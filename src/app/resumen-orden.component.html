@@ -1,0 +1,433 @@
+﻿
+<div class="container">
+
+  <div class="row mt-5">
+    <div class="col-8">
+      <h3><b>Resumen de la Orden de Servicio #{{_global.reporte.idreporte}}</b></h3>
+    </div>
+    <div class="col-4 text-right">
+      <button class="btn" (click)="imprimirReporte()"><i class="fa fa-print"></i> Imprimir </button>
+    </div>
+  </div>
+
+  <div class="row my-5">
+    <div class="col-12">
+
+      <div class="row">
+        <div class="col-5">
+          <b>Nombre o Razón Social del Cliente:</b>
+        </div>
+        <div class="col-5">
+          {{_global.cliente.objeto.RazonSocial}} {{_global.cliente.objeto.Nombre}} {{_global.cliente.objeto.APaterno}} {{_global.cliente.objeto.AMaterno}}
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-5">
+          <b>Tipo:</b>
+        </div>
+        <div class="col-5">
+          {{_global.cliente.objeto.TipoPersona}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-5">
+          <b>No. de Cliente:</b>
+        </div>
+        <div class="col-5">
+          {{_global.cliente.objeto.id}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-5">
+          <b>Fecha de Registro:</b>
+        </div>
+        <div class="col-5">
+          {{_global.cliente.objeto.FechaRegistro}}
+        </div>
+        <div class="col-2 text-right">
+          <a class="btn" routerLink="/inicio/cliente/detalle/">Ver perfil</a>
+        </div>
+      </div>
+
+
+      <hr>
+
+    </div>
+  </div>
+</div>
+
+
+
+<div class="container">
+
+
+    <div class="row sameheight mt-2">
+
+      <div class="col-sm-4">
+        <div class="px-4 bright">
+          <div class="sform">1. Distribuidor</div>
+          <div class="vform">{{this.RazonSocialDistribuidor}}</div>
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="px-4 bright">
+          <div class="sform">2. Home Products Group No:</div>
+          <div class="vform">{{this._global.reporte.objreporte.Distribuidor}}</div>
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="px-4">
+          <div class="sform">3. Tipo Reclamo:</div>
+          <div class="vform">{{this._global.reporte.objreporte.TipoReclamoDiagnostico}} </div>
+        </div>
+      </div>
+    </div><!--row-->
+    <!--DATOS GENERALES-->
+    <div class="row mt-2">
+      <div class="col-sm-12 my-3">
+        <h4 class="mt-3 naranja"><b>Datos Generales</b></h4>
+        <hr />
+      </div>
+    </div>
+
+    <div class="row sameheight mt-2">
+      <div class="col-sm-4">
+        <div class="px-4 bright">
+          <div class="sform mb-3">4. Información del Producto</div>
+          <div class="vform"><div class="vformleft">Categoría: </div> <div class="vformright">{{this._global.reporte.objreporte.Categoria}} </div></div>
+          <div class="vform"><div class="vformleft">Subcategoría: </div> <div class="vformright">{{this._global.reporte.objreporte.Subcategoria}} </div></div>
+          <div class="vform"><div class="vformleft">Modelo: </div> <div class="vformright">{{this._global.reporte.objreporte.Modelo}} </div></div>
+          <div class="vform"><div class="vformleft">Producto: </div> <div class="vformright">{{this._global.reporte.objreporte.Tipo}} </div></div>
+          <div class="vform"><div class="vformleft">No. de serie: </div> <div class="vformright">{{this._global.reporte.objreporte.NoSerie}} </div></div>
+          <div class="vform">
+            <div class="vformleft">Condición General: </div>
+            <div class="vformright">{{this._global.reporte.objreporte.CondicionProductoDiagnostico}} </div>
+          </div>
+          <div class="vform">
+            <div class="vformleft">Número de Factura: </div>
+            <div class="vformright">{{this._global.reporte.objreporte.NoFactura}} </div>
+          </div>
+
+          <div class="vform">
+            <div class="vformleft">Fecha de Factura: </div>
+            <div class="vformright">{{this._global.reporte.objreporte.CondicionProductoDiagnostico}} </div>
+          </div>
+          <div class="vform"><div class="vformleft">Uso del Producto: </div> <div class="vformright">{{this._global.reporte.objreporte.Uso}} </div></div>
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+        <div class="px-4 bright">
+          <div class="sform mb-3">5. Información del Cliente:</div>
+          <div class="vform"><div class="vformleft">Nombre: </div> <div class="vformright">{{this._global.cliente.objeto.RazonSocial}} {{this._global.cliente.objeto.Nombre}} {{this._global.cliente.objeto.AMaterno}} {{this._global.cliente.objeto.APaterno}} </div></div>
+          <div class="vform"><div class="vformleft">Dirección: </div> <div class="vformright">{{this._global.cliente.objeto.Direccion}} </div></div>
+          <div class="vform"><div class="vformleft">Estado: </div> <div class="vformright">{{this._global.cliente.objeto.IDEstado}} </div></div>
+          <div class="vform"><div class="vformleft">Ciudad: </div> <div class="vformright">{{this._global.cliente.objeto.IDLocalidad}} </div></div>
+          <div class="vform"><div class="vformleft">Teléfono: </div> <div class="vformright">{{this._global.cliente.objeto.Telefono}} </div></div>
+        </div>
+      </div>
+
+
+      <div class="col-sm-4">
+        <div class="px-4">
+          <div class="sform mb-3">6. Información del Centro de Servicio</div>
+          <div class="vform"><div class="vformleft">Ref. Cliente: </div> <div class="vformright">{{this._global.cliente.objeto.id}} </div></div>
+          <div class="vform"><div class="vformleft">Nombre Taller: </div> <div class="vformright">{{this._global.user.NombreCentro}}</div></div>
+          <div class="vform"><div class="vformleft">Atendió: </div> <div class="vformright">{{this._global.user.nombre}}</div></div>
+          <div class="vform"><div class="vformleft">Email: </div> <div class="vformright">{{this._global.user.Email}}</div></div>
+          <div class="vform"><div class="vformleft">Teléfono(s): </div> <div class="vformright">{{this._global.user.Telefono1}} <br> {{this._global.user.Telefono2}} <br> {{this._global.user.Telefono3}}</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!--DAÑO DE PRODUCTO-->
+    <div class="row mt-2">
+      <div class="col-sm-12 my-3">
+        <h4 class="mt-3 naranja"><b>Daño del Producto</b></h4>
+        <hr />
+      </div>
+    </div>
+
+    <div class="row sameheight mt-2">
+      <div class="col-sm-6">
+        <div class="px-4 bright">
+          <div class="sform mb-3">7. Información de daño del Producto</div>
+          <div class="vform"><div class="vformleft">Fecha reportada por cliente: </div> <div class="vformright">{{_global.reporte.objreporte.FechaRegistroReporte.replace("00:00:00", "")}}</div></div>
+          <div class="vform">
+            <div class="vformleft">No. de parte que causó el daño: </div>
+            <div class="vformright">{{this._global.reporte.objreporte.NoParteCausoDano}} </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="px-4">
+          <div class="sform mb-3">8. Información de daño del Producto</div>
+          <div class="vform"><div class="vformleft">Descripción de la falla: </div> <div class="vformright">{{_global.reporte.objreporte.ObservacionesCDSDiagnostico}}</div></div>
+          <div class="vform" *ngIf="_global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio'"><div class="vformleft">Motivo de cambio: </div> <div class="vformright">{{_global.reporte.objreporte.MotivoCambioDiagnostico}}</div></div>
+
+          <div class="vform">
+            <div class="vformleft">Resolución: </div>
+            <div class="vformright">{{this._global.reporte.objreporte.Resolucion}} </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--COSTOS DE REPARACIÓN-->
+    <div class="row mt-2">
+      <div class="col-sm-12 my-3">
+        <h4 class="mt-3 naranja"><b>Costos de Refacciones</b></h4>
+        <hr />
+      </div>
+    </div>
+
+    <!--REFACCIONES -->
+    <div class="row mt-2">
+      <div class="col-12">
+        <div class="sform mb-3">9. Partes utilizadas</div>
+
+        <!--tabla-->
+        <div class="row my-5" *ngIf="_global.refacciones[0]">
+          <div class="col-12 mb-5">
+
+            <table>
+              <tr>
+                <th>Cantidad</th>
+                <th>Descripción/No. Parte</th>
+                <th>Precio Unitario</th>
+                <th>Importe</th>
+
+              </tr>
+
+              <tr *ngFor="let item of _global.refacciones; let i = index">
+
+                <td>
+                  {{item.Cantidad}}
+                </td>
+                <td>
+                  {{item.NombreRefaccion}} - {{item.NoParte}}
+                </td>
+                <td>
+                  ${{item.CostoUnitario}}
+                </td>
+                <td>
+                  ${{item.CostoTotal}}
+                </td>
+
+              </tr>
+
+            </table>
+
+          </div>
+        </div>
+      </div>
+      <!--termina REFACCIONES -->
+
+    </div>
+
+  <div class="row">
+    <div class="col-sm-4">
+      <div class="ml-3">
+        <div class="sform mb-3">10. Tarifa</div>
+        <div class="">{{this.tiporeparacion.SubtipoServicio}} </div>
+      </div>
+
+
+    </div>
+
+    <div class="offset-sm-4 col-sm-4">
+
+      <div class="vform"><div class="vformleft aright">Valor de Refacciones: </div> <div class="vformright"> ${{this._global.reporte.objreporte.MontoRefacciones}} &nbsp;USD</div></div>
+      <div class="vform"><div class="vformleft aright">Atención Técnica: </div> <div class="vformright"> ${{this._global.reporte.objreporte.MontoReparacion}} &nbsp;USD</div></div>
+      <div class="vform"><div class="vformleft aright">Movilización: </div> <div class="vformright"> ${{this._global.reporte.objreporte.MontoMovilizacion}} &nbsp;USD</div></div>
+      <!--<div class="vform"><div class="vformleft aright">Costo Landed: </div> <div class="vformright"> $<span [innerHTML]="calculaValorRepuestos()"></span> USD</div></div>-->
+      <div class="vform"><div class="vformleft aright">Subtotal: </div> <div class="vformright"> ${{this._global.reporte.objreporte.MontoSubtotal}} &nbsp;USD</div></div>
+      <div class="vform"><div class="vformleft aright">IVA%: </div> <div class="vformright"> ${{this._global.reporte.objreporte.MontoIVA}}&nbsp;USD</div></div>
+      <div class="vform bold negro"><div class="vformleft aright">Total: </div> <div class="vformright"> ${{this._global.reporte.objreporte.MontoTotal}}&nbsp;USD</div></div>
+    </div>
+
+   </div>
+
+
+    <!--Archivos adjuntos-->
+    <div class="row">
+      <div class="col-sm-12 my-3">
+        <h4 class="mt-3 naranja"><b>Archivos adjuntos</b></h4>
+        <hr />
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-4 mb-5">
+        <div class="row">
+          <div class="col-4 text-right">
+            <div class="sform mb-3">10. <i>Factura o ticket de compra</i> del producto:</div>
+          </div>
+          <div class="col-8">
+            <div class="row no-gutters">
+              <div class="col-12 mb-1 attachments">
+                <div class="prev" *ngFor="let item of _global.AdjuntosFacturasNotasCompraArre; let i = index"  [innerHTML]="prevAttach(item)"></div>
+                <div *ngIf="!_global.AdjuntosFacturasNotasCompraArre[0]">No hay</div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-4 mb-5">
+        <div class="row">
+          <div class="col-4 text-right">
+            <div class="sform mb-3">11. <i>Fotos del modelo y no. serie</i> de producto:</div>
+          </div>
+          <div class="col-8">
+            <div class="row">
+              <div class="col-12 mb-1 attachments">
+                <div class="prev" *ngFor="let item of _global.AdjuntosFotosModeloSerieArre; let i = index" [innerHTML]="prevAttach(item)"></div>
+                <div *ngIf="!_global.AdjuntosFotosModeloSerieArre[0]">No hay</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-4 mb-5">
+        <div class="row">
+          <div class="col-4 text-right">
+            <div class="sform mb-3">12. <i>Facturas de repuestos</i> utilizados:</div>
+          </div>
+          <div class="col-8">
+            <div class="row">
+              <div class="col-12 mb-1 attachments">
+                <div class="prev" *ngFor="let item of _global.AdjuntosFacturasRepuestosArre; let i = index" [innerHTML]="prevAttach(item)"></div>
+                <div *ngIf="!_global.AdjuntosFacturasRepuestosArre[0]">No hay</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-4 mb-5">
+        <div class="row">
+          <div class="col-4 text-right">
+            <div class="sform mb-3">13. Adjuntar <i>otro</i>:</div>
+          </div>
+          <div class="col-8">
+            <div class="row">
+              <div class="col-12 mb-1 attachments">
+                <div class="prev" *ngFor="let item of _global.AdjuntosOtrosArre; let i = index"  [innerHTML]="prevAttach(item)"></div>
+                <div *ngIf="!_global.AdjuntosOtrosArre[0]">No hay</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+    </div><!--termina Archivos Adjuntos-->
+    <!--HP-->
+    <div class="row">
+      <div class="col-sm-12 my-3 mt-3">
+        <h4 class="mt-3 naranja"><b>Resolución (llenado exclusivo de Home Products Group After Sales Dept)</b></h4>
+        <hr />
+      </div>
+    </div>
+    <form class="formulario formularioRegistro my-3" name="formularioresolicion" [formGroup]="genericForm" (ngSubmit)="submitResolucion()" *ngIf="formulariostatus.success == 1">
+    <div class="row grayed">
+      <div class="col-sm-6">
+        <div class="row mb-1">
+          <div class="col-4 text-right">
+            Información completa:
+          </div>
+          <div class="col-8">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="informacionCompleta" id="informacionCompleta1" value="1">
+              <label class="form-check-label" for="informacionCompleta1">Sí</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="informacionCompleta" id="informacionCompleta2" value="0">
+              <label class="form-check-label" for="informacionCompleta2">No</label>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-4 text-right">
+            Razón del rechazo:
+          </div>
+          <div class="col-8">
+            <textarea class="form-control form-control-sm" formControlName="razonRechazo" id="razonRechazo" rows="3"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="row mb-1">
+          <div class="col-4 text-right">
+            Reclamo:
+          </div>
+          <div class="col-8">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="reclamo" id="reclamo1" value="1">
+              <label class="form-check-label" for="reclamo1">Aceptado</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input" type="radio" formControlName="reclamo" id="reclamo2" value="0">
+              <label class="form-check-label" for="reclamo2">Rechazado</label>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-4 text-right">
+            Procesado por:
+          </div>
+          <div class="col-8">
+            <input type="text" class="form-control form-control-sm" id="procesadoPor" formControlName="procesadoPor" />
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-4 text-right">
+            Fecha:
+          </div>
+          <div class="col-8">
+            <input type="text" class="form-control form-control-sm" id="fechaResolucion" value={{this.FechaResolucion}} disabled />
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-sm-12 my-3 mt-1 text-center">
+        <button class="btn" type="submit">Registrar</button>
+      </div>
+    </div>
+  </form>
+  <div class="row">
+    <div class="col-12 mt-3">
+      <h2 class="alert-danger px-2">{{_global.appstatus.mensaje}}</h2>
+    </div>
+  </div>
+
+
+</div><!--container principal-->
+
+
+
+<div class="container">
+  <div class="row">
+    <!--<div class="col-6 my-5 ">
+      <a class="btn btnicono" routerLink="/inicio"><i class="fa fa-angle-left"></i> Anterior</a>
+    </div>-->
+    <!--<div class="col-6 offset-6 text-right my-5 ">
+      <a class="btn btnicono" (click)="this._global.seleccionarReporte(this._global.reporte.idreporte)"> Siguiente <i class="fa fa-angle-right"></i></a>
+    </div>-->
+    <div class="col-6 offset-6 text-right my-5 ">
+      <a class="btn btnicono" routerLink="/inicio"> <i class="fa fa-angle-left"></i> Regresar </a>
+    </div>
+  </div>
+</div>

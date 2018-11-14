@@ -1,0 +1,171 @@
+﻿
+
+<div class="container">
+
+  <div class="row mt-5">
+    <div class="col-6 ">
+      <h1>Perfil del Cliente</h1>
+    </div>
+    <div class="col-6 textbottom" >
+      <span><b>NO. CLIENTE:</b> {{_global.cliente.objeto.id}}</span>
+    </div>
+  </div>
+
+
+
+  <hr>
+
+  <!--<div class="row">
+    <div class="col-12 mt-3">
+      <h2 class="alert-danger px-2">{{_global.appstatus.mensaje}}</h2>
+    </div>
+  </div>-->
+
+
+
+
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="row">
+        <div class="col-3 headericono">
+          <i class="fa fa-user"></i>
+        </div>
+        <div class="col-9">
+          <ul class="stylenone">
+            <li><b>Tipo de cliente:</b> {{_global.cliente.objeto.TipoPersona}}</li>
+            <li><b>Nombre:</b> {{_global.cliente.objeto.RazonSocial}} {{_global.cliente.objeto.Nombre}} {{_global.cliente.objeto.APaterno}} {{_global.cliente.objeto.AMaterno}} </li>
+            <li><b>Email:</b> {{_global.cliente.objeto.Email}}</li>
+          </ul>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-4 offset-3 mt-5">
+          <button class="btn btn-sm" routerLink="/inicio/cliente/detalle/edicion">Editar Datos del Cliente</button>
+        </div>
+        <!--<div class="col-4  mt-5">
+          <button class="btn btn-sm" routerLink="#">Eliminar Cliente</button>
+        </div>-->
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="row">
+        <div class="col-2 headericono">
+          <i class="fa fa-map-marker-alt"></i>
+        </div>
+        <div class="col-10">
+          <ul class="stylenone">
+            <li><b>País:</b> {{_global.cliente.objeto.Pais}}</li>
+            <li><b>Estado:</b> {{_global.cliente.objeto.IDEstado}} </li>
+            <li><b>Delegación/Municipio:</b> {{_global.cliente.objeto.IDMunicipio}}</li>
+            <li><b>CP:</b> {{_global.cliente.objeto.CP}}</li>
+            <li><b>Dirección:</b> {{_global.cliente.objeto.Direccion}}</li>
+            <li><b>Localidad:</b> {{_global.cliente.objeto.IDLocalidad}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+<div class="container">
+  <hr>
+  <div class="row my-5">
+    <div class="col-12 text-center">
+      <button class="btn btn-sm" (click)="this._global.nuevoReporte()"><i class="fa fa-plus-circle"></i> Registrar Nuevo Caso</button>
+    </div>
+  </div>
+</div>
+
+  <div class="container">
+    <hr>
+    <div class="row my-5">
+      <div class="col-6">
+        <h3>Reportes Levantados</h3>
+      </div>
+    </div>
+
+    <div class="row mb-5" *ngIf="!_global.reportesLevantadosCliente.recientes[0]">
+      No existen reportes dados de alta para este cliente
+    </div>
+
+    <div class="row" *ngIf="_global.reportesLevantadosCliente.recientes[0]">
+      <div class="col-12 ">
+
+        <table>
+          <tr>
+            <th>País</th>
+            <th>No. de Reporte</th>
+            <th>Nombre o Razón Social</th>
+
+            <th>Fecha de Registro</th>
+            <th>Tipo de Caso</th>
+            <th>Modelo</th>
+            <th>Producto</th>
+            <th>No. de Serie</th>
+            <th>Aplica Garantía</th>
+            <th>Subestatus</th>
+            <th>Status</th>
+            <th>Selección</th>
+          </tr>
+
+          <tr *ngFor="let item of _global.reportesLevantadosCliente.recientes;">
+
+            <td>
+              {{item.Pais}}
+            </td>
+            <td>
+              {{item.id}}
+            </td>
+            <td>
+              {{item.RazonSocial}} {{item.Nombre}} {{item.APaterno}} {{item.AMaterno}}
+            </td>
+
+            <td>
+              {{item.FechaRegistroReporteNF}}
+            </td>
+            <td>
+              {{item.TipoCaso}}
+            </td>
+            <td>
+              {{item.Modelo}}
+            </td>
+            <td>
+              {{item.Tipo}}
+            </td>
+            <td>
+              {{item.NoSerie}}
+            </td>
+            <td>
+              {{item.AplicaGarantia}}
+            </td>
+            <td>
+              {{item.StatusReporte}}
+            </td>
+            <td [innerHtml]="this.abiertoCerrado(item.StatusReporte)">
+
+            </td>
+            <td>
+              <button (click)="this._global.seleccionarReporte(item.id)" class="btn btn-sm">Seleccionar</button>
+            </td>
+          </tr>
+
+        </table>
+
+      </div>
+    </div>
+
+
+  </div>
+
+
+<div class="container" >
+  <div class="row">
+    <div class="col-6 my-5 ">
+      <a class="btn btn-sm btnicono" routerLink="/inicio"><i class="fa fa-angle-left"></i> Anterior</a>
+    </div>
+
+  </div>
+</div>

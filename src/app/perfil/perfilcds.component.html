@@ -1,0 +1,138 @@
+﻿
+
+<div class="container">
+
+  <div class="row mt-5">
+    <div class="col-6 ">
+      <h1>Perfil Centro de Servicio</h1>
+    </div>
+    <div class="col-6 textbottom" >
+      <span><b>NO. ID:</b> 1</span>
+    </div>
+  </div>
+
+  
+
+  <hr>
+  
+  <!--<div class="row">
+    <div class="col-12 mt-3">
+      <h2 class="alert-danger px-2">{{_global.appstatus.mensaje}}</h2>
+    </div>
+  </div>-->
+
+
+
+
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="row">
+        <div class="col-2 headericono">
+          <i class="fa fa-building"></i>
+        </div>
+        <div class="col-10">
+          <ul class="stylenone">
+            <li><b>Razón Social:</b> {{this._global.user.NombreCentro}}</li>
+            <li><b>Tipo:</b> {{this._global.user.Red}}</li>
+            <li><b>Categoría:</b> {{this._global.user.Categoria}}</li>
+            <li><b>Contacto:</b> {{this._global.user.Responsable}}</li>
+            <li><b>Correo Electrónico:</b> {{this._global.user.Email}}</li>
+            <li><b>Horarios:</b> {{this._global.user.Horarios}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="row">
+        <div class="col-2 headericono">
+          <i class="fa fa-map-marker-alt"></i>
+        </div>
+        <div class="col-10">
+          <ul class="stylenone">
+            <li><b>País:</b> {{this._global.user.Pais}}</li>
+            <li><b>Dirección:</b> {{this._global.user.Direccion}}</li>
+            <li><b>Teléfono(s):</b> {{this._global.user.Telefono1}} <br> 
+            {{this._global.user.Telefono2}} <br> 
+            {{this._global.user.Telefono3}} <br> </li>
+            <li><b>Email:</b> {{this._global.user.Email}}</li>
+            <li><b>Responsable:</b> {{this._global.user.Responsable}}</li>
+            <li><b>Teléfono Responsable:</b> {{this._global.user.TelefonoResponsable}}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+
+  <div class="container">
+    <hr>
+    <div class="row mt-5 mb-2">
+      <div class="col-6">
+        <h3>Reportes Asignados Recientemente</h3>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="_global.casosAsignados.recientes[0]">
+      <div class="col-12 ">
+
+        <table>
+          <tr>
+            <th>País</th>
+            <th>No. de Reporte</th>
+            <th>Nombre o Razón Social</th>
+
+            <th>Fecha de Registro</th>
+            <th>Tipo de Caso</th>
+            <th>Status</th>
+            <th>Selección</th>
+          </tr>
+
+          <tr *ngFor="let item of _global.casosAsignados.recientes;">
+
+            <td>
+              {{item.Pais}}
+            </td>
+            <td>
+              {{item.id}}
+            </td>
+            <td>
+              {{item.RazonSocial}} {{item.Nombre}} {{item.APaterno}} {{item.AMaterno}}
+            </td>
+
+            <td>
+              {{item.FechaRegistroReporte}}
+            </td>
+            <td>
+              {{item.TipoCaso}}
+            </td>
+            <td>
+              {{item.StatusReporte}}
+            </td>
+            <td>
+              <button (click)="this._global.seleccionarReporte(item.id)" class="btn btn-sm">Seleccionar</button>
+            </td>
+          </tr>
+
+        </table>
+
+      </div>
+    </div> 
+
+
+
+  </div>
+
+
+<div class="container" >
+  <div class="row">
+    <div class="col-6 my-5 ">
+      <a class="btn btn-sm btnicono" routerLink="/inicio"><i class="fa fa-angle-left"></i> Anterior</a>
+    </div>
+    
+  </div>
+</div>
+
+

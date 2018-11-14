@@ -1,0 +1,263 @@
+﻿<div class="container my-3">
+  <div class="row">
+    <div class="col-12">
+      <div class="statusapp">
+        <div class="paso active">
+          <div class="wrap">
+            <span>1</span>
+          </div>
+          <div>Cliente</div>
+        </div>
+        <div class="paso">
+          <div class="wrap">
+            <span>2</span>
+          </div>
+          <div>Reporte del Caso</div>
+        </div>
+        <div class="paso">
+          <div class="wrap">
+            <span>3</span>
+          </div>
+          <div>Reparación</div>
+        </div>
+        <div class="paso">
+          <div class="wrap">
+            <span>4</span>
+          </div>
+          <div>Orden de Servicio</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+ <div class="container">
+
+    <div class="row my-5">
+      <div class="col-12">
+        <h1>Búsqueda de cliente</h1>
+        <p>Selecciona la opción según el criterio de búsqueda de tu elección.</p>
+      </div>
+    </div>
+
+    <div class="row my-1">
+      <div class="col-12 text-center">
+
+        <form class="formulario formularioRegistro my-3" name="formulariologin" [formGroup]="genericForm" (ngSubmit)="submitBusqueda()">
+
+
+          <div class="row pb-1 text-center">
+            <div class="col-12 mb-4"><h3>Buscar por:</h3></div>
+          </div>
+          <div class="row pb-5">
+
+            <div class="col-sm-3 mb-4 text-center">
+               <label><input type="radio" formControlName="TipoBusqueda" value="IDCliente" (change)="changeTipoBusqueda()" > No. de cliente</label>
+            </div>
+            <div class="col-sm-3 mb-4 text-center">
+              <label><input type="radio" formControlName="TipoBusqueda" value="IDOrden" (change)="changeTipoBusqueda()" > No. de Orden</label>
+            </div>
+            <div class="col-sm-3 mb-4 text-center">
+              <label><input type="radio" formControlName="TipoBusqueda" value="IDReporte" (change)="changeTipoBusqueda()" > No. de Reporte</label>
+            </div>
+            <div class="col-sm-3 mb-4 text-center">
+              <label><input type="radio" formControlName="TipoBusqueda" value="Nombre" (change)="changeTipoBusqueda()" > Nombre</label>
+            </div>
+            <div class="col-sm-4 mb-4 text-center">
+              <label><input type="radio" formControlName="TipoBusqueda" value="Email" (change)="changeTipoBusqueda()" > Email</label>
+            </div>
+            <div class="col-sm-4 mb-4 text-center">
+              <label><input type="radio" formControlName="TipoBusqueda" value="IDDistribuidor" (change)="changeTipoBusqueda()"> ID / Nombre Distribuidor</label>
+            </div>
+            <div class="col-sm-4 mb-4 text-center">
+              <label><input type="radio" formControlName="TipoBusqueda" value="NoSerie" (change)="changeTipoBusqueda()"> No. de Serie</label>
+            </div>
+          </div>
+
+          <div [hidden]="this.genericForm.controls.TipoBusqueda.value == ''">
+            <div class="row" [hidden]="this.genericForm.controls.TipoBusqueda.value != 'IDCliente'">
+              <div class="col-sm-12">
+                <label>
+                  <input id="IDCliente" maxlength="250" type="text" OnlyNumber="true" class="form-control form-control-sm text-center" formControlName="IDCliente" placeholder="No. de Cliente" [autofocus]="this.genericForm.controls.TipoBusqueda.value == 'IDCliente'"  (keyup)="submitBusqueda()" />
+                  <span class="alert alert-danger" *ngIf="!genericForm.controls.IDCliente.valid && genericForm.controls.IDCliente.touched">
+                    Este campo es requerido
+                  </span>
+                </label>
+              </div>
+            </div><!--row-->
+            <div class="row" [hidden]="this.genericForm.controls.TipoBusqueda.value != 'IDOrden'">
+              <div class="col-sm-12">
+                <label>
+                  <input id="IDOrden" maxlength="250" type="text" OnlyNumber="true" class="form-control form-control-sm text-center" formControlName="IDOrden" placeholder="No. de Orden" [autofocus]="this.genericForm.controls.TipoBusqueda.value == 'IDOrden'"  (keyup)="submitBusqueda()" />
+                  <span class="alert alert-danger" *ngIf="!genericForm.controls.IDOrden.valid && genericForm.controls.IDOrden.touched">
+                    Este campo es requerido
+                  </span>
+                </label>
+              </div>
+            </div><!--row-->
+            <div class="row" [hidden]="this.genericForm.controls.TipoBusqueda.value != 'IDReporte'">
+              <div class="col-sm-12">
+                <label>
+                  <input id="IDReporte" maxlength="250" type="text" OnlyNumber="true" class="form-control form-control-sm text-center" formControlName="IDReporte" placeholder="No. de Reporte" [autofocus]="this.genericForm.controls.TipoBusqueda.value == 'IDReporte'" (keyup)="submitBusqueda()" />
+                  <span class="alert alert-danger" *ngIf="!genericForm.controls.IDReporte.valid && genericForm.controls.IDReporte.touched">
+                    Este campo es requerido
+                  </span>
+                </label>
+              </div>
+            </div><!--row-->
+            <div class="row" [hidden]="this.genericForm.controls.TipoBusqueda.value != 'Nombre'">
+              <!--<div class="col-sm-4">
+                <label>
+                  <input id="Nombre" maxlength="250" type="text" class="form-control form-control-sm" formControlName="Nombre" placeholder="Nombre(s)" (keyup)="submitBusqueda()"  [autofocus]="this.genericForm.controls.TipoBusqueda.value == 'Nombre'"/>
+                  <span class="alert alert-danger" *ngIf="!genericForm.controls.Nombre.valid && genericForm.controls.Nombre.touched">
+                    Este campo es requerido
+                  </span>
+                </label>
+              </div>
+              <div class="col-sm-4">
+                <label>
+                  <input maxlength="250" type="text" class="form-control form-control-sm" formControlName="APaterno" placeholder="Apellido Paterno" (keyup)="submitBusqueda()" />
+                  <span class="alert alert-danger" *ngIf="!genericForm.controls.APaterno.valid && genericForm.controls.APaterno.touched">
+                    Este campo es requerido
+                  </span>
+                </label>
+              </div>
+              <div class="col-sm-4">
+                <label>
+                  <input maxlength="250" type="text" class="form-control form-control-sm" formControlName="AMaterno" placeholder="Apellido Materno" (keyup)="submitBusqueda()" />
+                  <span class="alert alert-danger" *ngIf="!genericForm.controls.AMaterno.valid && genericForm.controls.AMaterno.touched">
+                    Este campo es requerido
+                  </span>
+                </label>
+              </div>-->
+              <div class="col-sm-12">
+                <label>
+                  <input maxlength="250" type="text" class="form-control form-control-sm text-center" formControlName="RazonSocial" placeholder="Nombre o Razón Social"   (keyup)="submitBusqueda()" />
+                  <span class="alert alert-danger" *ngIf="!genericForm.controls.RazonSocial.valid && genericForm.controls.RazonSocial.touched">
+                    Este campo es requerido
+                  </span>
+                </label>
+              </div>
+            </div><!--row-->
+            <div class="row" [hidden]="this.genericForm.controls.TipoBusqueda.value != 'Email'">
+              <div class="col-sm-12">
+                <label>
+                  <input #Email maxlength="250" type="email" class="form-control form-control-sm text-center" formControlName="Email" placeholder="Email" [autofocus]="this.genericForm.controls.TipoBusqueda.value == 'Email'" (keyup)="submitBusqueda()" />
+                  <span class="alert alert-danger" *ngIf="!genericForm.controls.Email.valid && genericForm.controls.Email.touched">
+                    Este campo es requerido
+                  </span>
+                </label>
+              </div>
+            </div><!--row-->
+            <div class="row" [hidden]="this.genericForm.controls.TipoBusqueda.value != 'IDDistribuidor'">
+              <div class="col-sm-6">
+                <label>
+                  <input id="IDDistribuidor" maxlength="250" type="text" OnlyNumber="true" class="form-control form-control-sm text-center" formControlName="IDDistribuidor" placeholder="ID Distribuidor" [autofocus]="this.genericForm.controls.TipoBusqueda.value == 'IDDistribuidor'" (keyup)="submitBusqueda()" />
+                  <span class="alert alert-danger" *ngIf="!genericForm.controls.IDDistribuidor.valid && genericForm.controls.IDDistribuidor.touched">
+                    Este campo es requerido
+                  </span>
+                </label>
+              </div>  
+            <div class="col-sm-6">
+                <label>
+                  <input id="NombreDistribuidor" maxlength="250" type="text" class="form-control form-control-sm text-center" formControlName="NombreDistribuidor" placeholder="Nombre Distribuidor" [autofocus]="this.genericForm.controls.TipoBusqueda.value == 'IDDistribuidor'" (keyup)="submitBusqueda()" />
+                  <span class="alert alert-danger" *ngIf="!genericForm.controls.NombreDistribuidor.valid && genericForm.controls.NombreDistribuidor.touched">
+                    Este campo es requerido
+                  </span>
+                </label>
+              </div>
+            </div><!--row-->
+            <div class="row" [hidden]="this.genericForm.controls.TipoBusqueda.value != 'NoSerie'">
+              <div class="col-sm-12">
+                <label>
+                  <input maxlength="250" type="text" class="form-control form-control-sm text-center" formControlName="NoSerie" placeholder="Número de Serie" [autofocus]="this.genericForm.controls.TipoBusqueda.value == 'NoSerie'" (keyup)="submitBusqueda()" />
+                  <span class="alert alert-danger" *ngIf="!genericForm.controls.NoSerie.valid && genericForm.controls.NoSerie.touched">
+                    Este campo es requerido
+                  </span>
+                </label>
+              </div>
+            </div><!--row-->
+          </div>
+         
+          
+
+          <label class="text-center mt-4" [hidden]="this.genericForm.controls.TipoBusqueda.value == ''">
+            <button class="btn btn-sm" type="submit">Buscar</button>
+          </label>
+
+        </form>
+
+
+      </div>
+    </div>
+  </div>
+
+<div class="container">
+  <hr>
+  <div class="row my-1">
+    <div class="col-12">
+      <button class="btn btn-sm" routerLink="/registro-de-casos/registro-cliente"><i class="fa fa-plus-circle"></i> Nuevo Cliente</button>
+    </div>
+  </div>
+</div>
+
+
+  <div class="container" *ngIf="_global.busqueda.clientes[0]">
+    <div class="row my-5">
+      <div class="col-12 mb-5">
+
+        <table>
+          <tr>
+            <th>Perfil</th>
+            <th>País</th>
+            <th>Nombre o Razón Social</th>
+            <th>No. de Cliente</th>
+            <th>C.P.</th>
+            <th>Email</th>
+            <th>Selección</th>
+          </tr>
+
+          <tr *ngFor="let item of _global.busqueda.clientes;">
+            
+            <td>
+              <a class="underlined" (click)="this._global.verPerfil(item.id)" >Ver Perfil</a>
+            </td>
+           
+            <td>
+              {{item.Pais}}
+            </td>
+            <td>
+              {{item.RazonSocial}} {{item.Nombre}} {{item.APaterno}} {{item.AMaterno}}
+            </td>
+            <td>
+              {{item.id}}
+            </td>
+            <td>
+              {{item.CP}}
+            </td>
+            <td>
+              {{item.Email}}
+            </td>
+            <td>
+              <button (click)="this._global.seleccionarCliente(item.id)" class="btn btn-sm" >Seleccionar</button>
+            </td>
+          </tr>
+
+        </table>
+
+      </div>
+    </div>
+  </div>
+
+  
+  <div class="container">
+    <div class="row">
+      <div class="col-12 text-center">
+        <h3 class="alert-danger px-2">{{_global.appstatus.mensaje}}</h3>
+      </div>
+    </div>
+  </div>
+
+  

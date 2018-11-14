@@ -1,0 +1,373 @@
+﻿<div class="container">
+
+  <div class="row">
+    <div class="col-12 mt-3 text-center">
+      <h2 class="alert-success px-2">NUEVO REGISTRO</h2>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 mt-3">
+      <h2 class="alert-danger px-2" >{{_global.appstatus.mensaje}}</h2>
+    </div>
+  </div>
+ 
+
+    <form class="formulario formularioRegistro my-3" name="formulariologin" [formGroup]="genericForm" (ngSubmit)="submitRegistro()" *ngIf="formulariostatus.success == 1">
+      <div class="row">
+        <div class="col-12 text-center">
+          <h5>Datos participante</h5>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6">
+
+          <label>
+            <select class="form-control" formControlName="MotivoLlamada" (change)="changeMotivoLlamada()" >
+              <option value="">Motivo Llamada</option>
+              <option value="Registro Ticket">Registro Código</option>
+              <option value="Mecánica Promoción">Mecánica promoción</option>
+              <option value="Queja Promoción">Queja Promoción</option>
+              <option value="Productos Participantes">Productos Participantes</option>
+              <option value="Tiendas Participantes">Tiendas Participantes</option>
+              <option value="Cortó/colgó">Cortó/colgó</option>
+              <option value="Monitoreo/prueba registro participante">Monitoreo/prueba</option>
+              <option value="Monitoreo/prueba datos compra">Monitoreo/prueba datos compra</option>
+            </select>
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.MotivoLlamada.valid && genericForm.controls.MotivoLlamada.touched">
+              Este campo es requerido
+            </span>
+          </label>
+
+          <label>
+            <input type="text" class="form-control" formControlName="Nombrepadre" placeholder="Nombre del Padre" />
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.Nombrepadre.valid && genericForm.controls.Nombrepadre.touched">
+              Este campo es requerido
+            </span>
+          </label>
+
+          <label>
+            <input type="text" class="form-control" formControlName="Nombrenino" placeholder="Nombre del Niño" />
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.Nombrenino.valid && genericForm.controls.Nombrenino.touched">
+              Este campo es requerido
+            </span>
+          </label>
+
+          <label>
+            <select class="form-control" formControlName="Estado" (change)="changeEstado()">
+
+              
+                <option value="" hidden="">Estado</option>
+                <option value="01">AGUASCALIENTES</option>
+                <option value="02">BAJA CALIFORNIA</option>
+                <option value="03">BAJA CALIFORNIA SUR</option>
+                <option value="04">CAMPECHE</option>
+                <option value="07">CHIAPAS</option>
+                <option value="08">CHIHUAHUA</option>
+                <option value="05">COAHUILA</option>
+                <option value="06">COLIMA</option>
+                <option value="09">CIUDAD DE MEXICO</option>
+                <option value="10">DURANGO</option>
+                <option value="15">ESTADO DE MEXICO</option>
+                <option value="11">GUANAJUATO</option>
+                <option value="12">GUERRERO</option>
+                <option value="13">HIDALGO</option>
+                <option value="14">JALISCO</option>
+                <option value="16">MICHOACAN</option>
+                <option value="17">MORELOS</option>
+                <option value="18">NAYARIT</option>
+                <option value="19">NUEVO LEON</option>
+                <option value="20">OAXACA</option>
+                <option value="21">PUEBLA</option>
+                <option value="22">QUERETARO</option>
+                <option value="23">QUINTANA ROO</option>
+                <option value="24">SAN LUIS POTOSI</option>
+                <option value="25">SINALOA</option>
+                <option value="26">SONORA</option>
+                <option value="27">TABASCO</option>
+                <option value="28">TAMAULIPAS</option>
+                <option value="29">TLAXCALA</option>
+                <option value="30">VERACRUZ</option>
+                <option value="31">YUCATAN</option>
+                <option value="32">ZACATECAS</option>
+
+             
+
+            </select>
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.Estado.valid && genericForm.controls.Estado.touched">
+              Este campo es requerido
+            </span>
+          </label>
+
+          <label>
+
+            <select class="form-control" formControlName="IDMunicipio" id="IDMunicipio">
+
+            </select>
+
+            
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.IDMunicipio.valid && genericForm.controls.IDMunicipio.touched">
+              Este campo es requerido
+            </span>
+          </label>
+
+
+
+          
+
+        </div>
+
+        <div class="col-sm-6">
+
+          
+
+          <label>
+            <input autocomplete="off" OnlyNumber="true" maxlength="10" type="text" class="form-control" formControlName="Telefono" placeholder="Teléfono" />
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.Telefono.valid && genericForm.controls.Telefono.touched">
+              Este campo es requerido
+            </span>
+          </label>
+
+         
+          <label>
+
+            <input type="checkbox" class="form-control" formControlName="NoTieneEmail" (change)="changeNoTieneEmail()"/> <span>NO tiene correo electrónico</span>
+            
+          </label>
+
+          <label *ngIf="this.genericForm.controls.NoTieneEmail.value == false">
+
+            <input type="text" class="form-control" formControlName="Email" placeholder="Correo Electrónico" />
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.Email.valid && genericForm.controls.Email.touched">
+              Este campo es requerido
+            </span>
+          </label>
+
+          <label>
+
+            <textarea rows="5" type="text" class="form-control" formControlName="Comentarios" placeholder="Comentarios"></textarea>
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.Comentarios.valid && genericForm.controls.Comentarios.touched">
+              Este campo es requerido
+            </span>
+          </label>
+        </div>
+      </div><!--row-->
+        
+
+      <div class="wrapper" >
+
+        <div class="row">
+
+          <div class="col-12 text-center">
+            <h5>Datos Compra</h5>
+          </div>
+
+          <div class="col-sm-6">
+            
+            <label>
+              <input maxlength="30" type="text" class="form-control" formControlName="Codigo" placeholder="Código Sauris" />
+              <span class="alert alert-danger" *ngIf="!genericForm.controls.Codigo.valid && genericForm.controls.Codigo.touched">
+                Este campo es requerido
+              </span>
+            </label>
+
+
+          </div>
+
+          <div class="col-sm-6">
+            
+
+          </div>
+
+        </div><!--mostrar Datos Compra-->
+      </div>
+
+ 
+
+          <label class="text-center mt-4">
+            <button class="btn" type="submit">Registrar</button>
+          </label>
+
+       
+
+     
+
+    </form>
+
+
+  <div class="row" *ngIf="formulariostatus.success == 1.5">
+    <div class="col-12 text-center">
+      <h3 class="alert-success">Trivia</h3>
+      <h4 class="py-3">Código Sauris participante: {{formulariostatus.codigo}}</h4>
+    </div>
+    <div class="col-sm-6 offset-sm-3  text-center">
+      <h4>¿Listo para comenzar?:</h4>
+      <div class="my-5">
+
+        <button class="btn" type="submit" (click)="comenzarTrivia()">Comenzar</button>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="" *ngIf="formulariostatus.success == 2">
+
+    <div class="row">
+      <div class="col-12 text-center">
+        <h5>Datos participante</h5>
+      </div>
+    </div>
+
+    <div class="row my-5">
+      <div class="col-6">
+        <div class="row">
+          <div class="col-6">
+            Número de Participante:
+          </div>
+          <div class="col-6">
+            {{formulariostatus.idparticipante}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            Nombre del Padre:
+          </div>
+          <div class="col-6">
+            {{formulariostatus.datosparticipante.Nombrepadre}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            Nombre del Niño:
+          </div>
+          <div class="col-6">
+            {{formulariostatus.datosparticipante.Nombrenino}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            Estado:
+          </div>
+          <div class="col-6">
+            {{formulariostatus.datosparticipante.Estado}}
+          </div>
+        </div>
+
+
+      </div>
+      <div class="col-6">
+        <div class="row">
+          <div class="col-6">
+            Municipio/ciudad:
+          </div>
+          <div class="col-6">
+            {{formulariostatus.datosparticipante.IDMunicipio}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            Telefono:
+          </div>
+          <div class="col-6">
+            {{formulariostatus.datosparticipante.Telefono}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            Email:
+          </div>
+          <div class="col-6">
+            {{formulariostatus.datosparticipante.Email}}
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+
+    <div class="col-12 text-center">
+      <h3 class="alert-success">Trivia</h3>
+      <h4 class="py-3">Código Sauris participante: {{formulariostatus.codigo}}</h4>
+    </div>
+    <div class="col-sm-6 offset-sm-3  text-center">
+      <h4>Contesta las siguientes preguntas:</h4>
+      <div class="my-5">
+
+
+        <form class="formulario formularioTrivia my-3" name="formulariotrivia" [formGroup]="formaTrivia" (ngSubmit)="submitTrivia()">
+          <div *ngFor="let item of this.formulariostatus.preguntasSeleccionadas;let i=index;">
+            <div class="pb-3">
+              <div class="pb-3"><strong>{{item.pregunta}}</strong></div>
+              <div class="resps pb-2">
+                <div><input name="r{{i+1}}" type="radio" class="form-control" formControlName="r{{i+1}}" value="A"> {{item.a}}</div>
+                <div><input name="r{{i+1}}" type="radio" class="form-control" formControlName="r{{i+1}}" value="B"> {{item.b}}</div>
+                <div><input name="r{{i+1}}" type="radio" class="form-control" formControlName="r{{i+1}}" value="C"> {{item.c}}</div>
+              </div>
+            </div>
+          </div>
+          <label class="text-center mt-4">
+            <button class="btn" type="submit">Enviar</button>
+          </label>
+        </form>
+      </div>
+      <!--div class="my-5">
+        <button (click)="formulariostatus.success=false" class="btn">Registrar otro ticket</button>
+      </div>
+      <div class="my-5">
+        <button routerLink="/nuevoticket" class="btn">Terminar</button>
+      </div>-->
+    </div>
+  </div>
+
+
+  <div class="row" *ngIf="formulariostatus.success == 3">
+    <div class="col-12 text-center">
+      <h3 class="alert-success">Registro exitoso</h3>
+    </div>
+    <div class="col-sm-6 offset-sm-3  text-center">
+      <h4>Ha sido registrado el código Sauris para el usuario con número de participación y código Sauris '{{formulariostatus.codigo}}':</h4>
+      <div class="my-5">
+        <h2>Número de participante: {{formulariostatus.idparticipante}}</h2>
+      </div>
+      <div class="my-5">
+        <h2>Tiempo trivia: {{formulariostatus.tiempo}} segundos</h2>
+      </div>
+      <div class="my-5">
+        <a routerLink="/registroticket/{{formulariostatus.idparticipante}}" class="btn">Registrar otro código</a>
+      </div>
+      <div class="my-5">
+        <button routerLink="/nuevoticket" class="btn">Terminar</button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+  <div class="row" *ngIf="formulariostatus.success == 4">
+    <div class="col-12 text-center">
+      <h3 class="alert-success">Registro exitoso</h3>
+    </div>
+    <div class="col-sm-6 offset-sm-3  text-center">
+      <h4>Ha sido registrada la llamada para el usuario con número de participación:</h4>
+      <div class="my-5">
+        <h2>Número de participante:{{formulariostatus.idparticipante}}</h2>
+      </div>
+      <div class="my-5">
+        <a routerLink="/registroticket/{{formulariostatus.idparticipante}}" class="btn">Registrar otro código</a>
+      </div>
+      <div class="my-5">
+        <button routerLink="/nuevoticket" class="btn">Terminar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 my-5 text-center">
+
+    </div>
+  </div>
+
+</div>

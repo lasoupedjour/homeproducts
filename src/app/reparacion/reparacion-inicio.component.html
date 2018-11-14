@@ -1,0 +1,473 @@
+﻿<div class="container my-3">
+  <div class="row">
+    <div class="col-12">
+      <div class="statusapp">
+        <div class="paso active">
+          <div class="wrap">
+            <span>1</span>
+          </div>
+          <div>Cliente</div>
+        </div>
+        <div class="paso active">
+          <div class="wrap">
+            <span>2</span>
+          </div>
+          <div>Reporte del Caso</div>
+        </div>
+        <div class="paso active">
+          <div class="wrap">
+            <span>3</span>
+          </div>
+          <div>Reparación</div>
+        </div>
+        <div class="paso">
+          <div class="wrap">
+            <span>4</span>
+          </div>
+          <div>Orden de Servicio</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!--Cliente-->
+<div class="container">
+  <div class="row mt-5">
+    <div class="col-12 text-right bold">
+      Cliente: <a routerLink="/inicio/cliente/detalle"><span [innerHtml]="this._global.cliente.objeto.RazonSocial"> </span><span [innerHtml]="this._global.cliente.objeto.Nombre"></span>&nbsp;<span [innerHtml]="this._global.cliente.objeto.APaterno"></span>&nbsp;<span [innerHtml]="this._global.cliente.objeto.AMaterno"></span></a>
+    </div>
+  </div>
+</div>
+
+<div class="container" [hidden]="!(this.status.cotizar == -1)"  *ngIf="this._global.reporte.objreporte.AplicaGarantia == 'si'">
+  <form *ngIf="status.paso == 1"  class="formulario formularioRegistro my-3" name="formulariologin" [formGroup]="genericForm" (ngSubmit)="submitRegistro()">
+
+
+    <div class="row mt-5">
+      <div class="col-6">
+        <h3><i class="fa fa-wrench"></i> Producto y Falla</h3>
+        <div class="mt-5"><b>No. Reporte:</b> {{_global.reporte.idreporte}}</div>
+        <div><b>Categoría:</b> {{_global.reporte.objreporte.Categoria}}</div>
+        <div><b>Subcategoría:</b> {{_global.reporte.objreporte.Subcategoria}}</div>
+        <div><b>Modelo:</b> {{_global.reporte.objreporte.Modelo}}</div>
+        <div><b>Producto:</b> {{_global.reporte.objreporte.Tipo}}</div>
+        <div><b>Fecha de compra:</b> {{(_global.reporte.objreporte.FechaCompra).replace(" 00:00:00", "")}}</div>
+        <div><b>Lugar de compra:</b> {{_global.reporte.objreporte.LugarCompra}}</div>
+        <div *ngIf="_global.reporte.objreporte.Falla != 'OTRO'"><b>Falla reportada:</b> {{_global.reporte.objreporte.Falla}}</div>
+        <div *ngIf="_global.reporte.objreporte.Falla == 'OTRO'"><b>Falla reportada:</b> {{_global.reporte.objreporte.FallaDescripcion}}</div>
+        <div><b>Comentarios cliente:</b> {{_global.reporte.objreporte.Comentarios}}</div>
+        <label>
+          <textarea autocomplete="off" class="form-control form-control-sm" formControlName="CondicionProductoDiagnostico" placeholder="* Condición general del producto"></textarea>
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.CondicionProductoDiagnostico.valid && genericForm.controls.CondicionProductoDiagnostico.touched">
+            Este campo es requerido
+          </span>
+        </label>
+      </div>
+      <div class="col-6">
+        <h3><i class="fas fa-clipboard-list"></i> Diagnóstico</h3>
+
+
+        <div class="row my-3">
+          <div class="col-sm-12">
+            <label>
+              <input type="text" autocomplete="off" class="form-control form-control-sm" formControlName="NoSerie" placeholder="*No. de Serie" (change)="changeNoSerie()">
+              <span class="alert alert-danger" *ngIf="!genericForm.controls.NoSerie.valid && genericForm.controls.NoSerie.touched">
+                Este campo es requerido
+              </span>
+            </label>
+          </div>
+          <!--<div class="col-sm-6">
+            <label>
+              <select class="form-control form-control-sm" formControlName="MotivoFallaDiagnostico">
+                <option value="" hidden="">*Seleccionar falla</option>
+                <option *ngFor="let item of _global.fallas; let i = index" value="{{item.Falla}}">{{item.Falla}}</option>
+              </select>
+              <span class="alert alert-danger" *ngIf="!genericForm.controls.MotivoFallaDiagnostico.valid && genericForm.controls.MotivoFallaDiagnostico.touched">
+                Este campo es requerido
+              </span>
+            </label>
+          </div>-->
+          <div class="col-sm-12">
+            <label>
+              <select class="form-control form-control-sm" formControlName="TipoReclamoDiagnostico" (change)="changeTipoReclamoDiagnostico()">
+                <option value="" hidden="">*Selecciona el tipo de reclamo</option>
+                <option [hidden]="(_global.reporte.objreporte.Categoria.toUpperCase() == 'MENAJE' && _global.reporte.objreporte.Subcategoria.toUpperCase() != 'OLLAS Y SARTENES')" value="Revisión">Revisión</option>
+                <option [hidden]="(_global.reporte.objreporte.Categoria.toUpperCase() == 'MENAJE' && _global.reporte.objreporte.Subcategoria.toUpperCase() != 'OLLAS Y SARTENES')" value="Reparación">Reparación</option>
+                <option value="Cambio">Cambio</option>
+                <option value="Instrucciones de uso">Instrucciones de uso</option>
+                <option value="No aplica garantía">No aplica garantía</option>
+
+              </select>
+              <span class="alert alert-danger" *ngIf="!genericForm.controls.TipoReclamoDiagnostico.valid && genericForm.controls.TipoReclamoDiagnostico.touched">
+                Este campo es requerido
+              </span>
+            </label>
+          </div>
+
+          <div class="col-sm-12" [hidden]="!(this.genericForm.controls.TipoReclamoDiagnostico.value == 'Cambio')">
+            <label>
+              <select class="form-control form-control-sm" formControlName="MotivoCambioDiagnostico" >
+                <option value="" hidden="">*Selecciona el motivo de cambio</option>
+                <option value="Defecto de fábrica">Defecto de fábrica</option>
+                <option value="Fallo producto">Fallo producto</option>
+                <option value="No hay refacción">No hay refacción</option>
+                <option value="Protocolo comercial">Protocolo comercial</option>
+              </select>
+              <span class="alert alert-danger" *ngIf="!genericForm.controls.MotivoCambioDiagnostico.valid && genericForm.controls.MotivoCambioDiagnostico.touched">
+                Este campo es requerido
+              </span>
+            </label>
+          </div>
+
+          <div class="col-sm-12">
+            <label>
+              <textarea autocomplete="off"  class="form-control form-control-sm" formControlName="ObservacionesCDSDiagnostico" rows="6" placeholder="*Ingresa el motivo y causa de la falla"></textarea>
+              <span class="alert alert-danger" *ngIf="!genericForm.controls.ObservacionesCDSDiagnostico.valid && genericForm.controls.ObservacionesCDSDiagnostico.touched">
+                Este campo es requerido
+              </span>
+            </label>
+          </div>
+
+          <div class="col-sm-12" [hidden]="this.genericForm.controls.TipoReclamoDiagnostico.value == 'Cambio'">
+            <label class="pointer">
+              <input class="form-control form-control-sm fecha" formControlName="RequiereRefacciones" type="checkbox" (change)="changeRequiereRefacciones()" /> ¿Se requieren refacciones?
+            </label>
+          </div>
+
+        </div>
+
+      </div>
+     </div>
+
+      <!--REFACCIONES -->
+      <div class="row">
+        <div class="col-12">
+
+
+          <div class="row" *ngIf="this.genericForm.controls.RequiereRefacciones.value == true && this.genericForm.controls.TipoReclamoDiagnostico.value != 'Cambio' ">
+            <div class="col-12 pt-5">
+              <h3>Refacciones</h3>
+              <p>Agrega las refacciones necesarias para continuar con la reparación.</p>
+            </div>
+            <div class="col-sm-4">
+              <label>
+                <select class="form-control form-control-sm" formControlName="Refaccion" (change)="agregarRefaccion()">
+                  <option value="" hidden="">Agregar refacción</option>
+                  <option *ngFor="let item of _global.refaccionesproductos; let i = index" value="{{item.NoParte}}">{{item.NoParte}} - {{item.Nombre}}</option>
+
+                </select>
+
+              </label>
+            </div>
+            <!--<div class="col-sm-4">
+              <label>
+                <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="NoParte" placeholder="No. Parte" maxlength="18" readonly />
+                <span class="alert alert-danger" *ngIf="!this.status.agregaRefaccionValid">
+                  Por favor selecciona una refacción y escribe No.de Parte antes de continuar
+                </span>
+              </label>
+            </div>-->
+            <!--<div class="col-sm-4">
+              <button type="button" class="btn btn-sm" (click)="agregarRefaccion()"><i class="fa fa-plus-circle"></i> Agregar Refacción</button>
+            </div>-->
+          </div>
+
+
+
+          <!--tabla-->
+          <div class="row my-5" *ngIf="_global.refacciones[0]">
+            <div class="col-12 mb-5">
+
+              <table>
+                <tr>
+                  <th>Refacción/No. de parte</th>
+                  <th>Paquete Técnico</th>
+                  <th>Existencia</th>
+                  <th>Cantidad</th>
+                  <th>Costo Unitario</th>
+                  <th>Costo Total</th>
+                  <th>Cotizaciones</th>
+                  <th>Status</th>
+                  <th>Eliminar</th>
+                </tr>
+
+                <tr *ngFor="let item of _global.refacciones; let i = index">
+
+                  <td>
+                    {{item.NombreRefaccion}} - {{item.NoParte}}
+                  </td>
+
+                  <td>
+                    <a class="btndiagrama" href="#" title="Diagrama Explosivo"><i class="fa fa-file"></i></a>
+                    <a class="btndiagrama" href="#" title="Manual de servicio"><i class="fa fa-file"></i></a>
+                  </td>
+                  <td>
+                    <select class="form-control form-control-sm existencia" (change)="changeExistencia(i, $event.target.value)" >
+                      <option value="" hidden>Seleccionar</option>
+                      <option [selected]="_global.refacciones[i].Existencia == 'Disponible'" value="Disponible">Disponible</option>
+                      <option [selected]="_global.refacciones[i].Existencia == 'No Disponible'" value="No Disponible">No Disponible</option>
+                      <option [selected]="_global.refacciones[i].Existencia == 'No Encontrada'" value="No Encontrada">No Encontrada</option>
+                    </select>
+                  </td>
+                  <td>
+                    <div *ngIf="item.Existencia != ''">
+                      <input type="number" class="form-control form-control-sm cantidad text-center" (keyup)="changeCantidad(i, $event.target.value)" (change)="changeCantidad(i, $event.target.value)" min="1" value="{{_global.refacciones[i].Cantidad}}" />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="centeredxy" *ngIf="item.Existencia == 'Disponible'">
+                      <span class="spanleft">$</span> <input type="text" class="spanleft form-control form-control-sm costo" (keyup)="changeCosto(i, $event.target.value)" (change)="changeCosto(i, $event.target.value)" value="{{_global.refacciones[i].CostoUnitario}}" />
+                    </div>
+                    <div class="centeredxy" *ngIf="item.Existencia == 'No Disponible' || item.Existencia == 'No Encontrada'">
+                      <span class="spanleft">$</span> <input type="text" class="spanleft form-control form-control-sm costo" (keyup)="changeCosto(i, $event.target.value)" (change)="changeCosto(i, $event.target.value)" value="{{_global.refacciones[i].CostoUnitario}}" readonly />
+                    </div>
+                  </td>
+                  <td>
+                    <div class="centeredxy" *ngIf="item.Existencia != ''">
+                      <span class="spanleft">$</span><input type="text" class="form-control form-control-sm costototal spanleft" value="{{_global.refacciones[i].CostoTotal}}" readonly />
+                    </div>
+                  </td>
+                  <td>
+                    <div *ngIf="item.Existencia == 'Disponible'">
+                      No Aplica
+                    </div>
+
+                    <div *ngIf="item.Existencia == 'No Disponible' && _global.refacciones[i].Status == 'Por definir'">
+                      <button type="button" class="btn btn-sm" (click)="cotizar(i)">Cotizar</button>
+                    </div>
+                    <div *ngIf="item.Existencia == 'No Encontrada' && _global.refacciones[i].Status == 'Por definir'">
+                      <button type="button" class="btn btn-sm" (click)="solicitar(i)">Solicitar a HP</button>
+                    </div>
+
+                    <div  *ngIf=" item.Existencia != 'Disponible'">
+                      {{_global.refacciones[i].StatusCotizacion}}
+                    </div>
+
+                  </td>
+                  <td>
+
+                    <div>
+                      {{_global.refacciones[i].Status}}
+                    </div>
+
+
+                  </td>
+                  <td>
+                    <a class="btneliminar" (click)="eliminarRefaccion(i)"><i class="fa fa-trash"></i></a>
+                  </td>
+                </tr>
+
+              </table>
+
+            </div>
+          </div><!--termina REFACCIONES -->
+
+          <div class="row  mt-4">
+            <div class="col-sm-7">
+              <a class="btn btn-sm btnicono" routerLink="/registro-de-casos/reporte-de-caso"><i class="fa fa-angle-left"></i> Anterior</a>
+            </div>
+            <div class="col-sm-5">
+              <button class="btn btn-sm" type="submit">Guardar cambios</button>&nbsp;
+              <button *ngIf="(this.status.habilitarOrden == true)" class="btn btn-sm" type="button" routerLink="/registro-de-casos/orden-de-servicio/inicio" >Crear Orden de Servicio</button>
+            </div>
+          </div>
+
+        </div>
+      </div><!--<row>-->
+
+
+
+  </form>
+  </div>
+
+
+<div class="container"  *ngIf="this._global.reporte.objreporte.AplicaGarantia == 'no'">
+  <div class="row my-5">
+    <div class="col-12 text-center">
+      <h3>No aplica reparación debido a garantía inválida.</h3>
+    </div>
+    <div class="col-6 float-center mt-5">
+      <a class="btn btn-sm btnicono" routerLink="/registro-de-casos/reporte-de-caso"><i class="fa fa-angle-left"></i> Anterior </a>
+    </div>
+    <div class="col-6 text-right mt-5">
+      <a class="btn btn-sm" routerLink="/inicio">Terminar </a>
+    </div>
+  </div>
+</div>
+
+
+
+
+    <div class="row">
+      <div class="col-12 mt-3">
+        <h2 class="alert-danger px-2">{{_global.appstatus.mensaje}}</h2>
+      </div>
+    </div>
+
+
+
+
+
+  <!--COTIZAR REFACCIONES -->
+  <div class="container" [hidden]="!(this.status.cotizar >= 0)">
+
+    <div class="row">
+      <div class="col-12 mt-3">
+        <p class="breadcrumbs"><a (click)="regresarAReporte()"> <b>Reparación</b></a> > Cotizar Refacciones</p>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col-12 mt-3">
+        <h3>Cotización</h3>
+      </div>
+    </div>
+
+    <form id="formulariocotizacion" class="formulario formularioCotizacion my-3" name="formulariocotizacion" [formGroup]="cotizacionForm" (ngSubmit)="submitCotizacion()">
+
+      <div class="row">
+        <div class="col-sm-4">
+          <label>
+            <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="Proveedor" placeholder="* Nombre o Razón Social de Proveedor" maxlength="80" />
+            <span class="alert alert-danger" *ngIf="!cotizacionForm.controls.Proveedor.valid && cotizacionForm.controls.Proveedor.touched">
+              Este campo es requerido
+            </span>
+          </label>
+        </div>
+        <div class="col-sm-4">
+          <label>
+            <ng2-file-input (onAction)="onActionNota($event)"></ng2-file-input>
+            <span class="alert alert-danger" *ngIf="!cotizacionForm.controls.Nota.valid && cotizacionForm.controls.Nota.touched">
+              Este campo es requerido
+            </span>
+          </label>
+        </div>
+
+      </div><!--row-->
+
+      <div class="row">
+        <div class="col-sm-4">
+          <label>
+
+            <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="NombreRefaccion" placeholder="*Concepto" maxlength="80" readonly />
+            <span class="alert alert-danger" *ngIf="!cotizacionForm.controls.NombreRefaccion.valid && cotizacionForm.controls.NombreRefaccion.touched">
+              Este campo es requerido
+            </span>
+          </label>
+        </div>
+        <div class="col-sm-2">
+          <label>
+
+            <input autocomplete="off" type="number" class="form-control form-control-sm" formControlName="Cantidad" placeholder="*Cantidad">
+            <span class="alert alert-danger" *ngIf="!cotizacionForm.controls.Cantidad.valid && cotizacionForm.controls.Cantidad.touched">
+              Este campo es requerido
+            </span>
+          </label>
+        </div>
+        <div class="col-sm-3">
+          <label>
+
+            <span class="spanleft">$</span>
+            <input autocomplete="off" type="number" class="form-control form-control-sm spanleft" formControlName="CostoUnitario" placeholder="*Costo Unitario">
+            <span class="alert alert-danger" *ngIf="!cotizacionForm.controls.CostoUnitario.valid && cotizacionForm.controls.CostoUnitario.touched">
+              Este campo es requerido
+            </span>
+          </label>
+        </div>
+        <div class="col-sm-4">
+          <label class="fecha">
+
+            <input class="form-control form-control-sm fecha" placeholder="* Fecha de Entrega"
+                   formControlName="FechaEntrega" ngbDatepicker #d3="ngbDatepicker">
+            <button class="input-group-addon" (click)="d3.toggle()" type="button">
+              <i class="fa fa-calendar"></i>
+            </button>
+            <span class="alert alert-danger" *ngIf="!cotizacionForm.controls.FechaEntrega.valid && cotizacionForm.controls.FechaEntrega.touched">
+              Este campo es requerido
+            </span>
+          </label>
+        </div>
+
+      </div><!--row-->
+      <div class="row">
+        <div class="offset-sm-8 col-sm-4 mt-4 text-right">
+            <button class="btn btn-sm" type="submit">Continuar</button>
+            <button (click)="regresarAReporte()" class="btn btn-sm btnnotok" type="button">Cancelar</button>
+        </div>
+
+      </div>
+
+    </form>
+</div>
+
+
+
+
+  <div class="container" *ngIf="status.paso == 2">
+
+    <div class="row">
+      <div class="col-12">
+        <h3><i class="fa fa-check-circle"></i> Se ha registrado exitosamente un nuevo reporte:</h3>
+      </div>
+    </div>
+
+    <div class="row my-5">
+      <div class="col-8">
+        <div class="row">
+          <div class="col-6">
+            Tipo:
+          </div>
+          <div class="col-6">
+            {{_global.cliente.objeto.TipoPersona}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            Nombre o Razón Social:
+          </div>
+          <div class="col-6">
+            {{_global.cliente.objeto.RazonSocial}} {{_global.cliente.objeto.Nombre}} {{_global.cliente.objeto.APaterno}} {{_global.cliente.objeto.AMaterno}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            No. de Cliente:
+          </div>
+          <div class="col-6">
+            {{_global.cliente.objeto.id}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            No. de Reporte:
+          </div>
+          <div class="col-6">
+            {{_global.reporte.idreporte}}
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <a class="btn btn-sm" routerLink="/cliente/detalle/">Editar cliente</a>
+      </div>
+    </div>
+
+    <div class="row my-5">
+      <div class="col-6 ">
+        <a class="btn btn-sm btnicono" (click)="status.paso = 1"><i class="fa fa-angle-left"></i> Anterior</a>
+      </div>
+      <div class="col-6 text-right">
+        <a class="btn btn-sm" routerLink="/reparacion/inicio">Siguiente ></a>
+      </div>
+    </div>
+
+
+
+    <div class="row">
+      <div class="col-12 my-5 text-center">
+
+      </div>
+    </div>
+
+  </div>

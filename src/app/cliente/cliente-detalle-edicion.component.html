@@ -1,0 +1,640 @@
+﻿<div class="container my-3">
+  <div class="row">
+    <div class="col-12">
+      <div class="statusapp">
+        <div class="paso active">
+          <div class="wrap">
+            <span>1</span>
+          </div>
+          <div>Cliente</div>
+        </div>
+        <div class="paso">
+          <div class="wrap">
+            <span>2</span>
+          </div>
+          <div>Reporte del Caso</div>
+        </div>
+        <div class="paso">
+          <div class="wrap">
+            <span>3</span>
+          </div>
+          <div>Reparación</div>
+        </div>
+        <div class="paso">
+          <div class="wrap">
+            <span>4</span>
+          </div>
+          <div>Orden de Servicio</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-12 mt-3">
+      <h1>Registro de Cliente</h1>
+
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-12 mt-3">
+      <h2 class="alert-danger px-2">{{_global.appstatus.mensaje}}</h2>
+    </div>
+  </div>
+
+
+  <form *ngIf="formulariostatus.success == 1" class="formulario formularioRegistro my-3" name="formulariologin" [formGroup]="genericForm" (ngSubmit)="submitRegistro()">
+
+    <div class="row pb-4">
+      <div class="col-sm-4 offset-sm-4 text-center pb-4">
+        <label>
+          <select class="form-control form-control-sm" formControlName="OrigenContacto">
+            <option value="" hidden="">Origen del contacto</option>
+            <option value="Buzón">Buzón</option>
+            <option value="Correo Electrónico">Correo Electrónico</option>
+            <option value="Llamada">Llamada</option>
+            <option value="Mostrador">Mostrador</option>
+          </select>
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.OrigenContacto.valid && genericForm.controls.OrigenContacto.touched">
+            Este campo es requerido
+          </span>
+        </label>
+      </div>
+      <div class="col-sm-8 offset-sm-2 text-center">
+        <label class="halflabel pointer nonselectable" for="pmoral"><input type="radio" id="pmoral" formControlName="TipoPersona" value="Empresa" (change)="changeTipoPersona()"> Empresa</label>
+        <label class="halflabel pointer nonselectable" for="pfisica"><input type="radio" id="pfisica" formControlName="TipoPersona" value="Persona Física" (change)="changeTipoPersona()"> Persona Física</label>
+      </div>
+    </div>
+    <div class="row" *ngIf="genericForm.controls.TipoPersona.valid">
+
+
+      <!--DATOS DE CONTACTO-->
+      <div class="col-12">
+        <h3>Datos de Contacto</h3>
+      </div>
+      <div class="col-sm-6">
+
+        <!--<label [hidden]="genericForm.controls.TipoPersona.value == 'Persona Física'" >
+          <input autocomplete="off" id="RFC" type="text" class="form-control form-control-sm" formControlName="RFC" placeholder="RFC" maxlength="13" />
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.RFC.valid && genericForm.controls.RFC.touched">
+            Este campo es requerido
+          </span>
+        </label>-->
+        <label [hidden]="genericForm.controls.TipoPersona.value == 'Persona Física'">
+          <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="RazonSocial" placeholder="Razón Social" />
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.RazonSocial.valid && genericForm.controls.RazonSocial.touched">
+            Este campo es requerido
+          </span>
+        </label>
+
+
+
+        <label [hidden]="genericForm.controls.TipoPersona.value == 'Empresa'">
+          <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="Nombre" placeholder="Nombre(s)" />
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.Nombre.valid && genericForm.controls.Nombre.touched">
+            Este campo es requerido
+          </span>
+        </label>
+        <label [hidden]="genericForm.controls.TipoPersona.value == 'Empresa'">
+          <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="APaterno" placeholder="Apellido Paterno" />
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.APaterno.valid && genericForm.controls.APaterno.touched">
+            Este campo es requerido
+          </span>
+        </label>
+        <label [hidden]="genericForm.controls.TipoPersona.value == 'Empresa'">
+          <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="AMaterno" placeholder="Apellido Materno" />
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.AMaterno.valid && genericForm.controls.AMaterno.touched">
+            Este campo es requerido
+          </span>
+        </label>
+
+      </div>
+      <div class="col-sm-6">
+
+        <!--label>
+          <input type="checkbox" class="form-control form-control-sm" formControlName="NoTieneEmail" (change)="changeNoTieneEmail()" /> <span>No tiene correo electrónico</span>
+        </label-->
+        <label>
+          <input autocomplete="off" type="email" class="form-control form-control-sm" formControlName="Email" placeholder="Correo Electrónico" />
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.Email.valid && genericForm.controls.Email.touched">
+            Este campo es requerido
+          </span>
+        </label>
+
+        <label>
+          <input autocomplete="off" type="email" class="form-control form-control-sm" formControlName="NoReferencia" placeholder="Número de Referencia" />
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.NoReferencia.valid && genericForm.controls.NoReferencia.touched">
+            Este campo es requerido
+          </span>
+        </label>
+
+      </div>
+
+      <!--DOMICILIO -->
+      <div class="col-12 pt-3">
+        <h3>Domicilio</h3>
+      </div>
+      <div class="col-sm-6">
+        <label>
+          <select class="form-control form-control-sm" formControlName="Pais" (change)="changePais()">
+            <option value="" hidden="">País</option>
+            <option *ngFor="let item of _global.paises;" value="{{item.Pais}}">{{item.Pais}}</option>
+
+          </select>
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.Pais.valid && genericForm.controls.Pais.touched">
+            Este campo es requerido
+          </span>
+        </label>
+
+
+        <div *ngIf="genericForm.controls.Pais.value == 'México'">
+          <label>
+            <select class="form-control form-control-sm" formControlName="IDEstado" (change)="changeEstado()">
+              <option value="" hidden="">Estado</option>
+              <option value="01">Aguascalientes</option>
+              <option value="02">Baja California</option>
+              <option value="03">Baja California Sur</option>
+              <option value="04">Campeche</option>
+              <option value="07">Chiapas</option>
+              <option value="08">Chihuahua</option>
+              <option value="05">Coahuila</option>
+              <option value="06">Colima</option>
+              <option value="09">CDMX</option>
+              <option value="10">Durango</option>
+              <option value="15">Estado de México</option>
+              <option value="11">Guanajuato</option>
+              <option value="12">Guerrero</option>
+              <option value="13">Hidalgo</option>
+              <option value="14">Jalisco</option>
+              <option value="16">Michoacán</option>
+              <option value="17">Morelos</option>
+              <option value="18">Nayarit</option>
+              <option value="19">Nuevo León</option>
+              <option value="20">Oaxaca</option>
+              <option value="21">Puebla</option>
+              <option value="22">Querétaro</option>
+              <option value="23">Quintana Roo</option>
+              <option value="24">San Luis Potosí</option>
+              <option value="25">Sinaloa</option>
+              <option value="26">Sonora</option>
+              <option value="27">Tabasco</option>
+              <option value="28">Tamaulipas</option>
+              <option value="29">Tlaxcala</option>
+              <option value="30">Veracruz</option>
+              <option value="31">Yucatán</option>
+              <option value="32">Zacatecas</option>
+            </select>
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.IDEstado.valid && genericForm.controls.IDEstado.touched">
+              Este campo es requerido
+            </span>
+          </label>
+
+          <label>
+            <select class="form-control form-control-sm" formControlName="IDMunicipio" id="IDMunicipio" (change)="changeMunicipio()"><option value="" hidden>Municipio/Ciudad</option></select>
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.IDMunicipio.valid && genericForm.controls.IDMunicipio.touched">
+              Este campo es requerido
+            </span>
+          </label>
+          <label>
+            <select class="form-control form-control-sm" formControlName="IDLocalidad" id="IDLocalidad" (change)="changeLocalidad()"><option value="" hidden>Localidad</option></select>
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.IDLocalidad.valid && genericForm.controls.IDLocalidad.touched">
+              Este campo es requerido
+            </span>
+          </label>
+        </div>
+
+        <!--<div *ngIf="genericForm.controls.Pais.value != 'México'">
+          <label>
+            <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="IDEstado" placeholder="Estado" />
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.IDEstado.valid && genericForm.controls.IDEstado.touched">
+              Este campo es requerido
+            </span>
+          </label>
+
+          <label>
+            <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="IDMunicipio" placeholder="Municipio/Ciudad" />
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.IDMunicipio.valid && genericForm.controls.IDMunicipio.touched">
+              Este campo es requerido
+            </span>
+          </label>
+          <label>
+            <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="IDLocalidad" placeholder="Localidad" />
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.IDLocalidad.valid && genericForm.controls.IDLocalidad.touched">
+              Este campo es requerido
+            </span>
+          </label>
+
+
+        </div>-->
+        <!--ng if-->
+
+        <div *ngIf="genericForm.controls.Pais.value == 'Honduras'">
+          <label>
+            <select class="form-control form-control-sm" formControlName="IDEstado">
+              <option value="" hidden="">Estado</option>
+              <option value="Achiotal">Achiotal</option>
+              <option value="Amapala">Amapala</option>
+              <option value="América">América</option>
+              <option value="Arimís">Arimís</option>
+              <option value="Atima">Atima</option>
+              <option value="Azacualpa">Azacualpa</option>
+              <option value="Baracoa">Baracoa</option>
+              <option value="Barrio">Barrio</option>
+              <option value="Brick Bay">Brick Bay</option>
+              <option value="Búfalo">Búfalo</option>
+              <option value="Campamento">Campamento</option>
+              <option value="Cañaveral">Cañaveral</option>
+              <option value="Catacamas">Catacamas</option>
+              <option value="Ceiba">Ceiba</option>
+              <option value="Centro">Centro</option>
+              <option value="Cerro Grande">Cerro Grande</option>
+              <option value="Chapulin">Chapulin</option>
+              <option value="Chivana">Chivana</option>
+              <option value="Choloma">Choloma</option>
+              <option value="Choluteca">Choluteca</option>
+              <option value="Chotepe">Chotepe</option>
+              <option value="Cofradía">Cofradía</option>
+              <option value="Colón">Colón</option>
+              <option value="Comayagua">Comayagua</option>
+              <option value="Comayagüela">Comayagüela</option>
+              <option value="Copán">Copán</option>
+              <option value="Cortes">Cortes</option>
+              <option value="Cortez">Cortez</option>
+              <option value="Coxen Hole">Coxen Hole</option>
+              <option value="Coyoles Central">Coyoles Central</option>
+              <option value="Cucuyagua">Cucuyagua</option>
+              <option value="Danlí">Danlí</option>
+              <option value="Dulce Nombre">Dulce Nombre</option>
+              <option value="El Buen Pastor">El Buen Pastor</option>
+              <option value="El Durazno">El Durazno</option>
+              <option value="El Higuero">El Higuero</option>
+              <option value="El Marañón">El Marañón</option>
+              <option value="El Milagro">El Milagro</option>
+              <option value="El Mochito">El Mochito</option>
+              <option value="El Negrito">El Negrito</option>
+              <option value="El Níspero">El Níspero</option>
+              <option value="El Paraíso">El Paraíso</option>
+              <option value="El Paso">El Paso</option>
+              <option value="El Porvenir">El Porvenir</option>
+              <option value="El Prado">El Prado</option>
+              <option value="El Progreso">El Progreso</option>
+              <option value="El Rancho">El Rancho</option>
+              <option value="El Rosario">El Rosario</option>
+              <option value="El Tablón">El Tablón</option>
+              <option value="El Terrero">El Terrero</option>
+              <option value="El Tizatillo">El Tizatillo</option>
+              <option value="El Zapote">El Zapote</option>
+              <option value="Esparta">Esparta</option>
+              <option value="Flores">Flores</option>
+              <option value="Florida">Florida</option>
+              <option value="French Harbor">French Harbor</option>
+              <option value="French Harbour">French Harbour</option>
+              <option value="Gracias">Gracias</option>
+              <option value="Guaimaca">Guaimaca</option>
+              <option value="Gualaco">Gualaco</option>
+              <option value="Guanaja">Guanaja</option>
+              <option value="Guaymitas">Guaymitas</option>
+              <option value="Hacienda">Hacienda</option>
+              <option value="Hicaque">Hicaque</option>
+              <option value="Intibucá">Intibucá</option>
+              <option value="Jesús De Otoro">Jesús De Otoro</option>
+              <option value="Jonesville">Jonesville</option>
+              <option value="Jutiapa">Jutiapa</option>
+              <option value="Juticalpa">Juticalpa</option>
+              <option value="La Bueso">La Bueso</option>
+              <option value="La Ceiba">La Ceiba</option>
+              <option value="La Entrada">La Entrada</option>
+              <option value="La Esperanza">La Esperanza</option>
+              <option value="La Guama">La Guama</option>
+              <option value="La Jutosa">La Jutosa</option>
+              <option value="La Libertad">La Libertad</option>
+              <option value="La Lima">La Lima</option>
+              <option value="La Masica">La Masica</option>
+              <option value="La Paz">La Paz</option>
+              <option value="La Sabana">La Sabana</option>
+              <option value="La Unión">La Unión</option>
+              <option value="La Virtud">La Virtud</option>
+              <option value="Laguna Verde">Laguna Verde</option>
+              <option value="Lamaní">Lamaní</option>
+              <option value="Las Lajas">Las Lajas</option>
+              <option value="Las Vegas">Las Vegas</option>
+              <option value="Lepaera">Lepaera</option>
+              <option value="Lepaterique">Lepaterique</option>
+              <option value="Los Andes">Los Andes</option>
+              <option value="Los Ángeles">Los Ángeles</option>
+              <option value="Los Naranjos">Los Naranjos</option>
+              <option value="Los Plancitos">Los Plancitos</option>
+              <option value="Los Potrerillos">Los Potrerillos</option>
+              <option value="Los Robles">Los Robles</option>
+              <option value="Macuelizo">Macuelizo</option>
+              <option value="Managua">Managua</option>
+              <option value="Mangulile">Mangulile</option>
+              <option value="Marcala">Marcala</option>
+              <option value="Mezapa">Mezapa</option>
+              <option value="Mojimán">Mojimán</option>
+              <option value="Moras">Moras</option>
+              <option value="Morazán">Morazán</option>
+              <option value="Morocelí">Morocelí</option>
+              <option value="Nacaome">Nacaome</option>
+              <option value="New York">New York</option>
+              <option value="Nueva Armenia">Nueva Armenia</option>
+              <option value="Nuevo Chamelecón">Nuevo Chamelecón</option>
+              <option value="Ocote Paulino">Ocote Paulino</option>
+              <option value="Ocotepeque">Ocotepeque</option>
+              <option value="Olanchito">Olanchito</option>
+              <option value="Omoa">Omoa</option>
+              <option value="Peña Blanca">Peña Blanca</option>
+              <option value="Peñas Blancas">Peñas Blancas</option>
+              <option value="Petoa">Petoa</option>
+              <option value="Piedra Quemada">Piedra Quemada</option>
+              <option value="Piedras Amarillas">Piedras Amarillas</option>
+              <option value="Pimienta">Pimienta</option>
+              <option value="Pinalejo">Pinalejo</option>
+              <option value="Potrerillos">Potrerillos</option>
+              <option value="Potrero Grande">Potrero Grande</option>
+              <option value="Prieta">Prieta</option>
+              <option value="Progreso">Progreso</option>
+              <option value="Puerto Cortés">Puerto Cortés</option>
+              <option value="Puerto Cortez">Puerto Cortez</option>
+              <option value="Puerto Lempira">Puerto Lempira</option>
+              <option value="Quimistán">Quimistán</option>
+              <option value="Río Esteban">Río Esteban</option>
+              <option value="Río Lindo">Río Lindo</option>
+              <option value="Roatán">Roatán</option>
+              <option value="Sabá">Sabá</option>
+              <option value="Sabanagrande">Sabanagrande</option>
+              <option value="Salvador">Salvador</option>
+              <option value="San Antonio">San Antonio</option>
+              <option value="San Antonio De Cortés">San Antonio De Cortés</option>
+              <option value="San Cristóbal">San Cristóbal</option>
+              <option value="San Francisco De La Paz">San Francisco De La Paz</option>
+              <option value="San Francisco De Yojoa">San Francisco De Yojoa</option>
+              <option value="San José">San José</option>
+              <option value="San José De Colinas">San José De Colinas</option>
+              <option value="San José De Comayagua">San José De Comayagua</option>
+              <option value="San José Del Boquerón">San José Del Boquerón</option>
+              <option value="San Juan De Flores">San Juan De Flores</option>
+              <option value="San Lorenzo">San Lorenzo</option>
+              <option value="San Luis">San Luis</option>
+              <option value="San Manuel">San Manuel</option>
+              <option value="San Marcos">San Marcos</option>
+              <option value="San Marcos De Colón">San Marcos De Colón</option>
+              <option value="San Nicolás">San Nicolás</option>
+              <option value="San Pedro">San Pedro</option>
+              <option value="San Pedro Sula">San Pedro Sula</option>
+              <option value="San Sebastián">San Sebastián</option>
+              <option value="Santa Ana">Santa Ana</option>
+              <option value="Santa Bárbara">Santa Bárbara</option>
+              <option value="Santa Cruz">Santa Cruz</option>
+              <option value="Santa Cruz De Yojoa">Santa Cruz De Yojoa</option>
+              <option value="Santa Fe">Santa Fe</option>
+              <option value="Santa Lucía">Santa Lucía</option>
+              <option value="Santa Rita">Santa Rita</option>
+              <option value="Santa Rosa">Santa Rosa</option>
+              <option value="Santa Rosa De Copán">Santa Rosa De Copán</option>
+              <option value="Siguatepeque">Siguatepeque</option>
+              <option value="Sonaguera">Sonaguera</option>
+              <option value="Sula">Sula</option>
+              <option value="Suyapa De Lean">Suyapa De Lean</option>
+              <option value="Talanga">Talanga</option>
+              <option value="Támara">Támara</option>
+              <option value="Taulabé">Taulabé</option>
+              <option value="Tegucigalpa">Tegucigalpa</option>
+              <option value="Tela">Tela</option>
+              <option value="Teupasenti">Teupasenti</option>
+              <option value="Tocoa">Tocoa</option>
+              <option value="Toloa Adentro">Toloa Adentro</option>
+              <option value="Tornabé">Tornabé</option>
+              <option value="Trinidad">Trinidad</option>
+              <option value="Trinidad De Quebradas">Trinidad De Quebradas</option>
+              <option value="Trujillo">Trujillo</option>
+              <option value="Utilá">Utilá</option>
+              <option value="Valle">Valle</option>
+              <option value="Valle De Ángeles">Valle De Ángeles</option>
+              <option value="Vallecillo">Vallecillo</option>
+              <option value="Victoria">Victoria</option>
+              <option value="Villa De San Antonio">Villa De San Antonio</option>
+              <option value="Villa De San Francisco">Villa De San Francisco</option>
+              <option value="Villa Nueva">Villa Nueva</option>
+              <option value="Villanueva">Villanueva</option>
+              <option value="West End">West End</option>
+              <option value="Yamaranguila">Yamaranguila</option>
+              <option value="Yoro">Yoro</option>
+              <option value="Zambrano">Zambrano</option>
+            </select>
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.IDEstado.valid && genericForm.controls.IDEstado.touched">
+              Este campo es requerido
+            </span>
+          </label>
+
+
+
+          <label>
+            <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="IDMunicipio" placeholder="Municipio/Ciudad" />
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.IDMunicipio.valid && genericForm.controls.IDMunicipio.touched">
+              Este campo es requerido
+            </span>
+          </label>
+          <label>
+            <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="IDLocalidad" placeholder="Localidad" />
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.IDLocalidad.valid && genericForm.controls.IDLocalidad.touched">
+              Este campo es requerido
+            </span>
+          </label>
+
+
+
+
+
+        </div>
+
+        <div *ngIf="genericForm.controls.Pais.value != 'México' && genericForm.controls.Pais.value != 'Honduras'">
+
+          <label>
+            <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="IDEstado" placeholder="Estado" />
+
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.IDEstado.valid && genericForm.controls.IDEstado.touched">
+              Este campo es requerido
+            </span>
+          </label>
+
+
+          <label>
+            <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="IDMunicipio" placeholder="Municipio/Ciudad" />
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.IDMunicipio.valid && genericForm.controls.IDMunicipio.touched">
+              Este campo es requerido
+            </span>
+          </label>
+          <label>
+            <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="IDLocalidad" placeholder="Localidad" />
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.IDLocalidad.valid && genericForm.controls.IDLocalidad.touched">
+              Este campo es requerido
+            </span>
+          </label>
+
+        </div><!--ng if-->
+
+
+
+        <label>
+          <input id="CP" autocomplete="off" OnlyNumber="true" maxlength="5" type="text" class="form-control form-control-sm" formControlName="CP" placeholder="C.P." />
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.CP.valid && genericForm.controls.CP.touched">
+            Este campo es requerido
+          </span>
+        </label>
+
+      </div>
+
+
+
+      <div class="col-sm-6">
+        <label>
+          <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="Direccion" placeholder="Dirección" />
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.Direccion.valid && genericForm.controls.Direccion.touched">
+            Este campo es requerido
+          </span>
+        </label>
+        <label>
+          <input autocomplete="off" maxlength="10" type="text" class="form-control form-control-sm" formControlName="NoExt" placeholder="No. Exterior" />
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.NoExt.valid && genericForm.controls.NoExt.touched">
+            Este campo es requerido
+          </span>
+        </label>
+        <label>
+          <input autocomplete="off" maxlength="10" type="text" class="form-control form-control-sm" formControlName="NoInt" placeholder="No. Interior" />
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.NoInt.valid && genericForm.controls.NoInt.touched">
+            Este campo es requerido
+          </span>
+        </label>
+      </div>
+
+
+
+      <!--TELEFONO -->
+      <div class="col-12 pt-3">
+        <h3>Teléfono</h3>
+      </div>
+      <div class="col-sm-2">
+        <label>
+          <span class="spanleft">+</span> <input autocomplete="off" OnlyNumber="true" maxlength="3" type="text" class="form-control form-control-sm spanleft" formControlName="CodigoPais" placeholder="Código de País" />
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.CodigoPais.valid && genericForm.controls.CodigoPais.touched">
+            Este campo es requerido
+          </span>
+        </label>
+      </div>
+      <div class="col-sm-5">
+        <label>
+          <input autocomplete="off" OnlyNumber="true" maxlength="10" type="text" class="form-control form-control-sm" formControlName="Telefono" placeholder="Teléfono" />
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.Telefono.valid && genericForm.controls.Telefono.touched">
+            Este campo es requerido
+          </span>
+        </label>
+      </div>
+      <div class="col-sm-5">
+        <label>
+          <input autocomplete="off" OnlyNumber="true" maxlength="10" type="text" class="form-control form-control-sm" formControlName="Movil" placeholder="Teléfono 2" />
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.Movil.valid && genericForm.controls.Movil.touched">
+            Este campo es requerido
+          </span>
+        </label>
+      </div>
+
+
+      <!--<label class="text-center mt-4">
+        <button class="btn btn-sm" type="submit">Registrar</button>
+      </label>-->
+
+
+    </div><!--row-->
+
+
+
+
+  </form>
+
+
+
+
+  <div class="" *ngIf="formulariostatus.success == 2">
+
+    <div class="row">
+      <div class="col-12">
+        <h3><i class="fa fa-check-circle"></i> Se han registrado exitosamente los datos personales de un nuevo cliente:</h3>
+      </div>
+    </div>
+
+    <div class="row my-5">
+      <div class="col-8">
+        <div class="row">
+          <div class="col-6">
+            <b>Tipo:</b>
+          </div>
+          <div class="col-6">
+            {{_global.cliente.objeto.TipoPersona}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <b>Nombre o Razón Social:</b>
+          </div>
+          <div class="col-6">
+            {{_global.cliente.objeto.RazonSocial}} {{_global.cliente.objeto.Nombre}} {{_global.cliente.objeto.APaterno}} {{_global.cliente.objeto.AMaterno}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <b>No. de Cliente:</b>
+          </div>
+          <div class="col-6">
+            {{_global.cliente.objeto.id}}
+          </div>
+        </div>
+      </div>
+      <div class="col-4">
+        <a class="underlined" routerLink="/inicio/cliente/detalle">Editar cliente</a>
+      </div>
+    </div>
+
+    <!--<div class="row my-5">
+      <div class="col-12 float-right">
+        <a class="btn btn-sm" routerLink="/registro-de-casos/reporte-de-caso/{{_global.cliente.id}}">Continuar</a>
+      </div>
+    </div>-->
+
+
+
+    <div class="row">
+      <div class="col-12 my-5 text-center">
+
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<div class="container" *ngIf="this.formulariostatus.success == 1">
+  <div class="row">
+    <div class="col-6 my-5 ">
+      <a class="btn btn-sm btnicono" routerLink="/registro-de-casos"><i class="fa fa-angle-left"></i> Anterior</a>
+    </div>
+    <div class="col-6 text-right my-5 ">
+      <a class="btn btn-sm btnicono" (click)="submitRegistro()"> Registrar </a>
+    </div>
+  </div>
+</div>
+
+<div class="container" *ngIf="this.formulariostatus.success == 2">
+  <div class="row">
+    <div class="col-6 my-5 ">
+      <a class="btn btn-sm btnicono" routerLink="/registro-de-casos"><i class="fa fa-angle-left"></i> Anterior</a>
+    </div>
+    <div class="col-6 text-right my-5 ">
+      <a class="btn btn-sm btnicono" routerLink="/registro-de-casos/reporte-de-caso/{{_global.cliente.id}}"> Siguiente <i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+</div>

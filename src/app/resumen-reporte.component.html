@@ -1,0 +1,227 @@
+﻿
+<div class="container">
+
+  <div class="row mt-5">
+    <div class="col-8">
+      <h3>Resumen del Reporte</h3>
+    </div>
+    <div class="col-4 text-right">
+      <button class="btn" (click)="imprimirReporte()"><i class="fa fa-print"></i> Imprimir </button>
+    </div>
+  </div>
+
+  <div class="row my-5">
+    <div class="col-12">
+
+      <div class="row">
+        <div class="col-5">
+          <b>Nombre o Razón Social del Cliente:</b>
+        </div>
+        <div class="col-5">
+          {{_global.cliente.objeto.RazonSocial}} {{_global.cliente.objeto.Nombre}} {{_global.cliente.objeto.APaterno}} {{_global.cliente.objeto.AMaterno}}
+        </div>
+
+      </div>
+      <div class="row">
+        <div class="col-5">
+          <b>Tipo:</b>
+        </div>
+        <div class="col-5">
+          {{_global.cliente.objeto.TipoPersona}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-5">
+          <b>No. de Cliente:</b>
+        </div>
+        <div class="col-5">
+          {{_global.cliente.objeto.id}}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-5">
+          <b>Fecha de Registro:</b>
+        </div>
+        <div class="col-5">
+            {{_global.cliente.objeto.FechaRegistroNF}}
+        </div>
+        <div class="col-2 text-right">
+          <a class="btn" routerLink="/inicio/cliente/detalle/">Ver perfil</a>
+        </div>
+      </div>
+
+
+      <hr>
+
+
+      <div class="row">
+        <div class="col-5">
+          <b>No. de Reporte:</b>
+        </div>
+        <div class="col-5">
+          {{_global.reporte.idreporte}}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-5">
+          <b>Proceso:</b>
+        </div>
+        <div class="col-5">
+          <strong>{{_global.reporte.objreporte.StatusReporte}}</strong>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-5">
+          <b>Categoría:</b>
+        </div>
+        <div class="col-5">
+          {{_global.reporte.objreporte.Categoria}}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-5">
+          <b>Subcategoría:</b>
+        </div>
+        <div class="col-5">
+          {{_global.reporte.objreporte.Subcategoria}}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-5">
+          <b>Producto registrado:</b>
+        </div>
+        <div class="col-5">
+          {{_global.reporte.objreporte.Tipo}}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-5">
+          <b>Modelo:</b>
+        </div>
+        <div class="col-5">
+          {{_global.reporte.objreporte.Modelo}}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-5">
+          <b>Fecha de Compra:</b>
+        </div>
+        <div class="col-5">
+		        {{_global.reporte.objreporte.FechaCompraNF}}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-5">
+          <b>Falla:</b>
+        </div>
+        <div class="col-5" *ngIf="_global.reporte.objreporte.Falla != 'OTRO'">
+          {{_global.reporte.objreporte.Falla}}
+        </div>
+        <div class="col-5" *ngIf="_global.reporte.objreporte.Falla == 'OTRO'">
+          {{_global.reporte.objreporte.FallaDescripcion}}
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-5">
+          <b>Descripción:</b>
+        </div>
+        <div class="col-5">
+          {{_global.reporte.objreporte.Comentarios}}
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-5">
+          <b>Tipo de Revisión:</b>
+        </div>
+        <div class="col-5">
+          {{_global.reporte.objreporte.TipoRevision | titlecase}}
+        </div>
+      </div>
+
+      <div [hidden]="!(_global.reporte.objreporte.TipoRevision == 'domicilio')">
+        <div class="row">
+          <div class="col-5">
+            <b>Tipo Movilización:</b>
+          </div>
+          <div class="col-5">
+            {{this.SubtipoServicio}}
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-5">
+            <b>Tarifa Movilización:</b>
+          </div>
+          <div class="col-5">
+            $ {{_global.reporte.objreporte.MontoMovilizacion}} USD
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-5">
+            <b>Status Movilización:</b>
+          </div>
+          <div class="col-5">
+            {{_global.reporte.objreporte.StatusMovilidad}}
+          </div>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-5">
+          <b>&nbsp;</b>
+        </div>
+        <div class="col-5">
+          &nbsp;
+        </div>
+        <div class="col-2 text-right">
+          <a class="btn" routerLink="/registro-de-casos/reporte-de-caso">Editar</a>
+        </div>
+      </div>
+
+
+      <hr>
+
+
+
+    </div>
+
+  </div>
+
+
+</div>
+
+
+<div class="container noprint">
+  <div class="row">
+    <div class="col-6 my-5 ">
+      Status de Orden:
+      <select class="form-control">
+        <option value="Abierta">Abierta</option>
+        <option value="Cerrada">Cerrada</option>
+      </select>
+    </div>
+    <!--<div class="col-6 text-right my-5 ">
+      ¿Deseas generar un reporte adicional para este cliente? <a class="btn btnicono" (click)="this._global.nuevoReporte()">Nuevo Reporte</a>
+    </div>-->
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-6 my-5 ">
+      <a class="btn btnicono" routerLink="/inicio"><i class="fa fa-angle-left"></i> Anterior</a>
+    </div>
+    <div class="col-6 text-right my-5 ">
+      <a class="btn btnicono" (click)="this._global.seleccionarReporte(this._global.reporte.idreporte)"> Siguiente <i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,67 @@
+﻿<header>
+  <div class="container">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" routerLink="/inicio"><img src="assets/img/household-oster.png" alt="logo Oster" class="img-fluid"></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item text-center" [hidden]="this._global.user.id == ''">
+            <a class="nav-link" routerLink="/inicio" routerLinkActive="active">Inicio</a>
+          </li>
+          <li class="nav-item text-center" [hidden]="this._global.user.id == ''">
+            <a class="nav-link" routerLink="/registro-de-casos" routerLinkActive="active">Registro de Casos</a>
+          </li>
+          <li class="nav-item text-center" [hidden]="this._global.user.id == ''" *ngIf="_global.user.IDMaster == '0'">
+            <a class="nav-link" routerLink="/administracion/inicio" routerLinkActive="active">Administración</a>
+          </li>
+
+          <li class="nav-item text-center" [hidden]="this._global.user.id == ''" *ngIf="_global.user.IDMaster == '0'">
+            <a class="nav-link" routerLink="/notificaciones" routerLinkActive="#"><i class="far fa-bell"></i></a>
+            <div id="bell-counter" *ngIf="this._global.notificaciones.nuevas > 0">{{this._global.notificaciones.nuevas}}</div>
+          </li>
+
+          <!--li class="nav-item text-center">
+    <a class="nav-link" routerLink="/reporte">Reportes</a>
+  </!--li>-->
+
+          <li class="nav-item text-center separador" [hidden]="this._global.user.id == ''"></li>
+
+          <li class="nav-item dropdown" *ngIf="_global.user.nombre != ''">
+            <a class="nav-link dropdown-toggle" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user-circle"></i> {{_global.user.nombre}}</a>
+            <div class="dropdown-menu" aria-labelledby="dropdown01">
+              <a class="dropdown-item" routerLink="/perfil/cds">Perfil CDS</a>
+              <a class="nav-link" (click)="logout()"><i class="fa fa-power-off"></i> Cerrar Sesión</a>
+            </div>
+          </li>
+
+        </ul>
+
+      </div>
+    </nav>
+
+
+  </div>
+</header>
+<!-->div style="text-align:center">
+  <h1 class="my-2">
+  Home Products
+  </h1>
+</div-->
+
+<router-outlet></router-outlet>
+
+<div class="loading-overlay" [hidden]="!(_global.appstatus.loading == true)">
+  <i class="fas fa-circle-notch fa-spin fa-4x"></i>
+</div>
+
+
+<div id="toast" class="toast" [ngClass]="{'active' : _global.appstatus.toasting ==  true, 'notok' : _global.appstatus.tipotoast == 'notok'}" >
+  <div class="">
+  <i *ngIf="_global.appstatus.tipotoast ==  'ok'" class="fa fa-check-circle"></i>
+    <i *ngIf="_global.appstatus.tipotoast ==  'notok'" class="fa fa-exclamation-triangle"></i>
+  {{_global.appstatus.toastmsg}}</div>
+</div>

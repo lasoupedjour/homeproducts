@@ -1,0 +1,150 @@
+﻿<div class="container">
+  <div class="row mt-5">
+    <div class="col-12 text-center">
+      <h2 class="alert-success">Reporte</h2>
+    </div>
+    <div class="col-12 mt-1">
+      <h2 class="alert-danger px-2">{{_global.appstatus.mensaje}}</h2>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="reporte" *ngIf="_global.reporte.participaciones[0]">
+  <div class="row">
+    <div class="col-12 mt-1">
+
+      <table border="1">
+        <tr>
+          <th>ID</th>
+          <th>Nombre Padre</th>
+          <th>Nombre Niño</th>
+          <th>Estado CC</th>
+          <th>Estado Web</th>
+          <th>Municipio</th>
+          <th>Teléfono</th>
+          <th>Medio</th>
+          <th>Fecha Registro Usuario</th>
+          <th>Código</th>
+          <th>Puntaje</th>
+          <th>Fecha Inicio Trivia/Juego</th>
+          <th>Fecha Fin Trivia/JuegoPaterno</th>
+          <th>Tiempo</th>
+          <th>Fecha Participación</th>
+          <th>P1</th>
+          <th>P2</th>
+          <th>P3</th>
+          <th>P4</th>
+          <th>P5</th>
+          <th>R1</th>
+          <th>R2</th>
+          <th>R3</th>
+          <th>R4</th>
+          <th>R5</th>
+          <th>Aciertos</th>
+          <th>Operador</th>
+
+          
+        </tr>
+
+        <tr *ngFor="let item of _global.reporte.participaciones;">
+         
+          <td>
+            {{item.idusuarios}}
+          </td>
+          <td>
+            {{item.nombrepadre}}
+          </td>
+          <td>
+            {{item.nombrenino}}
+          </td>
+          <td>
+            {{item.estado}}
+          </td>
+          <td>
+            {{item.nombre}}
+          </td>
+          <td>
+            {{item.idmunicipio}}
+          </td>
+          <td>
+            {{item.telefono}}
+          </td>
+          <td>
+            {{item.medio}}
+          </td>
+          <td>
+            {{item.fecha_registro_usuario}}
+          </td>
+          <td>
+            {{item.codigo}}
+          </td>
+          <td>
+            {{item.puntaje}}
+          </td> 
+          <td>
+            {{item.fecha_inicio_trivia_juego}}
+          </td>
+          <td>
+            {{item.fecha_fin_trivia_juego}}
+          </td>
+          <td>
+            {{item.tiempo}}
+          </td>
+          <td>
+            {{item.fecha_participacion}}
+          </td>
+          <td>
+            {{item.p1}}
+          </td>
+          <td>
+            {{item.p2}}
+          </td>
+          <td>
+            {{item.p3}}
+          </td>
+          <td>
+            {{item.p4}}
+          </td>
+          <td>
+            {{item.p5}}
+          </td>
+          <td>
+            {{item.r1}}
+          </td>
+          <td>
+            {{item.r2}}
+          </td>
+          <td>
+            {{item.r3}}
+          </td>
+          <td>
+            {{item.r4}}
+          </td>
+          <td>
+            {{item.r5}}
+          </td>
+          <td>
+            {{item.aciertos}}
+          </td>
+          <td>
+            {{item.operador}}
+          </td>
+          
+          
+          
+          
+        </tr>
+
+      </table>
+
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row mt-5">
+ 
+  </div>
+</div>

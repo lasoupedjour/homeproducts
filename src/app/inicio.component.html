@@ -1,0 +1,548 @@
+﻿<!--div class="container">
+  <div class="row mt-5">
+    <div class="col-12 mt-1">
+      <h2 class="alert-danger px-2">{{_global.appstatus.mensaje}}</h2>
+    </div>
+  </div>
+</div-->
+
+
+ <div class="container">
+
+
+   <div class="row mt-3">
+     <div class="col-6">
+       <i class="fa fa-user-circle"></i> Bienvenido {{_global.user.nombre}} <br> No. Operador: {{_global.user.id}}
+     </div>
+
+
+   </div>
+  <hr>
+
+   <div [hidden]="!(_global.user.nivel == 'administrador')">
+
+     <!---->
+     <div class="row mt-5 mb-2">
+       <div class="col-8">
+         <h3>Refacciones por autorizar</h3>
+       </div>
+       <div class="col-4 text-right">
+         <a routerLink="/inicio/refacciones/">Ver todos</a>
+       </div>
+     </div>
+
+     <div class="row mb-3" *ngIf="_global.refaccionesXAutorizar.recientes[0]">
+       <div class="col-12 ">
+
+         <table class="table table-striped table-bordered">
+           <tr>
+             <th>País</th>
+             <th>No. de Reporte</th>
+             <th>CDS</th>
+
+             <th>Fecha de Registro</th>
+             <th>Tipo de Caso</th>
+
+             <th>Nombre Refaccion</th>
+             <th>No. Parte</th>
+
+
+
+             <th>Días Transcurridos</th>
+
+             <th>Status</th>
+
+             <th>Disponibilidad</th>
+             <th>Fecha Entrega</th>
+             <th>Acción</th>
+
+
+             <th>Selección</th>
+           </tr>
+
+           <tr *ngFor="let item of _global.refaccionesXAutorizar.recientes;" class="formulario">
+
+             <td>
+               {{item.Pais}}
+             </td>
+             <td>
+               {{item.id}}
+             </td>
+             <td>
+               {{item.NombreCentro}}
+             </td>
+
+             <td>
+			         {{item.FechaRegistroReporteNF}}
+             </td>
+             <td>
+               {{item.TipoCaso}}
+             </td>
+
+             <td>
+               {{item.Refacciones.NombreRefaccion}}
+             </td>
+             <td>
+               {{item.Refacciones.NoParte}}
+             </td>
+
+
+
+             <td [ngClass]="this._global.diasTranscurridosColor(item.FechaRegistroReporte)">
+               {{this._global.diasTranscurridos(item.FechaRegistroReporte)}}
+             </td>
+             <td>
+               <span [innerHTML]="this._global.setStatusRefaccion(item.Refacciones.StatusCotizacion)"></span>
+             </td>
+
+             <td>
+               {{item.Refacciones.Existencia}}
+             </td>
+
+             <td>
+               {{item.Refacciones.FechaEntrega.day}}/{{item.Refacciones.FechaEntrega.month}}/{{item.Refacciones.FechaEntrega.year}}<br>
+             </td>
+
+             <td>
+               <button (click)="this._global.evaluaRefaccion(item.id, item.Refacciones.NoParte)" class="btn btn-sm">Cambiar Status</button>
+             </td>
+
+
+             <td>
+               <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Ver reporte</button>
+             </td>
+           </tr>
+
+         </table>
+
+       </div>
+     </div>
+     <div class="row mb-3 ml-2" *ngIf="!_global.refaccionesXAutorizar.recientes[0]">No hay refacciones por autorizar.</div>
+
+
+       <!---->
+       <div class="row mt-5 mb-2">
+         <div class="col-8">
+           <h3>Cotizaciones por autorizar</h3>
+         </div>
+         <div class="col-4 text-right">
+           <a routerLink="/inicio/refacciones/">Ver todos</a>
+         </div>
+       </div>
+
+       <div class="row mb-3" *ngIf="_global.cotizacionesXAutorizar.recientes[0]">
+         <div class="col-12 ">
+
+           <table class="table table-striped table-bordered">
+             <tr>
+               <th>País</th>
+               <th>No. de Reporte</th>
+               <th>CDS</th>
+
+               <th>Fecha de Registro</th>
+               <th>Tipo de Caso</th>
+
+               <th>Nombre Refaccion</th>
+               <th>No. Parte</th>
+
+               <th>Cotización</th>
+
+               <th>Días Transcurridos</th>
+
+               <th>Status</th>
+
+               <th>Aprobación</th>
+               <th>Fecha Entrega</th>
+               <th>Acción</th>
+
+
+               <th>Selección</th>
+             </tr>
+
+             <tr *ngFor="let item of _global.cotizacionesXAutorizar.recientes;" class="formulario">
+
+               <td>
+                 {{item.Pais}}
+               </td>
+               <td>
+                 {{item.id}}
+               </td>
+               <td>
+                 {{item.NombreCentro}}
+               </td>
+
+               <td>
+				          {{item.FechaRegistroReporteNF}}
+               </td>
+               <td>
+                 {{item.TipoCaso}}
+               </td>
+
+               <td>
+                 {{item.Refacciones.NombreRefaccion}}
+               </td>
+               <td>
+                 {{item.Refacciones.NoParte}}
+               </td>
+
+
+               <td>
+                 <strong>Proveedor:</strong> {{item.Refacciones.Proveedor}}<br>
+                 <strong>Cantidad:</strong> {{item.Refacciones.Cantidad}}<br>
+                 <strong>Costo Unitario:</strong> ${{item.Refacciones.CostoUnitario}}<br>
+                 <strong>Costo Total:</strong> ${{item.Refacciones.CostoTotal}}<br>
+                 <strong>Fecha de Entrega:</strong> {{item.Refacciones.FechaEntrega.day}}/{{item.Refacciones.FechaEntrega.month}}/{{item.Refacciones.FechaEntrega.year}}<br>
+                 <strong>Nota:</strong> &nbsp;<a href="servicios/reparacion/uploads-reparaciones/{{item.Refacciones.Nota}}">&nbsp;<i class="fa fa-file"></i></a>
+               </td>
+
+
+               <td [ngClass]="this._global.diasTranscurridosColor(item.FechaRegistroReporte)">
+                 {{this._global.diasTranscurridos(item.FechaRegistroReporte)}}
+               </td>
+               <td>
+                 {{item.Refacciones.StatusCotizacion}}
+               </td>
+
+               <td>
+                 {{item.Refacciones.Status}}
+               </td>
+
+               <td>
+                 {{item.Refacciones.FechaEntrega.day}}/{{item.Refacciones.FechaEntrega.month}}/{{item.Refacciones.FechaEntrega.year}}<br>
+               </td>
+
+               <td>
+                 <button (click)="this._global.evaluaCotizacion(item.id, item.Refacciones.NoParte)" class="btn btn-sm">Cambiar Status</button>
+               </td>
+
+
+               <td>
+                 <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Ver reporte</button>
+               </td>
+             </tr>
+
+           </table>
+
+         </div>
+       </div>
+     <div class="row mb-3 ml-2" *ngIf="!_global.cotizacionesXAutorizar.recientes[0]">No hay cotizaciones por autorizar.</div>
+
+       <!---->
+       <div class="row mt-5 mb-2">
+         <div class="col-8">
+           <h3>Movilizaciones por autorizar</h3>
+         </div>
+         <div class="col-4 text-right">
+           <a routerLink="/inicio/refacciones/">Ver todos</a>
+         </div>
+       </div>
+
+       <div class="row mb-3" *ngIf="_global.movilizacionesXAutorizar.recientes[0]">
+         <div class="col-12 ">
+
+           <table class="table table-striped table-bordered">
+             <tr>
+               <th>País</th>
+               <th>No. de Reporte</th>
+               <th>CDS</th>
+
+               <th>Fecha de Registro</th>
+               <th>Tipo de Caso</th>
+
+               <th>Tipo Movilidad</th>
+               <th>Tarifa Movilidad</th>
+
+
+
+               <th>Días Transcurridos</th>
+
+               <th>Status</th>
+
+
+               <th>Acción</th>
+
+
+               <th>Selección</th>
+             </tr>
+
+             <tr *ngFor="let item of _global.movilizacionesXAutorizar.recientes;" class="formulario">
+
+               <td>
+                 {{item.Pais}}
+               </td>
+               <td>
+                 {{item.id}}
+               </td>
+               <td>
+                 {{item.NombreCentro}}
+               </td>
+
+               <td>
+				          {{item.FechaRegistroReporteNF}}
+               </td>
+               <td>
+                 {{item.TipoCaso}}
+               </td>
+
+               <td>
+                 {{item.SubtipoServicio}}
+               </td>
+               <td *ngIf="item.MontoMovilizacion==0">
+                 ${{item.Valor}}
+               </td>
+               <td *ngIf="item.MontoMovilizacion!=0">
+                 ${{item.MontoMovilizacion}}
+               </td>
+
+
+
+               <td [ngClass]="this._global.diasTranscurridosColor(item.FechaRegistroReporte)">
+                 {{this._global.diasTranscurridos(item.FechaRegistroReporte)}}
+               </td>
+               <td>
+                 {{item.StatusMovilidad}}
+               </td>
+
+
+
+               <td>
+                 <button (click)="this._global.evaluaMovilizacion(item.id, item.Refacciones.NoParte)" class="btn btn-sm">Cambiar Status</button>
+               </td>
+
+
+               <td>
+                 <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Ver reporte</button>
+               </td>
+             </tr>
+
+           </table>
+
+         </div>
+       </div>
+      <div class="row mb-3 ml-2" *ngIf="!_global.movilizacionesXAutorizar.recientes[0]">No hay movilizaciones por autorizar.</div>
+     </div> <!--termina administrador-->
+
+
+
+
+
+  <div class="row mt-5 mb-2">
+    <div class="col-8">
+      <h3>Casos Asignados Recientemente</h3>
+    </div>
+    <div class="col-4 text-right">
+      <a routerLink="/inicio/casos-asignados/">Ver todos</a>
+    </div>
+  </div>
+
+   <div class="row mb-3" *ngIf="_global.casosAsignados.recientes[0]">
+     <div class="col-12 ">
+
+       <table class="table table-striped table-bordered">
+         <tr>
+           <th>País</th>
+           <th>No. de Reporte</th>
+           <th>Nombre o Razón Social</th>
+
+           <th>Fecha de Registro</th>
+           <th>Tipo de Caso</th>
+           <th>Modelo</th>
+           <th>Producto</th>
+           <th>No. de Serie</th>
+           <th>Aplica Garantía</th>
+           <th>Días Transcurridos</th>
+           <th>Proceso</th>
+           <th>Status</th>
+           <th>Selección</th>
+         </tr>
+
+         <tr *ngFor="let item of _global.casosAsignados.recientes;">
+
+           <td>
+             {{item.Pais}}
+           </td>
+           <td>
+             {{item.id}}
+           </td>
+           <td>
+             {{item.RazonSocial}} {{item.Nombre}} {{item.APaterno}} {{item.AMaterno}}
+           </td>
+
+           <td>
+			       {{item.FechaRegistroReporteNF}}
+           </td>
+           <td>
+             {{item.TipoCaso}}
+           </td>
+           <td>
+             {{item.Modelo}}
+           </td>
+           <td>
+             {{item.Tipo}}
+           </td>
+           <td>
+             {{item.NoSerie}}
+           </td>
+           <td [innerHtml]="aplicaGarantia(item.AplicaGarantia)">
+
+           </td>
+           <td [ngClass]="this._global.diasTranscurridosColor(item.FechaRegistroReporte)">
+             {{this._global.diasTranscurridos(item.FechaRegistroReporte)}}
+           </td>
+           <td>
+             {{item.StatusReporte}}
+           </td>
+           <td>
+             Abierto
+           </td>
+           <td>
+             <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Seleccionar</button>
+           </td>
+         </tr>
+
+       </table>
+
+     </div>
+   </div>
+
+
+
+   <div class="row mt-5 mb-2">
+     <div class="col-8">
+       <h3>Últimas Órdenes de Servicio Generadas</h3>
+     </div>
+     <div class="col-4 text-right">
+       <a routerLink="/inicio/ordenes-de-servicio/">Ver todas</a>
+     </div>
+   </div>
+
+   <div class="row mb-3" *ngIf="_global.ordenesServicio.recientes[0]">
+     <div class="col-12">
+
+       <table class="table table-striped table-bordered">
+         <tr>
+           <th>País</th>
+           <th>No. de Orden</th>
+           <th>Nombre o Razón Social</th>
+
+           <th>Fecha de Registro</th>
+           <th>Tipo de Caso</th>
+           <th>Modelo</th>
+           <th>Producto</th>
+           <th>No. de Serie</th>
+           <th>Tipo de Reclamo</th>
+           <th>Proceso</th>
+           <th>Status</th>
+           <th>Selección</th>
+         </tr>
+
+         <tr *ngFor="let item of _global.ordenesServicio.recientes;">
+
+           <td>
+             {{item.Pais}}
+           </td>
+           <td>
+             {{item.id}}
+           </td>
+           <td>
+             {{item.RazonSocial}} {{item.Nombre}} {{item.APaterno}} {{item.AMaterno}}
+           </td>
+
+           <td>
+             {{item.FechaRegistroReporteNF}}
+           </td>
+           <td>
+             {{item.TipoCaso}}
+           </td>
+           <td>
+             {{item.Modelo}}
+           </td>
+           <td>
+             {{item.Tipo}}
+           </td>
+           <td>
+             {{item.NoSerie}}
+           </td>
+           <td>
+             {{item.TipoReclamoDiagnostico}}
+           </td>
+           <td>
+             {{item.StatusReporte}}
+           </td>
+           <td>
+             Cerrado
+           </td>
+           <td>
+             <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen/orden')" class="btn btn-sm">Seleccionar</button>
+           </td>
+         </tr>
+
+       </table>
+
+     </div>
+   </div>
+
+
+
+   <div class="row mt-5 mb-3">
+     <div class="col-8">
+       <h3>Nuevos Clientes Registrados</h3>
+     </div>
+     <div class="col-4 text-right">
+       <a routerLink="/inicio/clientes/">Ver todos</a>
+     </div>
+   </div>
+
+   <div class="row mb-5" *ngIf="_global.clientes.recientes[0]">
+     <div class="col-12">
+
+       <table class="table table-striped table-bordered">
+         <tr>
+           <th>País</th>
+           <th>Ciudad</th>
+           <th>Nombre o Razón Social</th>
+           <th>Fecha de Registro</th>
+           <th>Teléfono</th>
+           <th>Teléfono 2</th>
+           <th>Email</th>
+           <th>Selección</th>
+         </tr>
+
+         <tr *ngFor="let item of _global.clientes.recientes;">
+
+           <td>
+             {{item.Pais}}
+           </td>
+           <td>
+             {{item.IDEstado}}
+           </td>
+           <td>
+             {{item.RazonSocial}} {{item.Nombre}} {{item.APaterno}} {{item.AMaterno}}
+           </td>
+           <td>
+			       {{item.FechaRegistroReporteNF}}
+           </td>
+           <td>
+             {{item.Telefono}}
+           </td>
+           <td>
+             {{item.Movil}}
+           </td>
+           <td>
+             {{item.Email}}
+           </td>
+           <td>
+             <button (click)="this._global.verPerfil(item.id)" class="btn btn-sm">Seleccionar</button>
+           </td>
+         </tr>
+
+       </table>
+
+     </div>
+   </div>
+
+
+
+
+
+</div>

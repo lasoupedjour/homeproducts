@@ -1,0 +1,28 @@
+﻿<div class="container">
+  <div class="row">
+      <div class="col-6 offset-3">
+        <p>Escribe el email registrado en la aplicación y te enviaremos un correo de recuperación.</p>
+      </div>
+
+      <div class="col-6 offset-3 formulariologin">
+
+        <form class="formulario formulariologin" name="formularioolvido" [formGroup]="olvidoForm" (ngSubmit)="submitForm()">
+          <label>
+            <input type="email" class="form-control form-control-sm" formControlName="Email" placeholder="Email" />
+            <span class="alert alert-danger" *ngIf="!olvidoForm.controls.Email.valid && olvidoForm.controls.Email.touched">
+              Por favor ingresa un email válido
+            </span>
+          </label>
+
+          <label class="text-center">
+            <button class="btn btn-sm" type="submit">Enviar</button>
+          </label>
+        </form>
+      </div>
+      
+      <div class="col-6 offset-3 text-center">
+        <a routerLink="/">Regresar</a>
+      </div>
+
+    </div>
+</div>

@@ -1,0 +1,41 @@
+ <div class="container">
+
+   <div class="row mt-3">
+     <div class="col-6">
+       <h2>NOTIFICACIONES</h2>
+     </div>
+   </div>
+
+  <hr>
+   <div class="mb-5">
+     <div class="">
+
+       <table>
+         <tr>
+
+           <th>#</th>
+           <th>Notificación</th>
+           <th>Fecha de notificación</th>
+
+         </tr>
+
+         <tr *ngFor="let item of _global.notificaciones.objnotificaciones;">
+
+           <td>
+             {{item.id}}
+           </td>
+           <td>
+             {{item.descripcion}}
+           </td>
+           <td>
+             {{item.timestampNF}}
+           </td>
+
+         </tr>
+
+       </table>
+
+     </div>
+   </div>
+
+</div>
