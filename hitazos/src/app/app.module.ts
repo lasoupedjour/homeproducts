@@ -44,9 +44,16 @@ import { OrdenInicioComponent } from './orden-de-servicio/orden-inicio.component
 //Administracion
 import { AdministracionComponent } from './administracion/administracion.component';
 import { HistorialComponent } from './administracion/historial.component';
+import { ResumenPagosComponent } from './administracion/resumen-de-pagos.component';
 
 //Notificaciones
 import { NotificacionesComponent } from './notificaciones/listado.component';
+
+
+//Ver Todos
+import { NuevasRefaccionesComponent } from './nuevas-refacciones.component';
+import { NuevasCotizacionesComponent } from './nuevas-cotizaciones.component';
+import { NuevasMovilizacionesComponent } from './nuevas-movilizaciones.component';
 
 import { HttpModule } from '@angular/http';
 import { HTTPService } from './services/http.service';
@@ -103,8 +110,13 @@ import 'datatables.net-fixedheader';
 
         AdministracionComponent,
         HistorialComponent,
+        ResumenPagosComponent,
 
         NotificacionesComponent,
+
+        NuevasRefaccionesComponent,
+        NuevasCotizacionesComponent,
+        NuevasMovilizacionesComponent,
 
   ],
   imports: [

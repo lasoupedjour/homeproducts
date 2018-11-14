@@ -37,9 +37,15 @@ import { OrdenInicioComponent } from './orden-de-servicio/orden-inicio.component
 //Administracion
 import { AdministracionComponent } from './administracion/administracion.component';
 import { HistorialComponent } from './administracion/historial.component';
+import { ResumenPagosComponent } from './administracion/resumen-de-pagos.component';
 
 //Notificaciones
 import { NotificacionesComponent } from './notificaciones/listado.component';
+
+//Ver Todos
+import { NuevasRefaccionesComponent } from './nuevas-refacciones.component';
+import { NuevasCotizacionesComponent } from './nuevas-cotizaciones.component';
+import { NuevasMovilizacionesComponent } from './nuevas-movilizaciones.component';
 
 import { GlobalService } from './services/global.service';
 
@@ -72,13 +78,19 @@ export const routing = RouterModule.forRoot([
 
     { path: 'administracion/inicio', component: AdministracionComponent, canActivate: [GlobalService] },
     { path: 'administracion/historial-de-pagos', component: HistorialComponent, canActivate: [GlobalService] },
+    { path: 'administracion/resumen-de-pagos', component: ResumenPagosComponent, canActivate: [GlobalService] },
 
 
     //{ path: 'registroticket/:idparticipante', component: RegistroTicketComponent, canActivate: [GlobalService] },
     { path: 'reporte', component: ReporteComponent, canActivate: [GlobalService] },
 
     { path: 'notificaciones', component: NotificacionesComponent, canActivate: [GlobalService] },
-    
+
+    { path: 'nuevas-refacciones', component: NuevasRefaccionesComponent, canActivate: [GlobalService] },
+    { path: 'nuevas-cotizaciones', component: NuevasCotizacionesComponent, canActivate: [GlobalService] },
+    { path: 'nuevas-movilizaciones', component: NuevasMovilizacionesComponent, canActivate: [GlobalService] },
+
+
     /*{ path: 'conductor', component: HomeConductorComponent },
     { path: 'pasajero', component: HomePasajeroComponent },
     { path: '*', component: HomeComponent }*/

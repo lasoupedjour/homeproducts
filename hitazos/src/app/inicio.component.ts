@@ -79,6 +79,7 @@ export class InicioComponent {
         var params = {};
         params["IDCentro"] = this._global.user.IDCentro;
         params["nivel"] = this._global.user.nivel;
+        params["limit"] = "5";
 
         this._global.appstatus.loading = true;
         console.log('nuevas refacciones');
@@ -120,6 +121,7 @@ export class InicioComponent {
         var params = {};
         params["IDCentro"] = this._global.user.IDCentro;
         params["nivel"] = this._global.user.nivel;
+        params["limit"] = "5";
 
         this._global.appstatus.loading = true;
         console.log('nuevas cotizaciones');
@@ -161,6 +163,7 @@ export class InicioComponent {
         var params = {};
         params["IDCentro"] = this._global.user.IDCentro;
         params["nivel"] = this._global.user.nivel;
+        params["limit"] = "5";
 
         this._global.appstatus.loading = true;
         console.log('nuevas refacciones');

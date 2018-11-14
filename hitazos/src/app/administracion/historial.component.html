@@ -9,8 +9,11 @@
 
 <div class="container fM2 menuadmin">
   <div class="row">
-    <div class="offset-sm-8 col-sm-2 text-center">
+    <div class="offset-sm-6 col-sm-2 text-center">
       <a routerLink="/administracion/inicio/">Resumen de Servicios</a>
+    </div>
+    <div class="col-sm-2 text-center">
+      <a routerLink="/administracion/resumen-de-pagos/">Resumen de Pagos</a>
     </div>
     <!--<div class="col-sm-2 text-center">
       <a routerLink="/administracion/servicios-red/">Servicios Red</a>
@@ -20,7 +23,7 @@
     </div>
   </div>
 </div>
-  
+
 
 
 
@@ -56,16 +59,16 @@
 
        <table>
          <tr>
-           
+
            <th>Periodo</th>
            <th>Monto Total</th>
            <th>Status</th>
            <th>Comprobante</th>
-           
+
          </tr>
 
          <tr>
-           
+
            <td>
              <span [innerHTML]="this._global.getMes(item.Mes)"></span>&nbsp;<span [innerHTML]="item.Ano"></span>
            </td>
@@ -78,15 +81,15 @@
            <td>
              {{item.Comprobante}}
            </td>
-           
-           
-           
+
+
+
          </tr>
 
        </table>
 
      </div>
-   </div> 
+   </div>
 
    <div class="row my-5">
      <!--<div class="offset-sm-9 col-3">
@@ -97,8 +100,3 @@
 
 
 </div>
-
-  
-
-
-
