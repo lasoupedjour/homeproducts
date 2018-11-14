@@ -22,18 +22,21 @@ $res = array();
 
 $res['res'] = 'ok';
 
+$query = "
+          SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
+          FROM reportes, clientes, centros
+          where clientes.id = reportes.IDCliente
+            and centros.id = reportes.IDCentro
+          and StatusReporte = 'Reparacion'
+          order by FechaRegistroReporte desc :LIMIT
+          ";
 
-	$q = mysql_query("
-	SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF 
-	FROM reportes, clientes, centros
-	where clientes.id = reportes.IDCliente
-    and centros.id = reportes.IDCentro
-	and StatusReporte = 'Reparacion'
-	order by FechaRegistroReporte desc LIMIT 5
-	") or die(mysql_error());
+if($arre["limit"]=="")
+  $query = str_replace(":LIMIT", "", $query);
+else
+  $query = str_replace(":LIMIT", "LIMIT 5", $query);
 
-
-
+$q = mysql_query($query) or die(mysql_error());
 
 $reportes = array();
 

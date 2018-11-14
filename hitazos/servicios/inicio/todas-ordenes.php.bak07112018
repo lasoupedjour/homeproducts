@@ -1,5 +1,5 @@
 ﻿<?php
-include "dbc.php";
+include "../dbc.php";
 
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
@@ -22,16 +22,27 @@ $res = array();
 
 $res['res'] = 'ok';
 
-if($arre['nivel'] == 'administrador' || $arre['nivel'] == 'MKT'){
-	$query = "SELECT distinct Modelo FROM productos where Subcategoria = '".$arre['Subcategoria']."' order by Modelo asc";
+
+if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
+	$q = mysql_query("
+	SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno 
+	FROM reportes, clientes 
+	where clientes.id = reportes.IDCliente 
+	and reportes.IDCentro = ".$arre["IDCentro"]."
+	and StatusReporte = 'Orden de Servicio'
+	order by FechaRegistroReporte desc;
+	") or die(mysql_error());
 }else{
-	$query = "SELECT distinct Modelo FROM productos where Subcategoria = '".$arre['Subcategoria']."' order by Modelo asc";
+	$q = mysql_query("
+	SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno 
+	FROM reportes, clientes 
+	where clientes.id = reportes.IDCliente 
+	and StatusReporte = 'Orden de Servicio'
+	order by FechaRegistroReporte desc;
+	") or die(mysql_error());
 }
 
-$q = mysql_query($query) or die(mysql_error());
-
-
-$modelos = array();
+$reportes = array();
 
 while ($row = mysql_fetch_array($q))   
 {  
@@ -41,9 +52,9 @@ while ($row = mysql_fetch_array($q))
 		$value = utf8_encode($value);
 	});
 	$temp = json_encode($row);
-	array_push($modelos, $temp);
+	array_push($reportes, $temp);
 }
-$res['modelos'] = $modelos;
+$res['reportes'] = $reportes;
 
 echo json_encode($res);
 

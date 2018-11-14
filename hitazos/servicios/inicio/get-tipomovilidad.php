@@ -1,8 +1,4 @@
-<?php
-/*
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-*/
+﻿<?php
 include "../dbc.php";
 
 if (isset($_SERVER['HTTP_ORIGIN'])) {
@@ -19,25 +15,15 @@ array_walk_recursive($arre,function(&$value) use ($current_charset){
      $value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
 });
 
-$res = array();
+$q = mysql_query("SELECT SubtipoServicio from tarifas where id = " . $arre["id"]);
 
-$res['res'] = 'ok';
+$reportes = array();
+$subtipo = "";
 
-
-$query = "SELECT id, Nombre from centros where Pais like '%".$arre["Pais"]."%' and IDMaster=0";
-
-$query = utf8_encode($query);
-
-$result = mysql_query($query) or die(mysql_error());
-echo "<option value='' hidden>CDS</option>";
-while ($row = mysql_fetch_row($result)) {
-?>
-    <option value="<?php echo $row[0]; ?>" ><?php echo utf8_encode($row[1]); ?></option>
-<?php
+while ($row = mysql_fetch_array($q))
+{
+  $subtipo = $row["SubtipoServicio"];
 }
 
-
-
-
-
+echo('{"SubtipoServicio": "' . utf8_encode($subtipo) . '"}');
 ?>

@@ -33,30 +33,9 @@ if($mes)*/
 $fechaIni = $ano.'-'.$mes.'-'.'01';
 $fechaFin = $ano.'-'.$mes.'-'.'31';
 
-/*
-Query original sin nombre de centro y master
+$query = "
 SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno
 FROM reportes, clientes
-where clientes.id = reportes.IDCliente and
-StatusReporte = 'Orden de Servicio'
-:filtros
-order by FechaOrdenServicio desc;
-*/
-$query = "
-Select DISTINCT reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, centros.nombre,  IFNULL( centros1.nombre,  'N/A' ) AS  'Master', tarifas.TarifaMensual, tarifas.ImpuestoTarifaMensual from
-(select * from reportes) as reportes
-join
-(select * from clientes) as clientes
-on reportes.idcliente = clientes.id
-join
-(select * from centros) as centros
-on centros.id = reportes.idCentro
-join
-(select * from tarifas) as tarifas
-on centros.idGrupotarifa = tarifas.idGrupoTarifa
-left join
-(select * from centros) as centros1
-on centros.idMaster = centros1.id
 where clientes.id = reportes.IDCliente and
 StatusReporte = 'Orden de Servicio'
 :filtros
@@ -83,7 +62,10 @@ if($filtroCds!="" && $filtroFecha!=""){
 }else{
   $query = str_replace(":filtros", "", $query);
 }
-
+/*
+echo($query);
+die();
+*/
 $q = mysql_query($query) or die(mysql_error());
 
 /*

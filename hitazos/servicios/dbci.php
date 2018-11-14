@@ -2,9 +2,9 @@
 
 
 define ("DB_HOST", "localhost"); // set database host
-define ("DB_USER", "root"); // set database user
-define ("DB_PASS","root"); // set database password
-define ("DB_NAME","oster_homeproducts"); // set database name
+define ("DB_USER", "Oster"); // set database user
+define ("DB_PASS","Vcjc3jASBjYPDcND"); // set database password
+define ("DB_NAME","Oster_homeproducts"); // set database name
 
 $host = "http://".$_SERVER['HTTP_HOST'];
 

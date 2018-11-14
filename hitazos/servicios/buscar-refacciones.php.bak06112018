@@ -22,16 +22,13 @@ $res = array();
 
 $res['res'] = 'ok';
 
-if($arre['nivel'] == 'administrador' || $arre['nivel'] == 'MKT'){
-	$query = "SELECT distinct Modelo FROM productos where Subcategoria = '".$arre['Subcategoria']."' order by Modelo asc";
-}else{
-	$query = "SELECT distinct Modelo FROM productos where Subcategoria = '".$arre['Subcategoria']."' order by Modelo asc";
-}
 
-$q = mysql_query($query) or die(mysql_error());
+$q = mysql_query("
+SELECT distinct Nombre, NoParte FROM refacciones_productos where Nombre <> '' and Subcategoria = '".$arre['Subcategoria']."' and ModeloProducto = '".$arre['Modelo']."' order by NoParte, Nombre asc
+") or die(mysql_error());
 
 
-$modelos = array();
+$refaccionesproductos = array();
 
 while ($row = mysql_fetch_array($q))   
 {  
@@ -41,9 +38,9 @@ while ($row = mysql_fetch_array($q))
 		$value = utf8_encode($value);
 	});
 	$temp = json_encode($row);
-	array_push($modelos, $temp);
+	array_push($refaccionesproductos, $temp);
 }
-$res['modelos'] = $modelos;
+$res['refaccionesproductos'] = $refaccionesproductos;
 
 echo json_encode($res);
 

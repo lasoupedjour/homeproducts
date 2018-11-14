@@ -1,8 +1,8 @@
 <?php
 define ("DB_HOST", "localhost"); // set database host
-define ("DB_USER", "root"); // set database user
-define ("DB_PASS","root"); // set database password
-define ("DB_NAME","oster_homeproducts"); // set database name
+define ("DB_USER", "Oster"); // set database user
+define ("DB_PASS","Vcjc3jASBjYPDcND"); // set database password
+define ("DB_NAME","Oster_homeproducts"); // set database name
 
 $host = "http://".$_SERVER['HTTP_HOST'];
 
@@ -14,18 +14,18 @@ function filter($data) {
 
 	if (get_magic_quotes_gpc())
 		$data = stripslashes($data);
-
+	
 	$data = mysql_real_escape_string($data);
 	$data = html_entity_decode($data);
-
+	
 	return $data;
 }
 
 function genPassword($id, $nombrepadre, $nombrenino){
-
+	
 	$pwd = $id.strtoupper(substr($nombrepadre,0,1)).strtoupper(substr($nombrenino,0,1));
 	return $pwd;
-
+	
 }
 
 function randomPassword() {

@@ -22,16 +22,29 @@ $res = array();
 
 $res['res'] = 'ok';
 
-if($arre['nivel'] == 'administrador' || $arre['nivel'] == 'MKT'){
-	$query = "SELECT distinct Modelo FROM productos where Subcategoria = '".$arre['Subcategoria']."' order by Modelo asc";
-}else{
-	$query = "SELECT distinct Modelo FROM productos where Subcategoria = '".$arre['Subcategoria']."' order by Modelo asc";
+$tipoTarifa = '';
+
+$q = mysql_query("
+SELECT TipoTarifa
+from productos
+where Modelo = '".$arre['Modelo']."' limit 1; 
+") or die(mysql_error());
+
+$num = mysql_num_rows($q);
+
+while ($num > 0)   
+{ 
+	list($tipoTarifa) = mysql_fetch_row($q);
+	$num --;
 }
 
-$q = mysql_query($query) or die(mysql_error());
+
+$q = mysql_query("
+SELECT distinct id, IDGrupoTarifa, TipoTarifa, TipoServicio, SubtipoServicio, Valor, Impuesto, TarifaMensual, ImpuestoTarifaMensual FROM tarifas where TipoTarifa = '$tipoTarifa' and IDGrupoTarifa = ".$arre["IDGrupoTarifa"]."
+") or die(mysql_error());
 
 
-$modelos = array();
+$tarifas = array();
 
 while ($row = mysql_fetch_array($q))   
 {  
@@ -41,9 +54,9 @@ while ($row = mysql_fetch_array($q))
 		$value = utf8_encode($value);
 	});
 	$temp = json_encode($row);
-	array_push($modelos, $temp);
+	array_push($tarifas, $temp);
 }
-$res['modelos'] = $modelos;
+$res['tarifas'] = $tarifas;
 
 echo json_encode($res);
 
