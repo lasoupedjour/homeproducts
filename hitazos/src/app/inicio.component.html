@@ -192,7 +192,7 @@
                  <strong>Costo Unitario:</strong> ${{item.Refacciones.CostoUnitario}}<br>
                  <strong>Costo Total:</strong> ${{item.Refacciones.CostoTotal}}<br>
                  <strong>Fecha de Entrega:</strong> {{item.Refacciones.FechaEntrega.day}}/{{item.Refacciones.FechaEntrega.month}}/{{item.Refacciones.FechaEntrega.year}}<br>
-                 <strong>Nota:</strong> &nbsp;<a href="servicios/reparacion/uploads-reparaciones/{{item.Refacciones.Nota}}">&nbsp;<i class="fa fa-file"></i></a>
+                 <strong>Nota:</strong> &nbsp;<a (click)="this._global.muestraImagenNota(item.Refacciones.Nota, item.id)">&nbsp;<i class="fa fa-file"></i></a>
                </td>
 
 
@@ -320,6 +320,104 @@
          </div>
        </div>
       <div class="row mb-3 ml-2" *ngIf="!_global.movilizacionesXAutorizar.recientes[0]">No hay movilizaciones por autorizar.</div>
+
+
+      <!---->
+      <div class="row mt-5 mb-2">
+        <div class="col-8">
+          <h3>Cambios físicos por autorizar</h3>
+        </div>
+        <div class="col-4 text-right">
+          <a routerLink="../nuevos-cambios-fisicos/">Ver todos</a>
+        </div>
+      </div>
+
+      <div class="row mb-3" *ngIf="_global.cambiosFisicosXAutorizar.recientes[0]">
+        <div class="col-12 ">
+
+          <table class="table table-striped table-bordered">
+            <tr>
+              <th>País</th>
+              <th>No. de Reporte</th>
+              <th>CDS</th>
+
+              <th>Fecha de Registro</th>
+              <th>Tipo de Caso</th>
+
+              <th>Tipo Movilidad</th>
+              <th>Tarifa Movilidad</th>
+
+
+
+              <th>Días Transcurridos</th>
+
+              <th>Status</th>
+
+
+              <th>Acción</th>
+
+
+              <th>Selección</th>
+            </tr>
+
+            <tr *ngFor="let item of _global.cambiosFisicosXAutorizar.recientes;" class="formulario">
+
+              <td>
+                {{item.Pais}}
+              </td>
+              <td>
+                {{item.id}}
+              </td>
+              <td>
+                {{item.NombreCentro}}
+              </td>
+
+              <td>
+                 {{item.FechaRegistroReporteNF}}
+              </td>
+              <td>
+                {{item.TipoCaso}}
+              </td>
+
+              <td>
+                {{item.SubtipoServicio}}
+              </td>
+              <td *ngIf="item.MontoMovilizacion==0">
+                ${{item.Valor}}
+              </td>
+              <td *ngIf="item.MontoMovilizacion!=0">
+                ${{item.MontoMovilizacion}}
+              </td>
+
+
+
+              <td [ngClass]="this._global.diasTranscurridosColor(item.FechaRegistroReporte)">
+                {{this._global.diasTranscurridos(item.FechaRegistroReporte)}}
+              </td>
+              <td>
+                {{item.StatusMovilidad}}
+              </td>
+
+
+
+              <td>
+                <button (click)="this._global.evaluaMovilizacion(item.id, item.Refacciones.NoParte)" class="btn btn-sm">Cambiar Status</button>
+              </td>
+
+
+              <td>
+                <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Ver reporte</button>
+              </td>
+            </tr>
+
+          </table>
+
+        </div>
+      </div>
+     <div class="row mb-3 ml-2" *ngIf="!_global.cambiosFisicosXAutorizar.recientes[0]">No hay cambios físicos por autorizar.</div>
+
+
+
      </div> <!--termina administrador-->
 
 

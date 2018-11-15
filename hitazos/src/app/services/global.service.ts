@@ -11,8 +11,8 @@ export class GlobalService implements CanActivate{
 
 
     //base = '';
-    //base = 'http://apps.pautacreativatemporales.com.mx/oster/homeproducts/servicios/';
-    base = 'https://www.homeproductslatam.com.mx/servicios/';
+    base = 'http://apps.pautacreativatemporales.com.mx/oster/homeproducts/servicios/';
+    //base = 'https://www.homeproductslatam.com.mx/servicios/';
     //base = 'http://oster:8080/homeproducts/homeproducts/servicios/';
 
     timerToast = null;
@@ -243,6 +243,10 @@ export class GlobalService implements CanActivate{
     }
 
     movilizacionesXAutorizar = {
+        "recientes": []
+    }
+
+    cambiosFisicosXAutorizar = {
         "recientes": []
     }
 
@@ -1453,4 +1457,20 @@ export class GlobalService implements CanActivate{
             );
     }
     //Fin Notificaciones
+
+    muestraImagenNota(url_img, id){
+
+      swal({
+          title: 'Nota del Reporte #' + id,
+          html: `<img class='img-fluid' src='`+this.base+`reparacion/uploads-reparaciones/`+url_img+`'>`,
+          showConfirmButton: true,
+          confirmButtonText: 'Ok',
+          customClass: 'swal2-overflow',
+
+      })
+
+
+    }
+
+
 }

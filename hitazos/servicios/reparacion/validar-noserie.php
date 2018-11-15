@@ -26,7 +26,7 @@ $res['res'] = 'ok';
 $reporte = array();
 
 $query = "
-select id from reportes where NoSerie = ".$arre['NoSerie'].";
+select id from reportes where NoSerie = '".$arre['NoSerie']."';
 ";
 
 $id_reporte =  0;
@@ -36,7 +36,9 @@ if ($result = $mysqli->query($query)) {
 	}
 	$result->close();
 }else{
-	print_r (mysqli_error());
+	//print_r (mysqli_error());
+  $res['res'] = 'error';
+  $res['error'] = mysqli_error();
 }
 
 if($id_reporte>0)

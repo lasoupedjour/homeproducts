@@ -120,7 +120,7 @@ export class ReparacionInicioComponent {
 
         });
 
-        this.llenaFallas();
+        //this.llenaFallas();
         this.llenaRefacciones();
 
 

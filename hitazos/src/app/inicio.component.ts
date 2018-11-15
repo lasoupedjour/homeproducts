@@ -179,8 +179,50 @@ export class InicioComponent {
 
 
                     this._global.movilizacionesXAutorizar.recientes = this._global.parseJSON(data.reportes);
-                    console.log('cotizaciones por autorizar');
+                    console.log('movilizaciones por autorizar');
                     console.log(this._global.movilizacionesXAutorizar.recientes);
+
+                    if (data.reportes.length == 0) {
+                        this._global.appstatus.mensaje = 'No se encontraron órdenes.';
+                    }
+
+                } else if (data.res = 'error') {
+                    this._global.appstatus.mensaje = data.error;
+                }
+
+
+                //console.log("fichas");
+                //console.log(this.props.fichas);
+            },
+            error => alert(error),
+            () => console.log('termino submit')
+            );
+
+    }
+
+    nuevosCambiosFisicos() {
+
+        var params = {};
+        params["IDCentro"] = this._global.user.IDCentro;
+        params["nivel"] = this._global.user.nivel;
+        params["limit"] = "5";
+
+        this._global.appstatus.loading = true;
+        console.log('nuevas refacciones');
+        console.log(params);
+        this._httpService.postJSON(params, 'administracion/nuevos-cambios-fisicos.php')
+            .subscribe(
+            data => {
+                console.log('data');
+                console.log(data);
+                this._global.appstatus.loading = false;
+
+                if (data.res == 'ok') {
+
+
+                    this._global.cambiosFisicosXAutorizar.recientes = this._global.parseJSON(data.reportes);
+                    console.log('cambios fisicos por autorizar');
+                    console.log(this._global.cambiosFisicosXAutorizar.recientes);
 
                     if (data.reportes.length == 0) {
                         this._global.appstatus.mensaje = 'No se encontraron órdenes.';
