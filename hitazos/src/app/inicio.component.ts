@@ -45,6 +45,7 @@ export class InicioComponent {
         this.nuevosClientes();
         this.nuevasOrdenesServicio();
         this.nuevosCasosAsignados();
+        this.nuevosCambiosFisicos();
 
         //funciones de administrador
         if (this._global.user.nivel == 'administrador') {

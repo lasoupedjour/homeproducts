@@ -175,6 +175,42 @@
         </div>
       </div>
 
+      <div [hidden]="!(_global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio')">
+        <div class="row">
+          <div class="col-5">
+            <b>Monto Despiece:</b>
+          </div>
+          <div class="col-5">
+            ${{_global.reporte.objreporte.MontoDespiece}} USD
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-5">
+            <b>Monto Reciclaje:</b>
+          </div>
+          <div class="col-5">
+            ${{_global.reporte.objreporte.MontoReciclaje}} USD
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-5">
+            <b>Otro Costo:</b>
+          </div>
+          <div class="col-5">
+            ${{_global.reporte.objreporte.MontoOtro}} USD
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-5">
+            <b>Otro Costo (Descripción):</b>
+          </div>
+          <div class="col-5">
+            {{_global.reporte.objreporte.MontoOtroDescripcion}}
+          </div>
+        </div>
+      </div>
+
+
       <div class="row">
         <div class="col-5">
           <b>&nbsp;</b>

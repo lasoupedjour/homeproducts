@@ -29,6 +29,7 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
 	where clientes.id = reportes.IDCliente
 	and reportes.IDCentro = ".$arre["IDCentro"]."
 	and StatusReporte = 'Orden de Servicio'
+  and TipoReclamoDiagnostico <> 'Cambio'
 	order by FechaRegistroReporte desc LIMIT 5;
 	") or die(mysql_error());
 }else{
@@ -37,6 +38,7 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
 	FROM reportes, clientes
 	where clientes.id = reportes.IDCliente
 	and StatusReporte = 'Orden de Servicio'
+  and TipoReclamoDiagnostico <> 'Cambio'
 	order by FechaRegistroReporte desc LIMIT 5;
 	") or die(mysql_error());
 }

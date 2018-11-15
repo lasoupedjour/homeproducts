@@ -137,6 +137,12 @@ export class OrdenInicioComponent {
                 Validators.required
             ],
 
+            MontoDespiece: [0,
+            Validators.required
+            ],
+            MontoReciclaje: [0],
+            MontoOtro: [0],
+            MontoOtroDescripcion: [''],
             MontoRefacciones: [0,
             Validators.required
             ],
@@ -185,7 +191,8 @@ export class OrdenInicioComponent {
        var params = {};
 
        params['id'] = this._global.reporte.objreporte.IDTarifas;
-
+       console.log('obtener subtipo servicio');
+       console.log(params);
        this._httpService.postJSON(params, 'inicio/get-tipomovilidad.php')
            .subscribe(
            data => {
@@ -195,7 +202,7 @@ export class OrdenInicioComponent {
                this.SubtipoServicio = data.SubtipoServicio;
 
              }else{
-                 this._global.appstatus.mensaje = "No se encontró la tarifa.";
+                 //this._global.appstatus.mensaje = "No se encontró la tarifa.";
              }
 
 
@@ -367,6 +374,7 @@ export class OrdenInicioComponent {
         this.MontoTotal = this.MontoSubtotal + this.MontoIVA;
         //alert(this.MontoSubtotal + this.MontoIVA);
     }
+
     changeTipoReparacion() {
 
         console.log("change tipo reparación");
@@ -380,20 +388,56 @@ export class OrdenInicioComponent {
             }
         }
 
+        console.log(this.tiporeparacion.Valor);
 
-        this.MontoSubtotal = this.MontoRefacciones + parseFloat(String(this.tiporeparacion.Valor)) + parseFloat(this._global.reporte.objreporte.MontoMovilizacion);;
-        //alert(this.tiporeparacion.Impuesto);
-        if(String(this.tiporeparacion.Impuesto)=='0')
-          this.MontoIVA = this.IVA * this.MontoSubtotal;
-        else
-          this.MontoIVA = parseFloat(String(this.tiporeparacion.Impuesto)) * this.MontoSubtotal;
-
-        this.MontoTotal = this.MontoSubtotal + this.MontoIVA;
-        if(this.tiporeparacion.NecesitaAutorizacion==0)
-            this.tiporeparacion.NecesitaAutorizacionRO = true;
+        this.calculaCostoTotal();
 
     }
 
+    changeMontoOtro(){
+
+      if(this.genericForm.controls.MontoOtro.value != ''){
+        this.genericForm.controls.MontoOtroDescripcion.setValidators([Validators.required]);
+        this.genericForm.controls.MontoOtroDescripcion.updateValueAndValidity();
+      }else{
+        this.genericForm.controls.MontoOtroDescripcion.setValidators([]);
+        this.genericForm.controls.MontoOtroDescripcion.updateValueAndValidity();
+      }
+      this.calculaCostoTotal();
+    }
+
+    changeMontoReciclaje(){
+      this.calculaCostoTotal();
+    }
+
+    calculaCostoTotal(){
+      console.log('calculando monto total');
+      console.log(this.genericForm.controls.MontoReciclaje.value);
+      //suma refacciones
+      this.MontoSubtotal = this.MontoRefacciones + parseFloat(String(this.tiporeparacion.Valor)) + parseFloat(this._global.reporte.objreporte.MontoMovilizacion);
+
+      //suma Cambio físicos
+      if(this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio'){
+        this._global.reporte.objreporte.MontoDespiece = 0.5 * parseFloat(String(this.tiporeparacion.Valor));
+        this.MontoSubtotal = this.MontoSubtotal + this._global.reporte.objreporte.MontoDespiece;
+      }
+
+      //suma Reciclaje y otro CostoTotal
+      if(this.genericForm.controls.MontoReciclaje.value != null && this.genericForm.controls.MontoReciclaje.value != '')
+        this.MontoSubtotal = this.MontoSubtotal + parseFloat(String(this.genericForm.controls.MontoReciclaje.value));
+      if(this.genericForm.controls.MontoOtro.value != null && this.genericForm.controls.MontoOtro.value != '')
+        this.MontoSubtotal = this.MontoSubtotal + parseFloat(String(this.genericForm.controls.MontoOtro.value));
+
+      //alert(this.tiporeparacion.Impuesto);
+      if(String(this.tiporeparacion.Impuesto)=='0')
+        this.MontoIVA = this.IVA * this.MontoSubtotal;
+      else
+        this.MontoIVA = parseFloat(String(this.tiporeparacion.Impuesto)) * this.MontoSubtotal;
+
+      this.MontoTotal = this.MontoSubtotal + this.MontoIVA;
+      if(this.tiporeparacion.NecesitaAutorizacion==0)
+          this.tiporeparacion.NecesitaAutorizacionRO = true;
+    }
 
     onActionFacturasNotasCompra(event: any) {
         console.log(event);
