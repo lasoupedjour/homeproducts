@@ -25,11 +25,11 @@ $res['res'] = 'ok';
 
 if($arre["Nivel"] == "administrador" || $arre["Nivel"] == "MKT"){
   $query = "
-  SELECT id, Nombre from centros
+  SELECT id, Nombre, Ciudad from centros
   where Pais like '%".$arre["Pais"]."%'";
 }else{
   $query = "
-  SELECT id, Nombre from centros
+  SELECT id, Nombre, Ciudad from centros
   where Pais like '%".$arre["Pais"]."%'
   and (IDMaster=0 and id = ".$arre["IDCentro"].") or IDMaster = ".$arre["IDCentro"];
 }
@@ -40,8 +40,15 @@ $query = utf8_encode($query);
 $result = mysql_query($query) or die(mysql_error());
 echo "<option value='' hidden>CDS</option>";
 while ($row = mysql_fetch_row($result)) {
+
+  $valor = utf8_encode($row[1]);
+  if($row[2] != ''){
+    $valor .= ' - '.utf8_encode($row[2]);
+  }
+
+
 ?>
-    <option value="<?php echo $row[0]; ?>" ><?php echo utf8_encode($row[1]); ?></option>
+    <option value="<?php echo $row[0]; ?>" ><?=$valor?></option>
 <?php
 }
 
