@@ -1123,7 +1123,7 @@ export class ReporteCasoComponent {
                             //Registro de notificación
                             this._global.notificaciones.modulo = "/inicio/resumen/orden";
                             this._global.notificaciones.descripcion = "Se ha enviado la solicitud de autorización de kilometraje a HP." + this._global.reporte.idreporte;
-                            this._global.registrarNotificacion();
+                            this._global.registrarNotificacion(data.idreporte);
                             swal({
                                 title: 'Solicitud Enviada',
                                 text: 'Se ha enviado la solicitud de autorización de kilometraje a HP.',

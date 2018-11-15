@@ -411,7 +411,7 @@ export class GlobalService implements CanActivate{
                                   //Registro de notificación
                                   this.notificaciones.modulo = "/inicio";
                                   this.notificaciones.descripcion = "Refacción con No. de parte " + noparte + " disponible para el reporte No. " + this.reporte.idreporte;
-                                  this.registrarNotificacion();
+                                  this.registrarNotificacion(id);
 
                                     this.cambioStatusRefacciones(id, noparte, disponibilidad, fechaentrega, costo, noguia);
                                 }
@@ -437,7 +437,7 @@ export class GlobalService implements CanActivate{
                               //Registro de notificación
                               this.notificaciones.modulo = "/inicio";
                               this.notificaciones.descripcion = "Refacción con No. de parte " + noparte + " NO disponible para el reporte No. " + this.reporte.idreporte;
-                              this.registrarNotificacion();
+                              this.registrarNotificacion(id);
 
                                 this.cambioStatusRefacciones(id, noparte, disponibilidad, fechaentrega)
                             }
@@ -622,6 +622,10 @@ export class GlobalService implements CanActivate{
 
                     swal('¡Guardado!', 'Se ha enviado una notificacion al CDS.', 'success');
 
+                    //Registro de notificación
+                    this.notificaciones.modulo = "/registro-de-casos/reparacion/inicio";
+                    this.notificaciones.descripcion = "Cotización con No. de parte " + noparte + " fue " + aprobacion;
+                    this.registrarNotificacion(id);
 
                 } else if (data.res == 'error') {
 
@@ -666,6 +670,10 @@ export class GlobalService implements CanActivate{
 
                     swal('¡Guardado!', 'Se ha enviado una notificacion al CDS.', 'success');
 
+                    //Registro de notificación
+                    this.notificaciones.modulo = "/registro-de-casos/reparacion/inicio";
+                    this.notificaciones.descripcion = "Movilización del repotte No. " + id + " ha sido " + aprobacion;
+                    this.registrarNotificacion(id);
 
                 } else if (data.res == 'error') {
 
@@ -1090,7 +1098,7 @@ export class GlobalService implements CanActivate{
                   //Registro de notificación
                   this.notificaciones.modulo = "/registro-de-casos/reparacion/inicio";
                   this.notificaciones.descripcion = "Refacción con No. de parte " + this.refacciones[i].NoParte + " solicitada para el reporte No. " + this.reporte.idreporte;
-                  this.registrarNotificacion();
+                  this.registrarNotificacion(this.reporte.idreporte);
                 }
             }
 
@@ -1392,7 +1400,7 @@ export class GlobalService implements CanActivate{
                   this.appstatus.mensaje = data.msg;
               }
           },
-          error => alert(error),
+          error => console.log("No hay notificaciones nuevas para el usuario.", error),
           () => console.log('termino submit')
           );
 
@@ -1427,12 +1435,12 @@ export class GlobalService implements CanActivate{
       //localStorage.setItem("cliente", JSON.stringify(this._global.cliente));
     }
 
-    registrarNotificacion() {
+    registrarNotificacion(id_reporte) {
         console.log('registrar notificación');
 
         var params = {};
         params['id_usuario'] = this.user.id;
-        params['id_reporte'] = this.reporte.idreporte;
+        params['id_reporte'] = id_reporte;
         params['modulo'] = this.notificaciones.modulo;
         params['descripcion'] = this.notificaciones.descripcion;
 

@@ -198,7 +198,7 @@ export class ResumenOrdenComponent {
               console.log("pre notificación");
               this._global.notificaciones.modulo = "/inicio/resumen/orden";
               this._global.notificaciones.descripcion = "Registro de resolución para el reporte No. " + this._global.reporte.idreporte;
-              this._global.registrarNotificacion();
+              this._global.registrarNotificacion(this._global.reporte.idreporte);
 
               this.genericForm.reset();
               this.formulariostatus.success = 2;

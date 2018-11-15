@@ -18,7 +18,7 @@ export class AppComponent {
 
     ngOnInit() {
       console.log("init app.component");
-      //this._global.contarNotificaciones();
+      this._global.contarNotificaciones();
     }
 
     logout() {

@@ -610,7 +610,7 @@ export class ReparacionInicioComponent {
 
                         this._global.notificaciones.modulo = "/registro-de-casos/reparacion/inicio";
                         this._global.notificaciones.descripcion = "Registro de cotización de refacción para el reporte No. " + this._global.reporte.idreporte;
-                        this._global.registrarNotificacion();
+                        this._global.registrarNotificacion(this._global.reporte.idreporte);
 
                     } else if (data.res == 'error') {
 

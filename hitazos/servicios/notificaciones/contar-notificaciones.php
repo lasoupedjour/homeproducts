@@ -23,7 +23,17 @@ $id_usuario = utf8_decode(urldecode($arre['id_usuario']));
 if($id_usuario==17)
   $query = "SELECT id FROM notificaciones where id_usuario<>17";
 else{
-  $query = "select n.id from (select * from notificaciones where id_usuario= where id_usuario=17) as n join (select * from reportes where IDCentro=$id_usuario) as r on n.id_usuario = r.IDCentro group by id";
+  $query = "
+            select n.id from 
+            (select * from notificaciones where id_usuario=17) as n
+            join
+            (select * from reportes) as r
+            on n.id_reporte = r.id
+            join
+            (select * from usuarios_admin where ID=$id_usuario) as u
+            on r.idcentro = u.idcentro
+            group by id
+          ";
 }
 
 
