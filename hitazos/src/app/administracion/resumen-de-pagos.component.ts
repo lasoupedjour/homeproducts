@@ -41,6 +41,7 @@ export class ResumenPagosComponent {
         "mes": '08',
         "ano": '2018',
     };
+
     /*Datos del pago*/
     statusPago = "Por Enviar";
     idPago = 0;
@@ -76,15 +77,8 @@ export class ResumenPagosComponent {
 
         this.precargaPaises();
         this.setMesResumen();
-        /*
-        this.filterForm.controls.Ano.setValue('0');
-        this.filterForm.controls.Mes.setValue('0');
-        */
         this.filterForm.controls.Cds.setValue('');
-        //this.traeOrdenes();
-
-
-
+        
         this.filtrarReporte();
 
     }

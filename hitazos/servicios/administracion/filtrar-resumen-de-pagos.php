@@ -161,7 +161,6 @@ $res['Pago'] = $pagos;
 
 echo json_encode($res);
 
-//$mysqli->close();
 /*
 echo("Monto refacciones: " . $MontoRefacciones);
 echo("<br>Monto TA y Mov.: " . $MontoRefacciones);
