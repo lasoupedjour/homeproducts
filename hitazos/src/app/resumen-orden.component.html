@@ -243,6 +243,14 @@
       <div class="vform"><div class="vformleft aright">Valor de Refacciones: </div> <div class="vformright"> ${{this._global.reporte.objreporte.MontoRefacciones}} &nbsp;USD</div></div>
       <div class="vform"><div class="vformleft aright">Atención Técnica: </div> <div class="vformright"> ${{this._global.reporte.objreporte.MontoReparacion}} &nbsp;USD</div></div>
       <div class="vform"><div class="vformleft aright">Movilización: </div> <div class="vformright"> ${{this._global.reporte.objreporte.MontoMovilizacion}} &nbsp;USD</div></div>
+
+      <div [hidden]="!(this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio')">
+        <div class="vform"><div class="vformleft aright">Despiece: </div> <div class="vformright"> ${{this._global.reporte.objreporte.MontoDespiece}} &nbsp;USD</div></div>
+        <div class="vform"><div class="vformleft aright">Reciclaje: </div> <div class="vformright"> ${{this._global.reporte.objreporte.MontoReciclaje}} &nbsp;USD</div></div>
+        <div class="vform"><div class="vformleft aright">Otro Costo: </div> <div class="vformright"> ${{this._global.reporte.objreporte.MontoOtro}} &nbsp;USD</div></div>
+        <div class="vform"><div class="vformleft aright">Otro Costo (Descripción): </div> <div class="vformright"> {{this._global.reporte.objreporte.MontoOtroDescripcion}}</div></div>
+      </div>
+
       <!--<div class="vform"><div class="vformleft aright">Costo Landed: </div> <div class="vformright"> $<span [innerHTML]="calculaValorRepuestos()"></span> USD</div></div>-->
       <div class="vform"><div class="vformleft aright">Subtotal: </div> <div class="vformright"> ${{this._global.reporte.objreporte.MontoSubtotal}} &nbsp;USD</div></div>
       <div class="vform"><div class="vformleft aright">IVA%: </div> <div class="vformright"> ${{this._global.reporte.objreporte.MontoIVA}}&nbsp;USD</div></div>

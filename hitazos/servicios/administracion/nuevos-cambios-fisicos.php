@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 include "../dbc.php";
 
 if (isset($_SERVER['HTTP_ORIGIN'])) {
@@ -22,22 +22,28 @@ $res = array();
 
 $res['res'] = 'ok';
 
-$query = "
-          SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, tarifas.SubtipoServicio, tarifas.Valor, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
-          FROM reportes, clientes, centros, tarifas
-          where clientes.id = reportes.IDCliente
-          and centros.id = reportes.IDCentro
-          and StatusMovilidad <> 'Aprobada'
-          and reportes.IDTarifas = tarifas.id
-          order by FechaRegistroReporte desc :LIMIT
-          ";
+if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
+	$q = mysql_query("
+	SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
+	FROM reportes, clientes
+	where clientes.id = reportes.IDCliente
+	and reportes.IDCentro = ".$arre["IDCentro"]."
+	and StatusReporte = 'Orden de Servicio'
+  and TipoReclamoDiagnostico = 'Cambio'
+	order by FechaRegistroReporte desc LIMIT 5;
+	") or die(mysql_error());
+}else{
+	$q = mysql_query("
+	SELECT distinct reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
+	FROM reportes, clientes
+	where clientes.id = reportes.IDCliente
+	and StatusReporte = 'Orden de Servicio'
+  and TipoReclamoDiagnostico = 'Cambio'
+	order by FechaRegistroReporte desc LIMIT 5;
+	") or die(mysql_error());
+}
 
-if($arre["limit"]=="")
-  $query = str_replace(":LIMIT", "", $query);
-else
-  $query = str_replace(":LIMIT", "LIMIT 5", $query);
 
-$q = mysql_query($query) or die(mysql_error());
 
 $reportes = array();
 
@@ -50,12 +56,6 @@ while ($row = mysql_fetch_array($q))
 	});
 	$temp = json_encode($row);
 	array_push($reportes, $temp);
-	/*if($agregar){
-		//print_r($statuscotizacion);
-		$temp = json_encode($row);
-		array_push($reportes, $temp);
-	}
-	*/
 }
 $res['reportes'] = $reportes;
 

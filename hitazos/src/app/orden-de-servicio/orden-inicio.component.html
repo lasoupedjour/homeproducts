@@ -253,6 +253,9 @@
 
           </div>
         </div>
+
+        <div class="mb-5" *ngIf="!_global.refacciones[0]">No requiere refacciones.</div>
+
       </div>
       <!--termina REFACCIONES -->
 
@@ -267,7 +270,7 @@
           <div class="vform"><div class="vformleft">Kilometraje: </div> <div class="vformright">{{this.SubtipoServicio}} </div></div>
           <div class="vform"><div class="vformleft">Costo movilización: </div> <div class="vformright">$ {{this._global.reporte.objreporte.MontoMovilizacion}} USD </div></div>
         </div>
-        <div *ngIf="this._global.reporte.objreporte.TipoRevision=='domicilio'">
+        <div>
           <b>Atención técnica</b>
         </div>
         <label>
@@ -292,6 +295,27 @@
         <div class="vform"><div class="vformleft aright">Atención Técnica: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoReparacion" readonly [ngModel]="this.tiporeparacion.Valor" />&nbsp;USD</div></div>
         <div class="vform"><div class="vformleft aright">Movilización: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoMovilizacion" readonly="{{this.tiporeparacion.NecesitaAutorizacionRO}}" [ngModel]="this._global.reporte.objreporte.MontoMovilizacion" />&nbsp;USD</div></div>
         <!--<div class="vform"><div class="vformleft aright">Costo Landed: </div> <div class="vformright"> $<span [innerHTML]="calculaValorRepuestos()"></span> USD</div></div>-->
+
+        <div [hidden]="!(this._global.reporte.objreporte.TipoReclamoDiagnostico== 'Cambio')">
+          <div class="vform"><div class="vformleft aright">Despiece: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoDespiece"  [ngModel]="this._global.reporte.objreporte.MontoDespiece" readonly />&nbsp;USD</div>
+          </div>
+          <div class="vform"><div class="vformleft aright">Reciclaje: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoReciclaje"  [ngModel]="this._global.reporte.objreporte.MontoReciclaje" (change)="changeMontoReciclaje()" />&nbsp;USD</div>
+            <div class="alert alert-danger" *ngIf="!genericForm.controls.MontoReciclaje.valid && genericForm.controls.MontoReciclaje.touched">
+              Este campo es requerido
+            </div>
+          </div>
+          <div class="vform"><div class="vformleft aright">Otro Costo: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoOtro"  [ngModel]="this._global.reporte.objreporte.MontoOtro" (change)="changeMontoOtro()" />&nbsp;USD</div>
+            <div class="alert alert-danger" *ngIf="!genericForm.controls.MontoOtro.valid && genericForm.controls.MontoOtro.touched">
+              Este campo es requerido
+            </div>
+          </div>
+          <div class="vform"><div class="vformleft aright">Otro Costo (Descripción): </div> <div class="vformright"> &nbsp;&nbsp;<input type="text" class="form-control-static" formControlName="MontoOtroDescripcion" maxlength="250"  [ngModel]="this._global.reporte.objreporte.MontoOtroDescripcion" /></div>
+            <div class="alert alert-danger" *ngIf="!genericForm.controls.MontoOtroDescripcion.valid && genericForm.controls.MontoOtroDescripcion.touched">
+              Este campo es requerido
+            </div>
+          </div>
+        </div>
+
         <div class="vform"><div class="vformleft aright">Subtotal: </div> <div class="vformright"> $<input type="text" class="form-control-static" formControlName="MontoSubtotal" readonly [ngModel]="MontoSubtotal" />&nbsp;USD</div></div>
         <div class="vform"><div class="vformleft aright">IVA%: </div> <div class="vformright"> $<input type="text" class="form-control-static" formControlName="MontoIVA" readonly [ngModel]="MontoIVA" />&nbsp;USD</div></div>
         <div class="vform"><div class="vformleft aright">Total: </div> <div class="vformright"> $<input type="text" class="form-control-static" formControlName="MontoTotal" readonly [ngModel]="MontoTotal" />&nbsp;USD</div></div>

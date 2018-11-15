@@ -344,9 +344,10 @@
               <th>Fecha de Registro</th>
               <th>Tipo de Caso</th>
 
-              <th>Tipo Movilidad</th>
-              <th>Tarifa Movilidad</th>
-
+              <th>Tarifa Despiece</th>
+              <th>Tarifa Reciclaje</th>
+              <th>Tarifa Otro Monto</th>
+              <!--th>Descripcion Otro Monto</th-->
 
 
               <th>Días Transcurridos</th>
@@ -380,28 +381,29 @@
               </td>
 
               <td>
-                {{item.SubtipoServicio}}
+                ${{item.MontoDespiece}} USD
               </td>
-              <td *ngIf="item.MontoMovilizacion==0">
-                ${{item.Valor}}
+              <td>
+                ${{item.MontoReciclaje}} USD
               </td>
-              <td *ngIf="item.MontoMovilizacion!=0">
-                ${{item.MontoMovilizacion}}
+              <td>
+                ${{item.MontoOtro}} USD
               </td>
-
-
+              <!--td>
+                {{item.MontoOtroDescripcion}}
+              </td-->
 
               <td [ngClass]="this._global.diasTranscurridosColor(item.FechaRegistroReporte)">
                 {{this._global.diasTranscurridos(item.FechaRegistroReporte)}}
               </td>
               <td>
-                {{item.StatusMovilidad}}
+                {{item.StatusCambioFisico}}
               </td>
 
 
 
               <td>
-                <button (click)="this._global.evaluaMovilizacion(item.id, item.Refacciones.NoParte)" class="btn btn-sm">Cambiar Status</button>
+                <button (click)="this._global.evaluaCambioFisico(item.id)" class="btn btn-sm">Cambiar Status</button>
               </td>
 
 

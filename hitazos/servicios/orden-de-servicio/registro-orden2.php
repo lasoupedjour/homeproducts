@@ -10,7 +10,7 @@ include "../dbci.php";
 
 $json = $_POST['json'];
 $arre = json_decode($json, true);
-	
+
 $current_charset = 'ISO-8859-15';//or what it is now
 array_walk_recursive($arre,function(&$value) use ($current_charset){
      $value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
@@ -39,9 +39,9 @@ $AdjuntosFacturasRepuestos = subirAdjuntos($arre['IDReporte'], 'AdjuntosFacturas
 $AdjuntosOtros = subirAdjuntos($arre['IDReporte'], 'AdjuntosOtros', $arre['AdjuntosOtrosSize']);
 
 function subirAdjuntos($idreporte, $field, $size){
-	
+
 	$arrebd = Array();
-	
+
 	for($i = 0; $i < $size; $i++){
 
 		if(!empty($_FILES[$field.$i]['name'])){
@@ -63,9 +63,9 @@ function subirAdjuntos($idreporte, $field, $size){
 		}
 
 	}
-	
+
 	return $arrebd;
-	
+
 }
 
 //insertar
@@ -74,7 +74,7 @@ $FechaFactura = urldecode($arre['FechaFactura']['year']).'-'.urldecode($arre['Fe
 
 if ($stmt = $mysqli->prepare("
 
-update reportes set 
+update reportes set
 HomeProductsGroupNo = ?,
 NoFactura = ?,
 FechaFactura = ?,
@@ -85,6 +85,10 @@ TipoMovilidad = ?,
 FechaOrdenServicio = now(),
 MontoRefacciones = ?,
 MontoReparacion = ?,
+MontoDespiece = ?,
+MontoReciclaje = ?,
+MontoOtro = ?,
+MontoOtroDescripcion = ?,
 MontoSubtotal = ?,
 MontoIVA = ?,
 MontoTotal = ?,
@@ -96,16 +100,20 @@ StatusReporte = 'Orden de Servicio'
 where id = ?
 
 ")) {
-	$stmt->bind_param("sssssssdddddssssd", 
-	$arre['HomeProductsGroupNo'], 
-	$arre['NoFactura'], 
-	$FechaFactura, 
-	$arre['NoParteCausoDano'], 
-	$arre['Resolucion'], 
-	$arre['TipoReparacion'], 
+	$stmt->bind_param("sssssssdddddsdddssssd",
+	$arre['HomeProductsGroupNo'],
+	$arre['NoFactura'],
+	$FechaFactura,
+	$arre['NoParteCausoDano'],
+	$arre['Resolucion'],
+	$arre['TipoReparacion'],
 	$arre['TipoMovilidad'],
 	$arre['MontoRefacciones'],
 	$arre['MontoReparacion'],
+  $arre['MontoDespiece'],
+  $arre['MontoReciclaje'],
+  $arre['MontoOtro'],
+  $arre['MontoOtroDescripcion'],
 	$arre['MontoSubtotal'],
 	$arre['MontoIVA'],
 	$arre['MontoTotal'],
@@ -114,19 +122,19 @@ where id = ?
 	json_encode($AdjuntosFacturasRepuestos),
 	json_encode($AdjuntosOtros),
 	$arre['IDReporte']
-	
+
 	);
 	if($stmt->execute()){
-		
+
 		$reporte = array();
-		
+
 		$query = "
 		select * from reportes where id = ".$arre['IDReporte'].";
 		";
 
 		if ($result = $mysqli->query($query)) {
 			while ($row = $result->fetch_array()) {
-			
+
 				$current_charset = 'ISO-8859-15';//or what it is now
 				array_walk_recursive($row,function(&$value) use ($current_charset){
 					 //$value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
@@ -140,14 +148,14 @@ where id = ?
 			print_r (mysqli_error());
 		}
 
-		
+
 		$res['idreporte'] = $arre['IDReporte'];
 		$res['objreporte'] = $reporte[0];
-		
+
 	}else{
 		$res['res'] = 'error';
 		$res['msg'] = $stmt->error;
-		
+
 	}
 }
 
