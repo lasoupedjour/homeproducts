@@ -24,7 +24,10 @@ $res = array();
 $res['res'] = 'ok';
 
 
-$query = "SELECT id, Nombre from centros where Pais like '%".$arre["Pais"]."%' and IDMaster=0";
+$query = "
+SELECT id, Nombre from centros
+where Pais like '%".$arre["Pais"]."%'
+and (IDMaster=0 and id = ".$arre["IDCentro"].") or IDMaster = ".$arre["IDCentro"];
 
 $query = utf8_encode($query);
 
