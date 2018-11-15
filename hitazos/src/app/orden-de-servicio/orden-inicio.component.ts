@@ -418,8 +418,8 @@ export class OrdenInicioComponent {
 
       //suma Cambio físicos
       if(this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio'){
-        this._global.reporte.objreporte.MontoDespiece = 0.5 * parseFloat(String(this.tiporeparacion.Valor));
-        this.MontoSubtotal = this.MontoSubtotal + this._global.reporte.objreporte.MontoDespiece;
+        this._global.reporte.objreporte.MontoDespiece = String(0.5 * parseFloat(String(this.tiporeparacion.Valor)));
+        this.MontoSubtotal = this.MontoSubtotal + parseFloat(this._global.reporte.objreporte.MontoDespiece);
       }
 
       //suma Reciclaje y otro CostoTotal
