@@ -120,6 +120,7 @@ export class AdministracionComponent {
         var params = {};
         params['Pais'] = this.filterForm.controls.Pais.value;
         params['IDCentro'] = this._global.user.IDCentro;
+        params['Nivel'] = this._global.user.nivel;
 
         this._global.appstatus.loading = true;
 

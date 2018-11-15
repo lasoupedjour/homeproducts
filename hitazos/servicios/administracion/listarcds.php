@@ -23,11 +23,17 @@ $res = array();
 
 $res['res'] = 'ok';
 
+if($arre["Nivel"] == "administrador" || $arre["Nivel"] == "MKT"){
+  $query = "
+  SELECT id, Nombre from centros
+  where Pais like '%".$arre["Pais"]."%'";
+}else{
+  $query = "
+  SELECT id, Nombre from centros
+  where Pais like '%".$arre["Pais"]."%'
+  and (IDMaster=0 and id = ".$arre["IDCentro"].") or IDMaster = ".$arre["IDCentro"];
+}
 
-$query = "
-SELECT id, Nombre from centros
-where Pais like '%".$arre["Pais"]."%'
-and (IDMaster=0 and id = ".$arre["IDCentro"].") or IDMaster = ".$arre["IDCentro"];
 
 $query = utf8_encode($query);
 
