@@ -45,6 +45,14 @@ if ($result = $mysqli->query($query)) {
 	print_r (mysqli_error());
 }
 
+
+//Marcamos las notificaciones como leídas
+$mysqli->query("
+update notificaciones set
+leida = 1
+where leida = 0
+");
+
 $res['notificaciones'] = $notificaciones;
 
 echo json_encode($res);
