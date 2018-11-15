@@ -176,9 +176,33 @@
      </div>
    </div>
 
-        <div class="row my-5">
+      <div class="row mt-3" *ngIf="this.statusPago != 'Por Enviar'">
+        <div class="col-6">
+          <h2>DATOS DE PAGO</h2>
+        </div>
+      </div>
+      <div class="row my-2" *ngIf="this.statusPago != 'Por Enviar'">
+        <div class="col-6">
+          Pago <b>{{this.statusPago}}</b><br>
+          Comprobante: <b *ngIf="this.statusPago == 'Enviado'">{{this.comprobantePago}}</b><br>
+          Fecha de registro: <b>{{this.fechaRegistroPago}}</b><br>
+        </div>
+        <div class="col-6">
+          <form class="formulario formularioCotizacion my-3" name="formulariopagos" [formGroup]="pagosForm" (ngSubmit)="submitCambiastatusPago()" *ngIf="this.comprobantePago=='Pago sin realizar'">
+            <ng2-file-input (onAction)="onActionComprobante($event)" ></ng2-file-input>
+            <span class="alert alert-danger" *ngIf="this.AdjuntosComprobanteLenght==0 && this.adjuntosValidos==false">
+              Este campo es requerido
+            </span>
+
+
+            <br>
+            <button class="btn btn-sm" type="submit">Guardar</button>
+          </form>
+        </div>
+      </div>
+     <div class="row my-5" *ngIf="this.statusPago == 'Por Enviar'">
        <div class="offset-sm-9 col-3 mb-5">
-         <a *ngIf="this.statusPago != 'Enviado' && this._global.ordenesServicio.recientes.length != 0" class="btn btn-sm btnicono" (click)="generaReporte()"> Generar reporte y enviar </a>
+         <a class="btn btn-sm btnicono" (click)="generaReporte()"> Generar reporte y enviar </a>
        </div>
      </div>
 
