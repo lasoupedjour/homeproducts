@@ -97,8 +97,8 @@ export class AdministracionComponent {
         this.filterForm = this.formBuilder.group({
             Ano: [],
             Mes: [],
-            Pais: [],
-            Cds: []
+            Pais: [this._global.user.Pais],
+            Cds: ['']
         });
 
         this.precargaPaises();
@@ -107,7 +107,8 @@ export class AdministracionComponent {
         this.filterForm.controls.Ano.setValue('0');
         this.filterForm.controls.Mes.setValue('0');
         */
-        this.filterForm.controls.Cds.setValue('');
+
+        this.changePais();
         //this.traeOrdenes();
 
 
@@ -118,6 +119,8 @@ export class AdministracionComponent {
         //console.log(this.filterForm.controls.Pais.value);
         var params = {};
         params['Pais'] = this.filterForm.controls.Pais.value;
+        params['IDCentro'] = this._global.user.IDCentro;
+
         this._global.appstatus.loading = true;
 
         this._httpService.postHTML(params, 'administracion/listarcds.php')
