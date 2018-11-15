@@ -1,11 +1,17 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { HTTPService } from '../services/http.service';
 import { GlobalService } from '../services/global.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
 import { Subject } from 'rxjs';
 import { ISubscription } from "rxjs/Subscription";
+
+import { userValidators } from '../userValidators';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+
+import swal from 'sweetalert2';
+import { Ng2FileInputModule } from 'ng2-file-input';
 
 @Component({
     selector: 'resumenpagos',
@@ -14,13 +20,16 @@ import { ISubscription } from "rxjs/Subscription";
 export class ResumenPagosComponent {
     title = 'app';
 
+    pagosForm: FormGroup;
+
+    private sub: any;
+
     montoTotal = 0;
     montoRefacciones = 0;
     montoTAMov = 0;
     montoFee = 0;
 
     nombreMes = 'Agosto';
-
 
     filterForm: FormGroup;
 
@@ -32,12 +41,22 @@ export class ResumenPagosComponent {
         "mes": '08',
         "ano": '2018',
     };
-
+    /*Datos del pago*/
     statusPago = "Por Enviar";
+    idPago = 0;
+    comprobantePago = "";
+    fechaRegistroPago = "";
+    status = 0;
+
+    ComprobanteLenght: 0;
+    adjuntosValidos;
+    AdjuntosComprobante = {};
+    AdjuntosComprobanteLenght = 0;
+    AdjuntosComprobanteArre = [];
 
     constructor(
         public formBuilder: FormBuilder,
-        public _httpService: HTTPService, public _router: Router, public _global: GlobalService) { }
+        public _httpService: HTTPService, public _router: Router, public _global: GlobalService, public route: ActivatedRoute) { }
 
     ngOnInit() {
         console.log('init');
@@ -51,6 +70,10 @@ export class ResumenPagosComponent {
             Cds: []
         });
 
+        this.pagosForm = this.formBuilder.group({
+            Comprobante: ['']
+        });
+
         this.precargaPaises();
         this.setMesResumen();
         /*
@@ -60,8 +83,24 @@ export class ResumenPagosComponent {
         this.filterForm.controls.Cds.setValue('');
         //this.traeOrdenes();
 
+
+
         this.filtrarReporte();
 
+    }
+
+    validarAdjuntos(){
+      try { this.AdjuntosComprobanteLenght = Object(this.AdjuntosComprobante).currentFiles.length; } catch (e) { this.AdjuntosComprobanteLenght = 0; }
+
+      this.adjuntosValidos = false;
+      if(this.AdjuntosComprobanteLenght>0){
+        this.adjuntosValidos = true;
+      }
+    }
+
+    onActionComprobante(event: any) {
+        console.log("Event Comprobante", event);
+        this.AdjuntosComprobante = event;
     }
 
     changePais() {
@@ -205,6 +244,20 @@ export class ResumenPagosComponent {
                 this.montoTAMov = data.MontoTAMov;
                 this.montoFee = data.MontoFee;
                 this.montoTotal = data.MontoTotal;
+
+                this.statusPago = '';
+                if(data.Pago.id){
+                  this.idPago = data.Pago.id;
+                  this.statusPago = data.Pago.StatusPago;
+                  this.comprobantePago = data.Pago.Comprobante;
+                  this.fechaRegistroPago = data.Pago.FechaRegistro;
+                  this.status = data.Pago.Status;
+                }
+
+                console.log("statuspago", this.statusPago);
+                if(this.statusPago=="")
+                  this.statusPago = "Por Enviar";
+
                 this.evaluaMes();
             },
             error => alert(error),
@@ -346,6 +399,64 @@ export class ResumenPagosComponent {
     }
 
 
+    submitCambiastatusPago() {
+        console.log('submit cambhio de status de pago');
+        this.validarAdjuntos();
 
+        if (this.adjuntosValidos) {
+
+            console.log('submit cambio de estatus');
+            this._global.clearMessages();
+            this._global.appstatus.loading = true;
+
+            console.log(this.pagosForm.getRawValue());
+
+            var params = {};
+            params = this.pagosForm.getRawValue();
+
+            params["IDReporte"] = this.idPago;
+            params["ComprobantePago"] = this.AdjuntosComprobante;
+            try { params["AdjuntosComprobantePagoSize"] = Object(this.AdjuntosComprobante).currentFiles.length; } catch (e) { params["AdjuntosComprobantePagoSize"] = 0; };
+
+            console.log("Parametros de cambio de estatus", params);
+
+            this._httpService.postFormData(params, 'administracion/actualizar-status-pago.php')
+              .subscribe(
+              data => {
+                  console.log("Parametros de cambio de estatus>>>", params);
+                  console.log('data res comprobante', data);
+                  this._global.appstatus.loading = false;
+
+                  if (data.res == 'ok') {
+
+                    swal({
+                        title: 'Pago Actualizado',
+                        text: 'Se ha marcado como pagado y adjuntado el comprobante.',
+                        type: 'success',
+                        showConfirmButton: true,
+                        confirmButtonText: 'Ok',
+                        customClass: 'swal2-overflow',
+                    }).then((result) => {
+                        if (result.value) {
+                            //this.filtrarReporte();
+                        }
+                    });
+
+                  } else if (data.res = 'error') {
+                      this._global.appstatus.mensaje = data.error;
+                  }
+
+
+                  //console.log("fichas");
+                  //console.log(this.props.fichas);
+              },
+              error => alert(error),
+              () => console.log('termino submit')
+              );
+
+        } else {
+            this._global.validateAllFormFields(this.pagosForm);
+        }
+    }
 
 }
