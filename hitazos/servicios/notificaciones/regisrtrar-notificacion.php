@@ -22,9 +22,9 @@ if($modulo!="" &&
   $res['res'] = 'ok';
   $query = "
   insert into notificaciones
-  (id_reporte, id_usuario, modulo, descripcion)
+  (id_reporte, id_usuario, leida, modulo, descripcion)
   values
-  ($id_reporte, $id_usuario,'$modulo','$descripcion')
+  ($id_reporte, $id_usuario, 0, '$modulo','$descripcion')
   ";
 
   $q = mysql_query($query) or die(mysql_error());

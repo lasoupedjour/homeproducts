@@ -21,11 +21,11 @@ $arre = json_decode($json, true);
 
 $id_usuario = utf8_decode(urldecode($arre['id_usuario']));
 if($id_usuario==17)
-  $query = "SELECT id FROM notificaciones where id_usuario<>17";
+  $query = "SELECT id FROM notificaciones where id_usuario<>17 and leida=0";
 else{
   $query = "
-            select n.id from 
-            (select * from notificaciones where id_usuario=17) as n
+            select n.id from
+            (select * from notificaciones where id_usuario=17 and leida=0) as n
             join
             (select * from reportes) as r
             on n.id_reporte = r.id
