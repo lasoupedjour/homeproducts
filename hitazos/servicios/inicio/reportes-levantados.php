@@ -22,15 +22,23 @@ $res = array();
 
 $res['res'] = 'ok';
 
+if($arre["IDDistribuidor"]>0){
+  $query = "SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
+  FROM reportes, clientes
+  where clientes.id = reportes.IDCliente
+  and reportes.IDOperadorDistribuidor = ".$arre["IDDistribuidor"]."
+  and reportes.IDCliente = ".$arre['IDCliente']."
+  order by FechaRegistroReporte desc LIMIT 5;";
+}else{
+  $query = "SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
+  FROM reportes, clientes
+  where clientes.id = reportes.IDCliente
+  and reportes.IDOperadorCentro = ".$arre["IDCentro"]."
+  and reportes.IDCliente = ".$arre['IDCliente']."
+  order by FechaRegistroReporte desc LIMIT 5;";
+}
 
-$q = mysql_query("
-SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF 
-FROM reportes, clientes
-where clientes.id = reportes.IDCliente
-and reportes.IDCentro = ".$arre["IDCentro"]."
-and reportes.IDCliente = ".$arre['IDCliente']."
-order by FechaRegistroReporte desc LIMIT 5;
-") or die(mysql_error());
+$q = mysql_query($query) or die(mysql_error());
 
 $reportes = array();
 

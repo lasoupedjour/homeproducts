@@ -184,7 +184,7 @@ export class ReporteCasoComponent {
 
 
         /*Si el usuario es un distgrobuidor*/
-        if(this._global.user.IDDistribuidor>0)
+        if(this._global.user.IDDistribuidor)
           this.precargaCentros();
         /*precarga tarifas movilización*/
         //this.precargaTarifasMovilizacion();
@@ -529,7 +529,7 @@ export class ReporteCasoComponent {
         switch (this.genericForm.controls.TipoCaso.value) {
 
             case "Garantía":
-                if(!this._global.user.IDDistribuidor>0){
+                if(!this._global.user.IDDistribuidor){
                   this.genericForm.controls.TipoRevision.setValidators([Validators.required]);
                   this.genericForm.controls.TipoRevision.updateValueAndValidity();
 
@@ -1146,7 +1146,7 @@ export class ReporteCasoComponent {
 
             this._global.appstatus.loading = true;
 
-            console.log(params);
+            console.log("registro reporte", params);
 
             this._httpService.postJSON(params, 'registro-de-casos/registro-reporte.php')
                 .subscribe(
@@ -1180,7 +1180,7 @@ export class ReporteCasoComponent {
                                 customClass: 'swal2-overflow',
                             }).then((result) => {
                                 if (result.value) {
-                                  if(this._global.user.IDDistribuidor>0){
+                                  if(this._global.user.IDDistribuidor){
                                     this._router.navigate(['inicio']);
                                   }else{
                                     this._router.navigate(['inicio/resumen']);
@@ -1189,7 +1189,7 @@ export class ReporteCasoComponent {
                             });
 
                         } else {
-                          if(this._global.user.IDDistribuidor>0){
+                          if(this._global.user.IDDistribuidor){
                             this._router.navigate(['inicio']);
                           }else{
                             this._router.navigate(['inicio/resumen']);

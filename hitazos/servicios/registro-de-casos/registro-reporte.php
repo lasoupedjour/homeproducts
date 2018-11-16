@@ -56,19 +56,24 @@ if($arre['NecesitaAutorizacion'] == 1){
 
 $IDOperadorCentro = 0;
 
-if($arre['IDOperadorDistribuidor']==0)
+$IDOperadorDistribuidor = 0;
+
+if($arre['IDDistribuidor']==0)
   $IDOperadorCentro = $arre['IDUsuario'];
+else{
+  $IDOperadorDistribuidor = $arre['IDDistribuidor'];
+}
 
 if(!$arre['Update']){
 	//insertar
 	if ($stmt = $mysqli->prepare("
 	insert into reportes (IDCliente, IDCentro, IDOperadorDistribuidor, IDOperadorCentro, TipoCaso, Categoria, Subcategoria, Tipo, Modelo, CodigoSAP, FechaCompra, Sello, AplicaGarantia, Uso, Distribuidor, LugarCompra, Falla, FallaDescripcion, Comentarios, TipoRevision, IDTarifas, StatusMovilidad, MontoMovilizacion, FechaRevision, Descripcion, StatusReporte)
-	values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Reporte')
+	values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Reporte')
 	")) {
 		$stmt->bind_param("ddddssssssssssssssssdsdss",
 		$arre['IDCliente'],
 		$arre['IDCentro'],
-    $arre['IDOperadorDistribuidor'],
+    $IDOperadorDistribuidor,
     $IDOperadorCentro,
     $arre['TipoCaso'],
 		$arre['Categoria'],
@@ -98,26 +103,7 @@ if(!$arre['Update']){
 
 			$reporte = array();
 
-
-      //Se verifica si el registro lo realiza un distribuidores
-      if(!$arre["IDDistribuidor"]==""){
-        //Actualzamos el registro del cliente para asignarlo al centro randsSeleccionado
-        //siempre y cuando no esté asignado ya a otro centro
-        if ($stmt = $mysqli->prepare("
-                                      update clientes set
-                                  		IDCentro = ?
-                                  		where id = ? and IDCentro=0
-                                  		")) {
-    			$stmt->bind_param("dd",
-    			$arre['IDCentro'],
-    			$arre['IDCliente']
-    			);
-
-          $stmt->execute();
-    		}
-      }
-
-			//regresa el reporte como objeto
+      //regresa el reporte como objeto
 
 			$query = "
 			select * from reportes where id = ".$res['idreporte'].";
@@ -135,6 +121,24 @@ if(!$arre['Update']){
 					array_push($reporte, $temp);
 				}
 				$result->close();
+
+        //Se verifica si el registro lo realiza un distribuidores
+        if(!$arre["IDDistribuidor"]>0){
+          //Actualzamos el registro del cliente para asignarlo al centro randsSeleccionado
+          //siempre y cuando no esté asignado ya a otro centro
+          if ($stmt = $mysqli->prepare("
+                                        update clientes set
+                                    		IDCentro = ?
+                                    		where id = ? and IDCentro=0
+                                    		")) {
+      			$stmt->bind_param("dd",
+      			$arre['IDCentro'],
+      			$arre['IDCliente']
+      			);
+
+            $stmt->execute();
+      		}
+        }
 			}else{
 				print_r (mysqli_error());
 			}

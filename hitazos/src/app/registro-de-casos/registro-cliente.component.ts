@@ -329,7 +329,7 @@ export class RegistroClienteComponent {
             params = this.genericForm.getRawValue();
             params["IDUsuario"] = this._global.user.id;
 
-            if(this._global.user.IDDistribuidor>0)
+            if(this._global.user.IDDistribuidor)
               params["IDCentro"] = 0;
             else
               params["IDCentro"] = this._global.user.IDCentro;

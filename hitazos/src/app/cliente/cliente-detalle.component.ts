@@ -92,7 +92,8 @@ export class ClienteDetalleComponent {
 
         var params = {
             IDCliente: Object(this._global.cliente.objeto).id,
-            IDCentro: Object(this._global.user).IDCentro
+            IDCentro: Object(this._global.user).IDCentro,
+            IDDistribuidor: Object(this._global.user).IDDistribuidor
         };
 
         this._global.appstatus.loading = true;
@@ -428,5 +429,3 @@ export class ClienteDetalleComponent {
 
 
 }
-
-
