@@ -121,6 +121,8 @@ export class AdministracionComponent {
         params['Pais'] = this.filterForm.controls.Pais.value;
         params['IDCentro'] = this._global.user.IDCentro;
         params['Nivel'] = this._global.user.nivel;
+        params['IDMaster'] = this._global.user.IDMaster;
+        params['IDGrupoTarifa'] = this._global.user.IDGrupoTarifa;
 
         this._global.appstatus.loading = true;
 
