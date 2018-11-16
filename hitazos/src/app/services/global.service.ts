@@ -1594,6 +1594,18 @@ export class GlobalService implements CanActivate{
 
       })
 
+    }
+
+    muestraImagenPago(url_img, mes, ano){
+
+      swal({
+          title: 'Evidencia Pago ' + mes + ' ' + ano,
+          html: `<img class='img-fluid' src='`+this.base+`administracion/uploads-pagos/`+url_img+`'>`,
+          showConfirmButton: true,
+          confirmButtonText: 'Ok',
+          customClass: 'swal2-overflow',
+
+      })
 
     }
 

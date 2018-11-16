@@ -24,25 +24,24 @@ $res = array();
 
 $res['res'] = 'ok';
 
-$AdjuntosComprobantePago = Array();
+$nombrenota = subirAdjuntos($arre['IDReporte'], 'ComprobantePago', 1);
 
-$AdjuntosComprobantePago = subirAdjuntos($arre['IDReporte'], 'ComprobantePago', $arre['AdjuntosComprobantePagoSize']);
 
-function subirAdjuntos($idreporte, $field){
+function subirAdjuntos($idreporte, $field, $size){
 
 	$arrebd = Array();
 
-  for($i = 0; $i < $size; $i++){
+	for($i = 0; $i < $size; $i++){
 
-		if(!empty($_FILES[$field.$i]['name'])){
+		if(!empty($_FILES[$field]['name'])){
 			$uploadedFile = '';
-			if(!empty($_FILES[$field.$i]["type"])){
-				$fileName = $idreporte.'_'.time().'_'.$_FILES[$field.$i]['name'];
+			if(!empty($_FILES[$field]["type"])){
+				$fileName = $idreporte.'_'.time().'_'.$_FILES[$field]['name'];
 				$valid_extensions = array("jpeg", "jpg", "png", "pdf");
-				$temporary = explode(".", $_FILES[$field.$i]["name"]);
+				$temporary = explode(".", $_FILES[$field]["name"]);
 				$file_extension = end($temporary);
-				if((($_FILES["hard_file"]["type"] == "image/png") || ($_FILES[$field.$i]["type"] == "image/jpg") || ($_FILES[$field.$i]["type"] == "image/jpeg") || ($_FILES[$field.$i]["type"] == "image/png") || ($_FILES[$field.$i]["type"] == "application/pdf")) && in_array($file_extension, $valid_extensions)){
-					$sourcePath = $_FILES[$field.$i]['tmp_name'];
+				if((($_FILES["hard_file"]["type"] == "image/png") || ($_FILES[$field]["type"] == "image/jpg") || ($_FILES[$field]["type"] == "image/jpeg") || ($_FILES[$field]["type"] == "image/png") || ($_FILES[$field]["type"] == "application/pdf")) && in_array($file_extension, $valid_extensions)){
+					$sourcePath = $_FILES[$field]['tmp_name'];
 					$targetPath = "uploads-pagos/".$fileName;
 					if(move_uploaded_file($sourcePath,$targetPath)){
 						$uploadedFile = $fileName;
@@ -54,9 +53,11 @@ function subirAdjuntos($idreporte, $field){
 
 	}
 
-	return $arrebd;
+	return $fileName;
 
 }
+
+$res['nombrenota'] = $nombrenota;
 
 if ($stmt = $mysqli->prepare("
 
@@ -68,7 +69,7 @@ where id = ?
 
 ")) {
 	$stmt->bind_param("ss",
-		json_encode($AdjuntosComprobantePago),
+		$nombrenota,
 		$arre['IDReporte']
 	);
 	if($stmt->execute()){

@@ -9,7 +9,7 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
 
 $json = $_POST['json'];
 $arre = json_decode($json, true);
-	
+
 $current_charset = 'ISO-8859-15';//or what it is now
 array_walk_recursive($arre,function(&$value) use ($current_charset){
      $value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
@@ -28,7 +28,7 @@ subirAdjuntos($arre['IDReporte'], 'AdjuntosFacturasRepuestos', $arre['AdjuntosFa
 subirAdjuntos($arre['IDReporte'], 'AdjuntosOtros', $arre['AdjuntosOtrosSize']);
 
 function subirAdjuntos($idreporte, $field, $size){
-	
+
 	for($i = 0; $i < $size; $i++){
 
 		if(!empty($_FILES[$field.$i]['name'])){
@@ -49,14 +49,14 @@ function subirAdjuntos($idreporte, $field, $size){
 		}
 
 	}
-	
+
 }
 
 
 
 //echo "bien subido: ".$uploadedFile;
-	
+
 	//$res['res'] = $arre['IDReporte'];
-	
+
 	echo $arre['IDReporte'];
 ?>
