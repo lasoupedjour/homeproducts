@@ -529,16 +529,16 @@ export class ReporteCasoComponent {
         switch (this.genericForm.controls.TipoCaso.value) {
 
             case "Garantía":
+                if(!this._global.user.IDDistribuidor>0){
+                  this.genericForm.controls.TipoRevision.setValidators([Validators.required]);
+                  this.genericForm.controls.TipoRevision.updateValueAndValidity();
 
-                this.genericForm.controls.TipoRevision.setValidators([Validators.required]);
-                this.genericForm.controls.TipoRevision.updateValueAndValidity();
+                  /*this.genericForm.controls.FechaRevision.setValidators([Validators.required]);
+                  this.genericForm.controls.FechaRevision.updateValueAndValidity();*/
 
-                /*this.genericForm.controls.FechaRevision.setValidators([Validators.required]);
-                this.genericForm.controls.FechaRevision.updateValueAndValidity();*/
-
-                this.genericForm.controls.Comentarios.setValidators([Validators.required]);
-                this.genericForm.controls.Comentarios.updateValueAndValidity();
-
+                  this.genericForm.controls.Comentarios.setValidators([Validators.required]);
+                  this.genericForm.controls.Comentarios.updateValueAndValidity();
+                }
                 break;
 
             case "Refacciones":
@@ -1180,17 +1180,20 @@ export class ReporteCasoComponent {
                                 customClass: 'swal2-overflow',
                             }).then((result) => {
                                 if (result.value) {
-                                  if(this._global.user.IDDistribuidor>0)
+                                  if(this._global.user.IDDistribuidor>0){
                                     this._router.navigate(['inicio']);
-                                  else
+                                  }else{
                                     this._router.navigate(['inicio/resumen']);
+                                  }
                                 }
                             });
 
                         } else {
-
+                          if(this._global.user.IDDistribuidor>0){
+                            this._router.navigate(['inicio']);
+                          }else{
                             this._router.navigate(['inicio/resumen']);
-
+                          }
                         }
 
 

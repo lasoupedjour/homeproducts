@@ -100,7 +100,7 @@ if(!$arre['Update']){
 
 
       //Se verifica si el registro lo realiza un distribuidores
-      if($arre["IDDistribuidor"]>0){
+      if(!$arre["IDDistribuidor"]==""){
         //Actualzamos el registro del cliente para asignarlo al centro randsSeleccionado
         //siempre y cuando no esté asignado ya a otro centro
         if ($stmt = $mysqli->prepare("
