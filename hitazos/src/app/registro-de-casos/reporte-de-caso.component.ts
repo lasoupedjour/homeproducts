@@ -124,7 +124,7 @@ export class ReporteCasoComponent {
             Descripcion: [Object(this._global.reporte.objreporte).Descripcion],
             Refaccion: [''],
             NoParte: [''],
-
+            IDCentro: 0,
 
 
         });
@@ -183,12 +183,16 @@ export class ReporteCasoComponent {
         };
 
 
-
+        /*Si el usuario es un distgrobuidor*/
+        if(this._global.user.IDDistribuidor>0)
+          this.precargaCentros();
         /*precarga tarifas movilización*/
         //this.precargaTarifasMovilizacion();
 
 
     }
+
+
 
     precargaTarifasMovilizacion(Subcategoria) {
 
@@ -247,6 +251,48 @@ export class ReporteCasoComponent {
         } else {
             this.formulariostatus.habilitaDomicilio = true;
         }
+
+    }
+
+    precargaCentros() {
+
+        var params = {};
+
+        params['Pais'] = Object(this._global.user).Pais;
+
+        this._global.appstatus.loading = true;
+
+        /*console.log('Precarga distribuidores');
+        console.log(params);*/
+
+        this._httpService.postJSON(params, 'registro-de-casos/buscar-centros.php')
+            .subscribe(
+            data => {
+                console.log('data');
+                console.log(data);
+                this._global.appstatus.loading = false;
+
+                if (data.res == 'ok') {
+
+                    this._global.centros = this._global.parseJSON(data.centros);
+
+                    console.log('centros');
+                    console.log(this._global.centros);
+
+                    if (data.centros.length == 0) {
+                        this._global.appstatus.mensaje = 'No se encontraron datos con estas características.';
+                    }
+
+                } else if (data.res = 'error') {
+
+                    this._global.appstatus.mensaje = data.error;
+
+                }
+            },
+            error => alert(error),
+            () => console.log('termino submit')
+            );
+
 
     }
 
@@ -1092,6 +1138,7 @@ export class ReporteCasoComponent {
             params["Update"] = this.status.update;
             params["IDCentro"] = this._global.user.IDCentro;
             params["IDReporte"] = this._global.reporte.idreporte;
+            params["IDDistribuidor"] = this._global.user.IDDistribuidor;
             params["IDUsuario"] = this._global.user.id;
             params["IDCliente"] = Object(this._global.cliente.objeto).id;
             params["Refacciones"] = JSON.stringify(this._global.refacciones);
@@ -1133,9 +1180,10 @@ export class ReporteCasoComponent {
                                 customClass: 'swal2-overflow',
                             }).then((result) => {
                                 if (result.value) {
-
+                                  if(this._global.user.IDDistribuidor>0)
+                                    this._router.navigate(['inicio']);
+                                  else
                                     this._router.navigate(['inicio/resumen']);
-
                                 }
                             });
 
@@ -1168,7 +1216,10 @@ export class ReporteCasoComponent {
         }
     }
 
-
+    changeCentro(){
+      this._global.user.IDCentro = this.genericForm.controls.IDCentro.value;
+      //alert(this._global.user.IDCentro);
+    }
 
     submitCotizacion() {
         console.log('submit prevalidation cotizacion');

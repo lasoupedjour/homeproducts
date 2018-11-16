@@ -105,8 +105,8 @@ export class RegistroClienteComponent {
                 Validators.email
             ])],*/
             /*NoTieneEmail: [''],*/
-           
-           
+
+
 
         });
 
@@ -328,7 +328,13 @@ export class RegistroClienteComponent {
             var params = {};
             params = this.genericForm.getRawValue();
             params["IDUsuario"] = this._global.user.id;
-            params["IDCentro"] = this._global.user.IDCentro;
+
+            if(this._global.user.IDDistribuidor>0)
+              params["IDCentro"] = 0;
+            else
+              params["IDCentro"] = this._global.user.IDCentro;
+
+            params["IDDistribuidor"] = this._global.user.IDDistribuidor;
 
             this._global.appstatus.loading = true;
 

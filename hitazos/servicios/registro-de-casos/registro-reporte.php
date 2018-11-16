@@ -50,16 +50,23 @@ if($arre['NecesitaAutorizacion'] == 1){
 	$StatusMovilidad = 'Aprobada';
 }
 
+$IDOperadorCentro = 0;
+
+if($arre['IDOperadorDistribuidor']==0)
+  $IDOperadorCentro = $arre['IDCentro'];
+
 if(!$arre['Update']){
 	//insertar
 	if ($stmt = $mysqli->prepare("
-	insert into reportes (IDCliente, IDCentro, TipoCaso, Categoria, Subcategoria, Tipo, Modelo, CodigoSAP, FechaCompra, Sello, AplicaGarantia, Uso, Distribuidor, LugarCompra, Falla, FallaDescripcion, Comentarios, TipoRevision, IDTarifas, StatusMovilidad, MontoMovilizacion, FechaRevision, Descripcion, StatusReporte)
+	insert into reportes (IDCliente, IDCentro, IDOperadorDistribuidor, IDOperadorCentro, TipoCaso, Categoria, Subcategoria, Tipo, Modelo, CodigoSAP, FechaCompra, Sello, AplicaGarantia, Uso, Distribuidor, LugarCompra, Falla, FallaDescripcion, Comentarios, TipoRevision, IDTarifas, StatusMovilidad, MontoMovilizacion, FechaRevision, Descripcion, StatusReporte)
 	values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Reporte')
 	")) {
-		$stmt->bind_param("ddssssssssssssssssdsdss",
+		$stmt->bind_param("ddddssssssssssssssssdsdss",
 		$arre['IDCliente'],
 		$arre['IDCentro'],
-		$arre['TipoCaso'],
+    $arre['IDOperadorDistribuidor'],
+    $IDOperadorCentro,
+    $arre['TipoCaso'],
 		$arre['Categoria'],
 		$arre['Subcategoria'],
 		$arre['Tipo'],
@@ -88,7 +95,23 @@ if(!$arre['Update']){
 			$reporte = array();
 
 
+      //Se verifica si el registro lo realiza un distribuidores
+      if($arre["IDDistribuidor"]>0){
+        //Actualzamos el registro del cliente para asignarlo al centro randsSeleccionado
+        //siempre y cuando no esté asignado ya a otro centro
+        if ($stmt = $mysqli->prepare("
+                                      update clientes set
+                                  		IDCentro = ?
+                                  		where id = ? and IDCentro=0
+                                  		")) {
+    			$stmt->bind_param("dd",
+    			$arre['IDCentro'],
+    			$arre['IDCliente']
+    			);
 
+          $stmt->execute();
+    		}
+      }
 
 			//regresa el reporte como objeto
 

@@ -22,18 +22,11 @@ $res = array();
 
 $res['res'] = 'ok';
 
-if($arre['nivel'] == 'administrador' || $arre['nivel'] == 'MKT'){
-	$query = "SELECT  *, DATE_FORMAT(FechaRegistro,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF FROM clientes order by FechaRegistro desc LIMIT 5;";
-}else{
-  if($arre["IDDistribuidor"]==0)
-	 $query = "SELECT  *, DATE_FORMAT(FechaRegistro,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF FROM clientes where Pais = '".$arre["Pais"]."' and IDCentro = ".$arre["IDCentro"]." order by FechaRegistro desc LIMIT 5;";
-  else
-    $query = "SELECT  *, DATE_FORMAT(FechaRegistro,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF FROM clientes where Pais = '".$arre["Pais"]."' and IDDistribuidor = ".$arre["IDDistribuidor"]." order by FechaRegistro desc LIMIT 5;";
-}
+$query = "SELECT * from centros where Pais = '".$arre['Pais']."' and IDMaster<>0 order by Nombre asc";
 
 $q = mysql_query($query) or die(mysql_error());
 
-$clientes = array();
+$centros = array();
 
 while ($row = mysql_fetch_array($q))
 {
@@ -43,9 +36,9 @@ while ($row = mysql_fetch_array($q))
 		$value = utf8_encode($value);
 	});
 	$temp = json_encode($row);
-	array_push($clientes, $temp);
+	array_push($centros, $temp);
 }
-$res['clientes'] = $clientes;
+$res['centros'] = $centros;
 
 echo json_encode($res);
 
