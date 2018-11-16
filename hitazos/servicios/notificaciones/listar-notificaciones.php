@@ -26,8 +26,20 @@ $notificaciones = array();
 $id_usuario = utf8_decode(urldecode($arre['id_usuario']));
 if($id_usuario==17)
   $query = "SELECT *, DATE_FORMAT(timestamp,  '%d/%m/%Y %H:%i:%s' ) as timestampNF FROM notificaciones where id_usuario<>17 order by id desc;";
-else
-  $query = "select n.*, DATE_FORMAT(n.timestamp,  '%d/%m/%Y %H:%i:%s' ) as timestampNF from (select * from notificaciones where id_usuario=17) as n join (select * from reportes) as r on n.id_usuario = r.IDCentro  where IDCentro=$id_usuario group by id";
+else{
+  $query = "
+            select n.*, DATE_FORMAT(n.timestamp,  '%d/%m/%Y %H:%i:%s' ) as timestampNF from
+            (select * from notificaciones where id_usuario=17) as n
+            join
+            (select * from reportes) as r
+            on n.id_reporte = r.id
+            join
+            (select * from usuarios_admin where ID=$id_usuario) as u
+            on r.idcentro = u.idcentro
+            group by id
+            ";
+}
+
 
 if ($result = $mysqli->query($query)) {
 	while ($row = $result->fetch_array()) {

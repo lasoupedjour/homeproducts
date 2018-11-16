@@ -490,6 +490,10 @@ export class GlobalService implements CanActivate{
                     }).then((result) => {
                         if (result.value) {
                             this.cambioStatusCotizaciones(id, noparte, aprobacion);
+                            //Registro de notificación
+                            this.notificaciones.modulo = "/cambio-estatus-cotizacion";
+                            this.notificaciones.descripcion = "La cotización con No. de parte " + noparte + " ha sido " + aprobacion + " para el reporte No. " + id;
+                            this.registrarNotificacion(id);
                         }
                      });
 
@@ -535,6 +539,10 @@ export class GlobalService implements CanActivate{
                 }).then((result) => {
                     if (result.value) {
                         this.cambioStatusMovilizaciones(id, aprobacion);
+                        //Registro de notificación
+                        this.notificaciones.modulo = "/cambio-estatus-movilizacion";
+                        this.notificaciones.descripcion = "La movilización del reporte No. " + id + " ha sido " + aprobacion;
+                        this.registrarNotificacion(id);
                     }
                 });
 
@@ -580,6 +588,10 @@ export class GlobalService implements CanActivate{
                 }).then((result) => {
                     if (result.value) {
                         this.cambioStatusCambioFisico(id, aprobacion);
+                        //Registro de notificación
+                        this.notificaciones.modulo = "/cambio-estatus-cambio-fisico";
+                        this.notificaciones.descripcion = "El cambio físico del reporte No. " + id + " ha sido " + aprobacion;
+                        this.registrarNotificacion(id);
                     }
                 });
 

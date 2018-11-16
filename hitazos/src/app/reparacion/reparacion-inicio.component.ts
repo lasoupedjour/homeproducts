@@ -523,6 +523,13 @@ export class ReparacionInicioComponent {
 
                                 swal('¡Bien!', 'Se han guardado exitosamente los datos de la reparación.', 'success');
                                 //this._global.toast("ok", "");
+                                if(this.genericForm.controls.TipoReclamoDiagnostico.value=="Cambio"){//Si se trata de un cambnio físico se registra la notificación
+                                  //Registro de notificación
+                                  this._global.notificaciones.modulo = "/cambio-fisico";
+                                  this._global.notificaciones.descripcion = "Se ha registrado una solicitud de cambio físico para el reporte No. " + this._global.reporte.idreporte;
+                                  this._global.registrarNotificacion(this._global.reporte.idreporte);
+                                }
+                                
                                 this.habilitarOrdenServicio();
 
                             } else if (data.res == 'error') {
