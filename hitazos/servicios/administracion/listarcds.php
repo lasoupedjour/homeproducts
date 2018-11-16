@@ -29,7 +29,7 @@ if($arre["Nivel"] == "administrador" || $arre["Nivel"] == "MKT"){
   where Pais like '%".$arre["Pais"]."%'";
 }else{
   $query = "
-  SELECT id, Nombre from centros
+  SELECT id, Nombre, Ciudad from centros
   where Pais like '%".$arre["Pais"]."%'
   and (IDMaster=0 and id = ".$arre["IDCentro"].") or IDMaster = ".$arre["IDCentro"];
 }
