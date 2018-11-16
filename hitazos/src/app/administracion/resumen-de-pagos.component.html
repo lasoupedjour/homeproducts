@@ -182,7 +182,7 @@
       <div class="row my-2" *ngIf="this.statusPago != 'Por Enviar'">
         <div class="col-6">
           Pago <b>{{this.statusPago}}</b><br>
-          Comprobante: <b *ngIf="this.statusPago == 'Enviado'">{{this.comprobantePago}}</b><br>
+          Comprobante: <b *ngIf="this.statusPago == 'Pagado'"><a (click)="this._global.muestraImagenPago(this.comprobantePago, this.mes, this.ano)"><i class="fa fa-file"></i></a></b><br>
           Fecha de registro: <b>{{this.fechaRegistroPago}}</b><br>
         </div>
         <div class="col-6">

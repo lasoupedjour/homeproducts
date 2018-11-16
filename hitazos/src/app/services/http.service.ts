@@ -155,9 +155,28 @@ export class HTTPService {
         return this._http.post(this.base + url, fd)
             .map(res => res.json())
 
+    }
 
+    postFormDataPagos(params: any, url: string) {
 
+        console.log('servicio');
+        console.log(params["ComprobantePago"].currentFiles[0]);
+
+        const fd = new FormData();
+
+        var json = JSON.stringify(params);
+        fd.append('json', json);
+
+        fd.append('ComprobantePago', params["ComprobantePago"].currentFiles[0], params["ComprobantePago"].currentFiles[0].name);
+
+        console.log(this.base + url);
+
+        console.log(fd);
+
+        return this._http.post(this.base + url, fd)
+            .map(res => res.json())
 
     }
+
 
 }

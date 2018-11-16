@@ -46,6 +46,8 @@ export class ResumenPagosComponent {
     statusPago = "Por Enviar";
     idPago = 0;
     comprobantePago = "";
+    ano = "";
+    mes = "";
     fechaRegistroPago = "";
     status = 0;
 
@@ -78,7 +80,7 @@ export class ResumenPagosComponent {
         this.precargaPaises();
         this.setMesResumen();
         this.filterForm.controls.Cds.setValue('');
-        
+
         this.filtrarReporte();
 
     }
@@ -245,6 +247,8 @@ export class ResumenPagosComponent {
                   this.statusPago = data.Pago.StatusPago;
                   this.comprobantePago = data.Pago.Comprobante;
                   this.fechaRegistroPago = data.Pago.FechaRegistro;
+                  this.ano = params['ano'];
+                  this.mes = params['mes'];
                   this.status = data.Pago.Status;
                 }
 
@@ -394,7 +398,7 @@ export class ResumenPagosComponent {
 
 
     submitCambiastatusPago() {
-        console.log('submit cambhio de status de pago');
+        console.log('submit cambio de status de pago');
         this.validarAdjuntos();
 
         if (this.adjuntosValidos) {
@@ -410,11 +414,11 @@ export class ResumenPagosComponent {
 
             params["IDReporte"] = this.idPago;
             params["ComprobantePago"] = this.AdjuntosComprobante;
-            try { params["AdjuntosComprobantePagoSize"] = Object(this.AdjuntosComprobante).currentFiles.length; } catch (e) { params["AdjuntosComprobantePagoSize"] = 0; };
+
 
             console.log("Parametros de cambio de estatus", params);
 
-            this._httpService.postFormData(params, 'administracion/actualizar-status-pago.php')
+            this._httpService.postFormDataPagos(params, 'administracion/actualizar-status-pago.php')
               .subscribe(
               data => {
                   console.log("Parametros de cambio de estatus>>>", params);

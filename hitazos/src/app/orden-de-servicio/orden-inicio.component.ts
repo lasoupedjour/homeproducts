@@ -423,6 +423,7 @@ export class OrdenInicioComponent {
       }
 
       //suma Reciclaje y otro CostoTotal
+
       if(this.genericForm.controls.MontoReciclaje.value != null && this.genericForm.controls.MontoReciclaje.value != '')
         this.MontoSubtotal = this.MontoSubtotal + parseFloat(String(this.genericForm.controls.MontoReciclaje.value));
       if(this.genericForm.controls.MontoOtro.value != null && this.genericForm.controls.MontoOtro.value != '')
@@ -430,7 +431,7 @@ export class OrdenInicioComponent {
 
       //alert(this.tiporeparacion.Impuesto);
       if(String(this.tiporeparacion.Impuesto)=='0')
-        this.MontoIVA = this.IVA * this.MontoSubtotal;
+        this.MontoIVA = 0;
       else
         this.MontoIVA = parseFloat(String(this.tiporeparacion.Impuesto)) * this.MontoSubtotal;
 
