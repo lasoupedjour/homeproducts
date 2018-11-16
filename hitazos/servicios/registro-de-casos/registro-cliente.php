@@ -45,11 +45,12 @@ if($arre['NoTieneEmail'] == false){
 			if($num == 0){
 				//insertar
 				if ($stmt = $mysqli->prepare("
-				insert into clientes (IDCentro, OrigenContacto, TipoPersona, RFC, RazonSocial, Nombre, APaterno, AMaterno, Email, NoReferencia, Pais, IDEstado, IDMunicipio, IDLocalidad, CP, Direccion, NoExt, NoInt, CodigoPais, Telefono, Movil)
-				values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+				insert into clientes (IDCentro, IDDistribuidor, OrigenContacto, TipoPersona, RFC, RazonSocial, Nombre, APaterno, AMaterno, Email, NoReferencia, Pais, IDEstado, IDMunicipio, IDLocalidad, CP, Direccion, NoExt, NoInt, CodigoPais, Telefono, Movil)
+				values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 				")) {
-					$stmt->bind_param("dssssssssssssssssssss",
+					$stmt->bind_param("ddssssssssssssssssssss",
 					$arre['IDCentro'],
+          $arre['IDDistribuidor'],
 					$arre['OrigenContacto'],
 					$arre['TipoPersona'],
 					$arre['RFC'],

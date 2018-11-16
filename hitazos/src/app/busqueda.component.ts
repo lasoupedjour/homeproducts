@@ -41,8 +41,8 @@ export class BusquedaComponent {
             RazonSocial: [''],
             Email: [''],
             NoSerie: ['']
- 
-            
+
+
         });
 
     }
@@ -143,7 +143,7 @@ export class BusquedaComponent {
                         } else if (data.res = 'error') {
                             this._global.appstatus.mensaje = data.error;
                         }
-                        
+
                     },
                     error => alert(error),
                     () => console.log('termino submit')
@@ -174,5 +174,3 @@ export class BusquedaComponent {
     }
 
 }
-
-

@@ -1,4 +1,4 @@
-﻿import { Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Http, Headers, RequestOptions } from '@angular/http';
 import { HTTPService } from '../services/http.service';
 import 'rxjs/add/operator/map';
@@ -47,7 +47,9 @@ export class GlobalService implements CanActivate{
         "Horarios": "",
         "Responsable": "",
         "TelefonoResponsable": "",
-        "IDGrupoTarifa": ""
+        "IDGrupoTarifa": "",
+        "IDDistribuidor": "",
+        "CustomerID": ""
     };
 
     paises = [];
@@ -280,6 +282,7 @@ export class GlobalService implements CanActivate{
     modelos = []
     fallas = []
     distribuidores = []
+    centros = []
     subtiposervicio = []
 
     adjuntos = {
@@ -1370,6 +1373,8 @@ export class GlobalService implements CanActivate{
         this.user.Responsable = jsonstr.Responsable;
         this.user.TelefonoResponsable = jsonstr.TelefonoResponsable;
         this.user.IDGrupoTarifa = jsonstr.IDGrupoTarifa;
+        this.user.IDDistribuidor = jsonstr.IDDistribuidor;
+        this.user.CustomerID = jsonstr.CustomerID;
 
         console.log(this.user);
 
@@ -1413,7 +1418,9 @@ export class GlobalService implements CanActivate{
             "Horarios": "",
             "Responsable": "",
             "TelefonoResponsable": "",
-            "IDGrupoTarifa": ""
+            "IDGrupoTarifa": "",
+            "IDDistribuidor": "",
+            "CustomerID": ""
         };
         localStorage.setItem('user', JSON.stringify(this.user));
 

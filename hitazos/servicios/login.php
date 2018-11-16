@@ -32,7 +32,31 @@ and centros.status = 1
 $num = mysql_num_rows($q);
 
 if($num == 0){
-	$res['res'] = 'error';
+  //Si no es un usuario de la tabla usuarios_admin
+  $q = mysql_query("
+  select usuarios_distribuidores.id, usuarios_distribuidores.IDDistribuidor, usuarios_distribuidores.nombre, usuarios_distribuidores.nivel, distribuidores.Pais, distribuidores.IDDistribuidor as CustomerID
+  from usuarios_distribuidores, distribuidores
+  where
+  usuario = '$usuario' and pwd = '$pwd'
+  and usuarios_distribuidores.IDDistribuidor = distribuidores.id
+  and usuarios_distribuidores.status = 1
+  ") or die(mysql_error());
+
+  $num = mysql_num_rows($q);
+
+  if($num==0){//verificamos si es un distribuidor
+    $res['res'] = 'error';
+  }else{
+    $res['res'] = 'ok';
+    
+  	list($id, $IDDistribuidor, $nombre, $nivel, $Pais, $CustomerID) = mysql_fetch_row($q);
+  	$res['id'] = $id;
+  	$res['IDDistribuidor'] = $IDDistribuidor;
+  	$res['nombre'] = $nombre;
+  	$res['nivel'] = $nivel;
+  	$res['Pais'] = $Pais;
+  	$res['CustomerID'] = $CustomerID;
+  }
 }else if($num > 0){
 	$res['res'] = 'ok';
 	list($id, $IDCentro, $IDMaster, $nombre, $nivel, $NombreCentro, $Red, $Categoria, $Pais, $Ciudad, $Direccion, $Telefono1, $Telefono2, $Telefono3, $Email, $Horarios, $Responsable, $TelefonoResponsable, $IDGrupoTarifa) = mysql_fetch_row($q);

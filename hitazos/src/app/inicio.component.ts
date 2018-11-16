@@ -111,7 +111,7 @@ export class InicioComponent {
                 //console.log("fichas");
                 //console.log(this.props.fichas);
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
 
@@ -153,7 +153,7 @@ export class InicioComponent {
                 //console.log("fichas");
                 //console.log(this.props.fichas);
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
 
@@ -195,7 +195,7 @@ export class InicioComponent {
                 //console.log("fichas");
                 //console.log(this.props.fichas);
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
 
@@ -237,7 +237,7 @@ export class InicioComponent {
                 //console.log("fichas");
                 //console.log(this.props.fichas);
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
 
@@ -249,7 +249,8 @@ export class InicioComponent {
         var params = {};
         params["IDCentro"] = this._global.user.IDCentro;
         params["nivel"] = this._global.user.nivel;
-
+        params["IDDistribuidor"] = this._global.user.IDDistribuidor;
+        
         this._global.appstatus.loading = true;
 
         this._httpService.postJSON(params, 'inicio/nuevas-ordenes-asignadas.php')
@@ -278,7 +279,7 @@ export class InicioComponent {
                 //console.log("fichas");
                 //console.log(this.props.fichas);
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
 
@@ -290,6 +291,7 @@ export class InicioComponent {
 
         var params = {};
         params["IDCentro"] = this._global.user.IDCentro;
+        params["IDDistribuidor"] = this._global.user.IDDistribuidor;
         params["nivel"] = this._global.user.nivel;
 
         this._global.appstatus.loading = true;
@@ -320,7 +322,7 @@ export class InicioComponent {
                 //console.log("fichas");
                 //console.log(this.props.fichas);
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
 
@@ -332,6 +334,7 @@ export class InicioComponent {
         params["Pais"] = this._global.user.Pais;
         params["nivel"] = this._global.user.nivel;
         params["IDCentro"] = this._global.user.IDCentro;
+        params["IDDistribuidor"] = this._global.user.IDDistribuidor;
 
 
         this._global.appstatus.loading = true;
@@ -361,7 +364,7 @@ export class InicioComponent {
                 //console.log("fichas");
                 //console.log(this.props.fichas);
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
 
