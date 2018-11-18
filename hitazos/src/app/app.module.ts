@@ -43,6 +43,7 @@ import { OrdenInicioComponent } from './orden-de-servicio/orden-inicio.component
 
 //Administracion
 import { AdministracionComponent } from './administracion/administracion.component';
+import { CambiosComponent } from './administracion/cambios.component';
 import { HistorialComponent } from './administracion/historial.component';
 import { ResumenPagosComponent } from './administracion/resumen-de-pagos.component';
 
@@ -109,6 +110,7 @@ import 'datatables.net-fixedheader';
         OrdenInicioComponent,
 
         AdministracionComponent,
+        CambiosComponent,
         HistorialComponent,
         ResumenPagosComponent,
 

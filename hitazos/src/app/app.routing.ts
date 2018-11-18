@@ -36,6 +36,7 @@ import { OrdenInicioComponent } from './orden-de-servicio/orden-inicio.component
 
 //Administracion
 import { AdministracionComponent } from './administracion/administracion.component';
+import { CambiosComponent } from './administracion/cambios.component';
 import { HistorialComponent } from './administracion/historial.component';
 import { ResumenPagosComponent } from './administracion/resumen-de-pagos.component';
 
@@ -77,6 +78,7 @@ export const routing = RouterModule.forRoot([
 
 
     { path: 'administracion/inicio', component: AdministracionComponent, canActivate: [GlobalService] },
+    { path: 'administracion/cambios', component: CambiosComponent, canActivate: [GlobalService] },
     { path: 'administracion/historial-de-pagos', component: HistorialComponent, canActivate: [GlobalService] },
     { path: 'administracion/resumen-de-pagos', component: ResumenPagosComponent, canActivate: [GlobalService] },
 

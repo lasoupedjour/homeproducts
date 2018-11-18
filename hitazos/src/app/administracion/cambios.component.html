@@ -1,4 +1,4 @@
-<!--div class="container">
+﻿<!--div class="container">
   <div class="row mt-5">
     <div class="col-12 mt-1">
       <h2 class="alert-danger px-2">{{_global.appstatus.mensaje}}</h2>
@@ -9,13 +9,14 @@
 
 <div class="container fM2 menuadmin">
   <div class="row">
+
     <div class="offset-sm-4  col-sm-2 text-center">
       <a routerLink="/administracion/inicio/">Resumen de Servicios</a>
     </div>
-    <div class="col-sm-2 text-center">
+    <div class="col-sm-2 text-center active">
       <a routerLink="/administracion/cambios/">Cambios</a>
     </div>
-    <div class="col-sm-2 text-center active">
+    <div class="col-sm-2 text-center">
       <a routerLink="/administracion/resumen-de-pagos/">Resumen de Pagos</a>
     </div>
     <!--<div class="col-sm-2 text-center">
@@ -35,7 +36,7 @@
 
    <div class="row mt-3">
      <div class="col-6">
-       <h2>RESUMEN DE PAGOS</h2>
+       <h2>CAMBIOS</h2>
      </div>
    </div>
 
@@ -63,7 +64,7 @@
       </div>
 
 
-      <div class="col-3 fM3">
+      <!-- <div class="col-3 fM3">
         <div class="row">
           <div class="col-12">
             <h5><strong>Monto Total: ${{montoTotal}} USD</strong></h5>
@@ -74,7 +75,8 @@
             <h5><strong>Status: {{statusPago}}</strong></h5>
           </div>
         </div>
-      </div>
+      </div> -->
+      
    </div>
    <form  name="formulariofiltros" [formGroup]="filterForm" >
    <div class="row mt-3">
@@ -122,88 +124,133 @@
 
   <hr>
 
-   <div>
+   <div *ngIf="_global.ordenesServicio.recientes[0]">
      <div class="overflow">
-       <table class="table table-striped table-bordered">
+
+       <table datatable [dtOptions]="dtOptions" [dtTrigger]="trigger"  id="tabla" class="table table-striped table-bordered">
            <thead>
            <tr>
+             <th>Orden de Servicio</th>
+             <th>Centro - Master</th>
+             <th>No. Orden</th>
+             <th>Año</th>
              <th>Mes</th>
-             <th>Garantia de Partes</th>
-             <th>Garantia de M.O. & Kms</th>
-             <th>Reembolso Garantia FEE </th>
-             <th>Monto USD</th>
-             <th>Status</th>
+             <th>Día</th>
+             <th>Categoría</th>
+             <th>Subcategoría</th>
+             <th>No. Serie</th>
+             <th>Descripción del Producto</th>
+             <th>Modelo</th>
+             <th>Descripción Falla</th>
+             <th>Motivo de Falla</th>
+             <th>Nombre Cliente</th>
+             <th>Fecha de recepción</th>
+             <th>Fecha de entrega</th>
+             <th>Tipo de Reclamo</th>
+             <th>Costo Refacciones</th>
+             <th>Costo Reparacion</th>
+             <th>Costo Movilización</th>
+             <th>Fee Mensual</th>
+             <th>Impuesto Fee Mensual</th>
+             <th>Costo Impuesto</th>
+             <th>Total</th>
            </tr>
            </thead>
 
            <tbody>
-             <tr>
-               <td>
+           <tr *ngFor="let item of _global.ordenesServicio.recientes;">
+             <td>
+               <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen/orden')" class="btn btn-sm">Consultar</button>
+             </td>
+             <td>
+               {{item.nombre}}<span *ngIf="item.Master!='N/A'"> - {{item.Master}}</span>
+             </td>
+             <td>
+               {{item.id}}
+             </td>
+             <td>
+               {{item.FechaOrdenAno}}
+             </td>
+             <td>
+               {{item.FechaOrdenMes}}
+             </td>
+             <td>
+               {{item.FechaOrdenDia}}
+             </td>
+             <td>
+               {{item.Categoria}}
+             </td>
+             <td>
+               {{item.Subcategoria}}
+             </td>
+             <td>
+               {{item.NoSerie}}
+             </td>
+             <td>
+               {{item.Tipo}}
+             </td>
+             <td>
+               {{item.Modelo}}
+             </td>
+             <td>
+               {{item.Comentarios}}
+             </td>
+             <td>
+               {{item.ObservacionesCDSDiagnostico}}
+             </td>
+             <td>
+               {{item.RazonSocial}} {{item.Nombre}} {{item.APaterno}} {{item.AMaterno}}
+             </td>
+             <td>
+               {{item.FechaRegistroReporte}}
+             </td>
+             <td>
+               {{item.FechaDiagnostico}}
+             </td>
+             <td>
+               {{item.TipoReclamoDiagnostico}}
+             </td>
+             <td>
+               {{item.MontoRefacciones | currency}}
+             </td>
+             <td>
+               {{item.MontoReparacion | currency}}
+             </td>
+             <td>
+               {{item.MontoMovilizacion | currency}}
+             </td>
+             <td>
+               {{item.TarifaMensual | currency}}
+             </td>
+             <td>
+               {{item.ImpuestoTarifaMensual | currency}}
+             </td>
+             <td>
+               {{item.MontoIVA | currency}}
+             </td>
+             <td>
+               ${{item.MontoTotal | currency}}
+             </td>
 
-               </td>
-               <td>
-                 Cta # 7210000026
-               </td>
-               <td>
-                 Cta # 7210000027
-               </td>
-               <td>
-                 Cta # 7210000030
-               </td>
-               <td>
-
-               </td>
-               <td></td>
-             </tr>
-           <tr>
-             <td>
-               {{this.nombreMes}} {{this.filterForm.controls.Ano.value}}
-             </td>
-             <td>
-               {{this.montoRefacciones | currency}}
-             </td>
-             <td>
-               {{this.montoTAMov | currency}}
-             </td>
-             <td>
-               {{this.montoFee | currency}}
-             </td>
-             <td>
-               {{this.montoTotal | currency}}
-             </td>
-             <td></td>
            </tr>
            </tbody>
-        </table>
+</table>
+
+     </div>
+   </div>
+
+   <div *ngIf="!_global.ordenesServicio.recientes[0]">
+     <div class="row my-5">
+       <div class="col-sm-12 my-5 text-center">
+         No hay órdenes de servicio pendientes de envío para este mes.
+       </div>
      </div>
     </div>
-      <div class="row mt-3" *ngIf="this.statusPago != 'Por Enviar'">
-        <div class="col-6">
-          <h2>DATOS DE PAGO</h2>
-        </div>
-      </div>
-      <div class="row my-2" *ngIf="this.statusPago != 'Por Enviar'">
-        <div class="col-6">
-          Pago <b>{{this.statusPago}}</b><br>
-          Comprobante: <b *ngIf="this.statusPago == 'Pagado'"><a (click)="this._global.muestraImagenPago(this.comprobantePago, this.mes, this.ano)"><i class="fa fa-file"></i></a></b><br>
-          Fecha de registro: <b>{{this.fechaRegistroPago}}</b><br>
-        </div>
-        <div class="col-6">
-          <form class="formulario formularioCotizacion my-3" name="formulariopagos" [formGroup]="pagosForm" (ngSubmit)="submitCambiastatusPago()" *ngIf="this.comprobantePago=='Pago sin realizar'">
-            <ng2-file-input (onAction)="onActionComprobante($event)" ></ng2-file-input>
-            <span class="alert alert-danger" *ngIf="this.AdjuntosComprobanteLenght==0 && this.adjuntosValidos==false">
-              Este campo es requerido
-            </span>
 
 
-            <br>
-            <button class="btn btn-sm" type="submit">Guardar</button>
-          </form>
-        </div>
-      </div>
-     <div class="row my-5" *ngIf="this.statusPago == 'Por Enviar'">
+     <div class="row my-5">
        <div class="offset-sm-9 col-3 mb-5">
-         <a class="btn btn-sm btnicono" (click)="generaReporte()"> Generar reporte y enviar </a>
+         <a *ngIf="this.statusPago != 'Enviado' && this._global.ordenesServicio.recientes.length != 0" class="btn btn-sm btnicono" (click)="generaReporte()"> Generar reporte y enviar </a>
        </div>
      </div>
 
