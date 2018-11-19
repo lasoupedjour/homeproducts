@@ -356,46 +356,59 @@
           </div>
           <div class="col-8">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" formControlName="informacionCompleta" id="informacionCompleta1" value="1">
-              <label class="form-check-label" for="informacionCompleta1">Sí</label>
+              <input class="form-check-input" type="radio" formControlName="informacionCompleta" id="informacionCompleta1" value="1"  [attr.disabled]="this.resolucionDisabled()" >
+              <label class="form-check-label" for="informacionCompleta1" >Sí</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" formControlName="informacionCompleta" id="informacionCompleta2" value="0">
+              <input class="form-check-input" type="radio" formControlName="informacionCompleta" id="informacionCompleta2" value="0"  [attr.disabled]="this.resolucionDisabled()" >
               <label class="form-check-label" for="informacionCompleta2">No</label>
+            </div>
+            <div class="alert alert-danger" *ngIf="!genericForm.controls.informacionCompleta.valid && genericForm.controls.informacionCompleta.touched">
+              Este campo es requerido
             </div>
           </div>
         </div>
-        <div class="row mb-1">
-          <div class="col-4 text-right">
-            Razón del rechazo:
-          </div>
-          <div class="col-8">
-            <textarea class="form-control form-control-sm" formControlName="razonRechazo" id="razonRechazo" rows="3"></textarea>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-6">
         <div class="row mb-1">
           <div class="col-4 text-right">
             Reclamo:
           </div>
           <div class="col-8">
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" formControlName="reclamo" id="reclamo1" value="1">
+              <input class="form-check-input" type="radio" formControlName="reclamo" id="reclamo1" value="1" [attr.disabled]="this.resolucionDisabled()" (change)="this.reclamoChange()">
               <label class="form-check-label" for="reclamo1">Aceptado</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="radio" formControlName="reclamo" id="reclamo2" value="0">
+              <input class="form-check-input" type="radio" formControlName="reclamo" id="reclamo2" value="0" [attr.disabled]="this.resolucionDisabled()" (change)="this.reclamoChange()">
               <label class="form-check-label" for="reclamo2">Rechazado</label>
+            </div>
+            <div class="alert alert-danger" *ngIf="!genericForm.controls.reclamo.valid && genericForm.controls.reclamo.touched">
+              Este campo es requerido
             </div>
           </div>
         </div>
+        <div class="row mb-1" [hidden]="!(this.genericForm.controls.reclamo.value == 0 && this.genericForm.controls.reclamo.value != '')">
+          <div class="col-4 text-right">
+            Razón del rechazo:
+          </div>
+          <div class="col-8">
+            <textarea class="form-control form-control-sm" formControlName="razonRechazo" id="razonRechazo" rows="3" [attr.disabled]="this.resolucionDisabled()" ></textarea>
+            <div class="alert alert-danger" *ngIf="!genericForm.controls.razonRechazo.valid && genericForm.controls.razonRechazo.touched">
+              Este campo es requerido
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+
         <div class="row mb-1">
           <div class="col-4 text-right">
             Procesado por:
           </div>
           <div class="col-8">
-            <input type="text" class="form-control form-control-sm" id="procesadoPor" formControlName="procesadoPor" />
+            <input type="text" class="form-control form-control-sm" id="procesadoPor" formControlName="procesadoPor" [attr.disabled]="this.resolucionDisabled()" />
+            <div class="alert alert-danger" *ngIf="!genericForm.controls.procesadoPor.valid && genericForm.controls.procesadoPor.touched">
+              Este campo es requerido
+            </div>
           </div>
         </div>
         <div class="row mb-1">
@@ -411,7 +424,7 @@
     </div>
     <div class="row">
       <div class="col-sm-12 my-3 mt-1 text-center">
-        <button class="btn" type="submit">Registrar</button>
+        <button class="btn" type="submit" [attr.disabled]="this.resolucionDisabled()">Registrar</button>
       </div>
     </div>
   </form>

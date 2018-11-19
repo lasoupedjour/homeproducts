@@ -4,6 +4,7 @@ import { GlobalService } from './services/global.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment';
+import swal from 'sweetalert2';
 
 @Component({
     selector: 'resumenorden',
@@ -46,9 +47,7 @@ export class ResumenOrdenComponent {
             informacionCompleta: ['',
                 Validators.required
             ],
-            razonRechazo: ['',
-                Validators.required
-            ],
+            razonRechazo: [''],
             reclamo: ['',
                 Validators.required
             ],
@@ -163,6 +162,24 @@ export class ResumenOrdenComponent {
 
     }
 
+    resolucionDisabled(){
+      var flag = true;
+      if(this._global.user.nivel == 'administrador'){
+        flag = null;
+      }
+      return flag;
+    }
+
+    reclamoChange(){
+        //console.log('reclamo change');
+        if(this.genericForm.controls.reclamo.value == 0){
+          this.genericForm.controls.razonRechazo.setValidators([Validators.required]);
+        }else{
+          this.genericForm.controls.razonRechazo.setValidators([]);
+        }
+        this.genericForm.controls.razonRechazo.updateValueAndValidity();
+    }
+
     //Registro de la resolución
     submitResolucion() {
       console.log("submit resolución");
@@ -202,6 +219,10 @@ export class ResumenOrdenComponent {
 
               this.genericForm.reset();
               this.formulariostatus.success = 2;
+
+              swal("Notificación Enviada","Se ha enviado una notificación al CDS informando sobre el status de la orden de servicio.", "success");
+
+
             } else if (data.res == 'error') {
                 this._global.appstatus.mensaje = data.error;
             }

@@ -1030,7 +1030,7 @@ export class GlobalService implements CanActivate{
         this._httpService.postJSON(params, 'set-reporte.php')
             .subscribe(
             data => {
-                console.log('data');
+                console.log('data set reporte');
                 console.log(data);
 
                 this.appstatus.loading = false;

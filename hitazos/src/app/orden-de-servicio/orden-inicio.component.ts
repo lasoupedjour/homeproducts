@@ -537,6 +537,7 @@ export class OrdenInicioComponent {
             params["IDReporte"] = this._global.reporte.idreporte;
             params["IDUsuario"] = this._global.user.id;
             params["IDCliente"] = this._global.cliente.id;
+            params["TipoReclamoDiagnostico"] = this._global.reporte.objreporte.TipoReclamoDiagnostico;
 
             params["AdjuntosFacturasNotasCompra"] = this._global.AdjuntosFacturasNotasCompra;
             try { params["AdjuntosFacturasNotasCompraSize"] = Object(this._global.AdjuntosFacturasNotasCompra).currentFiles.length; } catch (e) { params["AdjuntosFacturasNotasCompraSize"] = 0; };
@@ -568,6 +569,15 @@ export class OrdenInicioComponent {
                       this._global.appstatus.loading = false;
 
                       this._global.toast('ok', 'Se ha generado exitosamente la nueva orden de servicio', 'inicio/resumen/orden', true);
+
+
+                      if(this._global.reporte.objreporte.TipoReclamoDiagnostico=="Cambio"){//Si se trata de un cambnio físico se registra la notificación
+                        //Registro de notificación
+                        this._global.notificaciones.modulo = "/cambio-fisico";
+                        this._global.notificaciones.descripcion = "Se ha registrado una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
+                        this._global.registrarNotificacion(this._global.reporte.idreporte);
+                      }
+
 
                       /*this._global.toast("ok", "Se han guardado exitosamente los datos de la reparación.");
                       this.habilitarOrdenServicio();*/

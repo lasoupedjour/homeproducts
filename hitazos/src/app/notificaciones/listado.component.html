@@ -13,9 +13,10 @@
        <table>
          <tr>
 
-           <th>#</th>
+           <th>Reporte/Orden #</th>
            <th>Notificación</th>
            <th>Fecha de notificación</th>
+           <th>Acción</th>
 
          </tr>
 
@@ -30,7 +31,9 @@
            <td>
              {{item.timestampNF}}
            </td>
-
+           <td>
+             <button (click)="this._global.seleccionarReporte(item.id_reporte, 'inicio/resumen/orden')" class="btn btn-sm">Seleccionar</button>
+           </td>
          </tr>
 
        </table>

@@ -68,7 +68,12 @@ function subirAdjuntos($idreporte, $field, $size){
 
 }
 
-//insertar
+//actualizar
+//determinar substatus reporte ABIERTO o Cerrado
+$SubStatusReporte = "Cerrado";
+if($arre['TipoReclamoDiagnostico']=='Cambio'){
+  $SubStatusReporte = "Abierto";
+}
 
 $FechaFactura = urldecode($arre['FechaFactura']['year']).'-'.urldecode($arre['FechaFactura']['month']).'-'.urldecode($arre['FechaFactura']['day']);
 
@@ -96,11 +101,12 @@ AdjuntosFacturasNotasCompra = ?,
 AdjuntosFotosModeloSerie = ?,
 AdjuntosFacturasRepuestos = ?,
 AdjuntosOtros = ?,
-StatusReporte = 'Orden de Servicio'
+StatusReporte = 'Orden de Servicio',
+SubStatusReporte = ?
 where id = ?
 
 ")) {
-	$stmt->bind_param("sssssssdddddsdddssssd",
+	$stmt->bind_param("sssssssdddddsdddsssssd",
 	$arre['HomeProductsGroupNo'],
 	$arre['NoFactura'],
 	$FechaFactura,
@@ -121,6 +127,7 @@ where id = ?
 	json_encode($AdjuntosFotosModeloSerie),
 	json_encode($AdjuntosFacturasRepuestos),
 	json_encode($AdjuntosOtros),
+  $SubStatusReporte,
 	$arre['IDReporte']
 
 	);

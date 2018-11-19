@@ -20,7 +20,6 @@ $NoOrden = utf8_decode(urldecode($arre['NoOrden']));
 
 $res = array();
 if($InformacionCompleta!="" &&
-   $RazonRechazo!="" &&
    $Reclamo!="" &&
    $ProcesadoPor!="" &&
    $FechaResolucion!="" &&
@@ -43,7 +42,7 @@ if($InformacionCompleta!="" &&
 
   $q = mysql_query("
   update reportes set
-  status = 2
+  StatusResolucionHP = 'Aprobado'
   where id = $NoOrden
   ") or die(mysql_error());
 }else{
