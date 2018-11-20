@@ -139,7 +139,7 @@ import 'datatables.net-fixedheader';
           removable: true,
           multiple: true,
           showPreviews: true,
-          extensions: ['jpg', 'png', 'pdf', 'jpeg'],
+          extensions: ['jpg', 'png', 'pdf', 'jpeg', 'mp4', 'mov', 'avi', 'webm'],
       }),
       DataTablesModule,
 

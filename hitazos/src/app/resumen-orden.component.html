@@ -340,6 +340,54 @@
 
 
     </div><!--termina Archivos Adjuntos-->
+
+    <!--Archivos adjuntos CAMBIO FISICO-->
+    <div class="row" *ngIf="this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio'">
+      <div class="col-sm-12 my-3">
+        <h4 class="mt-3 naranja"><b>Archivos adjuntos para Cambio Físico</b></h4>
+        <hr />
+      </div>
+    </div>
+
+    <form class="formulario formularioRegistro my-3" name="formulariocambiofisico" [formGroup]="adjuntosCambioFisicoForm" (ngSubmit)="submitAdjuntosCambioFisico()" >
+    <div class="row" *ngIf="this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio'">
+
+      <div class="col-sm-4 mb-5">
+        <div class="row">
+          <div class="col-4 text-right">
+            <div class="sform mb-3">14. Comprobante<i>reciclaje</i>:</div>
+          </div>
+          <div class="col-8">
+            <div class="row no-gutters">
+              <div class="col-12 mb-1 attachments">
+
+                <ng2-file-input (onAction)="onActionReciclaje($event)"></ng2-file-input>
+                <div class="alert alert-danger" *ngIf="this.ReciclajeLenght==0 && this.adjuntosValidosCambioFisico==false">
+                  Este campo es requerido
+                </div>
+
+                <div class="prev" *ngFor="let item of _global.AdjuntosReciclajeArre; let i = index"  [innerHTML]="prevAttach(item)"></div>
+                  <!-- <div *ngIf="_global.AdjuntosReciclajeArre.length<2">No hay</div> -->
+                </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+
+    <div class="row">
+      <div class="col-sm-12 my-3 mt-1 text-center">
+        <button class="btn" type="submit" >Registrar adjuntos de cambio físico</button>
+      </div>
+    </div>
+  </form>
+<!--termina Archivos Adjuntos CAMBIO FISICO-->
+
     <!--HP-->
     <div class="row">
       <div class="col-sm-12 my-3 mt-3">

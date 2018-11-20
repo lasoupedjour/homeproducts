@@ -95,7 +95,6 @@ export class HTTPService {
 
     postFormData(params: any, url: string) {
 
-
         const fd = new FormData();
 
         var json = JSON.stringify(params);
@@ -128,11 +127,27 @@ export class HTTPService {
         return this._http.post(this.base + url, fd)
             .map(res => res.json())
 
-
-
-
     }
 
+    postFormDataCambioFisico(params: any, url: string) {
+
+        const fd = new FormData();
+
+        var json = JSON.stringify(params);
+        fd.append('json', json);
+
+        for (var i = 0; i < params["AdjuntosReciclajeSize"]; i++) {
+            fd.append('AdjuntosReciclaje'+i, params["AdjuntosReciclaje"].currentFiles[i], params["AdjuntosReciclaje"].currentFiles[i].name);
+            /*console.log('AdjuntosFacturasNotasCompra' + i);
+            console.log(params["AdjuntosFacturasNotasCompra"].currentFiles[i].name)*/
+        }
+
+        console.log(this.base + url);
+
+        return this._http.post(this.base + url, fd)
+            .map(res => res.json())
+
+    }
 
     postFormDataCotizaciones(params: any, url: string) {
 

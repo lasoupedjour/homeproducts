@@ -27,6 +27,11 @@ $res = array();
 
 $res['res'] = 'ok';
 
+if($arre['IDDistribuidor'] == null){
+  $arre['IDDistribuidor'] = 0;
+}
+
+
 if($arre['NoTieneEmail'] == false){
 
 	if($arre['IDCliente'] == null || $arre['IDCliente'] == ''){

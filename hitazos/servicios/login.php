@@ -48,7 +48,7 @@ if($num == 0){
     $res['res'] = 'error';
   }else{
     $res['res'] = 'ok';
-    
+
   	list($id, $IDDistribuidor, $nombre, $nivel, $Pais, $CustomerID) = mysql_fetch_row($q);
   	$res['id'] = $id;
   	$res['IDDistribuidor'] = $IDDistribuidor;
@@ -62,6 +62,7 @@ if($num == 0){
 	list($id, $IDCentro, $IDMaster, $nombre, $nivel, $NombreCentro, $Red, $Categoria, $Pais, $Ciudad, $Direccion, $Telefono1, $Telefono2, $Telefono3, $Email, $Horarios, $Responsable, $TelefonoResponsable, $IDGrupoTarifa) = mysql_fetch_row($q);
 	$res['id'] = $id;
 	$res['IDCentro'] = $IDCentro;
+  $res['IDDistribuidor'] = 0;
   $res['IDMaster'] = $IDMaster;
 	$res['nombre'] = $nombre;
 	$res['nivel'] = $nivel;

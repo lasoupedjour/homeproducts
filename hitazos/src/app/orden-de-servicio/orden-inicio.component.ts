@@ -9,6 +9,7 @@ import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 
 import { Ng2FileInputModule } from 'ng2-file-input';
+import swal from 'sweetalert2';
 
 @Component({
     selector: 'ordeninicio',
@@ -39,7 +40,9 @@ export class OrdenInicioComponent {
     FacturasNotasCompraLenght: 0;
     FacturasRepuestosLenght: 0;
     FotosModeloSerieLenght: 0;
+
     adjuntosValidos;
+
     SubtipoServicio: '';
 
     status = {
@@ -522,6 +525,9 @@ export class OrdenInicioComponent {
         this.adjuntosValidos = true;
       }
     }
+
+
+
 
     submitRegistro() {
         console.log('submit prevalidation');

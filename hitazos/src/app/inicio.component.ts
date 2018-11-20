@@ -250,7 +250,7 @@ export class InicioComponent {
         params["IDCentro"] = this._global.user.IDCentro;
         params["nivel"] = this._global.user.nivel;
         params["IDDistribuidor"] = this._global.user.IDDistribuidor;
-        
+
         this._global.appstatus.loading = true;
 
         this._httpService.postJSON(params, 'inicio/nuevas-ordenes-asignadas.php')
@@ -295,7 +295,8 @@ export class InicioComponent {
         params["nivel"] = this._global.user.nivel;
 
         this._global.appstatus.loading = true;
-
+        console.log('params nuevas ordenes');
+        console.log(params);
         this._httpService.postJSON(params, 'inicio/nuevas-ordenes.php')
             .subscribe(
             data => {

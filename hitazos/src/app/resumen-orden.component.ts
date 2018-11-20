@@ -13,6 +13,7 @@ import swal from 'sweetalert2';
 export class ResumenOrdenComponent {
     title = 'app';
     genericForm: FormGroup;
+    adjuntosCambioFisicoForm: FormGroup;
     RazonSocialDistribuidor: string;
     FechaResolucion: string;
     //@ViewChild("Email") Email: ElementRef;
@@ -31,6 +32,9 @@ export class ResumenOrdenComponent {
     formulariostatus = {
         "success": 1
     };
+
+    ReciclajeLenght: 0;
+    adjuntosValidosCambioFisico;
 
     constructor(
         public formBuilder: FormBuilder,
@@ -54,6 +58,19 @@ export class ResumenOrdenComponent {
             procesadoPor: ['',
                 Validators.required
             ]
+        });
+
+        this.adjuntosCambioFisicoForm = this.formBuilder.group({
+            // informacionCompleta: ['',
+            //     Validators.required
+            // ],
+            // razonRechazo: [''],
+            // reclamo: ['',
+            //     Validators.required
+            // ],
+            // procesadoPor: ['',
+            //     Validators.required
+            // ]
         });
 
 
@@ -87,6 +104,7 @@ export class ResumenOrdenComponent {
     prevAttach(item) {
         var tipo = '';
         var html = '';
+        console.log(item);
         if (item.includes('.jpg') || item.includes('.jpeg') || item.includes('.png')) {
             html = `
               <a class="img" href="${this._global.base}orden-de-servicio/uploads-ordenes/${item}" target="_blank" title="${item}">
@@ -97,6 +115,12 @@ export class ResumenOrdenComponent {
             html = `
               <a class="pdf" href="${this._global.base}orden-de-servicio/uploads-ordenes/${item}" target="_blank" title="${item}">
                 <i class="fa fa-file-pdf"></i>
+              </a>
+            `;
+        } else if (item.includes('.mp4') || item.includes('.mov') || item.includes('.avi') || item.includes('.webm')) {
+            html = `
+              <a class="pdf" href="${this._global.base}orden-de-servicio/uploads-ordenes/${item}" target="_blank" title="${item}">
+                <i class="fa fa-file-video"></i>
               </a>
             `;
         }
@@ -178,6 +202,78 @@ export class ResumenOrdenComponent {
           this.genericForm.controls.razonRechazo.setValidators([]);
         }
         this.genericForm.controls.razonRechazo.updateValueAndValidity();
+    }
+
+    onActionReciclaje(event: any) {
+        console.log(event);
+        this._global.AdjuntosReciclaje = event;
+    }
+
+    validarAdjuntosCambioFisico(){
+      try { this.ReciclajeLenght = Object(this._global.AdjuntosReciclaje).currentFiles.length; } catch (e) { this.ReciclajeLenght = 0; }
+
+
+      this.adjuntosValidosCambioFisico = false;
+      if(this.ReciclajeLenght>0){
+        this.adjuntosValidosCambioFisico = true;
+      }
+    }
+    //registro de adjuntos de cambio físico
+    submitAdjuntosCambioFisico(){
+      this.validarAdjuntosCambioFisico();
+
+      if (this.adjuntosCambioFisicoForm.valid && this.adjuntosValidosCambioFisico) {
+
+        this._global.clearMessages();
+        this._global.appstatus.loading = true;
+
+        var params = {};
+        params = this.adjuntosCambioFisicoForm.getRawValue();
+        params["IDReporte"] = this._global.reporte.idreporte;
+        params["IDUsuario"] = this._global.user.id;
+        params["IDCliente"] = this._global.cliente.id;
+        params["TipoReclamoDiagnostico"] = this._global.reporte.objreporte.TipoReclamoDiagnostico;
+
+        params["AdjuntosReciclaje"] = this._global.AdjuntosReciclaje;
+        try { params["AdjuntosReciclajeSize"] = Object(this._global.AdjuntosReciclaje).currentFiles.length; } catch (e) { params["AdjuntosReciclajeSize"] = 0; };
+
+        console.log(params);
+
+        this._httpService.postFormDataCambioFisico(params, 'orden-de-servicio/registro-adjuntos-cambio-fisico.php')
+            .subscribe(
+          data => {
+              console.log('data subiendo');
+              console.log(data);
+              this._global.appstatus.loading = false;
+
+              if (data.res == 'ok') {
+
+                  this._global.guardarIdReporte(data.idreporte);
+                  this._global.guardarObjReporte(data.objreporte);
+
+                  this._global.appstatus.loading = false;
+
+                  swal('Guardado','Se han guardado correctamente los comprobantes para la orden de servicio #'+this._global.reporte.idreporte,'success');
+
+
+                  //Registro de notificación
+                  this._global.notificaciones.modulo = "/resumen/orden/adjuntos-cambio-fisico";
+                  this._global.notificaciones.descripcion = "Se han subido comprobantes de cambio físico para la orden No. " + this._global.reporte.idreporte;
+                  this._global.registrarNotificacion(this._global.reporte.idreporte);
+
+
+              } else if (data.res == 'error') {
+                  swal('Error',data.msg,'error');
+              }
+
+          },
+          error => alert(error),
+          () => console.log('termino submit')
+          );
+      } else {
+          this._global.validateAllFormFields(this.adjuntosCambioFisicoForm);
+      }
+
     }
 
     //Registro de la resolución

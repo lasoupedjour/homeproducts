@@ -28,7 +28,7 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
     SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno , DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
     FROM reportes, clientes
     where clientes.id = reportes.IDCliente
-    and reportes.IDOperadorCentro = ".$arre["IDCentro"]."
+    and reportes.IDCentro = ".$arre["IDCentro"]."
     and StatusReporte <> 'Orden de Servicio'
     order by FechaRegistroReporte desc LIMIT 5;
     ") or die(mysql_error());

@@ -24,12 +24,13 @@ $res['res'] = 'ok';
 $notificaciones = array();
 
 $id_usuario = utf8_decode(urldecode($arre['id_usuario']));
-if($id_usuario==17)
-  $query = "SELECT *, DATE_FORMAT(timestamp,  '%d/%m/%Y %H:%i:%s' ) as timestampNF FROM notificaciones where id_usuario<>17 order by id desc;";
+$nivel= utf8_decode(urldecode($arre['nivel']));
+if($nivel=='administrador')
+  $query = "SELECT notificaciones.*, DATE_FORMAT(notificaciones.timestamp,  '%d/%m/%Y %H:%i:%s' ) as timestampNF FROM notificaciones,usuarios_admin where notificaciones.id_usuario=usuarios_admin.id and usuarios_admin.nivel <> 'administrador' order by notificaciones.id desc";
 else{
   $query = "
             select n.*, DATE_FORMAT(n.timestamp,  '%d/%m/%Y %H:%i:%s' ) as timestampNF from
-            (select * from notificaciones where id_usuario=17) as n
+            (select notificaciones.* from notificaciones,usuarios_admin where (nivel='administrador')) as n
             join
             (select * from reportes) as r
             on n.id_reporte = r.id
@@ -37,6 +38,7 @@ else{
             (select * from usuarios_admin where ID=$id_usuario) as u
             on r.idcentro = u.idcentro
             group by id
+            order by id desc
             ";
 }
 

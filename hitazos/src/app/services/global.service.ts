@@ -147,6 +147,7 @@ export class GlobalService implements CanActivate{
                 "AdjuntosFacturasRepuestos": "",
                 "AdjuntosFotosModeloSerie": "",
                 "AdjuntosOtros": "",
+                "AdjuntosReciclaje": "",
                 "AplicaGarantia": "",
                 "Categoria": "",
                 "CodigoSAP": "",
@@ -292,19 +293,25 @@ export class GlobalService implements CanActivate{
         "Otros": ['1'],
     }
 
+    //objetos para almacenar adjuntos
     AdjuntosFacturasNotasCompra = {};
     AdjuntosFotosModeloSerie = {};
     AdjuntosFacturasRepuestos = {};
     AdjuntosOtros = {};
+    AdjuntosReciclaje = {};
 
     AdjuntosNota = {};
+
 
     AdjuntosFacturasNotasCompraArre = [];
     AdjuntosFotosModeloSerieArre = [];
     AdjuntosFacturasRepuestosArre = [];
     AdjuntosOtrosArre = [];
+    AdjuntosReciclajeArre = [];
 
     AdjuntosNotaArre = [];
+
+
 
     //Notificaciones
     notificaciones = {
@@ -846,6 +853,7 @@ export class GlobalService implements CanActivate{
                 "AdjuntosFacturasRepuestos": "",
                 "AdjuntosFotosModeloSerie": "",
                 "AdjuntosOtros": "",
+                "AdjuntosReciclaje": "",
                 "AplicaGarantia": "",
                 "Categoria": "",
                 "CodigoSAP": "",
@@ -953,6 +961,7 @@ export class GlobalService implements CanActivate{
         try { this.AdjuntosFotosModeloSerieArre = JSON.parse(Object(this.reporte.objreporte).AdjuntosFotosModeloSerie); } catch (e) { };
         try { this.AdjuntosFacturasRepuestosArre = JSON.parse(Object(this.reporte.objreporte).AdjuntosFacturasRepuestos); } catch (e) { };
         try { this.AdjuntosOtrosArre = JSON.parse(Object(this.reporte.objreporte).AdjuntosOtros); } catch (e) { };
+        try { this.AdjuntosReciclajeArre = JSON.parse(Object(this.reporte.objreporte).AdjuntosReciclaje); } catch (e) { };
     }
 
     parseJSON(arre) {
@@ -1356,6 +1365,7 @@ export class GlobalService implements CanActivate{
 
         this.user.id = jsonstr.id;
         this.user.IDCentro = jsonstr.IDCentro;
+        this.user.IDDistribuidor = jsonstr.IDDistribuidor;
         this.user.IDMaster = jsonstr.IDMaster;
         this.user.nombre = jsonstr.nombre;
         this.user.nivel = jsonstr.nivel;
@@ -1527,14 +1537,15 @@ export class GlobalService implements CanActivate{
     listarNotificaciones(){
       var params = {};
       params['id_usuario'] = this.user.id;
-
+      params['nivel'] = this.user.nivel;
+      this.appstatus.loading = true;
       console.log("listar notificaciones");
       this._httpService.postJSON(params, 'notificaciones/listar-notificaciones.php')
           .subscribe(
           data => {
               console.log('data notificaciones');
               console.log(data);
-
+              this.appstatus.loading = false;
               if (data.res == 'ok') {
                 this.notificaciones.objnotificaciones = this.parseJSON(data.notificaciones);
 

@@ -274,7 +274,7 @@
       </div>
 
       <!--REVISION -->
-      <div [hidden]="this.genericForm.controls.TipoCaso.value != 'Garantía'" class="col-12" *ngIf="!this._global.user.IDDistribuidor>0">
+      <div [hidden]="this.genericForm.controls.TipoCaso.value != 'Garantía'" class="col-12" *ngIf="!(this._global.user.IDDistribuidor>0)">
         <div class="row">
 
           <div class="col-12 pt-3">
@@ -674,9 +674,10 @@
     <div class="col-6 my-5 ">
       <a class="btn btn-sm btnicono" routerLink="/inicio/cliente/detalle"><i class="fa fa-angle-left"></i> Anterior</a>
     </div>
-    <div class="col-6 text-right my-5 "  [hidden]="(this.genericForm.controls.TipoKilometraje.value == 'Más de 20 kilómetros')">
-      <button class="btn btn-sm btnicono" (click)="submitRegistro()"  *ngIf="!this._global.user.IDDistribuidor>0"> Siguiente <i class="fa fa-angle-right"></i></button>
-      <button class="btn btn-sm btnicono" (click)="submitRegistro()"  *ngIf="this._global.user.IDDistribuidor>0"> Registrar reporte <i class="fa fa-angle-right"></i></button>
+    <!-- <div class="col-6 text-right my-5 "  [hidden]="(this.genericForm.controls.TipoKilometraje.value == 'Más de 20 kilómetros')"> -->
+    <div class="col-6 text-right my-5 "  >
+      <button class="btn btn-sm btnicono" (click)="submitRegistro()"  *ngIf="!(this._global.user.IDDistribuidor>0)"> Siguiente <i class="fa fa-angle-right"></i></button>
+      <!-- <button class="btn btn-sm btnicono" (click)="submitRegistro()"  *ngIf="this._global.user.IDDistribuidor>0"> Registrar reporte <i class="fa fa-angle-right"></i></button> -->
     </div>
 
     <div class="col-6 text-right my-5 " [hidden]="!(this.genericForm.controls.TipoKilometraje.value == 'Más de 20 kilómetros')">
