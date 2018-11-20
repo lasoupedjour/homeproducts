@@ -98,6 +98,7 @@ export class CambiosComponent {
             Ano: [],
             Mes: [],
             Pais: [this._global.user.Pais],
+            Master: [''],
             Cds: ['']
         });
 
@@ -126,6 +127,33 @@ export class CambiosComponent {
 
         this._global.appstatus.loading = true;
 
+        this._httpService.postHTML(params, 'administracion/listarmaster.php')
+            .subscribe(
+            data => {
+                console.log('data cds');
+                console.log(data);
+
+                this._global.appstatus.loading = false;
+                document.getElementById('master').innerHTML = data;
+                //console.log("fichas");
+                //console.log(this.props.fichas);
+            },
+            error => alert(error),
+            () => console.log('termino submit')
+            );
+    }
+
+    changeMaster() {
+        //console.log(this.filterForm.controls.Pais.value);
+        var params = {};
+        params['Pais'] = this.filterForm.controls.Pais.value;
+        params['IDCentro'] = this._global.user.IDCentro;
+        params['Nivel'] = this._global.user.nivel;
+        params['IDMaster'] = this._global.user.IDMaster;
+        params['IDGrupoTarifa'] = this._global.user.IDGrupoTarifa;
+
+        this._global.appstatus.loading = true;
+
         this._httpService.postHTML(params, 'administracion/listarcds.php')
             .subscribe(
             data => {
@@ -141,7 +169,7 @@ export class CambiosComponent {
             () => console.log('termino submit')
             );
     }
-
+    
     precargaPaises() {
 
         var params = {};

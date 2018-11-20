@@ -23,15 +23,22 @@ $res = array();
 
 $res['res'] = 'ok';
 
-$query = "
-SELECT id, Nombre, Ciudad from centros
-where Pais like '%".$arre["Pais"]."%'
-and IDMaster = ".$arre["IDCentro"];
+if($arre["Nivel"] == "administrador" || $arre["Nivel"] == "MKT"){
+  $query = "
+  SELECT id, Nombre, Ciudad from centros
+  where Pais like '%".$arre["Pais"]."%'";
+}else{
+  $query = "
+  SELECT id, Nombre, Ciudad from centros
+  where Pais like '%".$arre["Pais"]."%'
+  and (IDMaster=0 and id = ".$arre["IDCentro"].")";
+}
+
 
 $query = utf8_encode($query);
 
 $result = mysql_query($query) or die(mysql_error());
-echo "<option value='' hidden>CDS</option>";
+echo "<option value='' hidden>Master</option>";
 while ($row = mysql_fetch_row($result)) {
 
   $valor = utf8_encode($row[1]);

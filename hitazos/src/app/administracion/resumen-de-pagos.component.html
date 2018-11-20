@@ -78,13 +78,18 @@
    </div>
    <form  name="formulariofiltros" [formGroup]="filterForm" >
    <div class="row mt-3">
-     <div class="col-3 text-right">
+     <div class="col-2 text-right">
        <select class="form-control form-control-sm" formControlName="Pais" (change)="changePais()">
          <option value="" hidden="">País</option>
          <option *ngFor="let item of _global.paises;" value="{{item.Pais}}">{{item.Pais}}</option>
        </select>
      </div>
-     <div class="col-3 text-right">
+     <div class="col-2 text-right">
+       <select class="form-control form-control-sm" formControlName="Master" id="master" (change)="changeMaster()">
+         <option value="" hidden>Master</option>
+       </select>
+     </div>
+     <div class="col-2 text-right">
        <select class="form-control form-control-sm" formControlName="Cds" id="centros">
          <option value="" hidden>CDS</option>
        </select>
