@@ -460,10 +460,9 @@ export class ReparacionInicioComponent {
 
         //valida por casos
         this._global.refacciones.forEach(function (e) {
-
             //caso disponible
             if (e.Existencia == 'Disponible') {
-              if (e.Status == "" || e.CostoTotal == "")
+              if (e.Status == "" || e.CostoUnitario === "")
                 validarefacciones = false
             }
 
