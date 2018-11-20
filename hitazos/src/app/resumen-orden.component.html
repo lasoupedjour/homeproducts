@@ -396,7 +396,7 @@
   </div>
 </div>
 
-<form  *ngIf="this._global.user.IDDistribuidor > 0 && this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio'" class="formulario formularioRegistro my-3" name="formulariocambiofisicodistribuidor" [formGroup]="distribuidorCambioFisicoForm" (ngSubmit)="submitDistribuidorCambioFisico()" >
+<form  *ngIf="this._global.esDistribuidor() && this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio'" class="formulario formularioRegistro my-3" name="formulariocambiofisicodistribuidor" [formGroup]="distribuidorCambioFisicoForm" (ngSubmit)="submitDistribuidorCambioFisico()" >
 <div class="row">
   <div class="col-sm-4 mb-5">
     <div class="row">
@@ -456,7 +456,7 @@
 <!--TERMINA DISTRIBUIDOR CAMBIO FISICO-->
 
 <!--INFO DISTRIBUIDOR CAMBIO FISICO PARA OTRO USUARIOS-->
-<div class="row sameheight mt-2"  *ngIf="this._global.user.IDDistribuidor == 0 && this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio'">
+<div class="row sameheight mt-2"  *ngIf="!(this._global.esDistribuidor()) && this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio'">
   <div class="col-sm-4">
     <div class="vform">
       <div class="vformleft">Costo Landed: </div>

@@ -14,13 +14,13 @@
           </div>
           <div>Reporte del Caso</div>
         </div>
-        <div class="paso" *ngIf="!this._global.user.IDDistribuidor>0">
+        <div class="paso" *ngIf="!(this._global.esDistribuidor())">
           <div class="wrap">
             <span>3</span>
           </div>
           <div>Reparación</div>
         </div>
-        <div class="paso" *ngIf="!this._global.user.IDDistribuidor>0">
+        <div class="paso" *ngIf="!(this._global.esDistribuidor())">
           <div class="wrap">
             <span>4</span>
           </div>

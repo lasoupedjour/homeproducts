@@ -1189,7 +1189,7 @@ export class ReporteCasoComponent {
                             });
 
                         } else {
-                          if(this._global.user.IDDistribuidor>0){
+                          if(parseInt(this._global.user.IDDistribuidor)>0){
                             this._router.navigate(['inicio']);
                           }else{
                             this._router.navigate(['inicio/resumen']);

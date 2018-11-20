@@ -11,8 +11,8 @@ export class GlobalService implements CanActivate{
 
 
     //base = '';
-    base = 'http://apps.pautacreativatemporales.com.mx/oster/homeproducts/servicios/';
-    //base = 'https://www.homeproductslatam.com.mx/servicios/';
+    //base = 'http://apps.pautacreativatemporales.com.mx/oster/homeproducts/servicios/';
+    base = 'https://www.homeproductslatam.com.mx/servicios/';
     //base = 'http://oster:8080/homeproducts/homeproducts/servicios/';
 
     timerToast = null;
@@ -1626,6 +1626,14 @@ export class GlobalService implements CanActivate{
 
       })
 
+    }
+
+    esDistribuidor(){
+      var flag = false;
+      if(parseInt(this.user.IDDistribuidor) > 0){
+        flag = true;
+      }
+      return flag;
     }
 
 
