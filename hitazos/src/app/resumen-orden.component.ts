@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import swal from 'sweetalert2';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'resumenorden',
@@ -14,6 +15,8 @@ export class ResumenOrdenComponent {
     title = 'app';
     genericForm: FormGroup;
     adjuntosCambioFisicoForm: FormGroup;
+    distribuidorCambioFisicoForm: FormGroup;
+
     RazonSocialDistribuidor: string;
     FechaResolucion: string;
     //@ViewChild("Email") Email: ElementRef;
@@ -35,6 +38,13 @@ export class ResumenOrdenComponent {
 
     ReciclajeLenght: 0;
     adjuntosValidosCambioFisico;
+
+    modelfechaentregacambio: NgbDateStruct;
+
+    minDate: Date;
+    minDateObj: Object;
+
+    fechaentregacambio = moment(this._global.reporte.objreporte.FechaEntregaCambio).format("DD/M/Y");
 
     constructor(
         public formBuilder: FormBuilder,
@@ -73,6 +83,14 @@ export class ResumenOrdenComponent {
             // ]
         });
 
+        this.distribuidorCambioFisicoForm = this.formBuilder.group({
+            FechaEntregaCambio: ['',
+                Validators.required
+            ],
+            CostoLanded: [this._global.reporte.objreporte.CostoLanded, Validators.required],
+        });
+
+        this.setFechaEntregaCambio();
 
        // this.nuevosClientes();
 
@@ -80,13 +98,39 @@ export class ResumenOrdenComponent {
 
        // this.nuevosCasosAsignados();
 
+       this.minDate = new Date();
+       this.minDateObj = {
+           year: this.minDate.getFullYear(),
+           month: this.minDate.getMonth() + 1,
+           day: this.minDate.getDate()
+       };
+
+
+
         this._global.setRefaccionesBd();
         this._global.setAdjuntos();
         this.getDistribuidor();
         this.setTipoReparacion();
     }
 
+    setFechaEntregaCambio(){
 
+      //set fecha revision
+      var fecha = Object(this._global.reporte.objreporte).FechaEntregaCambio;
+      fecha = fecha.replace(' 00:00:00', '');
+      fecha = fecha.split('-');
+      //console.log(fecha);
+      const now = new Date();
+      
+      var fechatemp = {
+          day: parseInt(fecha[2]),
+          month: parseInt(fecha[1]),
+          year: parseInt(fecha[0])
+      };
+
+      this.modelfechaentregacambio = { year: fechatemp.year, month: fechatemp.month, day: fechatemp.day };
+
+    }
 
     imprimirReporte() {
 
@@ -276,6 +320,49 @@ export class ResumenOrdenComponent {
 
     }
 
+    submitDistribuidorCambioFisico(){
+      console.log("submit distribuidor cambio físico");
+      console.log(this.distribuidorCambioFisicoForm.valid);
+
+      if (this.distribuidorCambioFisicoForm.valid) {
+        this._global.clearMessages();
+
+        var params = {};
+        params = this.distribuidorCambioFisicoForm.getRawValue();
+        params['IDReporte'] = this._global.reporte.idreporte;
+
+        this._global.appstatus.loading = true;
+
+        this._httpService.postJSON(params, 'resumen/registro-distribuidor-cambios-fisicos.php')
+          .subscribe(
+          data => {
+            console.log('data');
+            console.log(data);
+            this._global.appstatus.loading = false;
+
+            if (data.res == 'ok') {
+              console.log("pre notificación");
+              this._global.notificaciones.modulo = "/inicio/resumen/orden";
+              this._global.notificaciones.descripcion = "Registro de fecha de entrega de cambio por distribuidor para la orden No. " + this._global.reporte.idreporte;
+              this._global.registrarNotificacion(this._global.reporte.idreporte);
+
+              this.distribuidorCambioFisicoForm.reset();
+
+              swal("Notificación Enviada","Se ha enviado una notificación al CDS y HP informando sobre el status de fecha de entrega del producto.", "success");
+
+
+            } else if (data.res == 'error') {
+                this._global.appstatus.mensaje = data.error;
+            }
+          },
+          error => alert(error),
+          () => console.log('termino submit')
+        );
+      } else {
+          this._global.validateAllFormFields(this.distribuidorCambioFisicoForm);
+      }
+    }
+
     //Registro de la resolución
     submitResolucion() {
       console.log("submit resolución");
@@ -300,7 +387,7 @@ export class ResumenOrdenComponent {
 
         this._global.appstatus.loading = true;
 
-        this._httpService.postJSON(params, 'regisrto-resolucion.php')
+        this._httpService.postJSON(params, 'resumen/registro-resolucion.php')
           .subscribe(
           data => {
             console.log('data');

@@ -182,6 +182,9 @@ export class GlobalService implements CanActivate{
                 "MontoMovilizacion": "",
                 "MontoOtro": "",
                 "MontoOtroDescripcion": "",
+                "CostoLanded": "",
+                "FechaEntregaCambio": "",
+                "FechaCostoLanded": "",
                 "MontoSubtotal": "",
                 "MontoTotal": "",
                 "MotivoCambioDiagnostico": "",
@@ -888,6 +891,9 @@ export class GlobalService implements CanActivate{
                 "MontoMovilizacion": "",
                 "MontoOtro": "",
                 "MontoOtroDescripcion": "",
+                "CostoLanded": "",
+                "FechaEntregaCambio": "",
+                "FechaCostoLanded": "",
                 "MontoSubtotal": "",
                 "MontoTotal": "",
                 "MotivoCambioDiagnostico": "",
@@ -1538,6 +1544,8 @@ export class GlobalService implements CanActivate{
       var params = {};
       params['id_usuario'] = this.user.id;
       params['nivel'] = this.user.nivel;
+      params['IDDistribuidor'] = this.user.IDDistribuidor;
+
       this.appstatus.loading = true;
       console.log("listar notificaciones");
       this._httpService.postJSON(params, 'notificaciones/listar-notificaciones.php')

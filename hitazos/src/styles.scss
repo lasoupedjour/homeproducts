@@ -347,7 +347,7 @@ span.spanleft {
 input.spanleft {
   width: 90%;
   float: right;
- 
+
 }
 
 
@@ -584,7 +584,7 @@ table {
   color: $azul;
   font-weight: bold;
 
-  
+
 }
 .vform {
   padding-top: 3px;
@@ -767,7 +767,7 @@ ul{
   .ng2-file-input-drop-container{
     min-width:auto;
     button {
-      margin-left: 0px; 
+      margin-left: 0px;
     }
     span{
       display:block;
@@ -859,6 +859,10 @@ table.dataTable{
 .w-50{
   float:left;
   width:50%;
+}
+
+.w-100{
+  width:100%;
 }
 
 @media print{

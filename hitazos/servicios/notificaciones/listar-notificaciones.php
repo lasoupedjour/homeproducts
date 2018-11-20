@@ -25,9 +25,11 @@ $notificaciones = array();
 
 $id_usuario = utf8_decode(urldecode($arre['id_usuario']));
 $nivel= utf8_decode(urldecode($arre['nivel']));
-if($nivel=='administrador')
+$IDDistribuidor = utf8_decode(urldecode($arre['IDDistribuidor']));
+
+if($nivel=='administrador'){
   $query = "SELECT notificaciones.*, DATE_FORMAT(notificaciones.timestamp,  '%d/%m/%Y %H:%i:%s' ) as timestampNF FROM notificaciones,usuarios_admin where notificaciones.id_usuario=usuarios_admin.id and usuarios_admin.nivel <> 'administrador' order by notificaciones.id desc";
-else{
+}else if($nivel=='operador'){
   $query = "
             select n.*, DATE_FORMAT(n.timestamp,  '%d/%m/%Y %H:%i:%s' ) as timestampNF from
             (select notificaciones.* from notificaciones,usuarios_admin where (nivel='administrador')) as n
@@ -37,6 +39,20 @@ else{
             join
             (select * from usuarios_admin where ID=$id_usuario) as u
             on r.idcentro = u.idcentro
+            group by id
+            order by id desc
+            ";
+}else if($nivel=='distribuidor'){
+  $res['nivel'] = $IDDistribuidor;
+  $query = "
+            select n.*, DATE_FORMAT(n.timestamp,  '%d/%m/%Y %H:%i:%s' ) as timestampNF from
+            (select notificaciones.* from notificaciones,usuarios_admin where (nivel='administrador')) as n
+            join
+            (select * from reportes) as r
+            on n.id_reporte = r.id
+            join
+            (select * from distribuidores where id=$IDDistribuidor) as d
+            on r.Distribuidor = d.IDDistribuidor
             group by id
             order by id desc
             ";

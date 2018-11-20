@@ -388,6 +388,91 @@
   </form>
 <!--termina Archivos Adjuntos CAMBIO FISICO-->
 
+<!--DISTRIBUIDOR CAMBIO FISICO-->
+<div class="row" *ngIf="this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio'">
+  <div class="col-sm-12 my-3">
+    <h4 class="mt-3 naranja"><b>Cambio Físico (Distribuidor)</b></h4>
+    <hr />
+  </div>
+</div>
+
+<form  *ngIf="this._global.user.IDDistribuidor > 0 && this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio'" class="formulario formularioRegistro my-3" name="formulariocambiofisicodistribuidor" [formGroup]="distribuidorCambioFisicoForm" (ngSubmit)="submitDistribuidorCambioFisico()" >
+<div class="row">
+  <div class="col-sm-4 mb-5">
+    <div class="row">
+      <div class="vform w-100">
+        <div class="vformleft">Costo Landed: </div>
+        <div class="vformright">
+          <label class="">
+            <span class="simbolo">$</span> <input class="form-control form-control-sm w-50" OnlyNumber="true" placeholder="Costo Landed" formControlName="CostoLanded" >&nbsp;USD
+            <span class="alert alert-danger" *ngIf="!distribuidorCambioFisicoForm.controls.CostoLanded.valid && distribuidorCambioFisicoForm.controls.CostoLanded.touched">
+              Este campo es requerido
+            </span>
+          </label>
+
+        </div>
+
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-12">
+
+      </div>
+    </div>
+
+  </div>
+  <div class="col-sm-4 mb-5">
+    <div class="row">
+      <div class="vform w-100">
+        <div class="vformleft">Fecha de entrega del cambio a cliente: </div>
+        <div class="vformright">
+          <label class="fecha">
+
+            <input class="form-control form-control-sm fecha" placeholder=""
+                   formControlName="FechaEntregaCambio" ngbDatepicker #d1="ngbDatepicker" [(ngModel)]="modelfechaentregacambio"  [minDate]="minDateObj">
+            <button class="input-group-addon" (click)="d1.toggle()" type="button">
+              <i class="fa fa-calendar"></i>
+            </button>
+            <span class="alert alert-danger" *ngIf="!distribuidorCambioFisicoForm.controls.FechaEntregaCambio.valid && distribuidorCambioFisicoForm.controls.FechaEntregaCambio.touched">
+              Este campo es requerido
+            </span>
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+</div>
+
+<div class="row">
+  <div class="col-sm-12 my-3 mt-1 text-center">
+    <button class="btn" type="submit" >Registrar información distribuidor</button>
+  </div>
+</div>
+</form>
+<!--TERMINA DISTRIBUIDOR CAMBIO FISICO-->
+
+<!--INFO DISTRIBUIDOR CAMBIO FISICO PARA OTRO USUARIOS-->
+<div class="row sameheight mt-2"  *ngIf="this._global.user.IDDistribuidor == 0 && this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio'">
+  <div class="col-sm-4">
+    <div class="vform">
+      <div class="vformleft">Costo Landed: </div>
+      <div class="vformright">${{this._global.reporte.objreporte.CostoLanded}} </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
+    <div class="vform">
+      <div class="vformleft">Fecha Entrega de Cambio : </div>
+      <div class="vformright" [innerHTML]="this.fechaentregacambio" > </div>
+    </div>
+  </div>
+</div>
+
+
+
     <!--HP-->
     <div class="row">
       <div class="col-sm-12 my-3 mt-3">
