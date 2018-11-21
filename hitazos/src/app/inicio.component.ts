@@ -58,6 +58,7 @@ export class InicioComponent {
 
         this.precargaPaises();
         this.changePais();
+        this.changePais("masterOrdenes");
 
         this.nuevosClientes();
         this.nuevasOrdenesServicio();
@@ -82,7 +83,7 @@ export class InicioComponent {
 
     }
 
-    changePais() {
+    changePais(cmb="") {
         //console.log(this.filterForm.controls.Pais.value);
         var params = {};
         params['Pais'] = this.filterForm.controls.Pais.value;
@@ -100,7 +101,12 @@ export class InicioComponent {
                 console.log(data);
 
                 this._global.appstatus.loading = false;
-                document.getElementById('master').innerHTML = data;
+                if(cmb=="")
+                  document.getElementById('master').innerHTML = data;
+                else
+                  document.getElementById('masterOrdenes').innerHTML = data;
+
+                //filterOrdenesForm
                 //console.log("fichas");
                 //console.log(this.props.fichas);
             },
@@ -109,7 +115,7 @@ export class InicioComponent {
             );
     }
 
-    changeMaster() {
+    changeMaster(cmb="") {
         //console.log(this.filterForm.controls.Pais.value);
         var params = {};
         params['Pais'] = this.filterForm.controls.Pais.value;
@@ -127,7 +133,11 @@ export class InicioComponent {
                 console.log(data);
 
                 this._global.appstatus.loading = false;
-                document.getElementById('centros').innerHTML = data;
+                if(cmb=="")
+                  document.getElementById('centros').innerHTML = data;
+                else
+                  document.getElementById('centrosOrdenes').innerHTML = data;
+
                 //console.log("fichas");
                 //console.log(this.props.fichas);
             },
@@ -398,6 +408,7 @@ export class InicioComponent {
         params["IDCentro"] = this._global.user.IDCentro;
         params["IDDistribuidor"] = this._global.user.IDDistribuidor;
         params["nivel"] = this._global.user.nivel;
+        params["Cds"] = this.filterForm.controls.Cds.value;
 
         this._global.appstatus.loading = true;
         console.log('params nuevas ordenes');
