@@ -26,6 +26,7 @@ $res['res'] = 'ok';
 $cds = $arre['cds'];
 $ano = $arre['ano'];
 $mes = $arre['mes'];
+$categoria = $arre['categoria'];
 /*
 $mesnext =
 if($mes)*/

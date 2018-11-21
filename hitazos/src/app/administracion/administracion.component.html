@@ -13,9 +13,9 @@
     <div class="offset-sm-4  col-sm-2 text-center active">
       <a routerLink="/administracion/inicio/">Resumen de Servicios</a>
     </div>
-    <div class="col-sm-2 text-center">
+    <!--div class="col-sm-2 text-center">
       <a routerLink="/administracion/cambios/">Cambios</a>
-    </div>
+    </div-->
     <div class="col-sm-2 text-center">
       <a routerLink="/administracion/resumen-de-pagos/">Resumen de Pagos</a>
     </div>
@@ -96,6 +96,13 @@
        </select>
      </div>
      <div class="col-2 text-right">
+       <select class="form-control form-control-sm" formControlName="Categoria">
+         <option value="">Categoría</option>
+         <option value="LINEA BLANCA">LINEA BLANCA</option>
+         <option value="MENAJE">MENAJE</option>
+       </select>
+     </div>
+     <div class="col-2 text-right">
        <select class="form-control form-control-sm" formControlName="Ano">
          <option value="0">Año</option>
          <option value="2018">2018</option>
@@ -118,6 +125,11 @@
          <option value="11">noviembre</option>
          <option value="12">diciembre</option>
        </select>
+     </div>
+   </div>
+   <div class="row mt-3">
+     <div class="col-10 text-center">
+       &nbsp;
      </div>
      <div class="col-2 text-center">
        <a class="btn btn-sm btnicono" (click)="filtrarReporte()"> Filtrar </a>
@@ -154,6 +166,10 @@
              <th>Costo Refacciones</th>
              <th>Costo Reparacion</th>
              <th>Costo Movilización</th>
+             <th>Costo Despiece</th>
+             <th>Costo Reciclaje</th>
+             <th>Otro Costo</th>
+             <th>Descr. Otro Costo</th>
              <th>Fee Mensual</th>
              <th>Impuesto Fee Mensual</th>
              <th>Costo Impuesto</th>
@@ -222,6 +238,18 @@
              </td>
              <td>
                {{item.MontoMovilizacion | currency}}
+             </td>
+             <td>
+               {{item.MontoDespiece | currency}}
+             </td>
+             <td>
+               {{item.MontoReciclaje | currency}}
+             </td>
+             <td>
+               {{item.MontoOtro | currency}}
+             </td>
+             <td>
+               {{item.MontoOtroDescripcion}}
              </td>
              <td>
                {{item.TarifaMensual | currency}}

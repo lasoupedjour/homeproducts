@@ -26,6 +26,8 @@ $res['res'] = 'ok';
 $cds = $arre['cds'];
 $ano = $arre['ano'];
 $mes = $arre['mes'];
+$categoria = $arre['categoria'];
+
 /*
 $mesnext =
 if($mes)*/
@@ -65,6 +67,7 @@ order by FechaOrdenServicio desc;
 
 $filtroFecha  = "";
 $filtroCds    = "";
+$filtroCcat    = "";
 
 if ($cds!=""){
   $filtroCds = " and reportes.IDCentro=$cds";
@@ -74,12 +77,22 @@ if($mes!=0 && $ano!=0){
   $filtroFecha = " and (FechaOrdenServicio >= '$fechaIni' and FechaOrdenServicio <= '$fechaFin')";
 }
 
-if($filtroCds!="" && $filtroFecha!=""){
-  $query = str_replace(":filtros", $filtroCds . $filtroFecha, $query);
-}elseif($filtroCds!="" && $filtroFecha==""){
+if ($categoria!=""){
+  $filtroCat = " and reportes.Categoria='$categoria'";
+}
+
+if($filtroCds!="" && $filtroFecha!="" && $filtroCat!=""){
+  $query = str_replace(":filtros", $filtroCds . $filtroFecha . $filtroCat, $query);
+}elseif($filtroCds!="" && $filtroFecha=="" && $filtroCcat==""){
   $query = str_replace(":filtros", $filtroCds, $query);
-}elseif($filtroCds=="" && $filtroFecha!=""){
+}elseif($filtroCds=="" && $filtroFecha!="" && $filtroCcat==""){
   $query = str_replace(":filtros", $filtroFecha, $query);
+}elseif($filtroCds=="" && $filtroFecha=="" && $filtroCcat!=""){
+  $query = str_replace(":filtros", $filtroCat, $query);
+}elseif($filtroCds!="" && $filtroFecha!="" && $filtroCcat==""){
+  $query = str_replace(":filtros", $filtroCds . $filtroFecha, $query);
+}elseif($filtroCds!="" && $filtroFecha=="" && $filtroCcat==""){
+  $query = str_replace(":filtros", $filtroCds . $filtroCcat, $query);
 }else{
   $query = str_replace(":filtros", "", $query);
 }

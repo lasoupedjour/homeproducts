@@ -99,7 +99,8 @@ export class AdministracionComponent {
             Mes: [],
             Pais: [this._global.user.Pais],
             Master: [''],
-            Cds: ['']
+            Cds: [''],
+            Categoria: ['']
         });
 
         this.precargaPaises();
@@ -244,6 +245,7 @@ export class AdministracionComponent {
         params['cds']   = this.filterForm.controls.Cds.value;
         params['mes']   = this.filterForm.controls.Mes.value;
         params['ano']   = this.filterForm.controls.Ano.value;
+        params['categoria']   = this.filterForm.controls.Categoria.value;
 
         this._global.appstatus.loading = true;
 

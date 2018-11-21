@@ -71,7 +71,8 @@ export class ResumenPagosComponent {
             Mes: [],
             Pais: [],
             Master: [],
-            Cds: []
+            Cds: [],
+            Categoria: []
         });
 
         this.pagosForm = this.formBuilder.group({
@@ -258,6 +259,7 @@ export class ResumenPagosComponent {
         params['cds']   = this.filterForm.controls.Cds.value;
         params['mes']   = this.filterForm.controls.Mes.value;
         params['ano']   = this.filterForm.controls.Ano.value;
+        params['categoria']   = this.filterForm.controls.Categoria.value;
 
         this._global.appstatus.loading = true;
 
