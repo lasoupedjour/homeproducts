@@ -189,7 +189,7 @@ export class ReporteCasoComponent {
         /*precarga tarifas movilización*/
         //this.precargaTarifasMovilizacion();
 
-
+        this.genericForm.controls.TipoRevision.setValue(Object(this._global.reporte.objreporte).TipoRevision);
     }
 
 
@@ -243,7 +243,7 @@ export class ReporteCasoComponent {
 
     habilitaDomicilio() {
 
-        this.genericForm.controls.TipoRevision.setValue('');
+        this.genericForm.controls.TipoRevision.setValue(Object(this._global.reporte.objreporte).TipoRevision);
         this.genericForm.controls.TipoRevision.updateValueAndValidity();
 
         if (this._global.subtiposervicio.length == 0) {
@@ -395,6 +395,7 @@ export class ReporteCasoComponent {
             console.log('obj fecha compra');
             console.log(this.status.FechaCompra );
             this.evaluaFechaCompra();
+
         }
     }
 
