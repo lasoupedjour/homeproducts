@@ -294,7 +294,19 @@
               </span>
             </label>
           </div>
-
+          <!--En otro centro de servicio -->
+          <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'otro centro')" class="col-sm-2">
+            <label class="fecha">
+              <select class="form-control form-control-sm" formControlName="IDCentro" id="idcentro" (change)="changeCentro()">
+                <option value="">Selecciona el CDs</option>
+                <option *ngFor="let item of _global.centros; let i = index" value="{{item.id}}">{{item.Nombre}}</option>
+              </select>
+              <span class="alert alert-danger" *ngIf="!genericForm.controls.IDCentro.valid && genericForm.controls.IDCentro.touched">
+                Este campo es requerido
+              </span>
+            </label>
+          </div>
+          <!--termina en otro centro de servicio -->
           <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'domicilio')" class="col-sm-2">
             <label class="fecha">
               <select class="form-control form-control-sm" formControlName="TipoKilometraje" (change)="changeTipoKilometraje()">

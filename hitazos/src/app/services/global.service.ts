@@ -260,6 +260,14 @@ export class GlobalService implements CanActivate{
         "recientes": []
     }
 
+    cambiosFisicosXAutorizarDist = {
+        "recientes": []
+    }
+
+    cambiosFisicosXAutorizarPD = {
+        "recientes": []
+    }
+
     refacciones = []
 
     refaccionesproductos = [];

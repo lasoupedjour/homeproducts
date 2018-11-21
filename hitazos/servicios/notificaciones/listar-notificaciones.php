@@ -32,7 +32,10 @@ if($nivel=='administrador'){
 }else if($nivel=='operador'){
   $query = "
             select n.*, DATE_FORMAT(n.timestamp,  '%d/%m/%Y %H:%i:%s' ) as timestampNF from
-            (select notificaciones.* from notificaciones,usuarios_admin where (nivel='administrador')) as n
+            (select notificaciones.* from notificaciones) as n
+            join
+            (select * from usuarios_admin where (nivel='administrador')) as ua
+            on ua.id = n.id_usuario
             join
             (select * from reportes) as r
             on n.id_reporte = r.id
@@ -46,7 +49,10 @@ if($nivel=='administrador'){
   $res['nivel'] = $IDDistribuidor;
   $query = "
             select n.*, DATE_FORMAT(n.timestamp,  '%d/%m/%Y %H:%i:%s' ) as timestampNF from
-            (select notificaciones.* from notificaciones,usuarios_admin where (nivel='administrador')) as n
+            (select notificaciones.* from notificaciones) as n
+            join
+            (select * from usuarios_admin where (nivel='administrador')) as ua
+            on ua.id = n.id_usuario
             join
             (select * from reportes) as r
             on n.id_reporte = r.id

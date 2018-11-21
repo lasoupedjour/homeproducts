@@ -44,7 +44,7 @@ export class ResumenOrdenComponent {
     minDate: Date;
     minDateObj: Object;
 
-    fechaentregacambio = moment(this._global.reporte.objreporte.FechaEntregaCambio).format("DD/M/Y");
+    fechaentregacambio;
 
     constructor(
         public formBuilder: FormBuilder,
@@ -111,6 +111,10 @@ export class ResumenOrdenComponent {
         this._global.setAdjuntos();
         this.getDistribuidor();
         this.setTipoReparacion();
+
+        console.log("/inicio/resumen/orden reporte>>>", this._global.reporte.objreporte);
+        if(this._global.reporte.objreporte.FechaEntregaCambio !="0000-00-00 00:00:00")
+          this.fechaentregacambio = moment(this._global.reporte.objreporte.FechaEntregaCambio).format("DD/M/Y")
     }
 
     setFechaEntregaCambio(){
@@ -121,7 +125,7 @@ export class ResumenOrdenComponent {
       fecha = fecha.split('-');
       //console.log(fecha);
       const now = new Date();
-      
+
       var fechatemp = {
           day: parseInt(fecha[2]),
           month: parseInt(fecha[1]),
