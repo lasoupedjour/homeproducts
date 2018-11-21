@@ -22,35 +22,49 @@ $res = array();
 
 $res['res'] = 'ok';
 
+$query = "";
+
 if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
   if($arre["IDDistribuidor"]==0){
-    $q = mysql_query("
+    $query = "
     SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno , DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
     FROM reportes, clientes
     where clientes.id = reportes.IDCliente
     and reportes.IDCentro = ".$arre["IDCentro"]."
     and StatusReporte <> 'Orden de Servicio'
+    :filtroCds
     order by FechaRegistroReporte desc LIMIT 5;
-    ") or die(mysql_error());
+    ";
   }else{
-    $q = mysql_query("
+    $query = "
   	SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno , DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
   	FROM reportes, clientes
   	where clientes.id = reportes.IDCliente
   	and reportes.IDOperadorDistribuidor = ".$arre["IDDistribuidor"]."
   	and StatusReporte <> 'Orden de Servicio'
+    :filtroCds
   	order by FechaRegistroReporte desc LIMIT 5;
-  	") or die(mysql_error());
+  	";
   }
 }else{
-	$q = mysql_query("
+	$query = "
 	SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
 	FROM reportes, clientes
 	where clientes.id = reportes.IDCliente
 	and StatusReporte <> 'Orden de Servicio'
+  :filtroCds
 	order by FechaRegistroReporte desc LIMIT 5;
-	") or die(mysql_error());
+	";
 }
+
+if($arre["Cds"]!=""){
+  $query = str_replace(":filtroCds", " and reportes.IDCentro=" . $arre["Cds"], $query);
+}else{
+  $query = str_replace(":filtroCds", "", $query);
+}
+
+$q = mysql_query($query) or die(mysql_error());
+
 
 $reportes = array();
 

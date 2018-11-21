@@ -12,6 +12,8 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 export class InicioComponent {
     title = 'app';
     genericForm: FormGroup;
+    filterForm: FormGroup;
+    filterOrdenesForm: FormGroup;
 
     //@ViewChild("Email") Email: ElementRef;
 
@@ -42,6 +44,21 @@ export class InicioComponent {
 
         });
 
+        this.filterForm = this.formBuilder.group({
+            Pais: [this._global.user.Pais],
+            Master: [''],
+            Cds: ['']
+        });
+
+        this.filterOrdenesForm = this.formBuilder.group({
+            Pais: [this._global.user.Pais],
+            Master: [''],
+            Cds: ['']
+        });
+
+        this.precargaPaises();
+        this.changePais();
+
         this.nuevosClientes();
         this.nuevasOrdenesServicio();
         this.nuevosCasosAsignados();
@@ -63,9 +80,98 @@ export class InicioComponent {
 
         })
 
-
     }
 
+    changePais() {
+        //console.log(this.filterForm.controls.Pais.value);
+        var params = {};
+        params['Pais'] = this.filterForm.controls.Pais.value;
+        params['IDCentro'] = this._global.user.IDCentro;
+        params['Nivel'] = this._global.user.nivel;
+        params['IDMaster'] = this._global.user.IDMaster;
+        params['IDGrupoTarifa'] = this._global.user.IDGrupoTarifa;
+
+        this._global.appstatus.loading = true;
+
+        this._httpService.postHTML(params, 'administracion/listarmaster.php')
+            .subscribe(
+            data => {
+                console.log('data cds');
+                console.log(data);
+
+                this._global.appstatus.loading = false;
+                document.getElementById('master').innerHTML = data;
+                //console.log("fichas");
+                //console.log(this.props.fichas);
+            },
+            error => alert(error),
+            () => console.log('termino submit')
+            );
+    }
+
+    changeMaster() {
+        //console.log(this.filterForm.controls.Pais.value);
+        var params = {};
+        params['Pais'] = this.filterForm.controls.Pais.value;
+        params['IDCentro'] = this._global.user.IDCentro;
+        params['Nivel'] = this._global.user.nivel;
+        params['IDMaster'] = this._global.user.IDMaster;
+        params['IDGrupoTarifa'] = this._global.user.IDGrupoTarifa;
+
+        this._global.appstatus.loading = true;
+
+        this._httpService.postHTML(params, 'administracion/listarcds.php')
+            .subscribe(
+            data => {
+                console.log('data cds');
+                console.log(data);
+
+                this._global.appstatus.loading = false;
+                document.getElementById('centros').innerHTML = data;
+                //console.log("fichas");
+                //console.log(this.props.fichas);
+            },
+            error => alert(error),
+            () => console.log('termino submit')
+            );
+    }
+
+    precargaPaises() {
+
+        var params = {};
+
+        params['Pais'] = Object(this._global.user).Pais;
+        params['nivel'] = Object(this._global.user).nivel;
+
+        this._global.appstatus.loading = true;
+
+        /*console.log('Precarga distribuidores');
+        console.log(params);*/
+
+        this._httpService.postJSON(params, 'precarga-paises.php')
+            .subscribe(
+            data => {
+                this._global.appstatus.loading = false;
+
+                if (data.res == 'ok') {
+
+                    this._global.paises = this._global.parseJSON(data.paises);
+
+                    if (data.paises.length == 0) {
+                        this._global.appstatus.mensaje = 'No se encontraron datos con estas características.';
+                    }
+
+                } else if (data.res = 'error') {
+
+                    this._global.appstatus.mensaje = data.error;
+
+                }
+            },
+            error => alert(error),
+            () => console.log('termino submit')
+            );
+
+    }
 
     aplicaGarantia(txt) {
         if (txt != '') {
@@ -243,13 +349,12 @@ export class InicioComponent {
 
     }
 
-
     nuevosCasosAsignados() {
-
         var params = {};
         params["IDCentro"] = this._global.user.IDCentro;
         params["nivel"] = this._global.user.nivel;
         params["IDDistribuidor"] = this._global.user.IDDistribuidor;
+        params["Cds"] = this.filterForm.controls.Cds.value;
 
         this._global.appstatus.loading = true;
 

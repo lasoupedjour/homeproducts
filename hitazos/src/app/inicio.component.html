@@ -425,7 +425,6 @@
 
 
 
-
   <div class="row mt-5 mb-2">
     <div class="col-8">
       <h3>Casos Asignados Recientemente</h3>
@@ -434,6 +433,29 @@
       <a routerLink="/inicio/casos-asignados/">Ver todos</a>
     </div>
   </div>
+  <form  name="formulariofiltros" [formGroup]="filterForm" >
+  <div class="row mt-3 mb-2">
+    <div class="col-3 text-right">
+      <select class="form-control form-control-sm" formControlName="Pais" (change)="changePais()">
+        <option value="" hidden="">País</option>
+        <option *ngFor="let item of _global.paises;" value="{{item.Pais}}">{{item.Pais}}</option>
+      </select>
+    </div>
+    <div class="col-3 text-right">
+      <select class="form-control form-control-sm" formControlName="Master" id="master" (change)="changeMaster()">
+        <option value="" hidden>Master</option>
+      </select>
+    </div>
+    <div class="col-3 text-right">
+      <select class="form-control form-control-sm" formControlName="Cds" id="centros">
+        <option value="" hidden>CDS</option>
+      </select>
+    </div>
+    <div class="col-3 text-right">
+      <a class="btn btn-sm btnicono" (click)="nuevosCasosAsignados()"> Filtrar </a>
+    </div>
+  </div>
+  </form>
 
    <div class="row mb-3" *ngIf="_global.casosAsignados.recientes[0]">
      <div class="col-12 ">
@@ -515,6 +537,29 @@
        <a routerLink="/inicio/ordenes-de-servicio/">Ver todas</a>
      </div>
    </div>
+   <form  name="formulariofiltros" [formGroup]="filterOrdenesForm" >
+   <div class="row mt-3 mb-2">
+     <div class="col-3 text-right">
+       <select class="form-control form-control-sm" formControlName="Pais" (change)="changePais()">
+         <option value="" hidden="">País</option>
+         <option *ngFor="let item of _global.paises;" value="{{item.Pais}}">{{item.Pais}}</option>
+       </select>
+     </div>
+     <div class="col-3 text-right">
+       <select class="form-control form-control-sm" formControlName="Master" id="master" (change)="changeMaster()">
+         <option value="" hidden>Master</option>
+       </select>
+     </div>
+     <div class="col-3 text-right">
+       <select class="form-control form-control-sm" formControlName="Cds" id="centros">
+         <option value="" hidden>CDS</option>
+       </select>
+     </div>
+     <div class="col-3 text-right">
+       <a class="btn btn-sm btnicono" (click)="nuevosCasosAsignados()"> Filtrar </a>
+     </div>
+   </div>
+   </form>
 
    <div class="row mb-3" *ngIf="_global.ordenesServicio.recientes[0]">
      <div class="col-12">
