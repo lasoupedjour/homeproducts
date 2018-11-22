@@ -189,9 +189,9 @@ export class OrdenInicioComponent {
 
         console.log("UsewrObj", this._global.user);
 
-        this.MontoSubtotal = this._global.reporte.objreporte.MontoSubtotal;
-        this.MontoIVA = this._global.reporte.objreporte.MontoIVA;
-        this.MontoTotal = this._global.reporte.objreporte.MontoTotal;
+        this.MontoSubtotal = parseFloat(this._global.reporte.objreporte.MontoSubtotal);
+        this.MontoIVA = parseFloat(this._global.reporte.objreporte.MontoIVA);
+        this.MontoTotal = parseFloat(this._global.reporte.objreporte.MontoTotal);
 
      }
 
@@ -548,7 +548,7 @@ export class OrdenInicioComponent {
             params["IDUsuario"] = this._global.user.id;
             params["IDCliente"] = this._global.cliente.id;
             params["TipoReclamoDiagnostico"] = this._global.reporte.objreporte.TipoReclamoDiagnostico;
-            
+
             params["AdjuntosFacturasNotasCompra"] = this._global.AdjuntosFacturasNotasCompra;
             try { params["AdjuntosFacturasNotasCompraSize"] = Object(this._global.AdjuntosFacturasNotasCompra).currentFiles.length; } catch (e) { params["AdjuntosFacturasNotasCompraSize"] = 0; };
 
