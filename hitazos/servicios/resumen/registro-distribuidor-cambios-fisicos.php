@@ -27,7 +27,9 @@ if ($stmt = $mysqli->prepare("
 update reportes set
 CostoLanded = ?,
 FechaEntregaCambio = ?,
-FechaCostoLanded = now()
+FechaCostoLanded = now(),
+StatusCostoLanded = '',
+FechaStatusCostoLanded = '0000-00-00 00:00:00'
 where id = ?
 
 ")) {

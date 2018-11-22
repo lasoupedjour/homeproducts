@@ -30,7 +30,7 @@ and (reportes.Distribuidor = '".$arre["Distribuidor"]."'
 or reportes.Distribuidor = '".$arre["NombreDistribuidor"]."')
 and StatusReporte = 'Orden de Servicio'
 and TipoReclamoDiagnostico = 'Cambio'
-and CostoLanded = 0
+and (CostoLanded = 0 or StatusCostoLanded='Rechazado') 
 and StatusCambioFisico='Aprobado'
 order by FechaRegistroReporte desc LIMIT 5;
 ") or die(mysql_error());

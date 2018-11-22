@@ -401,7 +401,7 @@
 
 
               <td>
-                <button (click)="this._global.evaluaCambioFisico(item.id)" class="btn btn-sm">Cambiar Status</button>
+                <button (click)="this._global.evaluaCostoLanded(item.id)" class="btn btn-sm">Cambiar Status</button>
               </td>
 
 
@@ -545,6 +545,7 @@
 
 
              <th>Días Transcurridos</th>
+             <th>Status Costo Landed</th>
 
              <th>Status</th>
 
@@ -589,6 +590,9 @@
 
              <td [ngClass]="this._global.diasTranscurridosColor(item.FechaRegistroReporte)">
                {{this._global.diasTranscurridos(item.FechaRegistroReporte)}}
+             </td>
+             <td>
+               {{item.StatusCostoLanded}}
              </td>
              <td>
                {{item.StatusCambioFisico}}
@@ -796,7 +800,10 @@
            <td>
              {{item.NoSerie}}
            </td>
-           <td>
+           <td *ngIf="item.TipoReclamoDiagnostico=='Cambio'">
+             {{item.TipoReclamoDiagnostico}} - {{item.StatusCambioFisico}}
+           </td>
+           <td *ngIf="item.TipoReclamoDiagnostico!='Cambio'">
              {{item.TipoReclamoDiagnostico}}
            </td>
            <td>
@@ -805,7 +812,10 @@
            <td>
              {{item.SubStatusReporte}}
            </td>
-           <td>
+           <td *ngIf="item.StatusCambioFisico=='Rechazado'">
+             <button (click)="this._global.seleccionarReporte(item.id, 'registro-de-casos/orden-de-servicio/inicio')" class="btn btn-sm">Seleccionar</button>
+           </td>
+           <td *ngIf="item.TipoReclamoDiagnostico!='Cambio' || item.StatusCambioFisico=='Aprobado'">
              <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen/orden')" class="btn btn-sm">Seleccionar</button>
            </td>
          </tr>
