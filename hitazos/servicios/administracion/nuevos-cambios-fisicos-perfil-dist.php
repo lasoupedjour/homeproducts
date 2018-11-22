@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 include "../dbc.php";
 
 if (isset($_SERVER['HTTP_ORIGIN'])) {
@@ -22,25 +22,20 @@ $res = array();
 
 $res['res'] = 'ok';
 
-if($arre["nivel"] == "administrador" || $arre["nivel"] == "MKT"){
-  $query = "SELECT id, Nombre, Ciudad from centros order by Nombre asc";
-}else{
-  $query = "
-            SELECT id, Nombre, Ciudad from centros
-            where Pais = '".$arre['Pais']."'
-            and
-            (IDMaster=". $arre["IDMaster"] ." or id=". $arre["IDMaster"] .") order by Nombre asc";
-}
+$q = mysql_query("
+SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
+FROM reportes, clientes
+where clientes.id = reportes.IDCliente
+and (reportes.Distribuidor = '".$arre["Distribuidor"]."'
+or reportes.Distribuidor = '".$arre["NombreDistribuidor"]."')
+and StatusReporte = 'Orden de Servicio'
+and TipoReclamoDiagnostico = 'Cambio'
+and CostoLanded = 0
+and StatusCambioFisico='Aprobado'
+order by FechaRegistroReporte desc LIMIT 5;
+") or die(mysql_error());
 
-if($arre["IDDistribuidor"]>0){
-  $query = "
-            SELECT id, Nombre, Ciudad from centros
-            where Pais = '".$arre['Pais']."' order by Nombre asc";
-}
-
-$q = mysql_query($query) or die(mysql_error());
-
-$centros = array();
+$reportes = array();
 
 while ($row = mysql_fetch_array($q))
 {
@@ -50,9 +45,9 @@ while ($row = mysql_fetch_array($q))
 		$value = utf8_encode($value);
 	});
 	$temp = json_encode($row);
-	array_push($centros, $temp);
+	array_push($reportes, $temp);
 }
-$res['centros'] = $centros;
+$res['reportes'] = $reportes;
 
 echo json_encode($res);
 

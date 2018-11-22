@@ -58,11 +58,13 @@ export class InicioComponent {
 
         this.precargaPaises();
         this.changePais();
+        this.changePais("masterOrdenes");
 
         this.nuevosClientes();
         this.nuevasOrdenesServicio();
         this.nuevosCasosAsignados();
         this.nuevosCambiosFisicos();
+        this.nuevosCambiosFisicosDist();
 
         //funciones de administrador
         if (this._global.user.nivel == 'administrador') {
@@ -73,6 +75,8 @@ export class InicioComponent {
 
         }
 
+        if(this._global.user.CustomerID!='')
+          this.nuevosCambiosFisicosPerfilDist();
 
         $(document).ready(function () {
 
@@ -82,7 +86,7 @@ export class InicioComponent {
 
     }
 
-    changePais() {
+    changePais(cmb="") {
         //console.log(this.filterForm.controls.Pais.value);
         var params = {};
         params['Pais'] = this.filterForm.controls.Pais.value;
@@ -100,7 +104,12 @@ export class InicioComponent {
                 console.log(data);
 
                 this._global.appstatus.loading = false;
-                document.getElementById('master').innerHTML = data;
+                if(cmb=="")
+                  document.getElementById('master').innerHTML = data;
+                else
+                  document.getElementById('masterOrdenes').innerHTML = data;
+
+                //filterOrdenesForm
                 //console.log("fichas");
                 //console.log(this.props.fichas);
             },
@@ -109,7 +118,7 @@ export class InicioComponent {
             );
     }
 
-    changeMaster() {
+    changeMaster(cmb="") {
         //console.log(this.filterForm.controls.Pais.value);
         var params = {};
         params['Pais'] = this.filterForm.controls.Pais.value;
@@ -127,7 +136,11 @@ export class InicioComponent {
                 console.log(data);
 
                 this._global.appstatus.loading = false;
-                document.getElementById('centros').innerHTML = data;
+                if(cmb=="")
+                  document.getElementById('centros').innerHTML = data;
+                else
+                  document.getElementById('centrosOrdenes').innerHTML = data;
+
                 //console.log("fichas");
                 //console.log(this.props.fichas);
             },
@@ -349,6 +362,91 @@ export class InicioComponent {
 
     }
 
+    nuevosCambiosFisicosPerfilDist() {
+
+        var params = {};
+        params["IDCentro"] = this._global.user.IDCentro;
+        params["NombreDistribuidor"] = this._global.user.nombre;
+        params["Distribuidor"] = this._global.user.CustomerID;
+        params["limit"] = "5";
+
+        this._global.appstatus.loading = true;
+        console.log('nuevas cambios físicos perfil dist');
+        console.log(params);
+        this._httpService.postJSON(params, 'administracion/nuevos-cambios-fisicos-perfil-dist.php')
+            .subscribe(
+            data => {
+                console.log('data');
+                console.log(data);
+                this._global.appstatus.loading = false;
+
+                if (data.res == 'ok') {
+
+
+                    this._global.cambiosFisicosXAutorizarPD.recientes = this._global.parseJSON(data.reportes);
+                    console.log('cambios fisicos perfil dist');
+                    console.log(this._global.cambiosFisicosXAutorizarPD.recientes);
+
+                    if (data.reportes.length == 0) {
+                        this._global.appstatus.mensaje = 'No se encontraron órdenes.';
+                    }
+
+                } else if (data.res = 'error') {
+                    this._global.appstatus.mensaje = data.error;
+                }
+
+
+                //console.log("fichas");
+                //console.log(this.props.fichas);
+            },
+            error => console.log(error),
+            () => console.log('termino submit')
+            );
+
+    }
+
+    nuevosCambiosFisicosDist() {
+
+        var params = {};
+        params["IDCentro"] = this._global.user.IDCentro;
+        params["nivel"] = this._global.user.nivel;
+        params["limit"] = "5";
+
+        this._global.appstatus.loading = true;
+        console.log('nuevos cambios físicos distribuidores', params);
+
+        this._httpService.postJSON(params, 'administracion/nuevos-cambios-fisicos-distribuidor.php')
+            .subscribe(
+            data => {
+                console.log('data');
+                console.log(data);
+                this._global.appstatus.loading = false;
+
+                if (data.res == 'ok') {
+
+
+                    this._global.cambiosFisicosXAutorizarDist.recientes = this._global.parseJSON(data.reportes);
+                    console.log('cambios fisicos por autorizar');
+                    console.log(this._global.cambiosFisicosXAutorizarDist.recientes);
+
+                    if (data.reportes.length == 0) {
+                        this._global.appstatus.mensaje = 'No se encontraron órdenes.';
+                    }
+
+                } else if (data.res = 'error') {
+                    this._global.appstatus.mensaje = data.error;
+                }
+
+
+                //console.log("fichas");
+                //console.log(this.props.fichas);
+            },
+            error => console.log(error),
+            () => console.log('termino submit')
+            );
+
+    }
+
     nuevosCasosAsignados() {
         var params = {};
         params["IDCentro"] = this._global.user.IDCentro;
@@ -398,6 +496,7 @@ export class InicioComponent {
         params["IDCentro"] = this._global.user.IDCentro;
         params["IDDistribuidor"] = this._global.user.IDDistribuidor;
         params["nivel"] = this._global.user.nivel;
+        params["Cds"] = this.filterForm.controls.Cds.value;
 
         this._global.appstatus.loading = true;
         console.log('params nuevas ordenes');

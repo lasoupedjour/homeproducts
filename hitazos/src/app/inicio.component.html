@@ -322,10 +322,104 @@
       <div class="row mb-3 ml-2" *ngIf="!_global.movilizacionesXAutorizar.recientes[0]">No hay movilizaciones por autorizar.</div>
 
 
+      <div class="row mt-5 mb-2">
+        <div class="col-8">
+          <h3>Cambios físicos por autorizar - Distribuidores</h3>
+        </div>
+        <div class="col-4 text-right">
+          <a routerLink="../nuevos-cambios-fisicos/">Ver todos</a>
+        </div>
+      </div>
+      <div class="row mb-3" *ngIf="_global.cambiosFisicosXAutorizarDist.recientes[0]">
+        <div class="col-12 ">
+
+          <table class="table table-striped table-bordered">
+            <tr>
+              <th>País</th>
+              <th>No. de Reporte</th>
+              <th>CDS</th>
+
+              <th>Fecha de Registro</th>
+              <th>Tipo de Caso</th>
+
+              <th>Tarifa Despiece</th>
+              <th>Tarifa Reciclaje</th>
+              <th>Tarifa Otro Monto</th>
+              <!--th>Descripcion Otro Monto</th-->
+
+
+              <th>Días Transcurridos</th>
+
+              <th>Status</th>
+
+
+              <th>Acción</th>
+
+
+              <th>Selección</th>
+            </tr>
+
+            <tr *ngFor="let item of _global.cambiosFisicosXAutorizarDist.recientes;" class="formulario">
+
+              <td>
+                {{item.Pais}}
+              </td>
+              <td>
+                {{item.id}}
+              </td>
+              <td>
+                {{item.NombreCentro}}
+              </td>
+
+              <td>
+                 {{item.FechaRegistroReporteNF}}
+              </td>
+              <td>
+                {{item.TipoCaso}}
+              </td>
+
+              <td>
+                ${{item.MontoDespiece}} USD
+              </td>
+              <td>
+                ${{item.MontoReciclaje}} USD
+              </td>
+              <td>
+                ${{item.MontoOtro}} USD
+              </td>
+              <!--td>
+                {{item.MontoOtroDescripcion}}
+              </td-->
+
+              <td [ngClass]="this._global.diasTranscurridosColor(item.FechaRegistroReporte)">
+                {{this._global.diasTranscurridos(item.FechaRegistroReporte)}}
+              </td>
+              <td>
+                {{item.StatusCambioFisico}}
+              </td>
+
+
+
+              <td>
+                <button (click)="this._global.evaluaCambioFisico(item.id)" class="btn btn-sm">Cambiar Status</button>
+              </td>
+
+
+              <td>
+                <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen/orden')" class="btn btn-sm">Ver reporte</button>
+              </td>
+            </tr>
+
+          </table>
+
+        </div>
+      </div>
+     <div class="row mb-3 ml-2" *ngIf="!_global.cambiosFisicosXAutorizarDist.recientes[0]">No hay cambios físicos por autorizar.</div>
+
       <!---->
       <div class="row mt-5 mb-2">
         <div class="col-8">
-          <h3>Cambios físicos por autorizar</h3>
+          <h3>Cambios físicos por autorizar - CDs</h3>
         </div>
         <div class="col-4 text-right">
           <a routerLink="../nuevos-cambios-fisicos/">Ver todos</a>
@@ -422,8 +516,102 @@
 
      </div> <!--termina administrador-->
 
+     <div  *ngIf="_global.cambiosFisicosXAutorizarPD.recientes[0]">
+     <div class="row mt-5 mb-2">
+       <div class="col-8">
+         <h3>Cambios físicos</h3>
+       </div>
+       <div class="col-4 text-right">
+         <a routerLink="../nuevos-cambios-fisicos/">Ver todos</a>
+       </div>
+     </div>
+
+     <div class="row mb-3" *ngIf="_global.cambiosFisicosXAutorizarPD.recientes[0]">
+       <div class="col-12 ">
+
+         <table class="table table-striped table-bordered">
+           <tr>
+             <th>País</th>
+             <th>No. de Reporte</th>
+             <th>CDS</th>
+
+             <th>Fecha de Registro</th>
+             <th>Tipo de Caso</th>
+
+             <th>Tarifa Despiece</th>
+             <th>Tarifa Reciclaje</th>
+             <th>Tarifa Otro Monto</th>
+             <!--th>Descripcion Otro Monto</th-->
 
 
+             <th>Días Transcurridos</th>
+
+             <th>Status</th>
+
+
+             <!--th>Acción</th--->
+
+
+             <th>Selección</th>
+           </tr>
+
+           <tr *ngFor="let item of _global.cambiosFisicosXAutorizarPD.recientes;" class="formulario">
+
+             <td>
+               {{item.Pais}}
+             </td>
+             <td>
+               {{item.id}}
+             </td>
+             <td>
+               {{item.NombreCentro}}
+             </td>
+
+             <td>
+                {{item.FechaRegistroReporteNF}}
+             </td>
+             <td>
+               {{item.TipoCaso}}
+             </td>
+
+             <td>
+               ${{item.MontoDespiece}} USD
+             </td>
+             <td>
+               ${{item.MontoReciclaje}} USD
+             </td>
+             <td>
+               ${{item.MontoOtro}} USD
+             </td>
+             <!--td>
+               {{item.MontoOtroDescripcion}}
+             </td-->
+
+             <td [ngClass]="this._global.diasTranscurridosColor(item.FechaRegistroReporte)">
+               {{this._global.diasTranscurridos(item.FechaRegistroReporte)}}
+             </td>
+             <td>
+               {{item.StatusCambioFisico}}
+             </td>
+
+
+
+             <!--td>
+               <button (click)="this._global.evaluaCambioFisico(item.id)" class="btn btn-sm">Cambiar Status</button>
+             </td-->
+
+
+             <td>
+               <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen/orden')" class="btn btn-sm">Ver reporte</button>
+             </td>
+           </tr>
+
+         </table>
+
+       </div>
+     </div>
+     <div class="row mb-3 ml-2" *ngIf="!_global.cambiosFisicosXAutorizarPD.recientes[0]">No hay cambios físicos por autorizar.</div>
+     </div>
 
   <div class="row mt-5 mb-2">
     <div class="col-8">
@@ -540,23 +728,23 @@
    <form  name="formulariofiltros" [formGroup]="filterOrdenesForm" >
    <div class="row mt-3 mb-2">
      <div class="col-3 text-right">
-       <select class="form-control form-control-sm" formControlName="Pais" (change)="changePais()">
+       <select class="form-control form-control-sm" formControlName="Pais" (change)="changePais('masterOrdenes')">
          <option value="" hidden="">País</option>
          <option *ngFor="let item of _global.paises;" value="{{item.Pais}}">{{item.Pais}}</option>
        </select>
      </div>
      <div class="col-3 text-right">
-       <select class="form-control form-control-sm" formControlName="Master" id="master" (change)="changeMaster()">
+       <select class="form-control form-control-sm" formControlName="Master" id="masterOrdenes" (change)="changeMaster('centrosOrdenes')">
          <option value="" hidden>Master</option>
        </select>
      </div>
      <div class="col-3 text-right">
-       <select class="form-control form-control-sm" formControlName="Cds" id="centros">
+       <select class="form-control form-control-sm" formControlName="Cds" id="centrosOrdenes">
          <option value="" hidden>CDS</option>
        </select>
      </div>
      <div class="col-3 text-right">
-       <a class="btn btn-sm btnicono" (click)="nuevosCasosAsignados()"> Filtrar </a>
+       <a class="btn btn-sm btnicono" (click)="nuevasOrdenesServicio()"> Filtrar </a>
      </div>
    </div>
    </form>

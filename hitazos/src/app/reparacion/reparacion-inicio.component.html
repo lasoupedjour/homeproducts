@@ -52,7 +52,7 @@
         <div><b>Subcategoría:</b> {{_global.reporte.objreporte.Subcategoria}}</div>
         <div><b>Modelo:</b> {{_global.reporte.objreporte.Modelo}}</div>
         <div><b>Producto:</b> {{_global.reporte.objreporte.Tipo}}</div>
-        <div><b>Fecha de compra:</b> {{(_global.reporte.objreporte.FechaCompra).replace(" 00:00:00", "")}}</div>
+        <div><b>Fecha de compra:</b> {{_global.reporte.objreporte.FechaCompra | date: 'dd/MM/yyyy'}}</div>
         <div><b>Lugar de compra:</b> {{_global.reporte.objreporte.LugarCompra}}</div>
         <div *ngIf="_global.reporte.objreporte.Falla != 'OTRO'"><b>Falla reportada:</b> {{_global.reporte.objreporte.Falla}}</div>
         <div *ngIf="_global.reporte.objreporte.Falla == 'OTRO'"><b>Falla reportada:</b> {{_global.reporte.objreporte.FallaDescripcion}}</div>

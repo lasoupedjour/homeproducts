@@ -259,6 +259,9 @@ export class ReporteCasoComponent {
         var params = {};
 
         params['Pais'] = Object(this._global.user).Pais;
+        params['nivel'] = Object(this._global.user).nivel;
+        params['IDMaster'] = Object(this._global.user).IDCentro;
+        params['IDDistribuidor'] = Object(this._global.user).IDDistribuidor;
 
         this._global.appstatus.loading = true;
 
@@ -938,6 +941,8 @@ export class ReporteCasoComponent {
             }
 
 
+        }else if(this.genericForm.controls.TipoRevision.value == "otro centro"){
+          this.precargaCentros();
         }else{
 
             this.genericForm.controls.TipoKilometraje.setValidators([]);
