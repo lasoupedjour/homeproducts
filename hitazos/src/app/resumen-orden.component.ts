@@ -121,7 +121,7 @@ export class ResumenOrdenComponent {
       fecha = fecha.split('-');
       //console.log(fecha);
       const now = new Date();
-      
+
       var fechatemp = {
           day: parseInt(fecha[2]),
           month: parseInt(fecha[1]),
@@ -134,7 +134,8 @@ export class ResumenOrdenComponent {
 
     imprimirReporte() {
 
-        var ventana = window.open('http://apps.pautacreativatemporales.com.mx/oster/homeproducts/inicio/resumen/orden', '', 'width=1000,height=1000');
+        //var ventana = window.open('http://apps.pautacreativatemporales.com.mx/oster/homeproducts/inicio/resumen/orden', '', 'width=1000,height=1000');
+        var ventana = window.open('https://www.homeproductslatam.com.mx/inicio/resumen/orden', '', 'width=1000,height=1000');
         //var ventana = window.open('/inicio/resumen/orden', '', 'width=1000,height=1000');
 
         //ventana.document.write();
