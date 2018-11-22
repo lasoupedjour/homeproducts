@@ -24,9 +24,10 @@ $res['res'] = 'ok';
 
 if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
 	$q = mysql_query("
-	SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
-	FROM reportes, clientes
+	SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
+	FROM reportes, clientes, centros
 	where clientes.id = reportes.IDCliente
+  and centros.id = reportes.IDCentro
 	and reportes.IDOperadorCentro = ".$arre["IDCentro"]."
 	and StatusReporte = 'Orden de Servicio'
   and TipoReclamoDiagnostico = 'Cambio'
@@ -35,9 +36,10 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
 	") or die(mysql_error());
 }else{
 	$q = mysql_query("
-	SELECT distinct reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
-	FROM reportes, clientes
+	SELECT distinct reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
+	FROM reportes, clientes, centros
 	where clientes.id = reportes.IDCliente
+  and centros.id = reportes.IDCentro
 	and StatusReporte = 'Orden de Servicio'
   and TipoReclamoDiagnostico = 'Cambio'
   and CostoLanded = 0
