@@ -27,7 +27,7 @@ export class AdministracionComponent {
     trigger: Subject<any> = new Subject();
 
     fechaResumen = {
-        "mes": '08',
+        "mes": '11',
         "ano": '2018',
     };
 
@@ -113,7 +113,7 @@ export class AdministracionComponent {
         this.changePais();
         //this.traeOrdenes();
 
-
+        this.filtrarReporte();
 
     }
 
@@ -210,7 +210,7 @@ export class AdministracionComponent {
 
     setMesResumen() {
 
-        this.filterForm.controls.Mes.setValue('09');
+        this.filterForm.controls.Mes.setValue('11');
         this.filterForm.controls.Mes.updateValueAndValidity();
         this.filterForm.controls.Ano.setValue('2018');
         this.filterForm.controls.Ano.updateValueAndValidity();

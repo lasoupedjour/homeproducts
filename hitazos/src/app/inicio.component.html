@@ -625,7 +625,7 @@
       <a routerLink="/inicio/casos-asignados/">Ver todos</a>
     </div>
   </div>
-  <form  name="formulariofiltros" [formGroup]="filterForm" >
+  <form  name="formulariofiltros" [formGroup]="filterForm" *ngIf="this._global.user.nivel=='administrador'">
   <div class="row mt-3 mb-2">
     <div class="col-3 text-right">
       <select class="form-control form-control-sm" formControlName="Pais" (change)="changePais()">
@@ -729,7 +729,7 @@
        <a routerLink="/inicio/ordenes-de-servicio/">Ver todas</a>
      </div>
    </div>
-   <form  name="formulariofiltros" [formGroup]="filterOrdenesForm" >
+   <form  name="formulariofiltros" [formGroup]="filterOrdenesForm" *ngIf="this._global.user.nivel=='administrador'">
    <div class="row mt-3 mb-2">
      <div class="col-3 text-right">
        <select class="form-control form-control-sm" formControlName="Pais" (change)="changePais('masterOrdenes')">

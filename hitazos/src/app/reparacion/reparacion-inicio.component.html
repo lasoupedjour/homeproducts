@@ -129,7 +129,7 @@
             </label>
           </div>
 
-          <div class="col-sm-12" [hidden]="this.genericForm.controls.TipoReclamoDiagnostico.value == 'Cambio'">
+          <div class="col-sm-12" [hidden]="this.genericForm.controls.TipoReclamoDiagnostico.value == 'Cambio' || _global.refaccionesproductos.length==0">
             <label class="pointer">
               <input class="form-control form-control-sm fecha" formControlName="RequiereRefacciones" type="checkbox" (change)="changeRequiereRefacciones()" /> ¿Se requieren refacciones?
             </label>
@@ -143,7 +143,6 @@
       <!--REFACCIONES -->
       <div class="row">
         <div class="col-12">
-
 
           <div class="row" *ngIf="this.genericForm.controls.RequiereRefacciones.value == true && this.genericForm.controls.TipoReclamoDiagnostico.value != 'Cambio' ">
             <div class="col-12 pt-5">
