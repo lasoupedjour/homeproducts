@@ -188,6 +188,11 @@ export class OrdenInicioComponent {
         this.obtenerSubtipoServicio();
 
         console.log("UsewrObj", this._global.user);
+
+        this.MontoSubtotal = this._global.reporte.objreporte.MontoSubtotal;
+        this.MontoIVA = this._global.reporte.objreporte.MontoIVA;
+        this.MontoTotal = this._global.reporte.objreporte.MontoTotal;
+
      }
 
      obtenerSubtipoServicio(){
@@ -252,7 +257,6 @@ export class OrdenInicioComponent {
             this.status.FechaFactura = { year: fechatemp.year, month: fechatemp.month, day: fechatemp.day };
             console.log('obj fecha factura');
             console.log(this.status.FechaFactura);
-
         }
     }
 
@@ -530,7 +534,7 @@ export class OrdenInicioComponent {
 
 
     submitRegistro() {
-        console.log('submit prevalidation');
+        console.log('submit prevalidation submitRegistro()');
         this.validarAdjuntos();
 
         if (this.genericForm.valid && this.adjuntosValidos) {
@@ -544,7 +548,7 @@ export class OrdenInicioComponent {
             params["IDUsuario"] = this._global.user.id;
             params["IDCliente"] = this._global.cliente.id;
             params["TipoReclamoDiagnostico"] = this._global.reporte.objreporte.TipoReclamoDiagnostico;
-
+            
             params["AdjuntosFacturasNotasCompra"] = this._global.AdjuntosFacturasNotasCompra;
             try { params["AdjuntosFacturasNotasCompraSize"] = Object(this._global.AdjuntosFacturasNotasCompra).currentFiles.length; } catch (e) { params["AdjuntosFacturasNotasCompraSize"] = 0; };
 

@@ -102,7 +102,8 @@ AdjuntosFotosModeloSerie = ?,
 AdjuntosFacturasRepuestos = ?,
 AdjuntosOtros = ?,
 StatusReporte = 'Orden de Servicio',
-SubStatusReporte = ?
+SubStatusReporte = ?,
+StatusCambioFisico = ''
 where id = ?
 
 ")) {

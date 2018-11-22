@@ -199,6 +199,8 @@ export class GlobalService implements CanActivate{
                 "Status": "",
                 "StatusReporte": "",
                 "StatusMovilidad": "",
+                "StatusCambioFisico": "",
+                "StatusCostoLanded": "",
                 "Subcategoria": "",
                 "Tipo": "",
                 "TipoCaso": "",
@@ -571,6 +573,53 @@ export class GlobalService implements CanActivate{
             }
         });
     }
+    //cambioStatusCostoLanded
+    evaluaCostoLanded(id) {
+
+        var aprobacion = '';
+
+        swal({
+            title: 'Cambio Físico - Costo landed #Reporte: '+id,
+            html: `
+                <select id='aprobacioncambio' class="form-control form-control-sm" >
+                   <option value="" hidden>Aprobación</option>
+                   <option value="Aprobado">Aprobado</option>
+                   <option value="Rechazado">Rechazado</option>
+                   <option value="Pendiente">Pendiente</option>
+                </select>`,
+            showConfirmButton: true,
+            confirmButtonText: 'Confirmar',
+            showCancelButton: true,
+            cancelButtonText: 'Cancelar',
+            customClass: 'swal2-overflow',
+
+        }).then((result) => {
+            if (result.value) {
+
+                aprobacion = String($('#aprobacioncambio').val());
+                console.log(aprobacion);
+
+                swal({
+                    title: 'Confirmar cambio de status',
+                    text: 'Se enviará notificación al Distribuidor en caso de confirmar...',
+                    showConfirmButton: true,
+                    confirmButtonText: 'Confirmar',
+                    showCancelButton: true,
+                    cancelButtonText: 'Cancelar',
+                    customClass: 'swal2-overflow',
+
+                }).then((result) => {
+                    if (result.value) {
+                        this.cambioStatusCostoLanded(id, aprobacion);
+                        //Registro de notificación
+                        this.notificaciones.modulo = "/cambio-estatus-costolanded";
+                        this.notificaciones.descripcion = "El costo landed del cambio físico del reporte No. " + id + " ha sido " + aprobacion;
+                        this.registrarNotificacion(id);
+                    }
+                });
+            }
+        });
+    }
 
     evaluaCambioFisico(id) {
 
@@ -818,6 +867,50 @@ export class GlobalService implements CanActivate{
 
     }
 
+    cambioStatusCostoLanded(id, aprobacion = null) {
+        console.log('enviando a cds');
+        console.log(id);
+        console.log(aprobacion);
+
+        var params = {};
+        params['IDReporte'] = id;
+        params['StatusCambioFisico'] = aprobacion;
+
+        this.appstatus.loading = true;
+
+        this._httpService.postJSON(params, 'administracion/set-status-costolanded.php')
+            .subscribe(
+            data => {
+                console.log('data');
+                console.log(data);
+
+                this.appstatus.loading = false;
+
+                if (data.res == 'ok') {
+
+                    this.cambiosFisicosXAutorizar.recientes = this.parseJSON(data.reportes);
+                    console.log('cambios fisicos por autorizar');
+                    console.log(this.cambiosFisicosXAutorizar.recientes);
+
+                    swal('¡Guardado!', 'Se ha enviado una notificacion al Distribuidor.', 'success');
+
+
+                } else if (data.res == 'error') {
+
+                    // this.appstatus.mensaje = data.msg;
+                    swal('¡Oops!', 'Hubo un error en el envío, por favor intenta de nuevo. ' + data.msg, 'error');
+                }
+
+            },
+            error => {
+                //alert(error);
+                swal('¡Oops!', 'Hubo un error en el envío, por favor intenta de nuevo. ' + error, 'error');
+            },
+            () => console.log('termino submit')
+            );
+
+    }
+
 
     adjuntarOtraFactura() {
         this.adjuntos.FacturasNotasCompra.push('1');
@@ -916,6 +1009,8 @@ export class GlobalService implements CanActivate{
                 "Status": "",
                 "StatusReporte": "",
                 "StatusMovilidad": "",
+                "StatusCambioFisico": "",
+                "StatusCostoLanded": "",
                 "Subcategoria": "",
                 "Tipo": "",
                 "TipoCaso": "",

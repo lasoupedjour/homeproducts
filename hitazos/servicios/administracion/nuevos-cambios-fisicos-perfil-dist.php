@@ -23,14 +23,15 @@ $res = array();
 $res['res'] = 'ok';
 
 $q = mysql_query("
-SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
-FROM reportes, clientes
+SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
+FROM reportes, clientes, centros
 where clientes.id = reportes.IDCliente
+and centros.id = reportes.IDCentro
 and (reportes.Distribuidor = '".$arre["Distribuidor"]."'
 or reportes.Distribuidor = '".$arre["NombreDistribuidor"]."')
 and StatusReporte = 'Orden de Servicio'
 and TipoReclamoDiagnostico = 'Cambio'
-and CostoLanded = 0
+and (CostoLanded = 0 or StatusCostoLanded='Rechazado')
 and StatusCambioFisico='Aprobado'
 order by FechaRegistroReporte desc LIMIT 5;
 ") or die(mysql_error());
