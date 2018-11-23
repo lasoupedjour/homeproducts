@@ -59,40 +59,22 @@ on centros.idGrupotarifa = tarifas.idGrupoTarifa
 left join
 (select * from centros) as centros1
 on centros.idMaster = centros1.id
-where clientes.id = reportes.IDCliente and
-StatusReporte = 'Orden de Servicio'
+where clientes.id = reportes.IDCliente
+and StatusReporte = 'Orden de Servicio'
+and (reportes.Distribuidor='" . $arre["Nombre"] . "' or
+reportes.Distribuidor='" . $arre["CustomerID"] . "')
 :filtros
 order by FechaOrdenServicio desc;
           ";
 
 $filtroFecha  = "";
-$filtroCds    = "";
-$filtroCcat    = "";
-
-if ($cds!=""){
-  $filtroCds = " and reportes.IDCentro=$cds";
-}
 
 if($mes!=0 && $ano!=0){
   $filtroFecha = " and (FechaOrdenServicio >= '$fechaIni' and FechaOrdenServicio <= '$fechaFin')";
 }
 
-if ($categoria!=""){
-  $filtroCat = " and reportes.Categoria='$categoria'";
-}
-
-if($filtroCds!="" && $filtroFecha!="" && $filtroCat!=""){
-  $query = str_replace(":filtros", $filtroCds . $filtroFecha . $filtroCat, $query);
-}elseif($filtroCds!="" && $filtroFecha=="" && $filtroCcat==""){
-  $query = str_replace(":filtros", $filtroCds, $query);
-}elseif($filtroCds=="" && $filtroFecha!="" && $filtroCcat==""){
+if($filtroFecha!=""){
   $query = str_replace(":filtros", $filtroFecha, $query);
-}elseif($filtroCds=="" && $filtroFecha=="" && $filtroCcat!=""){
-  $query = str_replace(":filtros", $filtroCat, $query);
-}elseif($filtroCds!="" && $filtroFecha!="" && $filtroCcat==""){
-  $query = str_replace(":filtros", $filtroCds . $filtroFecha, $query);
-}elseif($filtroCds!="" && $filtroFecha=="" && $filtroCcat==""){
-  $query = str_replace(":filtros", $filtroCds . $filtroCcat, $query);
 }else{
   $query = str_replace(":filtros", "", $query);
 }

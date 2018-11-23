@@ -192,7 +192,7 @@ export class OrdenInicioComponent {
         this.MontoSubtotal = parseFloat(this._global.reporte.objreporte.MontoSubtotal);
         this.MontoIVA = parseFloat(this._global.reporte.objreporte.MontoIVA);
         this.MontoTotal = parseFloat(this._global.reporte.objreporte.MontoTotal);
-
+        try { this._global.AdjuntosFacturasNotasCompraArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosFacturasNotasCompra); } catch (e) { };
      }
 
      obtenerSubtipoServicio(){
@@ -364,6 +364,9 @@ export class OrdenInicioComponent {
             error => alert(error),
             () => console.log('termino submit')
             );
+
+            if(this._global.reporte.objreporte.MontoReparacion>0)
+              this.tiporeparacion.Valor = this._global.reporte.objreporte.MontoReparacion;
 
     }
 

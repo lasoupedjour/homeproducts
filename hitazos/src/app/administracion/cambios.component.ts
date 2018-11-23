@@ -248,7 +248,7 @@ export class CambiosComponent {
 
         this._global.appstatus.loading = true;
 
-        this.subscription = this._httpService.postJSON(params, 'administracion/filtrar-resumen-de-servicios.php')
+        this.subscription = this._httpService.postJSON(params, 'administracion/filtrar-resumen-de-cambios-dist.php')
             .subscribe(
             data => {
                 console.log('data');

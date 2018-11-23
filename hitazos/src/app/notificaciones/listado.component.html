@@ -26,13 +26,14 @@
              {{item.id}}
            </td>
            <td>
-             {{item.descripcion}}
+             <p [innerHTML]="item.descripcion"></p>
            </td>
            <td>
              {{item.timestampNF}}
            </td>
            <td>
-             <button (click)="this._global.seleccionarReporte(item.id_reporte, 'inicio/resumen/orden')" class="btn btn-sm">Seleccionar</button>
+             <button *ngIf="item.modulo=='/cambio-estatus-cambio-fisico-rechazado'" (click)="this._global.seleccionarReporte(item.id_reporte, 'registro-de-casos/orden-de-servicio/inicio')" class="btn btn-sm">Seleccionar</button>
+             <button *ngIf="item.modulo!='/cambio-estatus-cambio-fisico-rechazado'" (click)="this._global.seleccionarReporte(item.id_reporte, 'inicio/resumen/orden')" class="btn btn-sm">Seleccionar</button>
            </td>
          </tr>
 

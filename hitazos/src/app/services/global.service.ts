@@ -577,6 +577,7 @@ export class GlobalService implements CanActivate{
     evaluaCostoLanded(id) {
 
         var aprobacion = '';
+        var motivo_rechazo = '';
 
         swal({
             title: 'Cambio Físico - Costo landed #Reporte: '+id,
@@ -598,25 +599,65 @@ export class GlobalService implements CanActivate{
 
                 aprobacion = String($('#aprobacioncambio').val());
                 console.log(aprobacion);
+                /*
+                title: 'Motivo del rechazo',
+                html: 'Selecciona la fecha de entrega:<br><input id="datepicker">Costo:<br><input id="costo" class="w-100"><br>No. de guía:<br><input id="noguia" class="w-100">',
+                */
+                if (aprobacion== "Rechazado") {
+                    swal({
+                        title: 'Motivo del rechazo',
+                        html: '<textarea id="motivo_rechazo" ></textarea>',
+                        showConfirmButton: true,
+                        confirmButtonText: 'Confirmar',
+                        showCancelButton: true,
+                        cancelButtonText: 'Cancelar',
+                        customClass: 'swal2-overflow'
+                    }).then((result) => {
+                        if (result.value) {
+                            motivo_rechazo = String($('#motivo_rechazo').val());
 
-                swal({
-                    title: 'Confirmar cambio de status',
-                    text: 'Se enviará notificación al Distribuidor en caso de confirmar...',
-                    showConfirmButton: true,
-                    confirmButtonText: 'Confirmar',
-                    showCancelButton: true,
-                    cancelButtonText: 'Cancelar',
-                    customClass: 'swal2-overflow',
+                            swal({
+                              title: 'Confirmar cambio de status',
+                              text: 'Se enviará notificación al Distribuidor en caso de confirmar...',
+                              showConfirmButton: true,
+                              confirmButtonText: 'Confirmar',
+                              showCancelButton: true,
+                              cancelButtonText: 'Cancelar',
+                              customClass: 'swal2-overflow',
 
-                }).then((result) => {
-                    if (result.value) {
-                        this.cambioStatusCostoLanded(id, aprobacion);
-                        //Registro de notificación
-                        this.notificaciones.modulo = "/cambio-estatus-costolanded";
-                        this.notificaciones.descripcion = "El costo landed del cambio físico del reporte No. " + id + " ha sido " + aprobacion;
-                        this.registrarNotificacion(id);
-                    }
-                });
+                            }).then((result) => {
+                                if (result.value) {
+                                  this.cambioStatusCostoLanded(id, aprobacion);
+                                  //Registro de notificación
+                                  this.notificaciones.modulo = "/cambio-estatus-costolanded-rechazado";
+                                  this.notificaciones.descripcion = "El costo landed del cambio físico del reporte No. " + id + " ha sido rechazado.<br /><br />Motivo: " + motivo_rechazo;
+                                  this.registrarNotificacion(id);
+                                }
+                            });
+
+
+                        }
+                    });
+                }else{
+                  swal({
+                      title: 'Confirmar cambio de status',
+                      text: 'Se enviará notificación al Distribuidor en caso de confirmar...',
+                      showConfirmButton: true,
+                      confirmButtonText: 'Confirmar',
+                      showCancelButton: true,
+                      cancelButtonText: 'Cancelar',
+                      customClass: 'swal2-overflow',
+
+                  }).then((result) => {
+                      if (result.value) {
+                          this.cambioStatusCostoLanded(id, aprobacion);
+                          //Registro de notificación
+                          this.notificaciones.modulo = "/cambio-estatus-costolanded";
+                          this.notificaciones.descripcion = "El costo landed del cambio físico del reporte No. " + id + " ha sido " + aprobacion;
+                          this.registrarNotificacion(id);
+                      }
+                  });
+                }
             }
         });
     }
@@ -624,7 +665,8 @@ export class GlobalService implements CanActivate{
     evaluaCambioFisico(id) {
 
         var aprobacion = '';
-
+        var motivo_rechazo = '';
+        
         swal({
             title: 'Cambio Físico #Reporte: '+id,
             html: `
@@ -645,27 +687,65 @@ export class GlobalService implements CanActivate{
 
                 aprobacion = String($('#aprobacioncambio').val());
                 console.log(aprobacion);
+                /*
+                title: 'Motivo del rechazo',
+                html: 'Selecciona la fecha de entrega:<br><input id="datepicker">Costo:<br><input id="costo" class="w-100"><br>No. de guía:<br><input id="noguia" class="w-100">',
+                */
+                if (aprobacion== "Rechazado") {
+                    swal({
+                        title: 'Motivo del rechazo',
+                        html: '<textarea id="motivo_rechazo" ></textarea>',
+                        showConfirmButton: true,
+                        confirmButtonText: 'Confirmar',
+                        showCancelButton: true,
+                        cancelButtonText: 'Cancelar',
+                        customClass: 'swal2-overflow'
+                    }).then((result) => {
+                        if (result.value) {
+                            motivo_rechazo = String($('#motivo_rechazo').val());
 
-                swal({
-                    title: 'Confirmar cambio de status',
-                    text: 'Se enviará notificación al CDS en caso de confirmar...',
-                    showConfirmButton: true,
-                    confirmButtonText: 'Confirmar',
-                    showCancelButton: true,
-                    cancelButtonText: 'Cancelar',
-                    customClass: 'swal2-overflow',
+                            swal({
+                              title: 'Confirmar cambio de status',
+                              text: 'Se enviará notificación al CDS en caso de confirmar...',
+                              showConfirmButton: true,
+                              confirmButtonText: 'Confirmar',
+                              showCancelButton: true,
+                              cancelButtonText: 'Cancelar',
+                              customClass: 'swal2-overflow',
 
-                }).then((result) => {
-                    if (result.value) {
+                            }).then((result) => {
+                                if (result.value) {
+                                  this.cambioStatusCambioFisico(id, aprobacion);
+                                  //Registro de notificación
+                                  this.notificaciones.modulo = "/cambio-estatus-cambio-fisico-rechazado";
+                                  this.notificaciones.descripcion = "El cambio físico del reporte No. " + id + " ha sido rechazado.<br /><br />Motivo: " + motivo_rechazo;
+                                  this.registrarNotificacion(id);
+                                }
+                            });
+
+
+                        }
+                    });
+                }else{
+                  swal({
+                      title: 'Confirmar cambio de status',
+                      text: 'Se enviará notificación al CDS en caso de confirmar...',
+                      showConfirmButton: true,
+                      confirmButtonText: 'Confirmar',
+                      showCancelButton: true,
+                      cancelButtonText: 'Cancelar',
+                      customClass: 'swal2-overflow',
+
+                  }).then((result) => {
+                      if (result.value) {
                         this.cambioStatusCambioFisico(id, aprobacion);
                         //Registro de notificación
                         this.notificaciones.modulo = "/cambio-estatus-cambio-fisico";
                         this.notificaciones.descripcion = "El cambio físico del reporte No. " + id + " ha sido " + aprobacion;
                         this.registrarNotificacion(id);
-                    }
-                });
-
-
+                      }
+                  });
+                }
             }
         });
     }
