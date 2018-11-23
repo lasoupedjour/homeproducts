@@ -183,12 +183,13 @@ if(!$arre['Update']){
 	TipoRevision = ?,
 	IDTarifas = ?,
 	StatusMovilidad = ?,
+  MontoMovilizacion = ?,
 	FechaRevision = ?,
 	Descripcion = ?
 	where id = ?
 
 	")) {
-		$stmt->bind_param("ssssssssssssssssdsssd",
+		$stmt->bind_param("ssssssssssssssssdsdssd",
 
 		$arre['TipoCaso'],
 		$arre['Categoria'],
@@ -208,6 +209,7 @@ if(!$arre['Update']){
 		$arre['TipoRevision'],
 		$IDTarifas,
 		utf8_decode($StatusMovilidad),
+    $arre['CostoKilometraje'],
 		$FechaRevision,
 		$arre['Descripcion'],
 		$arre['IDReporte']

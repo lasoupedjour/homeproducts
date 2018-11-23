@@ -349,7 +349,7 @@
       </div>
     </div>
 
-    <form class="formulario formularioRegistro my-3" name="formulariocambiofisico" [formGroup]="adjuntosCambioFisicoForm" (ngSubmit)="submitAdjuntosCambioFisico()" *ngIf="this._global.reporte.objreporte.StatusCambioFisico=='Aprobado' && this._global.reporte.objreporte.CostoLanded>0 && this._global.reporte.objreporte.StatusCostoLanded=='Aprobado'">
+    <form class="formulario formularioRegistro my-3" name="formulariocambiofisico" [formGroup]="adjuntosCambioFisicoForm" (ngSubmit)="submitAdjuntosCambioFisico()" *ngIf="this._global.reporte.objreporte.StatusCambioFisico=='Aprobado' && this._global.reporte.objreporte.StatusCostoLanded=='Aprobado'">
     <div class="row" *ngIf="this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio'">
 
       <div class="col-sm-4 mb-5">
