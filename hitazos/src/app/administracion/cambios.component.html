@@ -10,19 +10,13 @@
 <div class="container fM2 menuadmin">
   <div class="row">
 
-    <div class="offset-sm-4  col-sm-2 text-center">
-      <a routerLink="/administracion/inicio/">Resumen de Servicios</a>
-    </div>
-    <!--div class="col-sm-2 text-center active">
+    <div class="offset-sm-8 col-sm-2 text-center active" *ngIf="this._global.user.nivel=='distribuidor'">
       <a routerLink="/administracion/cambios/">Cambios</a>
-    </div-->
-    <div class="col-sm-2 text-center">
-      <a routerLink="/administracion/resumen-de-pagos/">Resumen de Pagos</a>
     </div>
     <!--<div class="col-sm-2 text-center">
       <a routerLink="/administracion/servicios-red/">Servicios Red</a>
     </div>-->
-    <div class="col-sm-2 text-center">
+    <div class="col-sm-2 text-center" *ngIf="this._global.user.nivel=='distribuidor'">
       <a routerLink="/administracion/historial-de-pagos/">Historial de Pagos</a>
     </div>
   </div>
@@ -80,23 +74,7 @@
    </div>
    <form  name="formulariofiltros" [formGroup]="filterForm" >
    <div class="row mt-3">
-     <div class="col-2 text-right">
-       <select class="form-control form-control-sm" formControlName="Pais" (change)="changePais()">
-         <option value="" hidden="">País</option>
-         <option *ngFor="let item of _global.paises;" value="{{item.Pais}}">{{item.Pais}}</option>
-       </select>
-     </div>
-     <div class="col-2 text-right">
-       <select class="form-control form-control-sm" formControlName="Master" id="master" (change)="changeMaster()">
-         <option value="" hidden>Master</option>
-       </select>
-     </div>
-     <div class="col-2 text-right">
-       <select class="form-control form-control-sm" formControlName="Cds" id="centros">
-         <option value="" hidden>CDS</option>
-       </select>
-     </div>
-     <div class="col-2 text-right">
+     <div class="offset-sm-6 col-2 text-right">
        <select class="form-control form-control-sm" formControlName="Ano">
          <option value="0">Año</option>
          <option value="2018">2018</option>

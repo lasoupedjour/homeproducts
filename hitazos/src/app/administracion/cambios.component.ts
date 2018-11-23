@@ -169,7 +169,7 @@ export class CambiosComponent {
             () => console.log('termino submit')
             );
     }
-    
+
     precargaPaises() {
 
         var params = {};
@@ -241,7 +241,8 @@ export class CambiosComponent {
     filtrarReporte() {
 
         var params = {};
-        params['cds']   = this.filterForm.controls.Cds.value;
+        params['Nombre']   = this._global.user.nombre;
+        params['CustomerID']   = this._global.user.CustomerID;
         params['mes']   = this.filterForm.controls.Mes.value;
         params['ano']   = this.filterForm.controls.Ano.value;
 

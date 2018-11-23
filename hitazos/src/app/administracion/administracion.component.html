@@ -6,25 +6,18 @@
   </div>
 </div-->
 
-
 <div class="container fM2 menuadmin">
   <div class="row">
 
-    <div class="offset-sm-4  col-sm-2 text-center active">
+    <div class="offset-sm-8  col-sm-2 text-center active" *ngIf="this._global.user.nivel!='distribuidor'">
       <a routerLink="/administracion/inicio/">Resumen de Servicios</a>
     </div>
-    <!--div class="col-sm-2 text-center">
-      <a routerLink="/administracion/cambios/">Cambios</a>
-    </div-->
-    <div class="col-sm-2 text-center">
+    <div class="col-sm-2 text-center" *ngIf="this._global.user.nivel!='distribuidor'">
       <a routerLink="/administracion/resumen-de-pagos/">Resumen de Pagos</a>
     </div>
     <!--<div class="col-sm-2 text-center">
       <a routerLink="/administracion/servicios-red/">Servicios Red</a>
     </div>-->
-    <div class="col-sm-2 text-center">
-      <a routerLink="/administracion/historial-de-pagos/">Historial de Pagos</a>
-    </div>
   </div>
 </div>
 
