@@ -35,7 +35,7 @@ if($arre["nivel"] == "administrador" || $arre["nivel"] == "MKT"){
 if($arre["IDDistribuidor"]>0){
   $query = "
             SELECT id, Nombre, Ciudad from centros
-            where Pais = '".$arre['Pais']."' order by Nombre asc";
+            where Pais = '".$arre['Pais']."' and IDMaster=0 order by Nombre asc";
 }
 
 $q = mysql_query($query) or die(mysql_error());

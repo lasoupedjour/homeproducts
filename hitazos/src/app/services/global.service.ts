@@ -606,7 +606,7 @@ export class GlobalService implements CanActivate{
                 if (aprobacion== "Rechazado") {
                     swal({
                         title: 'Motivo del rechazo',
-                        html: '<textarea id="motivo_rechazo" ></textarea>',
+                        html: '<textarea id="motivo_rechazo" class="w-100" rows="4"></textarea>',
                         showConfirmButton: true,
                         confirmButtonText: 'Confirmar',
                         showCancelButton: true,
@@ -666,7 +666,7 @@ export class GlobalService implements CanActivate{
 
         var aprobacion = '';
         var motivo_rechazo = '';
-        
+
         swal({
             title: 'Cambio Físico #Reporte: '+id,
             html: `
@@ -694,7 +694,7 @@ export class GlobalService implements CanActivate{
                 if (aprobacion== "Rechazado") {
                     swal({
                         title: 'Motivo del rechazo',
-                        html: '<textarea id="motivo_rechazo" ></textarea>',
+                        html: '<textarea id="motivo_rechazo" class="w-100" rows="4"></textarea>',
                         showConfirmButton: true,
                         confirmButtonText: 'Confirmar',
                         showCancelButton: true,

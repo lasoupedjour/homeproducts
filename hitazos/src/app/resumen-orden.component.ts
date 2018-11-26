@@ -200,7 +200,7 @@ export class ResumenOrdenComponent {
                     this._global.appstatus.mensaje = data.error;
                 }
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
     }
@@ -228,7 +228,7 @@ export class ResumenOrdenComponent {
                     this._global.appstatus.mensaje = data.error;
                 }
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
 
@@ -316,7 +316,7 @@ export class ResumenOrdenComponent {
               }
 
           },
-          error => alert(error),
+          error => console.log(error),
           () => console.log('termino submit')
           );
       } else {
@@ -353,14 +353,23 @@ export class ResumenOrdenComponent {
 
               this.distribuidorCambioFisicoForm.reset();
 
-              swal("Notificación Enviada","Se ha enviado una notificación al CDS y HP informando sobre el status de fecha de entrega del producto.", "success");
-
+              //swal("Notificación Enviada","Se ha enviado una notificación al CDS y HP informando sobre el status de fecha de entrega del producto.", "success");
+              swal({
+                  title: 'Notificación Enviada',
+                  text: 'Se ha enviado una notificación al CDS y HP informando sobre el status de fecha de entrega del producto.',
+                  type: 'success',
+                  showConfirmButton: true,
+                  confirmButtonText: 'Ok',
+                  customClass: 'swal2-overflow',
+              }).then((result) => {
+                  this._router.navigate(['inicio']);
+              });
 
             } else if (data.res == 'error') {
                 this._global.appstatus.mensaje = data.error;
             }
           },
-          error => alert(error),
+          error => console.log(error),
           () => console.log('termino submit')
         );
       } else {
@@ -415,7 +424,7 @@ export class ResumenOrdenComponent {
                 this._global.appstatus.mensaje = data.error;
             }
           },
-          error => alert(error),
+          error => console.log(error),
           () => console.log('termino submit')
         );
       } else {

@@ -545,9 +545,8 @@
 
 
              <th>Días Transcurridos</th>
+             <th>Status CDs</th>
              <th>Status Costo Landed</th>
-
-             <th>Status</th>
 
 
              <!--th>Acción</th--->
@@ -592,10 +591,10 @@
                {{this._global.diasTranscurridos(item.FechaRegistroReporte)}}
              </td>
              <td>
-               {{item.StatusCostoLanded}}
+               {{item.StatusCambioFisico}}
              </td>
              <td>
-               {{item.StatusCambioFisico}}
+               {{item.StatusCostoLanded}}
              </td>
 
 
@@ -666,7 +665,8 @@
            <th>Aplica Garantía</th>
            <th>Días Transcurridos</th>
            <th>Proceso</th>
-           <th>Status</th>
+           <th>Status Reporte</th>
+           <th>Status CDs</th>
            <th>Selección</th>
          </tr>
 
@@ -707,6 +707,9 @@
              {{item.StatusReporte}}
            </td>
            <td>
+             Asignado
+           </td>
+           <td>
              Abierto
            </td>
            <td>
@@ -721,7 +724,7 @@
 
 
 
-   <div class="row mt-5 mb-2">
+   <div class="row mt-5 mb-2" *ngIf="this._global.user.nivel!='distribuidor'">
      <div class="col-8">
        <h3>Últimas Órdenes de Servicio Generadas</h3>
      </div>
@@ -753,7 +756,7 @@
    </div>
    </form>
 
-   <div class="row mb-3" *ngIf="_global.ordenesServicio.recientes[0]">
+   <div class="row mb-3" *ngIf="_global.ordenesServicio.recientes[0] && this._global.user.nivel!='distribuidor'">
      <div class="col-12">
 
        <table class="table table-striped table-bordered">

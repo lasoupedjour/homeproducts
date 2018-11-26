@@ -192,7 +192,11 @@ export class OrdenInicioComponent {
         this.MontoSubtotal = parseFloat(this._global.reporte.objreporte.MontoSubtotal);
         this.MontoIVA = parseFloat(this._global.reporte.objreporte.MontoIVA);
         this.MontoTotal = parseFloat(this._global.reporte.objreporte.MontoTotal);
+
         try { this._global.AdjuntosFacturasNotasCompraArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosFacturasNotasCompra); } catch (e) { };
+        try { this._global.AdjuntosFotosModeloSerieArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosFotosModeloSerie); } catch (e) { };
+        try { this._global.AdjuntosFacturasRepuestosArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosFacturasRepuestos); } catch (e) { };
+        try { this._global.AdjuntosOtrosArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosOtros); } catch (e) { };
      }
 
      obtenerSubtipoServicio(){
@@ -217,7 +221,7 @@ export class OrdenInicioComponent {
                //console.log("fichas");
                //console.log(this.props.fichas);
            },
-           error => alert(error),
+           error => console.log(error),
            () => console.log('termino submit')
            );
      }
@@ -283,7 +287,7 @@ export class OrdenInicioComponent {
                     this._global.appstatus.mensaje = data.error;
                 }
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
     }
@@ -321,7 +325,7 @@ export class OrdenInicioComponent {
                     this._global.appstatus.mensaje = data.error;
                 }
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
 
@@ -361,12 +365,12 @@ export class OrdenInicioComponent {
                     this._global.appstatus.mensaje = data.error;
                 }
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
 
-            if(this._global.reporte.objreporte.MontoReparacion>0)
-              this.tiporeparacion.Valor = this._global.reporte.objreporte.MontoReparacion;
+            if(parseFloat(this._global.reporte.objreporte.MontoReparacion)>0)
+              this.tiporeparacion.Valor = parseFloat(this._global.reporte.objreporte.MontoReparacion);
 
     }
 
@@ -603,7 +607,7 @@ export class OrdenInicioComponent {
                   }
 
               },
-              error => alert(error),
+              error => console.log(error),
               () => console.log('termino submit')
               );
 
@@ -614,7 +618,31 @@ export class OrdenInicioComponent {
 
     }
 
-
+    prevAttach(item) {
+        var tipo = '';
+        var html = '';
+        console.log(item);
+        if (item.includes('.jpg') || item.includes('.jpeg') || item.includes('.png')) {
+            html = `
+              <a class="img" href="${this._global.base}orden-de-servicio/uploads-ordenes/${item}" target="_blank" title="${item}">
+                <img src="${this._global.base}orden-de-servicio/uploads-ordenes/${item}" >
+              </a>
+            `;
+        } else if (item.includes('.pdf')) {
+            html = `
+              <a class="pdf" href="${this._global.base}orden-de-servicio/uploads-ordenes/${item}" target="_blank" title="${item}">
+                <i class="fa fa-file-pdf"></i>
+              </a>
+            `;
+        } else if (item.includes('.mp4') || item.includes('.mov') || item.includes('.avi') || item.includes('.webm')) {
+            html = `
+              <a class="pdf" href="${this._global.base}orden-de-servicio/uploads-ordenes/${item}" target="_blank" title="${item}">
+                <i class="fa fa-file-video"></i>
+              </a>
+            `;
+        }
+        return html;
+    }
 
 
 

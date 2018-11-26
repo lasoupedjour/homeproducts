@@ -233,7 +233,12 @@
           </span>
         </label>
         <label>
-          <select class="form-control form-control-sm" formControlName="Distribuidor">
+          <select class="form-control form-control-sm" formControlName="Distribuidor" *ngIf="this._global.user.IDDistribuidor>0">
+            <option value="" hidden>Distribuidor</option>
+            <option *ngFor="let item of _global.distribuidores" [hidden]="item.IDDistribuidor!=this._global.user.CustomerID" value="{{item.IDDistribuidor}}">{{item.RazonSocial}}</option>
+
+          </select>
+          <select class="form-control form-control-sm" formControlName="Distribuidor" *ngIf="this._global.user.IDDistribuidor==0">
             <option value="" hidden>Distribuidor</option>
             <option *ngFor="let item of _global.distribuidores" value="{{item.IDDistribuidor}}">{{item.RazonSocial}}</option>
 
@@ -689,7 +694,7 @@
     <!-- <div class="col-6 text-right my-5 "  [hidden]="(this.genericForm.controls.TipoKilometraje.value == 'Más de 20 kilómetros')"> -->
     <div class="col-6 text-right my-5 "  >
       <button class="btn btn-sm btnicono" (click)="submitRegistro()"  *ngIf="!(this._global.user.IDDistribuidor>0)"> Siguiente <i class="fa fa-angle-right"></i></button>
-      <!-- <button class="btn btn-sm btnicono" (click)="submitRegistro()"  *ngIf="this._global.user.IDDistribuidor>0"> Registrar reporte <i class="fa fa-angle-right"></i></button> -->
+      <button class="btn btn-sm btnicono" (click)="submitRegistro()"  *ngIf="this._global.user.IDDistribuidor>0"> Registrar reporte <i class="fa fa-angle-right"></i></button>
     </div>
 
     <div class="col-6 text-right my-5 " [hidden]="!(this.genericForm.controls.TipoKilometraje.value == 'Más de 20 kilómetros')">

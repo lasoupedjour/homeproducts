@@ -41,7 +41,7 @@ require '../phpmailer/class.phpmailer.php';
 require "../baseurl.php";
 
 $q = mysqli_query($con, "
-select centros.Nombre as NombreCentro, centros.Direccion, centros.Pais, reportes.Modelo, reportes.NoFactura, clientes.RazonSocial, clientes.Nombre as NombreCliente, clientes.APaterno, clientes.AMaterno, reportes.FechaStatusCambioFisico
+select centros.Nombre as NombreCentro, centros.Direccion, centros.Pais, reportes.Modelo, reportes.NoFactura, clientes.RazonSocial, clientes.Nombre as NombreCliente, clientes.APaterno, clientes.AMaterno, reportes.FechaStatusCambioFisico, reportes.Categoria
 from reportes, centros, clientes
 where
 reportes.id = ".$arre["IDReporte"]." and
@@ -65,6 +65,11 @@ array_walk_recursive($row,function(&$value) use ($current_charset){
 // }
 
 $nombrecliente = $row["RazonSocial"].''.$row["NombreCliente"].' '.$row["APaterno"].' '.$row["AMaterno"];
+$categoria = $row["Categoria"];
+$imagenHeader = "logo-hp.jpg";
+if($categoria!="LINEA BLANCA"){
+  $imagenHeader = "logo-hpgroup.jpg";
+}
 //$nombrecliente = $row["NombreCliente"];
 setlocale(LC_TIME, 'es_ES');
 //$date=date_create($row["FechaStatusCambioFisico"]);
@@ -116,7 +121,7 @@ $fecha = strftime('%d de %B, %Y', strtotime($row["FechaStatusCambioFisico"]));
         <table align='center' border='0' cellpadding='0' cellspacing='0' width='600' style='border: 1px solid #DDDDDD; border-collapse: collapse; padding: 0px; width: 600px; margin: 0 auto; background-color: #ffffff;' class='breacktable'>
           <tr>
         	<td bgcolor='#fff' align='left' valign='middle' height='130'>
-        		<img src='$baseurl/email/cambios/logo-hp.jpg' width='400'  border='0' alt='Household Solutions' style='display:block;' />
+        		<img src='$baseurl/email/cambios/$imagenHeader' width='400'  border='0' alt='Household Solutions' style='display:block;' />
         	</td>
           </tr>
 
@@ -176,8 +181,9 @@ $fecha = strftime('%d de %B, %Y', strtotime($row["FechaStatusCambioFisico"]));
 
         require "../email-conf.php";
 
-        $mail->AddAddress('slazo@pautacreativa.com.mx');
+        //$mail->AddAddress('slazo@pautacreativa.com.mx');
         //$mail->AddBCC('lasoupedjour@gmail.com');
+        $mail->AddAddress('jguillen@pautacreativa.com.mx');
 
         $mail->Subject  = utf8_decode("Autorización de Cambio Físico");
 

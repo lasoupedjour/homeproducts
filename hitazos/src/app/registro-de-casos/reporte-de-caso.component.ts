@@ -1196,7 +1196,16 @@ export class ReporteCasoComponent {
 
                         } else {
                           if(parseInt(this._global.user.IDDistribuidor)>0){
-                            this._router.navigate(['inicio']);
+                            swal({
+                                title: 'Solicitud Enviada',
+                                text: 'Se ha enviado la solicitud.',
+                                type: 'success',
+                                showConfirmButton: true,
+                                confirmButtonText: 'Ok',
+                                customClass: 'swal2-overflow',
+                            }).then((result) => {
+                                this._router.navigate(['inicio']);
+                            });
                           }else{
                             this._router.navigate(['inicio/resumen']);
                           }
