@@ -348,7 +348,11 @@ export class ResumenOrdenComponent {
             if (data.res == 'ok') {
               console.log("pre notificación");
               this._global.notificaciones.modulo = "/inicio/resumen/orden";
-              this._global.notificaciones.descripcion = "Registro de fecha de entrega de cambio por distribuidor para la orden No. " + this._global.reporte.idreporte;
+              this._global.notificaciones.descripcion = "Registro de fecha de entrega de cambio y costo landed por distribuidor para la orden No. " + this._global.reporte.idreporte;
+              if(this._global.reporte.objreporte.StatusCostoLanded=='Rechazado'){
+                this._global.notificaciones.descripcion = "Actualización de de fecha de entrega de cambio y costo landed por distribuidor para la orden No. " + this._global.reporte.idreporte;
+              }
+
               this._global.registrarNotificacion(this._global.reporte.idreporte);
 
               this.distribuidorCambioFisicoForm.reset();

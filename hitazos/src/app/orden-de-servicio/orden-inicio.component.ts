@@ -536,6 +536,8 @@ export class OrdenInicioComponent {
       if(this.FacturasNotasCompraLenght>0 && this.FotosModeloSerieLenght>0){
         this.adjuntosValidos = true;
       }
+
+      alert(this.adjuntosValidos);
     }
 
 
@@ -543,7 +545,16 @@ export class OrdenInicioComponent {
 
     submitRegistro() {
         console.log('submit prevalidation submitRegistro()');
-        this.validarAdjuntos();
+        this._global.notificaciones.descripcion = "Se ha registrado una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
+        var mensaje = "";
+        if(this._global.reporte.objreporte.StatusCambioFisico!='Rechazado'){
+          mensaje = "Se ha generado exitosamente la nueva orden de servicio";
+          this.validarAdjuntos();
+        }else{
+          mensaje = "Se ha actualizado exitosamente la nueva orden de servicio";
+          this.adjuntosValidos = true;
+          this._global.notificaciones.descripcion = "Se han actualizado los costos de una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
+        }
 
         if (this.genericForm.valid && this.adjuntosValidos) {
 
@@ -568,7 +579,10 @@ export class OrdenInicioComponent {
 
             params["AdjuntosOtros"] = this._global.AdjuntosOtros;
             try { params["AdjuntosOtrosSize"] = Object(this._global.AdjuntosOtros).currentFiles.length; } catch (e) { params["AdjuntosOtrosSize"] = 0; };
+            params["Update"] = false;
 
+            if(this._global.reporte.objreporte.StatusCambioFisico=='Rechazado')
+              params["Update"] = true;
 
             console.log(params);
 
@@ -586,13 +600,18 @@ export class OrdenInicioComponent {
 
                       this._global.appstatus.loading = false;
 
-                      this._global.toast('ok', 'Se ha generado exitosamente la nueva orden de servicio', 'inicio/resumen/orden', true);
+                      if(this._global.reporte.objreporte.StatusCambioFisico=='Rechazado'){
+                        this._global.toast('ok', mensaje, 'inicio/resumen/orden', true);
+                      }else{
+                        this._global.toast('ok', mensaje, 'inicio/resumen/orden', true);
+                      }
+
 
 
                       if(this._global.reporte.objreporte.TipoReclamoDiagnostico=="Cambio"){//Si se trata de un cambnio físico se registra la notificación
                         //Registro de notificación
                         this._global.notificaciones.modulo = "/cambio-fisico";
-                        this._global.notificaciones.descripcion = "Se ha registrado una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
+
                         this._global.registrarNotificacion(this._global.reporte.idreporte);
                       }
 

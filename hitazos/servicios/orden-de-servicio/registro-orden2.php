@@ -24,49 +24,107 @@ $res = array();
 
 $res['res'] = 'ok';
 
-
+$update = $arre['Update'];
 //subir adjuntos
 
+if(!$update){
+  $AdjuntosFacturasNotasCompra = Array();
+  $AdjuntosFotosModeloSerie = Array();
+  $AdjuntosFacturasRepuestos = Array();
+  $AdjuntosOtros = Array();
 
-$AdjuntosFacturasNotasCompra = Array();
-$AdjuntosFotosModeloSerie = Array();
-$AdjuntosFacturasRepuestos = Array();
-$AdjuntosOtros = Array();
+  $AdjuntosFacturasNotasCompra = subirAdjuntos($arre['IDReporte'], 'AdjuntosFacturasNotasCompra', $arre['AdjuntosFacturasNotasCompraSize']);
+  $AdjuntosFotosModeloSerie = subirAdjuntos($arre['IDReporte'], 'AdjuntosFotosModeloSerie', $arre['AdjuntosFotosModeloSerieSize']);
+  $AdjuntosFacturasRepuestos = subirAdjuntos($arre['IDReporte'], 'AdjuntosFacturasRepuestos', $arre['AdjuntosFacturasRepuestosSize']);
+  $AdjuntosOtros = subirAdjuntos($arre['IDReporte'], 'AdjuntosOtros', $arre['AdjuntosOtrosSize']);
 
-$AdjuntosFacturasNotasCompra = subirAdjuntos($arre['IDReporte'], 'AdjuntosFacturasNotasCompra', $arre['AdjuntosFacturasNotasCompraSize']);
-$AdjuntosFotosModeloSerie = subirAdjuntos($arre['IDReporte'], 'AdjuntosFotosModeloSerie', $arre['AdjuntosFotosModeloSerieSize']);
-$AdjuntosFacturasRepuestos = subirAdjuntos($arre['IDReporte'], 'AdjuntosFacturasRepuestos', $arre['AdjuntosFacturasRepuestosSize']);
-$AdjuntosOtros = subirAdjuntos($arre['IDReporte'], 'AdjuntosOtros', $arre['AdjuntosOtrosSize']);
+  function subirAdjuntos($idreporte, $field, $size){
 
-function subirAdjuntos($idreporte, $field, $size){
+  	$arrebd = Array();
 
-	$arrebd = Array();
+  	for($i = 0; $i < $size; $i++){
 
-	for($i = 0; $i < $size; $i++){
+  		if(!empty($_FILES[$field.$i]['name'])){
+  			$uploadedFile = '';
+  			if(!empty($_FILES[$field.$i]["type"])){
+  				$fileName = $idreporte.'_'.time().'_'.$_FILES[$field.$i]['name'];
+  				$valid_extensions = array("jpeg", "jpg", "png", "pdf");
+  				$temporary = explode(".", $_FILES[$field.$i]["name"]);
+  				$file_extension = end($temporary);
+  				if((($_FILES["hard_file"]["type"] == "image/png") || ($_FILES[$field.$i]["type"] == "image/jpg") || ($_FILES[$field.$i]["type"] == "image/jpeg") || ($_FILES[$field.$i]["type"] == "image/png") || ($_FILES[$field.$i]["type"] == "application/pdf")) && in_array($file_extension, $valid_extensions)){
+  					$sourcePath = $_FILES[$field.$i]['tmp_name'];
+  					$targetPath = "uploads-ordenes/".$fileName;
+  					if(move_uploaded_file($sourcePath,$targetPath)){
+  						$uploadedFile = $fileName;
+  						array_push($arrebd, $uploadedFile);
+  					}
+  				}
+  			}
+  		}
 
-		if(!empty($_FILES[$field.$i]['name'])){
-			$uploadedFile = '';
-			if(!empty($_FILES[$field.$i]["type"])){
-				$fileName = $idreporte.'_'.time().'_'.$_FILES[$field.$i]['name'];
-				$valid_extensions = array("jpeg", "jpg", "png", "pdf");
-				$temporary = explode(".", $_FILES[$field.$i]["name"]);
-				$file_extension = end($temporary);
-				if((($_FILES["hard_file"]["type"] == "image/png") || ($_FILES[$field.$i]["type"] == "image/jpg") || ($_FILES[$field.$i]["type"] == "image/jpeg") || ($_FILES[$field.$i]["type"] == "image/png") || ($_FILES[$field.$i]["type"] == "application/pdf")) && in_array($file_extension, $valid_extensions)){
-					$sourcePath = $_FILES[$field.$i]['tmp_name'];
-					$targetPath = "uploads-ordenes/".$fileName;
-					if(move_uploaded_file($sourcePath,$targetPath)){
-						$uploadedFile = $fileName;
-						array_push($arrebd, $uploadedFile);
-					}
-				}
-			}
-		}
+  	}
 
-	}
+  	return $arrebd;
 
-	return $arrebd;
+  }
 
+  $query = "
+  update reportes set
+  HomeProductsGroupNo = ?,
+  NoFactura = ?,
+  FechaFactura = ?,
+  NoParteCausoDano = ?,
+  Resolucion = ?,
+  TipoReparacion = ?,
+  TipoMovilidad = ?,
+  FechaOrdenServicio = now(),
+  MontoRefacciones = ?,
+  MontoReparacion = ?,
+  MontoDespiece = ?,
+  MontoReciclaje = ?,
+  MontoOtro = ?,
+  MontoOtroDescripcion = ?,
+  MontoSubtotal = ?,
+  MontoIVA = ?,
+  MontoTotal = ?,
+  AdjuntosFacturasNotasCompra = ?,
+  AdjuntosFotosModeloSerie = ?,
+  AdjuntosFacturasRepuestos = ?,
+  AdjuntosOtros = ?,
+  StatusReporte = 'Orden de Servicio',
+  SubStatusReporte = ?,
+  StatusCambioFisico = ''
+  where id = ?
+  ";
+  $params = "sssssssdddddsdddsssssd";
+}else{
+  $query = "
+  update reportes set
+  HomeProductsGroupNo = ?,
+  NoFactura = ?,
+  FechaFactura = ?,
+  NoParteCausoDano = ?,
+  Resolucion = ?,
+  TipoReparacion = ?,
+  TipoMovilidad = ?,
+  FechaOrdenServicio = now(),
+  MontoRefacciones = ?,
+  MontoReparacion = ?,
+  MontoDespiece = ?,
+  MontoReciclaje = ?,
+  MontoOtro = ?,
+  MontoOtroDescripcion = ?,
+  MontoSubtotal = ?,
+  MontoIVA = ?,
+  MontoTotal = ?,
+  StatusReporte = 'Orden de Servicio',
+  SubStatusReporte = ?,
+  StatusCambioFisico = ''
+  where id = ?
+  ";
+  $params = "sssssssdddddsdddsd";
 }
+
 
 //actualizar
 //determinar substatus reporte ABIERTO o Cerrado
@@ -77,61 +135,56 @@ if($arre['TipoReclamoDiagnostico']=='Cambio'){
 
 $FechaFactura = urldecode($arre['FechaFactura']['year']).'-'.urldecode($arre['FechaFactura']['month']).'-'.urldecode($arre['FechaFactura']['day']);
 
-if ($stmt = $mysqli->prepare("
+if ($stmt = $mysqli->prepare($query)) {
+  if(!$update){
+    $stmt->bind_param($params,
+  	$arre['HomeProductsGroupNo'],
+  	$arre['NoFactura'],
+  	$FechaFactura,
+  	$arre['NoParteCausoDano'],
+  	$arre['Resolucion'],
+  	$arre['TipoReparacion'],
+  	$arre['TipoMovilidad'],
+  	$arre['MontoRefacciones'],
+  	$arre['MontoReparacion'],
+    $arre['MontoDespiece'],
+    $arre['MontoReciclaje'],
+    $arre['MontoOtro'],
+    $arre['MontoOtroDescripcion'],
+  	$arre['MontoSubtotal'],
+  	$arre['MontoIVA'],
+  	$arre['MontoTotal'],
+  	json_encode($AdjuntosFacturasNotasCompra),
+  	json_encode($AdjuntosFotosModeloSerie),
+  	json_encode($AdjuntosFacturasRepuestos),
+  	json_encode($AdjuntosOtros),
+    $SubStatusReporte,
+  	$arre['IDReporte']
 
-update reportes set
-HomeProductsGroupNo = ?,
-NoFactura = ?,
-FechaFactura = ?,
-NoParteCausoDano = ?,
-Resolucion = ?,
-TipoReparacion = ?,
-TipoMovilidad = ?,
-FechaOrdenServicio = now(),
-MontoRefacciones = ?,
-MontoReparacion = ?,
-MontoDespiece = ?,
-MontoReciclaje = ?,
-MontoOtro = ?,
-MontoOtroDescripcion = ?,
-MontoSubtotal = ?,
-MontoIVA = ?,
-MontoTotal = ?,
-AdjuntosFacturasNotasCompra = ?,
-AdjuntosFotosModeloSerie = ?,
-AdjuntosFacturasRepuestos = ?,
-AdjuntosOtros = ?,
-StatusReporte = 'Orden de Servicio',
-SubStatusReporte = ?,
-StatusCambioFisico = ''
-where id = ?
+  	);
+  }else{
+    $stmt->bind_param($params,
+  	$arre['HomeProductsGroupNo'],
+  	$arre['NoFactura'],
+  	$FechaFactura,
+  	$arre['NoParteCausoDano'],
+  	$arre['Resolucion'],
+  	$arre['TipoReparacion'],
+  	$arre['TipoMovilidad'],
+  	$arre['MontoRefacciones'],
+  	$arre['MontoReparacion'],
+    $arre['MontoDespiece'],
+    $arre['MontoReciclaje'],
+    $arre['MontoOtro'],
+    $arre['MontoOtroDescripcion'],
+  	$arre['MontoSubtotal'],
+  	$arre['MontoIVA'],
+  	$arre['MontoTotal'],
+    $SubStatusReporte,
+  	$arre['IDReporte']
+  	);
+  }
 
-")) {
-	$stmt->bind_param("sssssssdddddsdddsssssd",
-	$arre['HomeProductsGroupNo'],
-	$arre['NoFactura'],
-	$FechaFactura,
-	$arre['NoParteCausoDano'],
-	$arre['Resolucion'],
-	$arre['TipoReparacion'],
-	$arre['TipoMovilidad'],
-	$arre['MontoRefacciones'],
-	$arre['MontoReparacion'],
-  $arre['MontoDespiece'],
-  $arre['MontoReciclaje'],
-  $arre['MontoOtro'],
-  $arre['MontoOtroDescripcion'],
-	$arre['MontoSubtotal'],
-	$arre['MontoIVA'],
-	$arre['MontoTotal'],
-	json_encode($AdjuntosFacturasNotasCompra),
-	json_encode($AdjuntosFotosModeloSerie),
-	json_encode($AdjuntosFacturasRepuestos),
-	json_encode($AdjuntosOtros),
-  $SubStatusReporte,
-	$arre['IDReporte']
-
-	);
 	if($stmt->execute()){
 
 		$reporte = array();

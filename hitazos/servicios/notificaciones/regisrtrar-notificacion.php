@@ -129,7 +129,7 @@ if($modulo!="" &&
                 <br><br>
                 <font color='#00B4FF' face='arial, Verdana, Helvetica, sans-serif; ' style='font-family: arial, Verdana, Helvetica, sans-serif; font-size: 16px; line-height: 20px; color: #000;'>
                 <p style='text-align: left;'>
-                  <span style='color: black;'>$descripcion</strong>.
+                  <span style='color: black;'>" . $arre['descripcion'] . "</strong>.
                 </p>
                 <br>
                 <br>
