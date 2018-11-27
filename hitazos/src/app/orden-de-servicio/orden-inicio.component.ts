@@ -529,7 +529,7 @@ export class OrdenInicioComponent {
     validarAdjuntos(){
       try { this.FacturasNotasCompraLenght = Object(this._global.AdjuntosFacturasNotasCompra).currentFiles.length; } catch (e) { this.FacturasNotasCompraLenght = 0; }
       //try { this.FacturasRepuestosLenght = Object(this._global.AdjuntosFotosModeloSerie).currentFiles.length; } catch (e) { this.FacturasRepuestosLenght = 0; }
-      try { this.FotosModeloSerieLenght = Object(this._global.AdjuntosFacturasRepuestos).currentFiles.length; } catch (e) { this.FotosModeloSerieLenght = 0; }
+      try { this.FotosModeloSerieLenght = Object(this._global.AdjuntosFotosModeloSerie).currentFiles.length; } catch (e) { this.FotosModeloSerieLenght = 0; }
 
       this.adjuntosValidos = false;
 

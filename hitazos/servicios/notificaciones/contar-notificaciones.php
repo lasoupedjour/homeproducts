@@ -20,12 +20,18 @@ $json = $_POST['json'];
 $arre = json_decode($json, true);
 
 $id_usuario = utf8_decode(urldecode($arre['id_usuario']));
-if($id_usuario==17)
-  $query = "SELECT id FROM notificaciones where id_usuario<>17 and leida=0";
-else{
+$nivel= utf8_decode(urldecode($arre['nivel']));
+$IDDistribuidor = utf8_decode(urldecode($arre['IDDistribuidor']));
+
+if($nivel=='administrador'){
+  $query = "SELECT notificaciones.id FROM notificaciones,usuarios_admin where notificaciones.id_usuario=usuarios_admin.id and usuarios_admin.nivel <> 'administrador' and leida=0 order by notificaciones.id desc";
+}else if($nivel=='operador'){
   $query = "
             select n.id from
-            (select * from notificaciones where id_usuario=17 and leida=0) as n
+            (select notificaciones.* from notificaciones where leida=0) as n
+            join
+            (select * from usuarios_admin where (nivel<>'administrador')) as ua
+            on ua.id = n.id_usuario
             join
             (select * from reportes) as r
             on n.id_reporte = r.id
@@ -33,7 +39,25 @@ else{
             (select * from usuarios_admin where ID=$id_usuario) as u
             on r.idcentro = u.idcentro
             group by id
-          ";
+            order by id desc
+            ";
+}else if($nivel=='distribuidor'){
+  $res['nivel'] = $IDDistribuidor;
+  $query = "
+            select n.id from
+            (select notificaciones.* from notificaciones where leida=0) as n
+            join
+            (select * from usuarios_admin where (nivel<>'administrador')) as ua
+            on ua.id = n.id_usuario
+            join
+            (select * from reportes) as r
+            on n.id_reporte = r.id
+            join
+            (select * from distribuidores where id=$IDDistribuidor) as d
+            on r.Distribuidor = d.IDDistribuidor
+            group by id
+            order by id desc
+            ";
 }
 
 

@@ -1701,6 +1701,8 @@ export class GlobalService implements CanActivate{
     contarNotificaciones(){
       var params = {};
       params['id_usuario'] = this.user.id;
+      params['nivel'] = this.user.nivel;
+      params['IDDistribuidor'] = this.user.IDDistribuidor;
 
       console.log("contar notificaciones");
       this._httpService.postJSON(params, 'notificaciones/contar-notificaciones.php')
