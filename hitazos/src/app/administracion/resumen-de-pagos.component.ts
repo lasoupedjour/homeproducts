@@ -83,7 +83,7 @@ export class ResumenPagosComponent {
         this.setMesResumen();
         this.filterForm.controls.Cds.setValue('');
 
-        this.filtrarReporte();
+        //this.filtrarReporte();
 
     }
 
@@ -254,7 +254,9 @@ export class ResumenPagosComponent {
     }
 
     filtrarReporte() {
-
+      var centro = this.filterForm.controls.Cds.value;
+      
+      if(centro!="" || this._global.user.nivel=='administrador'){
         var params = {};
         params['cds']   = this.filterForm.controls.Cds.value;
         params['mes']   = this.filterForm.controls.Mes.value;
@@ -295,7 +297,14 @@ export class ResumenPagosComponent {
             error => alert(error),
             () => console.log('termino submit')
             );
-
+          }else{
+            swal({
+                title: 'CDs requerido',
+                text: 'Favor de seleccionar el CDs',
+                type: 'error',
+                customClass: 'swal2-overflow',
+            });
+          }
     }
 
     traeOrdenes() {

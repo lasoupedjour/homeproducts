@@ -7,6 +7,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { DataTableDirective } from 'angular-datatables-5';
 import { Subject } from 'rxjs';
 import { ISubscription } from "rxjs/Subscription";
+import swal from 'sweetalert2';
 
 @Component({
     selector: 'administracion',
@@ -113,7 +114,7 @@ export class AdministracionComponent {
         this.changePais();
         //this.traeOrdenes();
 
-        this.filtrarReporte();
+        //this.filtrarReporte();
 
     }
 
@@ -240,60 +241,71 @@ export class AdministracionComponent {
     }
 
     filtrarReporte() {
+        var centro = this.filterForm.controls.Cds.value;
 
-        var params = {};
-        params['cds']   = this.filterForm.controls.Cds.value;
-        params['mes']   = this.filterForm.controls.Mes.value;
-        params['ano']   = this.filterForm.controls.Ano.value;
-        params['categoria']   = this.filterForm.controls.Categoria.value;
+        if(centro!="" || this._global.user.nivel=='administrador'){
+          var params = {};
+          params['cds']   = this.filterForm.controls.Cds.value;
+          params['mes']   = this.filterForm.controls.Mes.value;
+          params['ano']   = this.filterForm.controls.Ano.value;
+          params['categoria']   = this.filterForm.controls.Categoria.value;
 
-        this._global.appstatus.loading = true;
+          this._global.appstatus.loading = true;
 
-        this.subscription = this._httpService.postJSON(params, 'administracion/filtrar-resumen-de-servicios.php')
-            .subscribe(
-            data => {
-                console.log('data');
-                console.log(data);
-                this._global.appstatus.loading = false;
+          this.subscription = this._httpService.postJSON(params, 'administracion/filtrar-resumen-de-servicios.php')
+              .subscribe(
+              data => {
+                  console.log('data');
+                  console.log(data);
+                  this._global.appstatus.loading = false;
 
-                if (data.res == 'ok') {
+                  if (data.res == 'ok') {
 
 
-                    this._global.ordenesServicio.recientes = this._global.parseJSON(data.reportes);
+                      this._global.ordenesServicio.recientes = this._global.parseJSON(data.reportes);
 
-                    this._global.separaFechaOrdenServicio();
+                      this._global.separaFechaOrdenServicio();
 
-                    this.calculaMontoTotal();
+                      this.calculaMontoTotal();
 
-                    try { this.statusPago = JSON.parse(data.statuspago).StatusPago; } catch (e) {
-                        this.statusPago = 'Por Enviar';
-                    }
-                    console.log('status pago');
-                    console.log(this.statusPago);
-                    /*console.log(this._global.busqueda.clientes);
+                      try { this.statusPago = JSON.parse(data.statuspago).StatusPago; } catch (e) {
+                          this.statusPago = 'Por Enviar';
+                      }
+                      console.log('status pago');
+                      console.log(this.statusPago);
+                      /*console.log(this._global.busqueda.clientes);
 
-                    if (data.clientes.length == 0) {
-                        this._global.appstatus.mensaje = 'No se encontraron clientes con estos datos.';
-                    }*/
+                      if (data.clientes.length == 0) {
+                          this._global.appstatus.mensaje = 'No se encontraron clientes con estos datos.';
+                      }*/
 
-                    this.rerender();
-                    setTimeout(() => {
-                        //this.trigger.destroy();
-                        this.trigger.next();
-                    });
+                      this.rerender();
+                      setTimeout(() => {
+                          //this.trigger.destroy();
+                          this.trigger.next();
+                      });
 
-                } else if (data.res = 'error') {
-                    this._global.appstatus.mensaje = data.error;
-                }
+                  } else if (data.res = 'error') {
+                      this._global.appstatus.mensaje = data.error;
+                  }
 
-                //console.log('data ordenes..', this._global.ordenesServicio.recientes.master);
+                  //console.log('data ordenes..', this._global.ordenesServicio.recientes.master);
 
-                //console.log("fichas");
-                //console.log(this.props.fichas);
-            },
-            error => alert(error),
-            () => console.log('termino submit')
-            );
+                  //console.log("fichas");
+                  //console.log(this.props.fichas);
+              },
+              error => alert(error),
+              () => console.log('termino submit')
+              );
+        }else{
+          swal({
+              title: 'CDs requerido',
+              text: 'Favor de seleccionar el CDs',
+              type: 'error',
+              customClass: 'swal2-overflow',
+          });
+        }
+
 
     }
 
