@@ -22,7 +22,7 @@ $res = array();
 
 $res['res'] = 'ok';
 $query  ="";
-
+/*
 if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
   if($arre["IDDistribuidor"]==0){
     $query  ="
@@ -59,6 +59,55 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
 
 if($arre["Cds"]!=""){
   $query = str_replace(":filtroCds", " and reportes.IDCentro=" . $arre["Cds"], $query);
+}else{
+  $query = str_replace(":filtroCds", "", $query);
+}
+*/
+
+if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
+  if($arre["IDDistribuidor"]>0){ //Si es un distribuidor
+    $query = "
+    select reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno , DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF from
+    (select * from reportes) as reportes
+    join
+    (select * from clientes) as clientes
+    on reportes.IDCliente = clientes.id
+    Where StatusReporte = 'Orden de Servicio'
+    and (reportes.IDOperadorDistribuidor = ".$arre["IDDistribuidor"]." or reportes.IDDistribuidor = ".$arre["IDDistribuidor"].")
+    order by FechaRegistroReporte desc LIMIT 5;
+    ";
+  }else{
+    $query = "
+    select reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno , DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF from
+    (select * from reportes) as reportes
+    join
+    (select * from clientes) as clientes
+    on reportes.IDCliente = clientes.id
+    Where StatusReporte = 'Orden de Servicio'
+    and reportes.IDCentro = ".$arre["IDCentro"]."
+    order by FechaRegistroReporte desc LIMIT 5;
+    ";
+  }
+}else{
+  $query = "
+  select reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno , DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF from
+  (select * from reportes) as reportes
+  join
+  (select * from clientes) as clientes
+  on reportes.IDCliente = clientes.id
+  join
+  (select * from centros) as centros
+  on reportes.IDCentro = centros.id
+  Where StatusReporte = 'Orden de Servicio'
+  :filtroCds
+  order by FechaRegistroReporte desc LIMIT 5;
+  ";
+}
+
+if($arre["Cds"]!=""){
+  $query = str_replace(":filtroCds", " and reportes.IDCentro=" . $arre["Cds"], $query);
+}elseif($arre["Master"]!=""){
+  $query = str_replace(":filtroCds", " and centros.IDMaster=" . $arre["Master"], $query);
 }else{
   $query = str_replace(":filtroCds", "", $query);
 }

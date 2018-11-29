@@ -453,6 +453,7 @@ export class InicioComponent {
         params["IDCentro"] = this._global.user.IDCentro;
         params["nivel"] = this._global.user.nivel;
         params["IDDistribuidor"] = this._global.user.IDDistribuidor;
+        params["Master"] = this.filterForm.controls.Master.value;
         params["Cds"] = this.filterForm.controls.Cds.value;
 
         this._global.appstatus.loading = true;
@@ -497,7 +498,8 @@ export class InicioComponent {
         params["IDCentro"] = this._global.user.IDCentro;
         params["IDDistribuidor"] = this._global.user.IDDistribuidor;
         params["nivel"] = this._global.user.nivel;
-        params["Cds"] = this.filterForm.controls.Cds.value;
+        params["Cds"] = this.filterOrdenesForm.controls.Cds.value;
+        params["Master"] = this.filterOrdenesForm.controls.Master.value;
 
         this._global.appstatus.loading = true;
         console.log('params nuevas ordenes');
