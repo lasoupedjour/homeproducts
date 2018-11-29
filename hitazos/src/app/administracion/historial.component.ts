@@ -4,6 +4,7 @@ import { GlobalService } from '../services/global.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
+import { DataTableDirective } from 'angular-datatables-5';
 import { Subject } from 'rxjs';
 import { ISubscription } from "rxjs/Subscription";
 
@@ -21,6 +22,9 @@ export class HistorialComponent {
   title = 'app';
 
   pagosForm: FormGroup;
+  dtOptions: any = {};
+  @ViewChild(DataTableDirective)
+  dtElement: DataTableDirective;
 
   private sub: any;
 
@@ -256,6 +260,19 @@ export class HistorialComponent {
 
     }
     //alert(this.nombreMes);
+  }
+
+  rerender(): void {
+      console.log('rerendering');
+      console.log(this.dtElement);
+      this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+          // Destroy the table first
+          dtInstance.destroy();
+          // Call the dtTrigger to rerender again
+          setTimeout(() => {
+              this.trigger.next();
+          });
+      });
   }
 
   filtrarReporte() {

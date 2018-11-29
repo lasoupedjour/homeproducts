@@ -312,6 +312,19 @@ export class ResumenPagosComponent {
       }
       //alert(this.nombreMes);
     }
+    
+    rerender(): void {
+        console.log('rerendering');
+        console.log(this.dtElement);
+        this.dtElement.dtInstance.then((dtInstance: DataTables.Api) => {
+            // Destroy the table first
+            dtInstance.destroy();
+            // Call the dtTrigger to rerender again
+            setTimeout(() => {
+                this.trigger.next();
+            });
+        });
+    }
 
     filtrarReporte() {
       if(this.filterForm.controls.Ano.value!='' && this.filterForm.controls.Mes.value!="0"){
