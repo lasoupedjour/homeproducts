@@ -228,7 +228,7 @@
 
     </div>
 
-  <div class="row">
+  <div class="row" [hidden]="this._global.reporte.objreporte.TipoReclamoDiagnostico=='Cambio' && this._global.user.nivel=='distribuidor'">
     <div class="col-sm-4">
       <div class="ml-3">
         <div class="sform mb-3">10. Tarifa</div>
@@ -261,14 +261,14 @@
 
 
     <!--Archivos adjuntos-->
-    <div class="row">
+    <div class="row" [hidden]="this._global.reporte.objreporte.TipoReclamoDiagnostico=='Cambio' && this._global.user.nivel=='distribuidor'">>
       <div class="col-sm-12 my-3">
         <h4 class="mt-3 naranja"><b>Archivos adjuntos</b></h4>
         <hr />
       </div>
     </div>
 
-    <div class="row">
+    <div class="row" [hidden]="this._global.reporte.objreporte.TipoReclamoDiagnostico=='Cambio' && this._global.user.nivel=='distribuidor'">>
       <div class="col-sm-4 mb-5">
         <div class="row">
           <div class="col-4 text-right">

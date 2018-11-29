@@ -55,24 +55,39 @@ if($arre['NecesitaAutorizacion'] == 1){
 }
 
 $IDOperadorCentro = 0;
+$IDCentro = 0;
 
 $IDOperadorDistribuidor = 0;
+$IDDistribuidor = 0;
 
-if($arre['IDDistribuidor']==0)
+if($arre['IDDistribuidor']==0){
+  $IDCentro = $arre['IDCentro'];
   $IDOperadorCentro = $arre['IDUsuario'];
-else{
+}else{//Si se trata de un distribuidor obtenemos el ID
+
+  $query = "
+  select id from distribuidores Where IDDistribuidor='" . $arre['Distribuidor'] . "';
+  ";
+
+  if ($result = $mysqli->query($query)) {
+    while ($row = $result->fetch_array()) {
+      $IDDistribuidor = $row["id"];
+    }
+  }
+
   $IDOperadorDistribuidor = $arre['IDDistribuidor'];
 }
 
 if(!$arre['Update']){
-	//insertar
+  //insertar
 	if ($stmt = $mysqli->prepare("
-	insert into reportes (IDCliente, IDCentro, IDOperadorDistribuidor, IDOperadorCentro, TipoCaso, Categoria, Subcategoria, Tipo, Modelo, CodigoSAP, FechaCompra, Sello, AplicaGarantia, Uso, Distribuidor, LugarCompra, Falla, FallaDescripcion, Comentarios, TipoRevision, IDTarifas, StatusMovilidad, MontoMovilizacion, FechaRevision, Descripcion, StatusReporte)
-	values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Reporte')
+	insert into reportes (IDCliente, IDCentro, IDDistribuidor, IDOperadorDistribuidor, IDOperadorCentro, TipoCaso, Categoria, Subcategoria, Tipo, Modelo, CodigoSAP, FechaCompra, Sello, AplicaGarantia, Uso, Distribuidor, LugarCompra, Falla, FallaDescripcion, Comentarios, TipoRevision, IDTarifas, StatusMovilidad, MontoMovilizacion, FechaRevision, Descripcion, StatusReporte)
+	values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Reporte')
 	")) {
-		$stmt->bind_param("ddddssssssssssssssssdsdss",
+		$stmt->bind_param("dddddssssssssssssssssdsdss",
 		$arre['IDCliente'],
-		$arre['IDCentro'],
+		$IDCentro,
+    $IDDistribuidor,
     $IDOperadorDistribuidor,
     $IDOperadorCentro,
     $arre['TipoCaso'],

@@ -136,7 +136,7 @@
    <div *ngIf="_global.ordenesServicio.recientes[0]">
      <div class="overflow">
 
-       <table datatable [dtOptions]="dtOptions" [dtTrigger]="trigger"  id="tabla" class="table table-striped table-bordered">
+       <table datatable [dtOptions]="this.dtOptions" [dtTrigger]="trigger"  id="tabla" class="table table-striped table-bordered">
            <thead>
            <tr>
              <th>Orden de Servicio</th>

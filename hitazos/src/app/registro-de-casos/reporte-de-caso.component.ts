@@ -182,10 +182,6 @@ export class ReporteCasoComponent {
             day: this.minDate.getDate()
         };
 
-
-        /*Si el usuario es un distgrobuidor*/
-        if(this._global.user.IDDistribuidor)
-          this.precargaCentros();
         /*precarga tarifas movilización*/
         //this.precargaTarifasMovilizacion();
 
@@ -254,7 +250,7 @@ export class ReporteCasoComponent {
 
     }
 
-    precargaCentros() {
+    precargaCentros(){
 
         var params = {};
 
@@ -284,6 +280,8 @@ export class ReporteCasoComponent {
 
                     if (data.centros.length == 0) {
                         this._global.appstatus.mensaje = 'No se encontraron datos con estas características.';
+                    }else{
+                      this.genericForm.controls.IDCentro.setValue("");
                     }
 
                 } else if (data.res = 'error') {
@@ -315,7 +313,7 @@ export class ReporteCasoComponent {
         this._httpService.postJSON(params, 'registro-de-casos/buscar-distribuidores.php')
             .subscribe(
             data => {
-                console.log('data');
+                console.log('data distribuidores>>>>>>>>>>>');
                 console.log(data);
                 this._global.appstatus.loading = false;
 
@@ -633,6 +631,10 @@ export class ReporteCasoComponent {
                             this.changeSubcategoria(Object(this._global.reporte.objreporte).Subcategoria);
                         }
                     }
+
+                    /*Si el usuario es un distgrobuidor*/
+                    if(this._global.user.IDDistribuidor)
+                      this.precargaCentros();
 
                 } else if (data.res = 'error') {
                     this._global.appstatus.mensaje = data.error;
@@ -1132,7 +1134,7 @@ export class ReporteCasoComponent {
 
     submitRegistro() {
         console.log('submit prevalidation');
-
+        //alert(this.genericForm.valid);
         if (this.genericForm.valid) {
 
             console.log('submit registro');
@@ -1195,7 +1197,7 @@ export class ReporteCasoComponent {
                             });
 
                         } else {
-                          if(parseInt(this._global.user.IDDistribuidor)>0){
+                          if(parseInt(this._global.user.IDDistribuidor)>0 && this.genericForm.controls.Categoria.value=='LINEA BLANCA'){
                             swal({
                                 title: 'Solicitud Enviada',
                                 text: 'Se ha enviado la solicitud.',

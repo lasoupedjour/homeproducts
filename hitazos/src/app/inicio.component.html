@@ -713,7 +713,9 @@
              Abierto
            </td>
            <td>
-             <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Seleccionar</button>
+             <button *ngIf="this._global.user.nivel!='distribuidor' || item.TipoReclamoDiagnostico!='Cambio'" (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Seleccionar</button>
+             <button *ngIf="item.TipoReclamoDiagnostico=='Cambio'" (click)="this._global.seleccionarReporte(item.id, '/inicio/resumen/orden')" class="btn btn-sm">Seleccionar</button>
+             <!--button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Seleccionar</button-->
            </td>
          </tr>
 

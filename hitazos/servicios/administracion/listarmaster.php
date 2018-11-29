@@ -26,14 +26,13 @@ $res['res'] = 'ok';
 if($arre["Nivel"] == "administrador" || $arre["Nivel"] == "MKT"){
   $query = "
   SELECT id, Nombre, Ciudad from centros
-  where Pais like '%".$arre["Pais"]."%'";
+  where Pais like '%".$arre["Pais"]."%' and IDMaster=0";
 }else{
   $query = "
   SELECT id, Nombre, Ciudad from centros
   where Pais like '%".$arre["Pais"]."%'
   and (IDMaster=0 and id = ".$arre["IDCentro"].")";
 }
-
 
 $query = utf8_encode($query);
 

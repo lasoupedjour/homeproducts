@@ -19,7 +19,7 @@
             <a class="nav-link" routerLink="/administracion/inicio" routerLinkActive="active">Administración</a>
           </li>
           <li class="nav-item text-center" [hidden]="this._global.user.id == ''" *ngIf="this._global.user.nivel=='distribuidor'">
-            <a class="nav-link" routerLink="/administracion/cambios" routerLinkActive="active">Administración</a>
+            <a class="nav-link" routerLink="/administracion/resumen-distribuidor" routerLinkActive="active">Administración</a>
           </li>
 
           <li class="nav-item text-center" [hidden]="this._global.user.id == ''">

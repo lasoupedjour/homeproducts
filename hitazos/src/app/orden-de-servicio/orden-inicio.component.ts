@@ -537,7 +537,7 @@ export class OrdenInicioComponent {
         this.adjuntosValidos = true;
       }
 
-      alert(this.adjuntosValidos);
+      //alert(this.adjuntosValidos);
     }
 
 

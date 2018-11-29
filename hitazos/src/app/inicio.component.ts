@@ -122,10 +122,11 @@ export class InicioComponent {
         //console.log(this.filterForm.controls.Pais.value);
         var params = {};
         params['Pais'] = this.filterForm.controls.Pais.value;
-        params['IDCentro'] = this._global.user.IDCentro;
         params['Nivel'] = this._global.user.nivel;
-        params['IDMaster'] = this._global.user.IDMaster;
-        params['IDGrupoTarifa'] = this._global.user.IDGrupoTarifa;
+        if(cmb=="")
+          params['IDMaster'] = $("#master").val();
+        else
+          params['IDMaster'] = $("#masterOrdenes").val();
 
         this._global.appstatus.loading = true;
 

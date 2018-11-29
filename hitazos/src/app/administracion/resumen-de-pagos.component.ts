@@ -4,6 +4,7 @@ import { GlobalService } from '../services/global.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
+import { DataTableDirective } from 'angular-datatables-5';
 import { Subject } from 'rxjs';
 import { ISubscription } from "rxjs/Subscription";
 
@@ -21,6 +22,9 @@ export class ResumenPagosComponent {
     title = 'app';
 
     pagosForm: FormGroup;
+    dtOptions: any = {};
+    @ViewChild(DataTableDirective)
+    dtElement: DataTableDirective;
 
     private sub: any;
 
@@ -28,8 +32,9 @@ export class ResumenPagosComponent {
     montoRefacciones = 0;
     montoTAMov = 0;
     montoFee = 0;
+    montoCambio = 0;
 
-    nombreMes = 'Agosto';
+    nombreMes = '';
 
     filterForm: FormGroup;
 
@@ -66,6 +71,58 @@ export class ResumenPagosComponent {
 
         this._global.clearMessages();
 
+        this.dtOptions = {
+            bInfo: false,
+            pageLength: 1,
+            scrollX: false,
+            paging: false,
+            ordering:  false,
+            searching: false,
+            language: {
+                "processing": "Procesando...",
+                "lengthMenu": "Mostrar _MENU_ registros",
+                "zeroRecords": "No se encontraron resultados",
+                "emptyTable": "Ningún dato disponible en esta tabla",
+                "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                "infoPostFix": "",
+                "search": "Buscar:",
+                "url": "",
+                "thousands": ",",
+                "loadingRecords": "Cargando...",
+                "paginate": {
+                    "first": "Primero",
+                    "last": "Último",
+                    "next": "Siguiente",
+                    "previous": "Anterior"
+                },
+                "aria": {
+                    "sortAscending": ": Activar para ordenar la columna de manera ascendente",
+                    "sortDescending": ": Activar para ordenar la columna de manera descendente"
+                }
+            },
+            // Declare the use of the extension in the dom parameter
+            dom: 'Bfrtip',
+            select: true,
+            // Configure the buttons
+            buttons: [
+                /*'columnsToggle',
+                'colvis',*/
+                'copy',
+                /*'print',*/
+                'excel',
+               /* {
+                    text: 'Some button',
+                    key: '1',
+                    action: function (e, dt, node, config) {
+                        alert('Button activated');
+                    }
+                }*/
+            ],
+            /*fixedColumns: true*/
+        };
+
         this.filterForm = this.formBuilder.group({
             Ano: [],
             Mes: [],
@@ -81,7 +138,11 @@ export class ResumenPagosComponent {
 
         this.precargaPaises();
         this.setMesResumen();
+        this.filterForm.controls.Master.setValue('');
         this.filterForm.controls.Cds.setValue('');
+        this.filterForm.controls.Categoria.setValue('');
+        this.filterForm.controls.Ano.setValue('');
+        this.filterForm.controls.Mes.setValue('0');
 
         //this.filtrarReporte();
 
@@ -155,39 +216,38 @@ export class ResumenPagosComponent {
     }
 
     precargaPaises() {
+      var params = {};
 
-        var params = {};
+      params['Pais'] = Object(this._global.user).Pais;
+      params['nivel'] = Object(this._global.user).nivel;
 
-        params['Pais'] = Object(this._global.user).Pais;
-        params['nivel'] = Object(this._global.user).nivel;
+      this._global.appstatus.loading = true;
 
-        this._global.appstatus.loading = true;
+      /*console.log('Precarga distribuidores');
+      console.log(params);*/
 
-        /*console.log('Precarga distribuidores');
-        console.log(params);*/
+      this._httpService.postJSON(params, 'precarga-paises.php')
+          .subscribe(
+          data => {
+              this._global.appstatus.loading = false;
 
-        this._httpService.postJSON(params, 'precarga-paises.php')
-            .subscribe(
-            data => {
-                this._global.appstatus.loading = false;
+              if (data.res == 'ok') {
 
-                if (data.res == 'ok') {
+                  this._global.paises = this._global.parseJSON(data.paises);
+                  this.filterForm.controls.Pais.setValue('');
+                  if (data.paises.length == 0) {
+                      this._global.appstatus.mensaje = 'No se encontraron datos con estas características.';
+                  }
 
-                    this._global.paises = this._global.parseJSON(data.paises);
+              } else if (data.res = 'error') {
 
-                    if (data.paises.length == 0) {
-                        this._global.appstatus.mensaje = 'No se encontraron datos con estas características.';
-                    }
+                  this._global.appstatus.mensaje = data.error;
 
-                } else if (data.res = 'error') {
-
-                    this._global.appstatus.mensaje = data.error;
-
-                }
-            },
-            error => alert(error),
-            () => console.log('termino submit')
-            );
+              }
+          },
+          error => alert(error),
+          () => console.log('termino submit')
+          );
 
     }
 
@@ -242,7 +302,7 @@ export class ResumenPagosComponent {
         case "10":
           this.nombreMes = "Octubre";
         break;
-        case "12":
+        case "11":
           this.nombreMes = "Noviembre";
         break;
         case "12":
@@ -254,53 +314,70 @@ export class ResumenPagosComponent {
     }
 
     filtrarReporte() {
-      var centro = this.filterForm.controls.Cds.value;
-      
-      if(centro!="" || this._global.user.nivel=='administrador'){
-        var params = {};
-        params['cds']   = this.filterForm.controls.Cds.value;
-        params['mes']   = this.filterForm.controls.Mes.value;
-        params['ano']   = this.filterForm.controls.Ano.value;
-        params['categoria']   = this.filterForm.controls.Categoria.value;
+      if(this.filterForm.controls.Ano.value!='' && this.filterForm.controls.Mes.value!="0"){
+        var centro = this.filterForm.controls.Cds.value;
 
-        this._global.appstatus.loading = true;
+        if(centro!="" || this._global.user.nivel=='administrador'){
+          var params = {};
+          params['cds']   = this.filterForm.controls.Cds.value;
+          params['mes']   = this.filterForm.controls.Mes.value;
+          params['ano']   = this.filterForm.controls.Ano.value;
+          params['categoria']   = this.filterForm.controls.Categoria.value;
+          params['IDCentro']   = this._global.user.IDCentro;
 
-        this.subscription = this._httpService.postJSON(params, 'administracion/filtrar-resumen-de-pagos.php')
-            .subscribe(
-            data => {
-                console.log('data PAGOS');
-                console.log(data);
-                this._global.appstatus.loading = false;
+          this._global.appstatus.loading = true;
 
-                this.montoRefacciones = data.MontoRefacciones;
-                this.montoTAMov = data.MontoTAMov;
-                this.montoFee = data.MontoFee;
-                this.montoTotal = data.MontoTotal;
+          this.subscription = this._httpService.postJSON(params, 'administracion/filtrar-resumen-de-pagos.php')
+              .subscribe(
+              data => {
+                  console.log('data PAGOS');
+                  console.log(data);
+                  this._global.appstatus.loading = false;
 
-                this.statusPago = '';
-                if(data.Pago.id){
-                  this.idPago = data.Pago.id;
-                  this.statusPago = data.Pago.StatusPago;
-                  this.comprobantePago = data.Pago.Comprobante;
-                  this.fechaRegistroPago = data.Pago.FechaRegistro;
-                  this.ano = params['ano'];
-                  this.mes = params['mes'];
-                  this.status = data.Pago.Status;
-                }
+                  this.montoRefacciones = data.MontoRefacciones;
+                  this.montoTAMov = data.MontoTAMov;
+                  this.montoFee = data.MontoFee;
+                  this.montoTotal = data.MontoTotal;
+                  this.montoCambio = data.MontoCambio;
 
-                console.log("statuspago", this.statusPago);
-                if(this.statusPago=="")
-                  this.statusPago = "Por Enviar";
+                  this.statusPago = '';
+                  if(data.Pago.id){
+                    this.idPago = data.Pago.id;
+                    this.statusPago = data.Pago.StatusPago;
+                    this.comprobantePago = data.Pago.Comprobante;
+                    this.fechaRegistroPago = data.Pago.FechaRegistro;
+                    this.ano = params['ano'];
+                    this.mes = params['mes'];
+                    this.status = data.Pago.Status;
+                  }
 
-                this.evaluaMes();
-            },
-            error => alert(error),
-            () => console.log('termino submit')
-            );
+                  console.log("statuspago", this.statusPago);
+                  if(this.statusPago=="")
+                    this.statusPago = "Por Enviar";
+
+                  this.evaluaMes();
+
+                  setTimeout(() => {
+                      //this.trigger.destroy();
+                      this.trigger.next();
+                      this.rerender();
+                  });
+              },
+              error => console.log(error),
+              () => console.log('termino submit')
+              );
+            }else{
+              swal({
+                  title: 'CDs requerido',
+                  text: 'Favor de seleccionar el CDs',
+                  type: 'error',
+                  customClass: 'swal2-overflow',
+              });
+            }
           }else{
             swal({
-                title: 'CDs requerido',
-                text: 'Favor de seleccionar el CDs',
+                title: 'Mes y año requeridos',
+                text: 'Favor de indicar el mes y año',
                 type: 'error',
                 customClass: 'swal2-overflow',
             });

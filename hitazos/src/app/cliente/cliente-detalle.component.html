@@ -108,7 +108,7 @@
             <th>Aplica Garantía</th>
             <th>Subestatus</th>
             <th>Status</th>
-            <th>Selección</th>
+            <th *ngIf="this._global.user.nivel!='distribuidor'">Selección</th>
           </tr>
 
           <tr *ngFor="let item of _global.reportesLevantadosCliente.recientes;">
@@ -147,7 +147,7 @@
             <td [innerHtml]="this.abiertoCerrado(item.StatusReporte)">
 
             </td>
-            <td>
+            <td *ngIf="this._global.user.nivel!='distribuidor'">
               <button (click)="this._global.seleccionarReporte(item.id)" class="btn btn-sm">Seleccionar</button>
             </td>
           </tr>

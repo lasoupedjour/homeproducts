@@ -57,17 +57,6 @@
   </div>
 
   <form *ngIf="status.paso == 1" class="formulario formularioRegistro my-3" name="formulariologin" [formGroup]="genericForm" (ngSubmit)="submitRegistro()">
-    <div class="row my-3" *ngIf="this._global.user.IDDistribuidor>0">
-      <div class="col-6">
-        <p>Elegir Centro de Servicio:</p>
-      </div>
-      <div class="col-6">
-        <select class="form-control form-control-sm" formControlName="IDCentro" id="idcentro" (change)="changeCentro()">
-          <option *ngFor="let item of _global.centros; let i = index" value="{{item.id}}">{{item.Nombre}} - {{item.Ciudad}}</option>
-        </select>
-      </div>
-    </div>
-
     <div class="row my-3">
       <div class="col-6">
         <p>Proporciona los datos para identificar el caso y generar el reporte:</p>
@@ -221,7 +210,12 @@
             </span>
           </label>
         </div>
-
+        <label *ngIf="this._global.user.IDDistribuidor>0 && this.genericForm.controls.Categoria.value=='LINEA BLANCA'">
+          <select class="form-control form-control-sm" formControlName="IDCentro" id="idcentro" (change)="changeCentro()">
+            <option value="">Centro de Servicio</option>
+            <option *ngFor="let item of _global.centros; let i = index" value="{{item.id}}">{{item.Nombre}} <label *ngIf="item.Ciudad!=''">- {{item.Ciudad}}</label><label *ngIf="item.Categoria!=''">- {{item.Categoria}}</label></option>
+          </select>
+        </label>
         <label>
           <select class="form-control form-control-sm" formControlName="Uso">
             <option value="" hidden="">Uso del producto</option>
@@ -693,8 +687,8 @@
     </div>
     <!-- <div class="col-6 text-right my-5 "  [hidden]="(this.genericForm.controls.TipoKilometraje.value == 'Más de 20 kilómetros')"> -->
     <div class="col-6 text-right my-5 "  >
-      <button class="btn btn-sm btnicono" (click)="submitRegistro()"  *ngIf="!(this._global.user.IDDistribuidor>0)"> Siguiente <i class="fa fa-angle-right"></i></button>
-      <button class="btn btn-sm btnicono" (click)="submitRegistro()"  *ngIf="this._global.user.IDDistribuidor>0"> Registrar reporte <i class="fa fa-angle-right"></i></button>
+      <button class="btn btn-sm btnicono" (click)="submitRegistro()"  *ngIf="!(this._global.user.IDDistribuidor>0) || this.genericForm.controls.Categoria.value=='MENAJE'"> Siguiente <i class="fa fa-angle-right"></i></button>
+      <button class="btn btn-sm btnicono" (click)="submitRegistro()"  *ngIf="this._global.user.IDDistribuidor>0 && this.genericForm.controls.Categoria.value=='LINEA BLANCA'"> Registrar reporte <i class="fa fa-angle-right"></i></button>
     </div>
 
     <div class="col-6 text-right my-5 " [hidden]="!(this.genericForm.controls.TipoKilometraje.value == 'Más de 20 kilómetros')">

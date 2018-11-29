@@ -27,6 +27,10 @@ $cds = $arre['cds'];
 $ano = $arre['ano'];
 $mes = $arre['mes'];
 $categoria = $arre['categoria'];
+$CustomerID = $arre['CustomerID'];
+$Nombre = $arre['Nombre'];
+$IDCentro = $arre['IDCentro'];
+$IDDistribuidor = $arre['IDDistribuidor'];
 /*
 $mesnext =
 if($mes)*/
@@ -50,7 +54,11 @@ $queryMontos = "
             MontoRefacciones as MontoRefacciones,
             MontoReparacion as MontoReparacion,
             MontoMovilizacion as MontoMovilizacion,
-            StatusReporte, FechaOrdenServicio, reportes.IDCentro, reportes.id
+            MontoDespiece as MontoDespiece,
+            MontoReciclaje as MontoReciclaje,
+            MontoOtro as MontoOtro,
+            CostoLanded as CostoLanded,
+            StatusReporte, FechaOrdenServicio, reportes.IDCentro, reportes.Categoria, reportes.Distribuidor, reportes.id
             from
             (select * from reportes) as reportes
             join
@@ -72,8 +80,8 @@ $queryMontos = "
 
 $queryFee = "
             select TarifaMensual, ImpuestoTarifaMensual,
-            StatusReporte, FechaOrdenServicio, reportes.IDCentro from
-            (select idcentro, StatusReporte, FechaOrdenServicio from reportes) as reportes
+            StatusReporte, FechaOrdenServicio, reportes.IDCentro, reportes.Categoria, reportes.Distribuidor from
+            (select idcentro, StatusReporte, FechaOrdenServicio, Categoria, Distribuidor from reportes) as reportes
             join
             (select id, idgrupotarifa from centros) as c
             on reportes.idcentro = c.id
@@ -87,6 +95,16 @@ $queryFee = "
 
 $filtroFecha  = "";
 $filtroCds    = "";
+$filtroCat    = "";
+$filtroDist   = "";
+
+if ($CustomerID!="" || $Nombre!=""){
+  $filtroDist = " and (reportes.Distribuidor='$CustomerID' or reportes.Distribuidor='$Nombre')";
+}
+
+if ($categoria!=""){
+  $filtroCat = " and reportes.Categoria='$categoria'";
+}
 
 if ($cds!=""){
   $filtroCds = " and reportes.IDCentro=$cds";
@@ -96,20 +114,58 @@ if($mes!=0 && $ano!=0){
   $filtroFecha = " and (FechaOrdenServicio >= '$fechaIni' and FechaOrdenServicio <= '$fechaFin')";
 }
 
-if($filtroCds!="" && $filtroFecha!=""){
-  $queryMontos = str_replace(":filtros", $filtroCds . $filtroFecha, $queryMontos);
-  $queryFee = str_replace(":filtros", $filtroCds . $filtroFecha, $queryFee);
-}elseif($filtroCds!="" && $filtroFecha==""){
-  $queryMontos = str_replace(":filtros", $filtroCds, $queryMontos);
-  $queryFee = str_replace(":filtros", $filtroCds, $queryFee);
-}elseif($filtroCds=="" && $filtroFecha!=""){
-  $queryMontos = str_replace(":filtros", $filtroFecha, $queryMontos);
-  $queryFee = str_replace(":filtros", $filtroFecha, $queryFee);
+if($filtroDist==""){
+  if($filtroCds!="" && $filtroFecha!="" && $filtroCat!=""){
+    $queryMontos = str_replace(":filtros", $filtroCat . $filtroCds . $filtroFecha, $queryMontos);
+    $queryFee = str_replace(":filtros", $filtroCat . $filtroCds . $filtroFecha, $queryFee);
+  }elseif($filtroCds!="" && $filtroFecha=="" && $filtroCat!=""){
+    $queryMontos = str_replace(":filtros", $filtroCat . $filtroCds, $queryMontos);
+    $queryFee = str_replace(":filtros", $filtroCat . $filtroCds, $queryFee);
+  }elseif($filtroCds=="" && $filtroFecha!="" && $filtroCat!=""){
+    $queryMontos = str_replace(":filtros", $filtroCat . $filtroFecha, $queryMontos);
+    $queryFee = str_replace(":filtros", $filtroCat . $filtroFecha, $queryFee);
+  }elseif($filtroCds!="" && $filtroFecha=="" && $filtroCat==""){
+    $queryMontos = str_replace(":filtros", $filtroCds, $queryMontos);
+    $queryFee = str_replace(":filtros", $filtroCds, $queryFee);
+  }elseif($filtroCds=="" && $filtroFecha!="" && $filtroCat==""){
+    $queryMontos = str_replace(":filtros", $filtroFecha, $queryMontos);
+    $queryFee = str_replace(":filtros", $filtroFecha, $queryFee);
+  }elseif($filtroCds=="" && $filtroFecha=="" && $filtroCat!=""){
+    $queryMontos = str_replace(":filtros", $filtroCat, $queryMontos);
+    $queryFee = str_replace(":filtros", $filtroCat, $queryFee);
+  }else{
+    $queryMontos = str_replace(":filtros", "", $queryMontos);
+    $queryFee = str_replace(":filtros", "", $queryFee);
+  }
 }else{
-  $queryMontos = str_replace(":filtros", "", $queryMontos);
-  $queryFee = str_replace(":filtros", "", $queryFee);
+  if($filtroDist!="" && $filtroFecha!="" && $filtroCat!=""){
+    $queryMontos = str_replace(":filtros", $filtroCat . $filtroDist . $filtroFecha, $queryMontos);
+    $queryFee = str_replace(":filtros", $filtroCat . $filtroDist . $filtroFecha, $queryFee);
+  }elseif($filtroDist!="" && $filtroFecha=="" && $filtroCat!=""){
+    $queryMontos = str_replace(":filtros", $filtroCat . $filtroDist, $queryMontos);
+    $queryFee = str_replace(":filtros", $filtroCat . $filtroDist, $queryFee);
+  }elseif($filtroDist=="" && $filtroFecha!="" && $filtroCat!=""){
+    $queryMontos = str_replace(":filtros", $filtroCat . $filtroFecha, $queryMontos);
+    $queryFee = str_replace(":filtros", $filtroCat . $filtroFecha, $queryFee);
+  }elseif($filtroCds!="" && $filtroFecha=="" && $filtroCat==""){
+    $queryMontos = str_replace(":filtros", $filtroCds, $queryMontos);
+    $queryFee = str_replace(":filtros", $filtroCds, $queryFee);
+  }elseif($filtroCds=="" && $filtroFecha!="" && $filtroCat==""){
+    $queryMontos = str_replace(":filtros", $filtroFecha, $queryMontos);
+    $queryFee = str_replace(":filtros", $filtroFecha, $queryFee);
+  }elseif($filtroCds=="" && $filtroFecha=="" && $filtroCat!=""){
+    $queryMontos = str_replace(":filtros", $filtroCat, $queryMontos);
+    $queryFee = str_replace(":filtros", $filtroCat, $queryFee);
+  }else{
+    $queryMontos = str_replace(":filtros", "", $queryMontos);
+    $queryFee = str_replace(":filtros", "", $queryFee);
+  }
 }
-
+/*
+echo("Montos-> " . $queryMontos . "<br><br>");
+echo("Montos-> " . $queryFee . "<br>");
+die();
+*/
 $qMontos = mysql_query($queryMontos) or die(mysql_error());
 $qFee = mysql_query($queryFee) or die(mysql_error());
 
@@ -118,25 +174,49 @@ $MontoRefacciones = 0;
 $MontoTAMov = 0;
 $MontoFee = 0;
 $MontoImpuestoFee = 0;
+$MontoCambio = 0;
+$MontoDespiece = 0;
+$MontoReciclaje = 0;
+$MontoOtro = 0;
+$CostoLanded = 0;
 $reportes = array();
 
 while ($row = mysql_fetch_array($qMontos))
 {
   $MontoRefacciones = $MontoRefacciones + floatval($row["MontoRefacciones"]);
 	$MontoTAMov = $MontoTAMov+ (floatval($row["MontoReparacion"]) + floatval($row["MontoMovilizacion"]));
+  $MontoDespiece = $MontoDespiece + floatval($row["MontoDespiece"]);
+  $MontoReciclaje = $MontoReciclaje + floatval($row["MontoReciclaje"]);
+  $MontoOtro = $MontoOtro + floatval($row["MontoOtro"]);
+  $CostoLanded = $CostoLanded + floatval($row["CostoLanded"]);
+  if($IDCentro>0)
+    $MontoCambio = $MontoCambio + ($MontoDespiece + $MontoReciclaje + $MontoOtro);
+  else
+    $MontoCambio = $MontoCambio + $CostoLanded;
   array_push($reportes, $row["id"]);
 }
 
 $TotalFee = 0;
+
 while ($row = mysql_fetch_array($qFee))
 {
+
+
   $MontoFee = $MontoFee + floatval($row["TarifaMensual"]);
 	$MontoImpuestoFee = $MontoImpuestoFee + floatval($row["ImpuestoTarifaMensual"]);
   $ValorImpuesto = $MontoFee * $MontoImpuestoFee;
   $TotalFee = $TotalFee + ($MontoFee + $ValorImpuesto);
+  $MontoFee = $MontoFee + floatval($row["TarifaMensual"]);
+
 }
 
-$queryPagos = "Select * from pagos where mes='" . $mes . "' and ano='" . $ano . "'";
+if($IDCentro>0){
+  $queryPagos = "Select * from pagos where mes='" . $mes . "' and ano='" . $ano . "' and idCentro=$IDCentro";
+}elseif($IDDistribuidor>0){
+  $queryPagos = "Select * from pagos where mes='" . $mes . "' and ano='" . $ano . "' and IDDistribuidor=$IDDistribuidor";
+}else{
+  $queryPagos = "Select * from pagos where mes='" . $mes . "' and ano='" . $ano . "'";
+}
 //echo("pagos>>>>> " . $queryPagos);
 //die();
 $pagos = array();
@@ -151,12 +231,17 @@ while ($row = mysql_fetch_array($qPagos))
   $pagos["Status"] = $row["Status"];
 }
 
-$MontoTotal = $MontoRefacciones + $MontoTAMov + $TotalFee;
+if($IDDistribuidor==0)
+  $MontoTotal = $MontoRefacciones + $MontoTAMov + $TotalFee + $MontoCambio;
+else
+  $MontoTotal = $MontoCambio;
+
 $res = array();
 $res['MontoRefacciones'] = $MontoRefacciones;
 $res['MontoTAMov'] = $MontoTAMov;
 $res['MontoFee'] = $TotalFee;
 $res['MontoTotal'] = $MontoTotal;
+$res['MontoCambio'] = $MontoCambio;
 $res['Reportes'] = $reportes;
 $res['Pago'] = $pagos;
 

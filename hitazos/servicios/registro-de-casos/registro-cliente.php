@@ -32,6 +32,8 @@ if($arre['IDDistribuidor'] == null){
 }
 
 
+$FechaNacimiento = urldecode($arre['FechaNacimiento']['year']).'-'.urldecode($arre['FechaNacimiento']['month']).'-'.urldecode($arre['FechaNacimiento']['day']);
+
 if($arre['NoTieneEmail'] == false){
 
 	if($arre['IDCliente'] == null || $arre['IDCliente'] == ''){
@@ -50,10 +52,10 @@ if($arre['NoTieneEmail'] == false){
 			if($num == 0){
 				//insertar
 				if ($stmt = $mysqli->prepare("
-				insert into clientes (IDCentro, IDDistribuidor, OrigenContacto, TipoPersona, RFC, RazonSocial, Nombre, APaterno, AMaterno, Email, NoReferencia, Pais, IDEstado, IDMunicipio, IDLocalidad, CP, Direccion, NoExt, NoInt, CodigoPais, Telefono, Movil)
-				values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+				insert into clientes (IDCentro, IDDistribuidor, OrigenContacto, TipoPersona, RFC, RazonSocial, Nombre, APaterno, AMaterno, FechaNacimiento, Email, NoReferencia, Pais, IDEstado, IDMunicipio, IDLocalidad, CP, Direccion, NoExt, NoInt, CodigoPais, Telefono, Movil)
+				values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 				")) {
-					$stmt->bind_param("ddssssssssssssssssssss",
+					$stmt->bind_param("ddsssssssssssssssssssss",
 					$arre['IDCentro'],
           $arre['IDDistribuidor'],
 					$arre['OrigenContacto'],
@@ -63,6 +65,7 @@ if($arre['NoTieneEmail'] == false){
 					$arre['Nombre'],
 					$arre['APaterno'],
 					$arre['AMaterno'],
+					$FechaNacimiento,
 					$arre['Email'],
 					$arre['NoReferencia'],
 					$arre['Pais'],

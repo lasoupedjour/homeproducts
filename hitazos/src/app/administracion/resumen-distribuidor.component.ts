@@ -1,4 +1,4 @@
-﻿import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { HTTPService } from '../services/http.service';
 import { GlobalService } from '../services/global.service';
 import { Router } from '@angular/router';
@@ -9,10 +9,10 @@ import { Subject } from 'rxjs';
 import { ISubscription } from "rxjs/Subscription";
 
 @Component({
-    selector: 'cambios',
-    templateUrl: './cambios.component.html'
+    selector: 'resumen-distribuidor',
+    templateUrl: './resumen-distribuidor.component.html'
 })
-export class CambiosComponent {
+export class ResumenDistribuidorComponent {
     title = 'app';
 
     montoTotal = 0;
@@ -103,7 +103,7 @@ export class CambiosComponent {
         });
 
         this.precargaPaises();
-        this.setMesResumen();
+        //this.setMesResumen();
         /*
         this.filterForm.controls.Ano.setValue('0');
         this.filterForm.controls.Mes.setValue('0');
@@ -111,9 +111,8 @@ export class CambiosComponent {
 
         this.changePais();
         //this.traeOrdenes();
-
-
-
+        this.filterForm.controls.Ano.setValue('');
+        this.filterForm.controls.Mes.setValue('0');
     }
 
     changePais() {
@@ -275,10 +274,10 @@ export class CambiosComponent {
                         this._global.appstatus.mensaje = 'No se encontraron clientes con estos datos.';
                     }*/
 
-                    this.rerender();
                     setTimeout(() => {
                         //this.trigger.destroy();
                         this.trigger.next();
+                        this.rerender();
                     });
 
                 } else if (data.res = 'error') {

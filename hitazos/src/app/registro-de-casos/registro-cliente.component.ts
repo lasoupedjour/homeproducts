@@ -69,6 +69,7 @@ export class RegistroClienteComponent {
                 Validators.required
             ],
             AMaterno: [''],
+            FechaNacimiento: [''],
             Pais: ['',
                 Validators.required
             ],
@@ -329,13 +330,14 @@ export class RegistroClienteComponent {
             params = this.genericForm.getRawValue();
             params["IDUsuario"] = this._global.user.id;
 
-            if(this._global.user.IDDistribuidor)
+            if(parseFloat(this._global.user.IDDistribuidor)>0)
               params["IDCentro"] = 0;
             else
               params["IDCentro"] = this._global.user.IDCentro;
 
             params["IDDistribuidor"] = this._global.user.IDDistribuidor;
 
+            console.log("Registrar cliente>>>>>>", params);
             this._global.appstatus.loading = true;
 
             this._httpService.postJSON(params, 'registro-de-casos/registro-cliente.php')

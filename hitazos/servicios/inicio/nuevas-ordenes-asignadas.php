@@ -40,7 +40,7 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
   	SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno , DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
   	FROM reportes, clientes
   	where clientes.id = reportes.IDCliente
-  	and reportes.IDOperadorDistribuidor = ".$arre["IDDistribuidor"]."
+  	and (reportes.IDOperadorDistribuidor = ".$arre["IDDistribuidor"]." or reportes.IDDistribuidor = ".$arre["IDDistribuidor"].")
   	and StatusReporte <> 'Orden de Servicio'
     :filtroCds
   	order by FechaRegistroReporte desc LIMIT 5;

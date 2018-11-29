@@ -243,7 +243,7 @@ export class AdministracionComponent {
     filtrarReporte() {
         var centro = this.filterForm.controls.Cds.value;
 
-        if(centro!="" || this._global.user.nivel=='administrador'){
+        if(centro!=""){
           var params = {};
           params['cds']   = this.filterForm.controls.Cds.value;
           params['mes']   = this.filterForm.controls.Mes.value;
@@ -279,10 +279,11 @@ export class AdministracionComponent {
                           this._global.appstatus.mensaje = 'No se encontraron clientes con estos datos.';
                       }*/
 
-                      this.rerender();
+                      //this.rerender();
                       setTimeout(() => {
                           //this.trigger.destroy();
                           this.trigger.next();
+                          this.rerender();
                       });
 
                   } else if (data.res = 'error') {

@@ -9,7 +9,7 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
 
 $json = $_POST['json'];
 $arre = json_decode($json, true);
-	
+
 $current_charset = 'ISO-8859-15';//or what it is now
 array_walk_recursive($arre,function(&$value) use ($current_charset){
      $value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
@@ -24,8 +24,10 @@ $res['res'] = 'ok';
 
 if($arre['nivel'] == 'administrador' || $arre['nivel'] == 'MKT'){
 	$query = "SELECT distinct IDDistribuidor, RazonSocial FROM distribuidores where Categoria = '".$arre['Categoria']."' order by RazonSocial asc";
-}else{
+}elseif($arre['nivel']=="operador"){
 	$query = "SELECT distinct IDDistribuidor, RazonSocial FROM distribuidores where Pais = '".$arre['Pais']."' and Categoria = '".$arre['Categoria']."' order by RazonSocial asc";
+}else{//distgrobuidor
+  $query = "SELECT distinct IDDistribuidor, RazonSocial FROM distribuidores where Pais = '".$arre['Pais']."' order by RazonSocial asc";
 }
 
 $q = mysql_query($query) or die(mysql_error());
@@ -33,8 +35,8 @@ $q = mysql_query($query) or die(mysql_error());
 
 $distribuidores = array();
 
-while ($row = mysql_fetch_array($q))   
-{  
+while ($row = mysql_fetch_array($q))
+{
 	$current_charset = 'ISO-8859-15';//or what it is now
 	array_walk_recursive($row,function(&$value) use ($current_charset){
 		 //$value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
@@ -50,5 +52,5 @@ echo json_encode($res);
 
 
 
-	
+
 ?>
