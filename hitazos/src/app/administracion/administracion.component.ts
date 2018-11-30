@@ -140,7 +140,7 @@ export class AdministracionComponent {
                 //console.log("fichas");
                 //console.log(this.props.fichas);
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
     }
@@ -151,7 +151,7 @@ export class AdministracionComponent {
         params['Pais'] = this.filterForm.controls.Pais.value;
         params['IDCentro'] = this._global.user.IDCentro;
         params['Nivel'] = this._global.user.nivel;
-        params['IDMaster'] = this._global.user.IDMaster;
+        params['IDMaster'] = this.filterForm.controls.Master.value;
         params['IDGrupoTarifa'] = this._global.user.IDGrupoTarifa;
 
         this._global.appstatus.loading = true;
@@ -167,7 +167,7 @@ export class AdministracionComponent {
                 //console.log("fichas");
                 //console.log(this.props.fichas);
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
     }
@@ -203,7 +203,7 @@ export class AdministracionComponent {
 
                 }
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
 
@@ -279,7 +279,7 @@ export class AdministracionComponent {
                           this._global.appstatus.mensaje = 'No se encontraron clientes con estos datos.';
                       }*/
 
-                      //this.rerender();
+
                       setTimeout(() => {
                           //this.trigger.destroy();
                           this.trigger.next();
@@ -295,7 +295,7 @@ export class AdministracionComponent {
                   //console.log("fichas");
                   //console.log(this.props.fichas);
               },
-              error => alert(error),
+              error => console.log(error),
               () => console.log('termino submit')
               );
         }else{
@@ -361,7 +361,7 @@ export class AdministracionComponent {
                 //console.log("fichas");
                 //console.log(this.props.fichas);
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
 
@@ -434,7 +434,7 @@ export class AdministracionComponent {
                 //console.log("fichas");
                 //console.log(this.props.fichas);
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
 

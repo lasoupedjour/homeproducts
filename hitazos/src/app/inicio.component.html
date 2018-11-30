@@ -712,10 +712,11 @@
            <td>
              Abierto
            </td>
-           <td>
-             <button *ngIf="this._global.user.nivel!='distribuidor' || item.TipoReclamoDiagnostico!='Cambio'" (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Seleccionar</button>
-             <button *ngIf="item.TipoReclamoDiagnostico=='Cambio'" (click)="this._global.seleccionarReporte(item.id, '/inicio/resumen/orden')" class="btn btn-sm">Seleccionar</button>
-             <!--button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Seleccionar</button-->
+           <td *ngIf="this._global.user.nivel=='distribuidor'">
+             <button *ngIf="item.Categoria=='MENAJE'" (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Seleccionar</button>
+           </td>
+           <td *ngIf="this._global.user.nivel!='distribuidor'">
+             <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Seleccionar</button>
            </td>
          </tr>
 
@@ -725,8 +726,8 @@
    </div>
 
 
-
-   <div class="row mt-5 mb-2" *ngIf="this._global.user.nivel!='distribuidor'">
+   <!--*ngIf="this._global.user.nivel!='distribuidor'"-->
+   <div class="row mt-5 mb-2">
      <div class="col-8">
        <h3>Últimas Órdenes de Servicio Generadas</h3>
      </div>
@@ -757,8 +758,8 @@
      </div>
    </div>
    </form>
-
-   <div class="row mb-3" *ngIf="_global.ordenesServicio.recientes[0] && this._global.user.nivel!='distribuidor'">
+   <!-- && this._global.user.nivel!='distribuidor'-->
+   <div class="row mb-3" *ngIf="_global.ordenesServicio.recientes[0]">
      <div class="col-12">
 
        <table class="table table-striped table-bordered">
@@ -817,11 +818,11 @@
            <td>
              {{item.SubStatusReporte}}
            </td>
-           <td *ngIf="item.StatusCambioFisico=='Rechazado'">
-             <button (click)="this._global.seleccionarReporte(item.id, 'registro-de-casos/orden-de-servicio/inicio')" class="btn btn-sm">Seleccionar</button>
-           </td>
-           <td *ngIf="item.TipoReclamoDiagnostico!='Cambio' || item.StatusCambioFisico=='Aprobado'">
-             <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen/orden')" class="btn btn-sm">Seleccionar</button>
+           <td>
+             <!--item.StatusCambioFisico {{item.StatusCambioFisico}}<br>
+             item.TipoReclamoDiagnostico {{item.TipoReclamoDiagnostico}}-->
+             <button *ngIf="item.StatusCambioFisico=='Rechazado'" (click)="this._global.seleccionarReporte(item.id, 'registro-de-casos/orden-de-servicio/inicio')" class="btn btn-sm">Seleccionar</button>
+             <button *ngIf="item.TipoReclamoDiagnostico!='Cambio' || item.StatusCambioFisico=='Aprobado'" (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen/orden')" class="btn btn-sm">Seleccionar</button>
            </td>
          </tr>
 

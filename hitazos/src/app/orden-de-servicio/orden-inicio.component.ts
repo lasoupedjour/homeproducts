@@ -33,7 +33,7 @@ export class OrdenInicioComponent {
     TarifaMensual = 0;
     ImpuestoTarifaMensual = 0;
     NecesitaAutorizacionRO = true;
-
+    AtencionNoRequerida = false;
     maxDate: Date;
     maxDateObj: Object;
 
@@ -136,8 +136,7 @@ export class OrdenInicioComponent {
                 Validators.required
             ],
 
-            TipoReparacion: [Object(this._global.reporte.objreporte).TipoReparacion,
-                Validators.required
+            TipoReparacion: [Object(this._global.reporte.objreporte).TipoReparacion
             ],
 
             MontoDespiece: [0,
@@ -400,6 +399,12 @@ export class OrdenInicioComponent {
             if (this._global.tarifas[i].id == idtipo) {
                 this.tiporeparacion = this._global.tarifas[i];
             }
+        }
+        if(idtipo=='No requerido'){
+          this.AtencionNoRequerida = true;
+          this.tiporeparacion.Valor = 0;
+        }else if(idtipo==''){
+          this.AtencionNoRequerida = false;
         }
 
         console.log(this.tiporeparacion.Valor);

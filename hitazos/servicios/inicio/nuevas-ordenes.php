@@ -73,7 +73,7 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
     (select * from clientes) as clientes
     on reportes.IDCliente = clientes.id
     Where StatusReporte = 'Orden de Servicio'
-    and (reportes.IDOperadorDistribuidor = ".$arre["IDDistribuidor"]." or reportes.IDDistribuidor = ".$arre["IDDistribuidor"].")
+    and (reportes.IDOperadorDistribuidor = '".$arre["CustomerID"]."' or reportes.IDDistribuidor = ".$arre["IDDistribuidor"].")
     order by FechaRegistroReporte desc LIMIT 5;
     ";
   }else{

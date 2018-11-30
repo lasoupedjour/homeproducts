@@ -1139,7 +1139,7 @@ export class ReporteCasoComponent {
 
             console.log('submit registro');
             this._global.clearMessages();
-
+            var Categoria = this.genericForm.controls.Categoria.value;
 
             var params = {};
             params = this.genericForm.getRawValue();
@@ -1197,7 +1197,7 @@ export class ReporteCasoComponent {
                             });
 
                         } else {
-                          if(parseInt(this._global.user.IDDistribuidor)>0 && this.genericForm.controls.Categoria.value=='LINEA BLANCA'){
+                          if(parseInt(this._global.user.IDDistribuidor)>0 && Categoria=='LINEA BLANCA'){
                             swal({
                                 title: 'Solicitud Enviada',
                                 text: 'Se ha enviado la solicitud.',

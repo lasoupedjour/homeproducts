@@ -275,7 +275,7 @@
         </div>
         <label>
           <select class="form-control form-control-sm" formControlName="TipoReparacion" (change)="changeTipoReparacion()">
-            <option value="" hidden="">Seleccionar tipo de reparación</option>
+            <option value="">Seleccionar tipo de reparación</option>
             <option value="No requerido">No requerido</option>
             <ng-container *ngFor="let item of _global.tarifas; let i = index">
               <option value="{{item.id}}" *ngIf="item.TipoServicio!='Movilización'">{{item.SubtipoServicio}}</option>
@@ -292,8 +292,8 @@
       <div class="offset-sm-4 col-sm-4">
         <div class="vform"><div class="vformleft aright">Valor de Refacciones: </div> <div class="vformright"> $<input type="text" class="form-control-static" formControlName="MontoRefacciones" readonly [ngModel]="MontoRefacciones"/>&nbsp;USD</div></div>
         <div class="vform"><div class="vformleft aright">Atención Técnica: </div>
-          <div class="vformright" *ngIf="_global.user.nivel == 'distribuidor'"> $<input type="text" min="0" class="form-control-static" formControlName="MontoReparacion" [ngModel]="this.tiporeparacion.Valor" />&nbsp;USD</div>
-          <div class="vformright" *ngIf="_global.user.nivel != 'distribuidor'"> $<input type="text" min="0" class="form-control-static" formControlName="MontoReparacion" readonly [ngModel]="this.tiporeparacion.Valor" />&nbsp;USD</div>
+          <div class="vformright" *ngIf="this.AtencionNoRequerida==false"> $<input type="text" min="0" class="form-control-static" formControlName="MontoReparacion" [ngModel]="this.tiporeparacion.Valor" />&nbsp;USD</div>
+          <div class="vformright" *ngIf="this.AtencionNoRequerida==true"> $<input type="text" min="0" class="form-control-static" formControlName="MontoReparacion" readonly [ngModel]="this.tiporeparacion.Valor" />&nbsp;USD</div>
         </div>
         <div class="vform"><div class="vformleft aright">Movilización: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoMovilizacion" readonly="{{this.tiporeparacion.NecesitaAutorizacionRO}}" [ngModel]="this._global.reporte.objreporte.MontoMovilizacion" />&nbsp;USD</div></div>
         <!--<div class="vform"><div class="vformleft aright">Costo Landed: </div> <div class="vformright"> $<span [innerHTML]="calculaValorRepuestos()"></span> USD</div></div>-->

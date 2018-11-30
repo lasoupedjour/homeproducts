@@ -493,6 +493,9 @@ export class InicioComponent {
 
 
     nuevasOrdenesServicio() {
+        var CustomerID = "";
+        if(parseFloat(this._global.user.IDDistribuidor)>0)
+          CustomerID = this._global.user.CustomerID;
 
         var params = {};
         params["IDCentro"] = this._global.user.IDCentro;
@@ -500,7 +503,8 @@ export class InicioComponent {
         params["nivel"] = this._global.user.nivel;
         params["Cds"] = this.filterOrdenesForm.controls.Cds.value;
         params["Master"] = this.filterOrdenesForm.controls.Master.value;
-
+        params["CustomerID"] = CustomerID;
+        
         this._global.appstatus.loading = true;
         console.log('params nuevas ordenes');
         console.log(params);
