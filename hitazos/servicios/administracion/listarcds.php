@@ -26,7 +26,7 @@ $res['res'] = 'ok';
 $query = "
 SELECT id, Nombre, Ciudad from centros
 where Pais like '%".$arre["Pais"]."%'
-and IDMaster = ".$arre["IDMaster"] . " or id= ".$arre["IDMaster"];
+and (IDMaster = ".$arre["IDMaster"] . " or id= ".$arre["IDMaster"].")";
 
 $query = utf8_encode($query);
 
