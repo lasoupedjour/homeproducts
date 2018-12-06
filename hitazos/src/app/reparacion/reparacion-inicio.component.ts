@@ -316,7 +316,7 @@ export class ReparacionInicioComponent {
           */
 
           this._global.refaccion.NombreRefaccion = 'Otro';
-          this._global.refaccion.NoParte = OtraRefaccion;
+          this._global.refaccion.NoParte = String(OtraRefaccion);
 
           this._global.refacciones.push(this._global.refaccion);
 
