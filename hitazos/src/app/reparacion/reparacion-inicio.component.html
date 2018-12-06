@@ -130,7 +130,7 @@
             </label>
           </div>
 
-          <div class="col-sm-12" [hidden]="this.genericForm.controls.TipoReclamoDiagnostico.value == 'Cambio' || _global.refaccionesproductos.length==0">
+          <div class="col-sm-12" [hidden]="this.genericForm.controls.TipoReclamoDiagnostico.value == 'Cambio'">
             <label class="pointer">
               <input class="form-control form-control-sm fecha" formControlName="RequiereRefacciones" type="checkbox" (change)="changeRequiereRefacciones()" /> ¿Se requieren refacciones?
             </label>
@@ -154,12 +154,23 @@
               <label>
                 <select class="form-control form-control-sm" formControlName="Refaccion" (change)="agregarRefaccion()">
                   <option value="" hidden="">Agregar refacción</option>
+                  <option value="Otro">Otro</option>
                   <option *ngFor="let item of _global.refaccionesproductos; let i = index" value="{{item.NoParte}}">{{item.NoParte}} - {{item.Nombre}}</option>
-
                 </select>
-
               </label>
             </div>
+            <div class="col-sm-4">
+              <label>
+                <input *ngIf="this.genericForm.controls.Refaccion.value == 'Otro'" autocomplete="off" type="text" class="form-control form-control-sm" id="OtraRefaccion" placeholder="Descripción" maxlength="100" />&nbsp;
+              </label>
+            </div>
+            <div class="col-sm-4">
+              <label>
+                <button *ngIf="this.genericForm.controls.Refaccion.value == 'Otro'" type="button" class="btn btn-sm" (click)="agregarOtraRefaccion()"><i class="fa fa-plus-circle"></i> Agregar Refacción</button>
+              </label>
+            </div>
+
+
             <!--<div class="col-sm-4">
               <label>
                 <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="NoParte" placeholder="No. Parte" maxlength="18" readonly />

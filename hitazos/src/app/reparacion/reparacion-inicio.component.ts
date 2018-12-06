@@ -298,10 +298,44 @@ export class ReparacionInicioComponent {
         this.genericForm.controls.NoParte.updateValueAndValidity();*/
 
     }
+    agregarOtraRefaccion(){
+      var OtraRefaccion = $("#OtraRefaccion").val();
+
+      if (OtraRefaccion != '') {
+          this.status.agregaRefaccionValid = true;
+
+          this._global.resetRefaccion();
+
+          var nombrerefaccion = "";
+
+          /*
+          this._global.refaccionesproductos.forEach(function (e) {
+              if (e.NoParte == outer.genericForm.controls.OtraRefaccion.value)
+                  nombrerefaccion = e.Nombre;
+          });
+          */
+
+          this._global.refaccion.NombreRefaccion = 'Otro';
+          this._global.refaccion.NoParte = OtraRefaccion;
+
+          this._global.refacciones.push(this._global.refaccion);
+
+          this.genericForm.controls.Refaccion.setValue('');
+          this.genericForm.controls.NoParte.setValue('');
+
+          this.habilitarOrdenServicio();
+
+      }/*else if(this.genericForm.controls.Refaccion.value == 'Otro'){
+        alert("Show input");
+      }*/else {
+          this.status.agregaRefaccionValid = false;
+      }
+    }
+
     agregarRefaccion() {
         console.log('agregar refaccion');
 
-        if (this.genericForm.controls.Refaccion.value != '') {
+        if (this.genericForm.controls.Refaccion.value != '' && this.genericForm.controls.Refaccion.value!='Otro') {
             this.status.agregaRefaccionValid = true;
 
 
@@ -327,7 +361,9 @@ export class ReparacionInicioComponent {
 
             this.habilitarOrdenServicio();
 
-        } else {
+        }/*else if(this.genericForm.controls.Refaccion.value == 'Otro'){
+          alert("Show input");
+        }*/else {
             this.status.agregaRefaccionValid = false;
         }
 
