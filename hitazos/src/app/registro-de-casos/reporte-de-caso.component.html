@@ -101,6 +101,16 @@
             Este campo es requerido
           </span>
         </label>
+        <label><!-- (change)="changeUso()"-->
+          <select class="form-control form-control-sm" formControlName="Uso">
+            <option value="" hidden="">Uso del producto</option>
+            <option value="Comercial">Comercial</option>
+            <option value="Privado">Privado</option>
+          </select>
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.Uso.valid && genericForm.controls.Uso.touched">
+            Este campo es requerido
+          </span>
+        </label>
         <label>
           <select class="form-control form-control-sm" formControlName="Subcategoria" (change)="changeSubcategoria()">
             <option value="" hidden="">Selecciona subcategoría</option>
@@ -168,16 +178,6 @@
 
 
         <input type="hidden" formControlName="AplicaGarantia">
-
-        <div *ngIf="this.genericForm.controls.AplicaGarantia.value == 'no' && this.genericForm.controls.FechaCompra.valid" class="alert-danger alert-danger-2">
-          No aplica garantía
-        </div>
-        <div *ngIf="this.genericForm.controls.AplicaGarantia.value  == 'si' && this.genericForm.controls.FechaCompra.valid" class="alert-success">
-          Aplica garantía
-        </div>
-
-
-
       </div>
       <div class="col-sm-6">
 
@@ -210,21 +210,11 @@
             </span>
           </label>
         </div>
-        <label *ngIf="this._global.user.IDDistribuidor>0 && this.genericForm.controls.Categoria.value=='LINEA BLANCA'">
+        <label *ngIf="this._global.user.IDDistribuidor>0 && (this.genericForm.controls.Categoria.value=='LINEA BLANCA' || this.genericForm.controls.Modelo.value=='OS-17001' || this.genericForm.controls.Modelo.value=='OS-17001-1')">
           <select class="form-control form-control-sm" formControlName="IDCentro" id="idcentro" (change)="changeCentro()">
             <option value="">Centro de Servicio</option>
             <option *ngFor="let item of _global.centros; let i = index" value="{{item.id}}">{{item.Nombre}} <label *ngIf="item.Ciudad!=''">- {{item.Ciudad}}</label><label *ngIf="item.Categoria!=''">- {{item.Categoria}}</label></option>
           </select>
-        </label>
-        <label>
-          <select class="form-control form-control-sm" formControlName="Uso">
-            <option value="" hidden="">Uso del producto</option>
-            <option value="Comercial">Comercial</option>
-            <option value="Privado">Privado</option>
-          </select>
-          <span class="alert alert-danger" *ngIf="!genericForm.controls.Uso.valid && genericForm.controls.Uso.touched">
-            Este campo es requerido
-          </span>
         </label>
         <label>
           <select class="form-control form-control-sm" formControlName="Distribuidor" *ngIf="this._global.user.IDDistribuidor>0">
@@ -270,6 +260,13 @@
           </span>
         </label>
 
+        <div *ngIf="this.genericForm.controls.AplicaGarantia.value == 'no' && this.genericForm.controls.FechaCompra.valid" class="alert-danger alert-danger-2 mt-2">
+          No aplica garantía
+        </div>
+        <div *ngIf="this.genericForm.controls.AplicaGarantia.value  == 'si' && this.genericForm.controls.FechaCompra.valid" class="alert-success mt-2">
+          Aplica garantía
+        </div>
+
       </div>
 
       <!--REVISION -->
@@ -306,7 +303,7 @@
             </label>
           </div>
           <!--termina en otro centro de servicio -->
-          <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'domicilio')" class="col-sm-2">
+          <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'domicilio') || (this.genericForm.controls.Subcategoria.value=='MICROONDA' || this.genericForm.controls.Subcategoria.value=='DISPENSADOR DE AGUA')" class="col-sm-2">
             <label class="fecha">
               <select class="form-control form-control-sm" formControlName="TipoKilometraje" (change)="changeTipoKilometraje()">
                 <option value="" hidden="">Selecciona el kilometraje</option>
@@ -318,7 +315,7 @@
             </label>
           </div>
 
-          <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'domicilio')" class="col-sm-2">
+          <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'domicilio') || (this.genericForm.controls.Subcategoria.value=='MICROONDA' || this.genericForm.controls.Subcategoria.value=='DISPENSADOR DE AGUA')" class="col-sm-2">
             <label class="fecha">
               <input class="form-control form-control-sm fecha" placeholder="Elegir Fecha de Revisión"
                      formControlName="FechaRevision" ngbDatepicker #d2="ngbDatepicker"  [(ngModel)]="modelfecharevision"  >
@@ -332,7 +329,7 @@
           </div>
 
 
-          <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'domicilionomostrar')" class="col-sm-2">
+          <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'domicilionomostrar') || (this.genericForm.controls.Subcategoria.value=='MICROONDA' || this.genericForm.controls.Subcategoria.value=='DISPENSADOR DE AGUA')" class="col-sm-2">
             <label class="fecha">
               <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="Kilometraje" placeholder="Ingresa el kilometraje" maxlength="20" />
               <span class="alert alert-danger" *ngIf="!genericForm.controls.Kilometraje.valid && genericForm.controls.Kilometraje.touched">

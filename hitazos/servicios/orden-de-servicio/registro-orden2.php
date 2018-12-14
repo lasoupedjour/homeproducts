@@ -26,10 +26,14 @@ function subirAdjuntos($idreporte, $field, $size){
       $uploadedFile = '';
       if(!empty($_FILES[$field.$i]["type"])){
         $fileName = $idreporte.'_'.time().'_'.$_FILES[$field.$i]['name'];
-        $valid_extensions = array("jpeg", "jpg", "png", "pdf");
+        $valid_extensions = array("jpeg", "jpg", "png", "pdf", "mp4", "mov", "avi", "webm");
         $temporary = explode(".", $_FILES[$field.$i]["name"]);
         $file_extension = end($temporary);
-        if((($_FILES["hard_file"]["type"] == "image/png") || ($_FILES[$field.$i]["type"] == "image/jpg") || ($_FILES[$field.$i]["type"] == "image/jpeg") || ($_FILES[$field.$i]["type"] == "image/png") || ($_FILES[$field.$i]["type"] == "application/pdf")) && in_array($file_extension, $valid_extensions)){
+        if((($_FILES["hard_file"]["type"] == "image/png") || ($_FILES[$field.$i]["type"] == "image/jpg") || ($_FILES[$field.$i]["type"] == "image/jpeg") || ($_FILES[$field.$i]["type"] == "image/png") ||
+        ($_FILES[$field.$i]["type"] == "video/mp4") ||
+        ($_FILES[$field.$i]["type"] == "video/mov") ||
+        ($_FILES[$field.$i]["type"] == "video/avi") ||
+        ($_FILES[$field.$i]["type"] == "video/webm") || ($_FILES[$field.$i]["type"] == "application/pdf")) && in_array($file_extension, $valid_extensions)){
           $sourcePath = $_FILES[$field.$i]['tmp_name'];
           $targetPath = "uploads-ordenes/".$fileName;
           if(move_uploaded_file($sourcePath,$targetPath)){

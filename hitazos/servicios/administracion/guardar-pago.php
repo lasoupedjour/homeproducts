@@ -30,6 +30,9 @@ $res['res'] = 'ok';
 $IDCentro = 0;
 $IDDistribuidor = 0;
 
+$IDOperadorAdmin = $arre['IDOperadorAdmin'];
+$IDMaster = $arre['IDMaster'];
+
 if($arre['IDCentro']!="")
 	$IDCentro = $arre['IDCentro'];
 
@@ -38,14 +41,17 @@ if($arre['IDDistribuidor']!="")
 //insertar
 if ($stmt = $mysqli->prepare("
 
-insert into pagos(IDCentro, IDDistribuidor, ODS, MontoTotal, StatusPago,Comprobante,FechaRegistro,Mes,Ano)
+insert into pagos(IDMaster, IDCentro, IDOperadorAdmin, IDDistribuidor, Categoria, ODS, MontoTotal, StatusPago,Comprobante,FechaRegistro,Mes,Ano)
 values
-(?,?,?,?,'Enviado','Pago sin realizar',now(),?,?)
+(?,?,?,?,?,?,?,'Enviado','Pago sin realizar',now(),?,?)
 
 ")) {
-	$stmt->bind_param("ddsdss",
-	$IDCentro,
+	$stmt->bind_param("ddddssdss",
+	$IDMaster,
+  $IDCentro,
+  $IDOperadorAdmin,
 	$IDDistribuidor,
+  $arre['Categoria'],
 	$arre['Ordenes'],
 	$arre['MontoTotal'],
 	$arre['Mes'],
@@ -56,7 +62,7 @@ values
 		$pagos = array();
 
 		$query = "
-		select * from pagos order by FechaRegistro desc;
+		select * from pagos where IDMaster=$IDMaster order by FechaRegistro desc;
 		";
 
 		if ($result = $mysqli->query($query)) {
@@ -84,20 +90,8 @@ values
 
 	}
 }
-
-
-
 echo json_encode($res);
 
 $stmt->close();
 $mysqli->close();
-
-
-
-
-
-
-
-
-
 ?>

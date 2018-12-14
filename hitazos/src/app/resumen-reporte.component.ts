@@ -68,7 +68,7 @@ export class ResumenReporteComponent {
               this.SubtipoServicio = data.SubtipoServicio;
 
             }else{
-                this._global.appstatus.mensaje = "No se encontró la tarifa.";
+                //this._global.appstatus.mensaje = "No se encontró la tarifa1111.";
             }
 
 

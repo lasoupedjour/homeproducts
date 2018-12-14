@@ -48,7 +48,7 @@ export class HistorialComponent {
   };
 
   /*Datos del pago*/
-  statusPago = "Por Enviar";
+  statusPago = "";
   idPago = 0;
   comprobantePago = "";
   ano = "";
@@ -61,6 +61,10 @@ export class HistorialComponent {
   AdjuntosComprobante = {};
   AdjuntosComprobanteLenght = 0;
   AdjuntosComprobanteArre = [];
+  id_pago = 0;
+  mesPago = '';
+  categoriaPago = '';
+  montoPago = '';
 
   constructor(
       public formBuilder: FormBuilder,
@@ -70,6 +74,54 @@ export class HistorialComponent {
       console.log('init');
 
       this._global.clearMessages();
+
+      this.dtOptions = {
+          pageLength: 5,
+          scrollX: false,
+          language: {
+              "processing": "Procesando...",
+              "lengthMenu": "Mostrar _MENU_ registros",
+              "zeroRecords": "No se encontraron resultados",
+              "emptyTable": "Ningún dato disponible en esta tabla",
+              "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+              "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+              "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+              "infoPostFix": "",
+              "search": "Buscar:",
+              "url": "",
+              "thousands": ",",
+              "loadingRecords": "Cargando...",
+              "paginate": {
+                  "first": "Primero",
+                  "last": "Último",
+                  "next": "Siguiente",
+                  "previous": "Anterior"
+              },
+              "aria": {
+                  "sortAscending": ": Activar para ordenar la columna de manera ascendente",
+                  "sortDescending": ": Activar para ordenar la columna de manera descendente"
+              }
+          },
+          // Declare the use of the extension in the dom parameter
+          dom: 'Bfrtip',
+          select: true,
+          // Configure the buttons
+          buttons: [
+              /*'columnsToggle',
+              'colvis',*/
+              'copy',
+              /*'print',*/
+              'excel',
+             /* {
+                  text: 'Some button',
+                  key: '1',
+                  action: function (e, dt, node, config) {
+                      alert('Button activated');
+                  }
+              }*/
+          ],
+          /*fixedColumns: true*/
+      };
 
       this.filterForm = this.formBuilder.group({
           Ano: [],
@@ -84,15 +136,19 @@ export class HistorialComponent {
           Comprobante: ['']
       });
 
-      this.precargaPaises();
+      //this.precargaPaises();
       //this.setMesResumen();
-      this.filterForm.controls.Categoria.setValue('');
-      this.filterForm.controls.Ano.setValue('');
-      this.filterForm.controls.Mes.setValue('0');
+      //this.changeMaster();
 
+      /*this.filterForm.controls.Master.setValue('');
+      */
+      //this.filterForm.controls.Cds.setValue('');
+      //this.filterForm.controls.Categoria.setValue('');
+      //this.filterForm.controls.Ano.setValue('');
+      //this.filterForm.controls.Mes.setValue('0');
+
+      this.obtenerPagos();
       //this.filtrarReporte();
-
-      console.log("Datos usuario->", this._global.user);
 
   }
 
@@ -142,7 +198,7 @@ export class HistorialComponent {
       params['Pais'] = this.filterForm.controls.Pais.value;
       params['IDCentro'] = this._global.user.IDCentro;
       params['Nivel'] = this._global.user.nivel;
-      params['IDMaster'] = this._global.user.IDMaster;
+      params['IDMaster'] = this._global.user.IDCentro;
       params['IDGrupoTarifa'] = this._global.user.IDGrupoTarifa;
 
       this._global.appstatus.loading = true;
@@ -164,39 +220,38 @@ export class HistorialComponent {
   }
 
   precargaPaises() {
+    var params = {};
 
-      var params = {};
+    params['Pais'] = Object(this._global.user).Pais;
+    params['nivel'] = Object(this._global.user).nivel;
 
-      params['Pais'] = Object(this._global.user).Pais;
-      params['nivel'] = Object(this._global.user).nivel;
+    this._global.appstatus.loading = true;
 
-      this._global.appstatus.loading = true;
+    /*console.log('Precarga distribuidores');
+    console.log(params);*/
 
-      /*console.log('Precarga distribuidores');
-      console.log(params);*/
+    this._httpService.postJSON(params, 'precarga-paises.php')
+        .subscribe(
+        data => {
+            this._global.appstatus.loading = false;
 
-      this._httpService.postJSON(params, 'precarga-paises.php')
-          .subscribe(
-          data => {
-              this._global.appstatus.loading = false;
+            if (data.res == 'ok') {
 
-              if (data.res == 'ok') {
+                this._global.paises = this._global.parseJSON(data.paises);
+                this.filterForm.controls.Pais.setValue('');
+                if (data.paises.length == 0) {
+                    this._global.appstatus.mensaje = 'No se encontraron datos con estas características.';
+                }
 
-                  this._global.paises = this._global.parseJSON(data.paises);
+            } else if (data.res = 'error') {
 
-                  if (data.paises.length == 0) {
-                      this._global.appstatus.mensaje = 'No se encontraron datos con estas características.';
-                  }
+                this._global.appstatus.mensaje = data.error;
 
-              } else if (data.res = 'error') {
-
-                  this._global.appstatus.mensaje = data.error;
-
-              }
-          },
-          error => alert(error),
-          () => console.log('termino submit')
-          );
+            }
+        },
+        error => alert(error),
+        () => console.log('termino submit')
+        );
 
   }
 
@@ -276,55 +331,72 @@ export class HistorialComponent {
   }
 
   filtrarReporte() {
-    var centro = this.filterForm.controls.Cds.value;
-    this.evaluaMes();
-    if(centro!="" || this._global.user.nivel=='administrador'){
-      var params = {};
+    if(this.filterForm.controls.Ano.value!='' && this.filterForm.controls.Mes.value!="0"){
+      //var centro = this.filterForm.controls.Cds.value;
+      var centro = "Todos";
 
-      params['mes']   = this.filterForm.controls.Mes.value;
-      params['ano']   = this.filterForm.controls.Ano.value;
-      params['categoria']   = this.filterForm.controls.Categoria.value;
-      params['CustomerID']   = this._global.user.CustomerID;
-      params['Nombre']   = this._global.user.nombre;
-      params['IDDistribuidor']   = this._global.user.IDDistribuidor;
+      if(centro!="" || this._global.user.nivel=='administrador'){
+        var params = {};
+        params['cds']   = this.filterForm.controls.Cds.value;
+        params['mes']   = this.filterForm.controls.Mes.value;
+        params['ano']   = this.filterForm.controls.Ano.value;
+        params['categoria']   = this.filterForm.controls.Categoria.value;
+        params['IDMaster']   = this._global.user.IDCentro;
+        params['IDOperadorAdmin']   = this._global.user.id;
+        console.log("los parametros----> ", params);
+        this._global.appstatus.loading = true;
 
-      this._global.appstatus.loading = true;
+        this.subscription = this._httpService.postJSON(params, 'administracion/filtrar-resumen-de-pagos.php')
+            .subscribe(
+            data => {
+                console.log('data PAGOS');
+                console.log(data);
+                this._global.appstatus.loading = false;
 
-      this.subscription = this._httpService.postJSON(params, 'administracion/filtrar-resumen-de-pagos.php')
-          .subscribe(
-          data => {
-              console.log('data PAGOS');
-              console.log(data);
-              this._global.appstatus.loading = false;
+                this.montoRefacciones = data.MontoRefacciones;
+                this.montoTAMov = data.MontoTAMov;
+                this.montoFee = data.MontoFee;
+                this.montoTotal = data.MontoTotal;
+                this.montoCambio = data.MontoCambio;
 
-              this.montoRefacciones = data.MontoRefacciones;
-              this.montoTAMov = data.MontoTAMov;
-              this.montoFee = data.MontoFee;
-              this.montoTotal = data.MontoTotal;
-              this.montoCambio = data.MontoCambio;
+                this.statusPago = '';
+                if(data.Pago.id){
+                  this.idPago = data.Pago.id;
+                  this.statusPago = data.Pago.StatusPago;
+                  this.comprobantePago = data.Pago.Comprobante;
+                  this.fechaRegistroPago = data.Pago.FechaRegistro;
+                  this.ano = params['ano'];
+                  this.mes = params['mes'];
+                  this.status = data.Pago.Status;
+                }
 
-              this.statusPago = '';
-              if(data.Pago.id){
-                this.idPago = data.Pago.id;
-                this.statusPago = data.Pago.StatusPago;
-                this.comprobantePago = data.Pago.Comprobante;
-                this.fechaRegistroPago = data.Pago.FechaRegistro;
-                this.ano = params['ano'];
-                this.mes = params['mes'];
-                this.status = data.Pago.Status;
-              }
+                console.log("statuspago", this.statusPago);
+                if(this.statusPago=="")
+                  this.statusPago = "Por Enviar";
 
-              console.log("statuspago", this.statusPago);
-              if(this.statusPago=="")
-                this.statusPago = "Por Enviar";
-          },
-          error => alert(error),
-          () => console.log('termino submit')
-          );
+                this.evaluaMes();
+
+                setTimeout(() => {
+                    //this.trigger.destroy();
+                    this.trigger.next();
+                    this.rerender();
+                });
+            },
+            error => console.log(error),
+            () => console.log('termino submit')
+            );
+          }else{
+            swal({
+                title: 'CDs requerido',
+                text: 'Favor de seleccionar el CDs',
+                type: 'error',
+                customClass: 'swal2-overflow',
+            });
+          }
         }else{
           swal({
-              title: 'CDs requerido',
-              text: 'Favor de seleccionar el CDs',
+              title: 'Mes y año requeridos',
+              text: 'Favor de indicar el mes y año',
               type: 'error',
               customClass: 'swal2-overflow',
           });
@@ -420,7 +492,9 @@ export class HistorialComponent {
 
       var params = {};
       params['Ordenes'] = JSON.stringify(ids);
-      params['IDDistribuidor'] = this._global.user.IDDistribuidor;
+      params['IDMaster'] = this._global.user.IDCentro;
+      params['IDOperadorAdmin'] = this._global.user.id;
+      params['IDCentro'] = this.filterForm.controls.Cds.value;
       params['MontoTotal'] = this.montoTotal;
       params['Mes'] = this.filterForm.controls.Mes.value;
       params['Ano'] = this.filterForm.controls.Ano.value;
@@ -437,16 +511,71 @@ export class HistorialComponent {
               console.log('data');
               console.log(data);
               this._global.appstatus.loading = false;
-              alert(data.res);
+
               if (data.res == 'ok') {
+                this.statusPago = data.pagos.StatusPago;
+                this.obtenerPagos();
 
+              } else if (data.res = 'error') {
+                  this._global.appstatus.mensaje = data.error;
+              }
+
+
+              //console.log("fichas");
+              //console.log(this.props.fichas);
+          },
+          error => alert(error),
+          () => console.log('termino submit')
+          );
+
+
+
+  }
+
+  iniciarCargaComprobante(id_pago, mes_pago, ano_pago, categoria_pago, montototal_pago, comprobante_pago, fecha_pago){
+    this.statusPago='Cargar';
+    this.id_pago = id_pago;
+    this.mesPago = mes_pago;
+    this.categoriaPago = ano_pago;
+    this.montoPago = montototal_pago;
+    this.comprobantePago = comprobante_pago;
+    this.fechaRegistroPago = fecha_pago;
+    alert(this.id_pago);
+  }
+
+  obtenerPagos() {
+      var params = {};
+      params['IDMaster'] = this._global.user.IDCentro;
+      params['Nivel'] = this._global.user.nivel;
+
+      this._global.appstatus.loading = true;
+
+      this._httpService.postJSON(params, 'administracion/listar-pagos.php')
+          .subscribe(
+          data => {
+              this._global.appstatus.loading = false;
+
+              if (data.res == 'ok') {
                   //this._global.guardarObjPagos(data.pagos);
-                  this._global.pagos.objpagos = this._global.parseJSON(data.pagos);
-                  //localStorage.setItem('objpagos', data.pagos);
-                  console.log('pagos');
-                  console.log(this._global.pagos.objpagos);
-                  this._router.navigate(['administracion/historial-de-pagos']);
 
+                  this.precargaPaises();
+                  this.setMesResumen();
+                  this.changeMaster();
+
+                  this.filterForm.controls.Cds.setValue('');
+                  this.filterForm.controls.Categoria.setValue('');
+                  this.filterForm.controls.Ano.setValue('');
+                  this.filterForm.controls.Mes.setValue('0');
+
+                  //localStorage.setItem('objpagos', data.pagos);
+                  //console.log("_global.pagos.objpagos->", data.pagos);
+                  this._global.pagos.objpagos = data.pagos;
+                  //this._global.pagos.objpagos = this._global.parseJSON(data.pagos);
+                  setTimeout(() => {
+                      //this.trigger.destroy();
+                      this.trigger.next();
+                      this.rerender();
+                  });
               } else if (data.res = 'error') {
                   this._global.appstatus.mensaje = data.error;
               }
@@ -523,4 +652,5 @@ export class HistorialComponent {
           this._global.validateAllFormFields(this.pagosForm);
       }
   }
+
 }

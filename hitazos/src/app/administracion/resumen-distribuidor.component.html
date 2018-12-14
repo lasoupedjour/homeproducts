@@ -11,7 +11,7 @@
   <div class="row">
 
     <div class="offset-sm-8 col-sm-2 text-center active" *ngIf="this._global.user.nivel=='distribuidor'">
-      <a routerLink="/administracion/resumen-distribuidor/">Resumen de servicios</a>
+      <a routerLink="/administracion/resumen-distribuidor/">Resumen de Cambios</a>
     </div>
     <!--<div class="col-sm-2 text-center">
       <a routerLink="/administracion/servicios-red/">Servicios Red</a>
@@ -58,7 +58,7 @@
       </div>
 
 
-      <!-- <div class="col-3 fM3">
+      <div class="col-3 fM3">
         <div class="row">
           <div class="col-12">
             <h5><strong>Monto Total: ${{montoTotal}} USD</strong></h5>
@@ -69,7 +69,7 @@
             <h5><strong>Status: {{statusPago}}</strong></h5>
           </div>
         </div>
-      </div> -->
+      </div>
 
    </div>
    <form  name="formulariofiltros" [formGroup]="filterForm" >
@@ -130,6 +130,7 @@
              <th>Fecha de entrega</th>
              <th>Tipo de Reclamo</th>
              <th>Costo Landed</th>
+             <th>Otro Costo</th>
            </tr>
            </thead>
 
@@ -185,6 +186,9 @@
              </td>
              <td>
                {{item.CostoLanded}}
+             </td>
+             <td>
+               {{item.OtroCostoDistribuidor}}
              </td>
            </tr>
            </tbody>

@@ -31,6 +31,8 @@ $CustomerID = $arre['CustomerID'];
 $Nombre = $arre['Nombre'];
 $IDCentro = $arre['IDCentro'];
 $IDDistribuidor = $arre['IDDistribuidor'];
+$IDMaster = $arre['IDMaster'];
+$IDDistribuidor = $arre['IDDistribuidor'];
 /*
 $mesnext =
 if($mes)*/
@@ -71,7 +73,7 @@ $queryMontos = "
             (select * from tarifas) as tarifas
             on centros.idGrupotarifa = tarifas.idGrupoTarifa
             left join
-            (select * from centros) as centros1
+            (select * from centros where IDMaster=$IDMaster) as centros1
             on centros.idMaster = centros1.id
             where clientes.id = reportes.IDCliente and
             StatusReporte = 'Orden de Servicio'
@@ -83,7 +85,7 @@ $queryFee = "
             StatusReporte, FechaOrdenServicio, reportes.IDCentro, reportes.Categoria, reportes.Distribuidor from
             (select idcentro, StatusReporte, FechaOrdenServicio, Categoria, Distribuidor from reportes) as reportes
             join
-            (select id, idgrupotarifa from centros) as c
+            (select id, idgrupotarifa from centros where IDMaster=$IDMaster) as c
             on reportes.idcentro = c.id
             join
             (select * from tarifas) as t
@@ -105,11 +107,11 @@ if ($CustomerID!="" || $Nombre!=""){
 if ($categoria!=""){
   $filtroCat = " and reportes.Categoria='$categoria'";
 }
-
+/*
 if ($cds!=""){
   $filtroCds = " and reportes.IDCentro=$cds";
 }
-
+*/
 if($mes!=0 && $ano!=0){
   $filtroFecha = " and (FechaOrdenServicio >= '$fechaIni' and FechaOrdenServicio <= '$fechaFin')";
 }
@@ -133,6 +135,9 @@ if($filtroDist==""){
   }elseif($filtroCds=="" && $filtroFecha=="" && $filtroCat!=""){
     $queryMontos = str_replace(":filtros", $filtroCat, $queryMontos);
     $queryFee = str_replace(":filtros", $filtroCat, $queryFee);
+  }elseif($filtroCds!="" && $filtroFecha!="" && $filtroCat==""){
+    $queryMontos = str_replace(":filtros", $filtroCds . $filtroFecha, $queryMontos);
+    $queryFee = str_replace(":filtros", $filtroCds . $filtroFecha, $queryFee);
   }else{
     $queryMontos = str_replace(":filtros", "", $queryMontos);
     $queryFee = str_replace(":filtros", "", $queryFee);
@@ -161,6 +166,9 @@ if($filtroDist==""){
     $queryFee = str_replace(":filtros", "", $queryFee);
   }
 }
+
+//echo($queryMontos);
+//die();
 /*
 echo("Montos-> " . $queryMontos . "<br><br>");
 echo("Montos-> " . $queryFee . "<br>");
@@ -185,14 +193,15 @@ while ($row = mysql_fetch_array($qMontos))
 {
   $MontoRefacciones = $MontoRefacciones + floatval($row["MontoRefacciones"]);
 	$MontoTAMov = $MontoTAMov+ (floatval($row["MontoReparacion"]) + floatval($row["MontoMovilizacion"]));
-  $MontoDespiece = $MontoDespiece + floatval($row["MontoDespiece"]);
-  $MontoReciclaje = $MontoReciclaje + floatval($row["MontoReciclaje"]);
-  $MontoOtro = $MontoOtro + floatval($row["MontoOtro"]);
+  $MontoDespiece = floatval($row["MontoDespiece"]);
+  $MontoReciclaje = floatval($row["MontoReciclaje"]);
+  $MontoOtro = floatval($row["MontoOtro"]);
   $CostoLanded = $CostoLanded + floatval($row["CostoLanded"]);
   if($IDCentro>0)
     $MontoCambio = $MontoCambio + ($MontoDespiece + $MontoReciclaje + $MontoOtro);
   else
     $MontoCambio = $MontoCambio + $CostoLanded;
+
   array_push($reportes, $row["id"]);
 }
 
@@ -210,8 +219,8 @@ while ($row = mysql_fetch_array($qFee))
 
 }
 
-if($IDCentro>0){
-  $queryPagos = "Select * from pagos where mes='" . $mes . "' and ano='" . $ano . "' and idCentro=$IDCentro";
+if($IDMaster>0){
+  $queryPagos = "Select * from pagos where mes='" . $mes . "' and ano='" . $ano . "' and IDMaster=$IDMaster";
 }elseif($IDDistribuidor>0){
   $queryPagos = "Select * from pagos where mes='" . $mes . "' and ano='" . $ano . "' and IDDistribuidor=$IDDistribuidor";
 }else{
@@ -244,7 +253,17 @@ $res['MontoTotal'] = $MontoTotal;
 $res['MontoCambio'] = $MontoCambio;
 $res['Reportes'] = $reportes;
 $res['Pago'] = $pagos;
-
+/*
+echo("MontoRefacciones" . $MontoRefacciones . "--");
+echo("MontoTAMov" . $MontoTAMov . "--");
+echo("MontoFee" . $MontoFee . "--");
+echo("MontoTotal" . $MontoTotal . "--");
+echo("MontoDespiece" . $MontoDespiece . "--");
+echo("MontoReciclaje" . $MontoReciclaje . "--");
+echo("MontoOtro" . $MontoOtro . "--");
+echo("MontoCambio" . $MontoCambio . "--");
+die();
+*/
 echo json_encode($res);
 
 /*

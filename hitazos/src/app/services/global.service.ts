@@ -1701,6 +1701,7 @@ export class GlobalService implements CanActivate{
     contarNotificaciones(){
       var params = {};
       params['id_usuario'] = this.user.id;
+      params['id_centro'] = this.user.IDCentro;
       params['nivel'] = this.user.nivel;
       params['IDDistribuidor'] = this.user.IDDistribuidor;
 
@@ -1728,6 +1729,7 @@ export class GlobalService implements CanActivate{
     listarNotificaciones(){
       var params = {};
       params['id_usuario'] = this.user.id;
+      params['id_centro'] = this.user.IDCentro;
       params['nivel'] = this.user.nivel;
       params['IDDistribuidor'] = this.user.IDDistribuidor;
 
@@ -1756,7 +1758,7 @@ export class GlobalService implements CanActivate{
       //localStorage.setItem("cliente", JSON.stringify(this._global.cliente));
     }
 
-    registrarNotificacion(id_reporte) {
+    registrarNotificacion(id_reporte = null, id_centro = null) {
         console.log('registrar notificación');
 
         var params = {};
@@ -1764,7 +1766,9 @@ export class GlobalService implements CanActivate{
         params['id_reporte'] = id_reporte;
         params['modulo'] = this.notificaciones.modulo;
         params['descripcion'] = this.notificaciones.descripcion;
-
+        if(id_centro>0){
+          params['id_centro'] = id_centro;
+        }
         console.log(params);
 
         this._httpService.postJSON(params, 'notificaciones/regisrtrar-notificacion.php')

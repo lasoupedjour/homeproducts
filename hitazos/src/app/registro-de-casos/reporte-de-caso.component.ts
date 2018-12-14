@@ -644,9 +644,13 @@ export class ReporteCasoComponent {
             () => console.log('termino submit')
             );
     }
-
-    changeSubcategoria(Subcategoria = null) {
-
+    changeUso(Subcategoria = null){
+      var valido = true;
+      if(this.genericForm.controls.Uso.value=='' && this.genericForm.controls.Categoria.value=='MENAJE'){
+        alert("Favor de seleccionar el uso del producto.");
+        valido = false;
+      }
+      if(valido){
         this._global.appstatus.mensaje = '';
         console.log('submit busqueda');
         console.log(this.genericForm.getRawValue());
@@ -662,6 +666,69 @@ export class ReporteCasoComponent {
 
         params['Pais'] = this._global.user.Pais;
         params['nivel'] = this._global.user.nivel;
+        params['Categoria'] = this.genericForm.controls.Categoria.value;
+        params['Uso'] = this.genericForm.controls.Uso.value;
+
+        this._global.appstatus.loading = true;
+
+        this._global.modelos = [];
+        this.genericForm.controls.Modelo.setValue('');
+        this.genericForm.controls.Modelo.updateValueAndValidity();
+
+        this._global.productos = [];
+        this.genericForm.controls.Tipo.setValue('');
+        this.genericForm.controls.Tipo.updateValueAndValidity();
+
+        this._httpService.postJSON(params, 'buscar-fallas.php')
+            .subscribe(
+            data => {
+                console.log('data');
+                console.log(data);
+                this._global.appstatus.loading = false;
+
+                if (data.res == 'ok') {
+                    this._global.fallas = this._global.parseJSON(data.fallas);
+                    console.log('fallas');
+                    console.log(this._global.fallas);
+
+                    if (data.fallas.length == 0) {
+                        this._global.appstatus.mensaje = 'No se encontraron datos con estas características.';
+                    }
+
+                } else if (data.res = 'error') {
+                    this._global.appstatus.mensaje = data.error;
+                }
+            },
+            error => alert(error),
+            () => console.log('termino submit')
+            );
+        }
+    }
+
+    changeSubcategoria(Subcategoria = null) {
+      var valido = true;
+      if(this.genericForm.controls.Uso.value=='' && this.genericForm.controls.Categoria.value=='MENAJE'){
+        alert("Favor de seleccionar el uso del producto.");
+        valido = false;
+      }
+      if(valido){
+        this._global.appstatus.mensaje = '';
+        console.log('submit busqueda');
+        console.log(this.genericForm.getRawValue());
+        var params = {};
+        if (Subcategoria == null)
+            params['Subcategoria'] = this.genericForm.controls.Subcategoria.value;
+        else
+            params['Subcategoria'] = Subcategoria;
+
+
+        //precarga subtiposervicio de tarifas
+        this.precargaTarifasMovilizacion(params['Subcategoria']);
+
+        params['Pais'] = this._global.user.Pais;
+        params['nivel'] = this._global.user.nivel;
+        params['Categoria'] = this.genericForm.controls.Categoria.value;
+        params['Uso'] = this.genericForm.controls.Uso.value;
 
         this._global.appstatus.loading = true;
 
@@ -693,6 +760,11 @@ export class ReporteCasoComponent {
                             this.genericForm.controls.Modelo.updateValueAndValidity();
 
                             this.changeModelo(Object(this._global.reporte.objreporte).Modelo);
+                        }
+
+                        /*Si la subcategoría es Microondas o Dispensador de agua*/
+                        if(this.genericForm.controls.Subcategoria.value=="DISPENSADOR DE AGUA" || this.genericForm.controls.Subcategoria.value=="MICROONDA"){
+                          this.formulariostatus.habilitaDomicilio = true;
                         }
                     }
 
@@ -728,6 +800,7 @@ export class ReporteCasoComponent {
             error => alert(error),
             () => console.log('termino submit')
             );
+        }
     }
 
 
@@ -940,6 +1013,17 @@ export class ReporteCasoComponent {
 
                 this.modelfecharevision = { year: fechatemp.year, month: fechatemp.month, day: fechatemp.day };
 
+                /*Si la subcategoría es Microondas o Dispensador de agua*/
+                if(this.genericForm.controls.Subcategoria.value=="DISPENSADOR DE AGUA" || this.genericForm.controls.Subcategoria.value=="MICROONDA"){
+                  this.genericForm.controls.FechaRevision.setValidators([]);
+                  this.genericForm.controls.FechaRevision.setValue('');
+                  this.genericForm.controls.FechaRevision.updateValueAndValidity();
+
+                  this.genericForm.controls.TipoKilometraje.setValidators([]);
+                  this.genericForm.controls.TipoKilometraje.setValue('');
+                  this.genericForm.controls.TipoKilometraje.updateValueAndValidity();
+                  this.formulariostatus.necesitaAutorizacion = 1;
+                }
             }
 
 
@@ -1206,7 +1290,15 @@ export class ReporteCasoComponent {
                                 confirmButtonText: 'Ok',
                                 customClass: 'swal2-overflow',
                             }).then((result) => {
-                                this._router.navigate(['inicio']);
+                              ////Registro de notificación para HP
+                              this._global.notificaciones.modulo = "/cambio-fisico-distribuidor";
+                              this._global.notificaciones.descripcion = "Se ha registrado una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
+                              this._global.registrarNotificacion(this._global.reporte.idreporte);
+
+                              this._global.notificaciones.modulo = "/cambio-fisico-dist-asigna";
+                              this._global.notificaciones.descripcion = "Se ha registrado y asignado a su CDs una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
+                              this._global.registrarNotificacion(this._global.reporte.idreporte, this._global.user.IDCentro);
+                              this._router.navigate(['inicio']);
                             });
                           }else{
                             this._router.navigate(['inicio/resumen']);

@@ -20,6 +20,7 @@ $json = $_POST['json'];
 $arre = json_decode($json, true);
 
 $id_usuario = utf8_decode(urldecode($arre['id_usuario']));
+$id_centro = utf8_decode(urldecode($arre['id_centro']));
 $nivel= utf8_decode(urldecode($arre['nivel']));
 $IDDistribuidor = utf8_decode(urldecode($arre['IDDistribuidor']));
 
@@ -29,15 +30,16 @@ if($nivel=='administrador'){
   $query = "
             select n.id from
             (select notificaciones.* from notificaciones where leida=0) as n
-            join
-            (select * from usuarios_admin where (nivel<>'administrador')) as ua
+            left join
+            (select * from usuarios_admin where (nivel='administrador')) as ua
             on ua.id = n.id_usuario
             join
             (select * from reportes) as r
             on n.id_reporte = r.id
             join
-            (select * from usuarios_admin where ID=$id_usuario) as u
+            (select * from usuarios_admin) as u
             on r.idcentro = u.idcentro
+            Where (id_usuario=$id_usuario or (modulo='/cambio-fisico-dist-asigna' and id_centro=$id_centro)) or r.IDCentro=$id_centro
             group by id
             order by id desc
             ";
@@ -47,7 +49,7 @@ if($nivel=='administrador'){
             select n.id from
             (select notificaciones.* from notificaciones where leida=0) as n
             join
-            (select * from usuarios_admin where (nivel<>'administrador')) as ua
+            (select * from usuarios_admin where (nivel='administrador')) as ua
             on ua.id = n.id_usuario
             join
             (select * from reportes) as r
@@ -59,7 +61,6 @@ if($nivel=='administrador'){
             order by id desc
             ";
 }
-
 
 $q = mysql_query($query) or die(mysql_error());
 

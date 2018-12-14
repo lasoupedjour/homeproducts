@@ -192,10 +192,30 @@ export class OrdenInicioComponent {
         this.MontoIVA = parseFloat(this._global.reporte.objreporte.MontoIVA);
         this.MontoTotal = parseFloat(this._global.reporte.objreporte.MontoTotal);
 
-        try { this._global.AdjuntosFacturasNotasCompraArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosFacturasNotasCompra); } catch (e) { };
-        try { this._global.AdjuntosFotosModeloSerieArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosFotosModeloSerie); } catch (e) { };
-        try { this._global.AdjuntosFacturasRepuestosArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosFacturasRepuestos); } catch (e) { };
-        try { this._global.AdjuntosOtrosArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosOtros); } catch (e) { };
+
+        if(this._global.reporte.objreporte.AdjuntosFacturasNotasCompra!=""){
+            try { this._global.AdjuntosFacturasNotasCompraArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosFacturasNotasCompra); } catch (e) { };
+        }else{
+            this._global.AdjuntosFacturasNotasCompraArre = [];
+        }
+
+        if(this._global.reporte.objreporte.AdjuntosFacturasRepuestos!=""){
+            try { this._global.AdjuntosFotosModeloSerieArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosFotosModeloSerie); } catch (e) { };
+        }else{
+            this._global.AdjuntosFotosModeloSerieArre = [];
+        }
+
+        if(this._global.reporte.objreporte.AdjuntosFotosModeloSerie!=""){
+            try { this._global.AdjuntosFacturasRepuestosArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosFacturasRepuestos); } catch (e) { };
+        }else{
+            this._global.AdjuntosFacturasRepuestosArre = [];
+        }
+
+        if(this._global.reporte.objreporte.AdjuntosOtros!=""){
+            try { this._global.AdjuntosOtrosArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosOtros); } catch (e) { };
+        }else{
+            this._global.AdjuntosOtrosArre = [];
+        }
      }
 
      obtenerSubtipoServicio(){
@@ -409,7 +429,7 @@ export class OrdenInicioComponent {
 
         console.log(this.tiporeparacion.Valor);
 
-        this.calculaCostoTotal();
+        this.calculaCostoTotal(true);
 
     }
 
@@ -428,33 +448,49 @@ export class OrdenInicioComponent {
     changeMontoReciclaje(){
       this.calculaCostoTotal();
     }
+    changeMontoDespiece(){
+      this.calculaCostoTotal();
+    }
 
-    calculaCostoTotal(){
+    calculaCostoTotal(CahngeTipoRevision = null){
       console.log('calculando monto total');
       console.log(this.genericForm.controls.MontoReciclaje.value);
       //suma refacciones
-      this.MontoSubtotal = this.MontoRefacciones + parseFloat(String(this.tiporeparacion.Valor)) + parseFloat(this._global.reporte.objreporte.MontoMovilizacion);
+      this.MontoSubtotal = parseFloat(String(this.MontoRefacciones)) + parseFloat(String(this.tiporeparacion.Valor)) + parseFloat(this._global.reporte.objreporte.MontoMovilizacion);
 
-      //suma Cambio físicos
-      if(this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio'){
-        this._global.reporte.objreporte.MontoDespiece = String(0.5 * parseFloat(String(this.tiporeparacion.Valor)));
-        this.MontoSubtotal = this.MontoSubtotal + parseFloat(this._global.reporte.objreporte.MontoDespiece);
+      if(CahngeTipoRevision){
+        if(this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio'){
+          this._global.reporte.objreporte.MontoDespiece = String(0.5 * parseFloat(String(this.tiporeparacion.Valor)));
+        }
+      }else{
+        this._global.reporte.objreporte.MontoDespiece = this.genericForm.controls.MontoDespiece.value;
       }
+      /*
+      if(parseFloat(this.genericForm.controls.MontoDespiece.value)>0 && (this.genericForm.controls.MontoDespiece.value==this._global.reporte.objreporte.MontoDespiece)){
+        this._global.reporte.objreporte.MontoDespiece = this.genericForm.controls.MontoDespiece.value;
+      }else{
+        //suma Cambio físicos
+        //if(this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio'){
+          this._global.reporte.objreporte.MontoDespiece = String(0.5 * parseFloat(String(this.tiporeparacion.Valor)));
+        //}
+      }
+      */
+      this.MontoSubtotal = this.MontoSubtotal + parseFloat(this._global.reporte.objreporte.MontoDespiece);
 
       //suma Reciclaje y otro CostoTotal
 
       if(this.genericForm.controls.MontoReciclaje.value != null && this.genericForm.controls.MontoReciclaje.value != '')
-        this.MontoSubtotal = this.MontoSubtotal + parseFloat(String(this.genericForm.controls.MontoReciclaje.value));
+        this.MontoSubtotal = parseFloat(String(this.MontoSubtotal)) + parseFloat(String(this.genericForm.controls.MontoReciclaje.value));
       if(this.genericForm.controls.MontoOtro.value != null && this.genericForm.controls.MontoOtro.value != '')
-        this.MontoSubtotal = this.MontoSubtotal + parseFloat(String(this.genericForm.controls.MontoOtro.value));
+        this.MontoSubtotal = parseFloat(String(this.MontoSubtotal)) + parseFloat(String(this.genericForm.controls.MontoOtro.value));
 
       //alert(this.tiporeparacion.Impuesto);
       if(String(this.tiporeparacion.Impuesto)=='0')
         this.MontoIVA = 0;
       else
-        this.MontoIVA = parseFloat(String(this.tiporeparacion.Impuesto)) * this.MontoSubtotal;
+        this.MontoIVA = parseFloat(String(this.tiporeparacion.Impuesto)) * parseFloat(String(this.MontoSubtotal));
 
-      this.MontoTotal = this.MontoSubtotal + this.MontoIVA;
+      this.MontoTotal = parseFloat(String(this.MontoSubtotal)) + parseFloat(String(this.MontoIVA));
       if(this.tiporeparacion.NecesitaAutorizacion==0)
           this.tiporeparacion.NecesitaAutorizacionRO = true;
     }

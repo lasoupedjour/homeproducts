@@ -16,15 +16,19 @@ $id_usuario = utf8_decode(urldecode($arre['id_usuario']));
 $modulo = utf8_decode(urldecode($arre['modulo']));
 $descripcion = utf8_decode(urldecode($arre['descripcion']));
 
+$id_centro = 0;
+if($arre['id_centro']!="")
+  $id_centro = $arre['id_centro'];
+
 $res = array();
 if($modulo!="" &&
    $descripcion!=""){
   $res['res'] = 'ok';
   $query = "
   insert into notificaciones
-  (id_reporte, id_usuario, leida, modulo, descripcion)
+  (id_reporte, id_usuario, id_centro, leida, modulo, descripcion)
   values
-  ($id_reporte, $id_usuario, 0, '$modulo','$descripcion')
+  ($id_reporte, $id_usuario, $id_centro, 0, '$modulo','$descripcion')
   ";
 
   $q = mysql_query($query) or die(mysql_error());

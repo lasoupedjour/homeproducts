@@ -60,7 +60,7 @@
              <th>Selección</th>
            </tr>
 
-           <tr *ngFor="let item of _global.refaccionesXAutorizar.recientes;" class="formulario">
+           <tr *ngFor="let item of _global.refaccionesXAutorizar.recientes;" class="formulario" [hidden]="item.Refacciones.Existencia=='No Disponible'">
 
              <td>
                {{item.Pais}}
@@ -349,9 +349,9 @@
 
 
               <th>Días Transcurridos</th>
+              <th>Status Costo Landed</th>
 
               <th>Status</th>
-
 
               <th>Acción</th>
 
@@ -379,13 +379,13 @@
               </td>
 
               <td>
-                ${{item.MontoDespiece}} USD
+                {{item.MontoDespiece|currency}} USD
               </td>
               <td>
-                ${{item.MontoReciclaje}} USD
+                {{item.MontoReciclaje|currency}} USD
               </td>
               <td>
-                ${{item.MontoOtro}} USD
+                {{item.MontoOtro|currency}} USD
               </td>
               <!--td>
                 {{item.MontoOtroDescripcion}}
@@ -393,6 +393,9 @@
 
               <td [ngClass]="this._global.diasTranscurridosColor(item.FechaRegistroReporte)">
                 {{this._global.diasTranscurridos(item.FechaRegistroReporte)}}
+              </td>
+              <td>
+                {{item.StatusCostoLanded}}
               </td>
               <td>
                 {{item.StatusCambioFisico}}
@@ -475,13 +478,13 @@
               </td>
 
               <td>
-                ${{item.MontoDespiece}} USD
+                {{item.MontoDespiece|currency}} USD
               </td>
               <td>
-                ${{item.MontoReciclaje}} USD
+                {{item.MontoReciclaje|currency}} USD
               </td>
               <td>
-                ${{item.MontoOtro}} USD
+                {{item.MontoOtro|currency}} USD
               </td>
               <!--td>
                 {{item.MontoOtroDescripcion}}
@@ -538,9 +541,10 @@
              <th>Fecha de Registro</th>
              <th>Tipo de Caso</th>
 
-             <th>Tarifa Despiece</th>
-             <th>Tarifa Reciclaje</th>
-             <th>Tarifa Otro Monto</th>
+             <th [hidden]="this._global.user.nivel=='distribuidor'">Tarifa Despiece</th>
+             <th [hidden]="this._global.user.nivel=='distribuidor'">Tarifa Reciclaje</th>
+             <th [hidden]="this._global.user.nivel=='distribuidor'">Tarifa Otro Monto</th>
+             <th>Costo Landed</th>
              <!--th>Descripcion Otro Monto</th-->
 
 
@@ -574,14 +578,17 @@
                {{item.TipoCaso}}
              </td>
 
-             <td>
-               ${{item.MontoDespiece}} USD
+             <td [hidden]="this._global.user.nivel=='distribuidor'">
+               {{item.MontoDespiece|currency}} USD
+             </td>
+             <td [hidden]="this._global.user.nivel=='distribuidor'">
+               {{item.MontoReciclaje|currency}} USD
+             </td>
+             <td [hidden]="this._global.user.nivel=='distribuidor'">
+               {{item.MontoOtro|currency}} USD
              </td>
              <td>
-               ${{item.MontoReciclaje}} USD
-             </td>
-             <td>
-               ${{item.MontoOtro}} USD
+               {{item.CostoLanded|currency}} USD
              </td>
              <!--td>
                {{item.MontoOtroDescripcion}}
@@ -667,6 +674,7 @@
            <th>Proceso</th>
            <th>Status Reporte</th>
            <th>Status CDs</th>
+           <th>Categoría</th>
            <th>Selección</th>
          </tr>
 
@@ -711,6 +719,9 @@
            </td>
            <td>
              Abierto
+           </td>
+           <td>
+             {{item.Categoria}}
            </td>
            <td *ngIf="this._global.user.nivel=='distribuidor'">
              <button *ngIf="item.Categoria=='MENAJE'" (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Seleccionar</button>
@@ -821,6 +832,7 @@
            <td>
              <!--item.StatusCambioFisico {{item.StatusCambioFisico}}<br>
              item.TipoReclamoDiagnostico {{item.TipoReclamoDiagnostico}}-->
+             <button *ngIf="item.StatusCambioFisico=='' && item.TipoReclamoDiagnostico=='Cambio' " (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen/orden')" class="btn btn-sm">Seleccionar</button>
              <button *ngIf="item.StatusCambioFisico=='Rechazado'" (click)="this._global.seleccionarReporte(item.id, 'registro-de-casos/orden-de-servicio/inicio')" class="btn btn-sm">Seleccionar</button>
              <button *ngIf="item.TipoReclamoDiagnostico!='Cambio' || item.StatusCambioFisico=='Aprobado'" (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen/orden')" class="btn btn-sm">Seleccionar</button>
            </td>

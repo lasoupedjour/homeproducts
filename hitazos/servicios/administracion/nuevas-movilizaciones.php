@@ -21,15 +21,30 @@ array_walk_recursive($arre,function(&$value) use ($current_charset){
 $res = array();
 
 $res['res'] = 'ok';
+/*
+SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, tarifas.SubtipoServicio, tarifas.Valor, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
+FROM reportes, clientes, centros, tarifas
+where clientes.id = reportes.IDCliente
+and centros.id = reportes.IDCentro
+and StatusMovilidad <> 'Aprobada'
+and reportes.IDTarifas = tarifas.id
+order by FechaRegistroReporte desc :LIMIT
+*/
 
 $query = "
-          SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, tarifas.SubtipoServicio, tarifas.Valor, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
-          FROM reportes, clientes, centros, tarifas
-          where clientes.id = reportes.IDCliente
-          and centros.id = reportes.IDCentro
-          and StatusMovilidad <> 'Aprobada'
-          and reportes.IDTarifas = tarifas.id
-          order by FechaRegistroReporte desc :LIMIT
+select reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, tarifas.SubtipoServicio, tarifas.Valor from
+(select * from reportes) as reportes
+join
+(select * from clientes) as clientes
+on clientes.id = reportes.IDCliente
+join
+(select * from centros) as centros
+on centros.id = reportes.IDCentro
+left join
+(select * from tarifas) as tarifas
+on tarifas.id = reportes.IDTarifas
+where StatusMovilidad <> 'Aprobada'
+order by FechaRegistroReporte desc :LIMIT
           ";
 
 if($arre["limit"]=="")

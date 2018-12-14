@@ -39,6 +39,8 @@ import { AdministracionComponent } from './administracion/administracion.compone
 import { ResumenDistribuidorComponent } from './administracion/resumen-distribuidor.component';
 import { HistorialComponent } from './administracion/historial.component';
 import { ResumenPagosComponent } from './administracion/resumen-de-pagos.component';
+import { ResumenDeCambiosComponent } from './administracion/resumen-de-cambios.component';
+import { ResumenDeServiciosComponent } from './administracion/resumen-de-servicios.component';
 
 //Notificaciones
 import { NotificacionesComponent } from './notificaciones/listado.component';
@@ -81,6 +83,8 @@ export const routing = RouterModule.forRoot([
     { path: 'administracion/resumen-distribuidor', component: ResumenDistribuidorComponent, canActivate: [GlobalService] },
     { path: 'administracion/historial-de-pagos', component: HistorialComponent, canActivate: [GlobalService] },
     { path: 'administracion/resumen-de-pagos', component: ResumenPagosComponent, canActivate: [GlobalService] },
+    { path: 'administracion/resumen-de-cambios', component: ResumenDeCambiosComponent, canActivate: [GlobalService] },
+    { path: 'administracion/resumen-de-servicios', component: ResumenDeServiciosComponent, canActivate: [GlobalService] },
 
 
     //{ path: 'registroticket/:idparticipante', component: RegistroTicketComponent, canActivate: [GlobalService] },

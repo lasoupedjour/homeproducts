@@ -9,7 +9,7 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
 
 $json = $_POST['json'];
 $arre = json_decode($json, true);
-	
+
 $current_charset = 'ISO-8859-15';//or what it is now
 array_walk_recursive($arre,function(&$value) use ($current_charset){
      $value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
@@ -22,16 +22,22 @@ $res = array();
 
 $res['res'] = 'ok';
 
+if($arre['Categoria']=="MENAJE"){
+  $q = mysql_query("
+  SELECT distinct Falla FROM fallas where Subcategoria = '".$arre['Subcategoria']."' and Uso='".$arre['Uso']."' order by Falla asc
+  ") or die(mysql_error());
+}else{
+  $q = mysql_query("
+  SELECT distinct Falla FROM fallas where Subcategoria = '".$arre['Subcategoria']."' order by Falla asc
+  ") or die(mysql_error());
+}
 
-$q = mysql_query("
-SELECT distinct Falla FROM fallas where Subcategoria = '".$arre['Subcategoria']."' order by Falla asc
-") or die(mysql_error());
 
 
 $fallas = array();
 
-while ($row = mysql_fetch_array($q))   
-{  
+while ($row = mysql_fetch_array($q))
+{
 	$current_charset = 'ISO-8859-15';//or what it is now
 	array_walk_recursive($row,function(&$value) use ($current_charset){
 		 //$value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
@@ -47,5 +53,5 @@ echo json_encode($res);
 
 
 
-	
+
 ?>

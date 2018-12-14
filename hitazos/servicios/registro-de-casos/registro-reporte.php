@@ -65,7 +65,7 @@ if($arre['IDDistribuidor']==0){
   $IDCentro = $arre['IDCentro'];
   $IDOperadorCentro = $arre['IDUsuario'];
 }else{//Si se trata de un distribuidor obtenemos el ID
-
+  $IDCentro = $arre['IDCentro'];
   $query = "
   select id from distribuidores Where IDDistribuidor='" . $arre['Distribuidor'] . "';
   ";

@@ -46,6 +46,8 @@ import { AdministracionComponent } from './administracion/administracion.compone
 import { ResumenDistribuidorComponent } from './administracion/resumen-distribuidor.component';
 import { HistorialComponent } from './administracion/historial.component';
 import { ResumenPagosComponent } from './administracion/resumen-de-pagos.component';
+import { ResumenDeCambiosComponent } from './administracion/resumen-de-cambios.component';
+import { ResumenDeServiciosComponent } from './administracion/resumen-de-servicios.component';
 
 //Notificaciones
 import { NotificacionesComponent } from './notificaciones/listado.component';
@@ -113,6 +115,8 @@ import 'datatables.net-fixedheader';
         ResumenDistribuidorComponent,
         HistorialComponent,
         ResumenPagosComponent,
+        ResumenDeCambiosComponent,
+        ResumenDeServiciosComponent,
 
         NotificacionesComponent,
 

@@ -16,7 +16,7 @@ export class ResumenOrdenComponent {
     genericForm: FormGroup;
     adjuntosCambioFisicoForm: FormGroup;
     distribuidorCambioFisicoForm: FormGroup;
-
+    editarReciclaje = false;
     RazonSocialDistribuidor: string;
     FechaResolucion: string;
     //@ViewChild("Email") Email: ElementRef;
@@ -67,7 +67,8 @@ export class ResumenOrdenComponent {
             ],
             procesadoPor: ['',
                 Validators.required
-            ]
+            ],
+            MontoDespiece: [0]
         });
 
         this.adjuntosCambioFisicoForm = this.formBuilder.group({
@@ -88,6 +89,7 @@ export class ResumenOrdenComponent {
                 Validators.required
             ],
             CostoLanded: [this._global.reporte.objreporte.CostoLanded, Validators.required],
+            OtroCostoDistribuidor: [''],
         });
 
         this.setFechaEntregaCambio();
@@ -115,6 +117,39 @@ export class ResumenOrdenComponent {
         console.log("/inicio/resumen/orden reporte>>>", this._global.reporte.objreporte);
         if(this._global.reporte.objreporte.FechaEntregaCambio !="0000-00-00 00:00:00")
           this.fechaentregacambio = moment(this._global.reporte.objreporte.FechaEntregaCambio).format("DD/M/Y")
+
+
+
+        if(
+            this._global.reporte.objreporte.StatusCambioFisico=='Aprobado' &&
+            this._global.reporte.objreporte.StatusCostoLanded=='Aprobado' && !this._global.esDistribuidor()){
+              this.editarReciclaje = true;
+            }
+    }
+
+    changeMontoDespiece(){
+      var MontoSubtotal = 0;
+      var MontoDespiece = this.genericForm.controls.MontoDespiece.value;
+      var MontoIVA = 0;
+      var MontoTotal = 0;
+
+      MontoSubtotal = parseFloat(this._global.reporte.objreporte.MontoRefacciones) + parseFloat(this._global.reporte.objreporte.MontoReparacion) + parseFloat(this._global.reporte.objreporte.MontoMovilizacion);
+
+      MontoSubtotal = parseFloat(this._global.reporte.objreporte.MontoSubtotal) + parseFloat(MontoDespiece);
+      MontoSubtotal = parseFloat(this._global.reporte.objreporte.MontoSubtotal) + parseFloat(this._global.reporte.objreporte.MontoReciclaje);
+      MontoSubtotal = parseFloat(this._global.reporte.objreporte.MontoSubtotal) + parseFloat(this._global.reporte.objreporte.MontoOtro);
+
+      //alert(this.tiporeparacion.Impuesto);
+      if(String(this.tiporeparacion.Impuesto)=='0')
+        MontoIVA = 0;
+      else
+        MontoIVA = parseFloat(String(this.tiporeparacion.Impuesto)) * parseFloat(this._global.reporte.objreporte.MontoSubtotal);
+
+      MontoTotal = parseFloat(this._global.reporte.objreporte.MontoSubtotal) + parseFloat(this._global.reporte.objreporte.MontoIVA);
+
+      this._global.reporte.objreporte.MontoIVA = String(MontoIVA);
+      this._global.reporte.objreporte.MontoTotal = String(MontoTotal);
+      this._global.reporte.objreporte.MontoDespiece = MontoDespiece;
     }
 
     setFechaEntregaCambio(){
@@ -281,6 +316,10 @@ export class ResumenOrdenComponent {
         params["IDReporte"] = this._global.reporte.idreporte;
         params["IDUsuario"] = this._global.user.id;
         params["IDCliente"] = this._global.cliente.id;
+        params["MontoDespiece"] = this._global.reporte.objreporte.MontoDespiece;
+        params["MontoSubtotal"] = this._global.reporte.objreporte.MontoSubtotal;
+        params["MontoIVA"] = this._global.reporte.objreporte.MontoIVA;
+        params["MontoTotal"] = this._global.reporte.objreporte.MontoTotal;
         params["TipoReclamoDiagnostico"] = this._global.reporte.objreporte.TipoReclamoDiagnostico;
 
         params["AdjuntosReciclaje"] = this._global.AdjuntosReciclaje;
@@ -414,10 +453,11 @@ export class ResumenOrdenComponent {
 
             if (data.res == 'ok') {
               console.log("pre notificación");
+              /*
               this._global.notificaciones.modulo = "/inicio/resumen/orden";
               this._global.notificaciones.descripcion = "Registro de resolución para el reporte No. " + this._global.reporte.idreporte;
               this._global.registrarNotificacion(this._global.reporte.idreporte);
-
+              */
               this.genericForm.reset();
               this.formulariostatus.success = 2;
 

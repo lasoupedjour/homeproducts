@@ -32,6 +32,7 @@ $query = utf8_encode($query);
 
 $result = mysql_query($query) or die(mysql_error());
 echo "<option value='' hidden>CDS</option>";
+echo "<option value='Todos'>Todos</option>";
 while ($row = mysql_fetch_row($result)) {
 
   $valor = utf8_encode($row[1]);

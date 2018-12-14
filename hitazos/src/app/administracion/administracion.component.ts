@@ -105,13 +105,14 @@ export class AdministracionComponent {
         });
 
         this.precargaPaises();
-        this.setMesResumen();
+        //this.setMesResumen();
         /*
-        this.filterForm.controls.Ano.setValue('0');
-        this.filterForm.controls.Mes.setValue('0');
+
         */
 
         this.changePais();
+        this.filterForm.controls.Ano.setValue('0');
+        this.filterForm.controls.Mes.setValue('0');
         //this.traeOrdenes();
 
         //this.filtrarReporte();
@@ -243,8 +244,9 @@ export class AdministracionComponent {
     filtrarReporte() {
         var centro = this.filterForm.controls.Cds.value;
 
-        if(centro!=""){
+        if(centro!="" ){
           var params = {};
+          params['master']   = this.filterForm.controls.Master.value;
           params['cds']   = this.filterForm.controls.Cds.value;
           params['mes']   = this.filterForm.controls.Mes.value;
           params['ano']   = this.filterForm.controls.Ano.value;
@@ -373,13 +375,54 @@ export class AdministracionComponent {
 
         console.log(ordenes);
         var outer = this;
+        var MontoTotal=0;
+        var MontoFee=0;
+        var MontoImpuestoFee=0;
+        var ValorImpuesto=0;
+        var TotalFee=0;
+        var MontoFee=0;
+        var MontoRefacciones=0;
+        var MontoTAMov=0;
+        var MontoCambio=0;
+        var MontoDespiece=0;
+        var MontoOtro=0;
+        var MontoReciclaje=0;
+
         ordenes.forEach(function (e) {
             //console.log('orden');
-            //console.log(e);
-            outer.montoTotal += parseFloat(String(e.MontoTotal));
+            console.log("el valor de e>>>>>>", e);
+            //outer.montoTotal += parseFloat(String(e.MontoTotal));
+            //
+            MontoFee += parseFloat(String(e.TarifaMensual));
+            MontoImpuestoFee = MontoImpuestoFee + parseFloat(String(e.ImpuestoTarifaMensual));
+            ValorImpuesto = MontoFee * MontoImpuestoFee;
+            TotalFee = TotalFee + (MontoFee + ValorImpuesto);
+
+            MontoRefacciones +=  parseFloat(String(e.MontoRefacciones));
+            MontoTAMov += parseFloat(String(e.MontoReparacion)) + parseFloat(String(e.MontoMovilizacion));
+            MontoDespiece =  parseFloat(String(e.MontoDespiece));
+            MontoReciclaje =  parseFloat(String(e.MontoReciclaje));
+            MontoOtro =  parseFloat(String(e.MontoOtro));
+
+            MontoCambio = MontoCambio + (MontoDespiece + MontoReciclaje + MontoOtro);
         });
 
-        this.montoTotal = parseFloat(this.montoTotal.toFixed(2));
+        console.log("MontoFee", MontoFee);
+        console.log("MontoImpuestoFee", MontoImpuestoFee);
+        console.log("ValorImpuesto", ValorImpuesto);
+        console.log("TotalFee", TotalFee);
+        console.log("MontoRefacciones", MontoRefacciones);
+        console.log("MontoTAMov", MontoTAMov);
+        console.log("MontoDespiece", MontoDespiece);
+        console.log("MontoReciclaje", MontoReciclaje);
+        console.log("MontoOtro", MontoOtro);
+        console.log("MontoCambio", MontoCambio);
+
+
+        MontoTotal = MontoRefacciones + MontoTAMov + TotalFee + MontoCambio;
+        console.log("MontoTotal", MontoTotal);
+
+        this.montoTotal = parseFloat(MontoTotal.toFixed(2));
 
 
     }

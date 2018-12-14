@@ -48,7 +48,7 @@ export class ResumenPagosComponent {
     };
 
     /*Datos del pago*/
-    statusPago = "Por Enviar";
+    statusPago = "";
     idPago = 0;
     comprobantePago = "";
     ano = "";
@@ -72,12 +72,8 @@ export class ResumenPagosComponent {
         this._global.clearMessages();
 
         this.dtOptions = {
-            bInfo: false,
-            pageLength: 1,
+            pageLength: 5,
             scrollX: false,
-            paging: false,
-            ordering:  false,
-            searching: false,
             language: {
                 "processing": "Procesando...",
                 "lengthMenu": "Mostrar _MENU_ registros",
@@ -136,14 +132,18 @@ export class ResumenPagosComponent {
             Comprobante: ['']
         });
 
-        this.precargaPaises();
-        this.setMesResumen();
-        this.filterForm.controls.Master.setValue('');
-        this.filterForm.controls.Cds.setValue('');
-        this.filterForm.controls.Categoria.setValue('');
-        this.filterForm.controls.Ano.setValue('');
-        this.filterForm.controls.Mes.setValue('0');
+        //this.precargaPaises();
+        //this.setMesResumen();
+        //this.changeMaster();
 
+        /*this.filterForm.controls.Master.setValue('');
+        */
+        //this.filterForm.controls.Cds.setValue('');
+        //this.filterForm.controls.Categoria.setValue('');
+        //this.filterForm.controls.Ano.setValue('');
+        //this.filterForm.controls.Mes.setValue('0');
+
+        this.obtenerPagos();
         //this.filtrarReporte();
 
     }
@@ -194,7 +194,7 @@ export class ResumenPagosComponent {
         params['Pais'] = this.filterForm.controls.Pais.value;
         params['IDCentro'] = this._global.user.IDCentro;
         params['Nivel'] = this._global.user.nivel;
-        params['IDMaster'] = this._global.user.IDMaster;
+        params['IDMaster'] = this._global.user.IDCentro;
         params['IDGrupoTarifa'] = this._global.user.IDGrupoTarifa;
 
         this._global.appstatus.loading = true;
@@ -312,7 +312,7 @@ export class ResumenPagosComponent {
       }
       //alert(this.nombreMes);
     }
-    
+
     rerender(): void {
         console.log('rerendering');
         console.log(this.dtElement);
@@ -328,7 +328,8 @@ export class ResumenPagosComponent {
 
     filtrarReporte() {
       if(this.filterForm.controls.Ano.value!='' && this.filterForm.controls.Mes.value!="0"){
-        var centro = this.filterForm.controls.Cds.value;
+        //var centro = this.filterForm.controls.Cds.value;
+        var centro = "Todos";
 
         if(centro!="" || this._global.user.nivel=='administrador'){
           var params = {};
@@ -336,8 +337,9 @@ export class ResumenPagosComponent {
           params['mes']   = this.filterForm.controls.Mes.value;
           params['ano']   = this.filterForm.controls.Ano.value;
           params['categoria']   = this.filterForm.controls.Categoria.value;
-          params['IDCentro']   = this._global.user.IDCentro;
-
+          params['IDMaster']   = this._global.user.IDCentro;
+          params['IDOperadorAdmin']   = this._global.user.id;
+          console.log("los parametros----> ", params);
           this._global.appstatus.loading = true;
 
           this.subscription = this._httpService.postJSON(params, 'administracion/filtrar-resumen-de-pagos.php')
@@ -486,7 +488,9 @@ export class ResumenPagosComponent {
 
         var params = {};
         params['Ordenes'] = JSON.stringify(ids);
-        params['IDCentro'] = this._global.user.IDCentro;
+        params['IDMaster'] = this._global.user.IDCentro;
+        params['IDOperadorAdmin'] = this._global.user.id;
+        params['IDCentro'] = this.filterForm.controls.Cds.value;
         params['MontoTotal'] = this.montoTotal;
         params['Mes'] = this.filterForm.controls.Mes.value;
         params['Ano'] = this.filterForm.controls.Ano.value;
@@ -505,14 +509,57 @@ export class ResumenPagosComponent {
                 this._global.appstatus.loading = false;
 
                 if (data.res == 'ok') {
+                  this.statusPago = data.pagos.StatusPago;
+                  this.obtenerPagos();
 
+                } else if (data.res = 'error') {
+                    this._global.appstatus.mensaje = data.error;
+                }
+
+
+                //console.log("fichas");
+                //console.log(this.props.fichas);
+            },
+            error => alert(error),
+            () => console.log('termino submit')
+            );
+
+
+
+    }
+
+    obtenerPagos() {
+        var params = {};
+        params['IDMaster'] = this._global.user.IDCentro;
+
+        this._global.appstatus.loading = true;
+
+        this._httpService.postJSON(params, 'administracion/listar-pagos.php')
+            .subscribe(
+            data => {
+                this._global.appstatus.loading = false;
+
+                if (data.res == 'ok') {
                     //this._global.guardarObjPagos(data.pagos);
-                    this._global.pagos.objpagos = this._global.parseJSON(data.pagos);
-                    //localStorage.setItem('objpagos', data.pagos);
-                    console.log('pagos');
-                    console.log(this._global.pagos.objpagos);
-                    this._router.navigate(['administracion/historial-de-pagos']);
 
+                    this.precargaPaises();
+                    this.setMesResumen();
+                    this.changeMaster();
+
+                    this.filterForm.controls.Cds.setValue('');
+                    this.filterForm.controls.Categoria.setValue('');
+                    this.filterForm.controls.Ano.setValue('');
+                    this.filterForm.controls.Mes.setValue('0');
+
+                    //localStorage.setItem('objpagos', data.pagos);
+                    //console.log("_global.pagos.objpagos->", data.pagos);
+                    this._global.pagos.objpagos = data.pagos;
+                    //this._global.pagos.objpagos = this._global.parseJSON(data.pagos);
+                    setTimeout(() => {
+                        //this.trigger.destroy();
+                        this.trigger.next();
+                        this.rerender();
+                    });
                 } else if (data.res = 'error') {
                     this._global.appstatus.mensaje = data.error;
                 }

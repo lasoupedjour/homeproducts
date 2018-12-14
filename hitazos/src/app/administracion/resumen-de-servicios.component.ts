@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+﻿import { Component, ElementRef, ViewChild } from '@angular/core';
 import { HTTPService } from '../services/http.service';
 import { GlobalService } from '../services/global.service';
 import { Router } from '@angular/router';
@@ -7,12 +7,13 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { DataTableDirective } from 'angular-datatables-5';
 import { Subject } from 'rxjs';
 import { ISubscription } from "rxjs/Subscription";
+import swal from 'sweetalert2';
 
 @Component({
-    selector: 'resumen-distribuidor',
-    templateUrl: './resumen-distribuidor.component.html'
+    selector: 'resumen-de-servicios',
+    templateUrl: './resumen-de-servicios.component.html'
 })
-export class ResumenDistribuidorComponent {
+export class ResumenDeServiciosComponent {
     title = 'app';
 
     montoTotal = 0;
@@ -27,7 +28,7 @@ export class ResumenDistribuidorComponent {
     trigger: Subject<any> = new Subject();
 
     fechaResumen = {
-        "mes": '08',
+        "mes": '11',
         "ano": '2018',
     };
 
@@ -99,20 +100,24 @@ export class ResumenDistribuidorComponent {
             Mes: [],
             Pais: [this._global.user.Pais],
             Master: [''],
-            Cds: ['']
+            Cds: [''],
+            Categoria: ['']
         });
 
         this.precargaPaises();
         //this.setMesResumen();
         /*
-        this.filterForm.controls.Ano.setValue('0');
-        this.filterForm.controls.Mes.setValue('0');
+
         */
 
         this.changePais();
-        //this.traeOrdenes();
-        this.filterForm.controls.Ano.setValue('');
+        this.filterForm.controls.Ano.setValue('0');
         this.filterForm.controls.Mes.setValue('0');
+        this.changeMaster();
+        //this.traeOrdenes();
+
+        //this.filtrarReporte();
+
     }
 
     changePais() {
@@ -137,7 +142,7 @@ export class ResumenDistribuidorComponent {
                 //console.log("fichas");
                 //console.log(this.props.fichas);
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
     }
@@ -164,7 +169,7 @@ export class ResumenDistribuidorComponent {
                 //console.log("fichas");
                 //console.log(this.props.fichas);
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
     }
@@ -200,7 +205,7 @@ export class ResumenDistribuidorComponent {
 
                 }
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
 
@@ -208,7 +213,7 @@ export class ResumenDistribuidorComponent {
 
     setMesResumen() {
 
-        this.filterForm.controls.Mes.setValue('09');
+        this.filterForm.controls.Mes.setValue('11');
         this.filterForm.controls.Mes.updateValueAndValidity();
         this.filterForm.controls.Ano.setValue('2018');
         this.filterForm.controls.Ano.updateValueAndValidity();
@@ -238,60 +243,73 @@ export class ResumenDistribuidorComponent {
     }
 
     filtrarReporte() {
+        var centro = this.filterForm.controls.Cds.value;
 
-        var params = {};
-        params['Nombre']   = this._global.user.nombre;
-        params['CustomerID']   = this._global.user.CustomerID;
-        params['mes']   = this.filterForm.controls.Mes.value;
-        params['ano']   = this.filterForm.controls.Ano.value;
+        if(centro!="" ){
+          var params = {};
+          params['master']   = this._global.user.IDCentro;
+          params['cds']   = this.filterForm.controls.Cds.value;
+          params['mes']   = this.filterForm.controls.Mes.value;
+          params['ano']   = this.filterForm.controls.Ano.value;
+          params['categoria']   = this.filterForm.controls.Categoria.value;
 
-        this._global.appstatus.loading = true;
+          this._global.appstatus.loading = true;
 
-        this.subscription = this._httpService.postJSON(params, 'administracion/filtrar-resumen-de-cambios-dist.php')
-            .subscribe(
-            data => {
-                console.log('data');
-                console.log(data);
-                this._global.appstatus.loading = false;
+          this.subscription = this._httpService.postJSON(params, 'administracion/filtrar-resumen-de-servicios.php')
+              .subscribe(
+              data => {
+                  console.log('data');
+                  console.log(data);
+                  this._global.appstatus.loading = false;
 
-                if (data.res == 'ok') {
+                  if (data.res == 'ok') {
 
 
-                    this._global.ordenesServicio.recientes = this._global.parseJSON(data.reportes);
+                      this._global.ordenesServicio.recientes = this._global.parseJSON(data.reportes);
 
-                    this._global.separaFechaOrdenServicio();
+                      this._global.separaFechaOrdenServicio();
 
-                    this.calculaMontoTotal();
+                      this.calculaMontoTotal();
+                      try { this.statusPago = JSON.parse(data.pagos[0]).StatusPago; } catch (e) {
+                          this.statusPago = 'Por Enviar';
+                      }
+                      console.log('status pago');
+                      console.log(this.statusPago);
+                      /*console.log(this._global.busqueda.clientes);
 
-                    try { this.statusPago = JSON.parse(data.statuspago).StatusPago; } catch (e) {
-                        this.statusPago = 'Por Enviar';
-                    }
-                    console.log('status pago');
-                    console.log(this.statusPago);
-                    /*console.log(this._global.busqueda.clientes);
+                      if (data.clientes.length == 0) {
+                          this._global.appstatus.mensaje = 'No se encontraron clientes con estos datos.';
+                      }*/
 
-                    if (data.clientes.length == 0) {
-                        this._global.appstatus.mensaje = 'No se encontraron clientes con estos datos.';
-                    }*/
+                      /*
+                      setTimeout(() => {
+                          //this.trigger.destroy();
+                          this.trigger.next();
+                          this.rerender();
+                      });
+                      */
 
-                    setTimeout(() => {
-                        //this.trigger.destroy();
-                        this.trigger.next();
-                        this.rerender();
-                    });
+                  } else if (data.res = 'error') {
+                      this._global.appstatus.mensaje = data.error;
+                  }
 
-                } else if (data.res = 'error') {
-                    this._global.appstatus.mensaje = data.error;
-                }
+                  //console.log('data ordenes..', this._global.ordenesServicio.recientes.master);
 
-                //console.log('data ordenes..', this._global.ordenesServicio.recientes.master);
+                  //console.log("fichas");
+                  //console.log(this.props.fichas);
+              },
+              error => console.log(error),
+              () => console.log('termino submit')
+              );
+        }else{
+          swal({
+              title: 'CDs requerido',
+              text: 'Favor de seleccionar el CDs',
+              type: 'error',
+              customClass: 'swal2-overflow',
+          });
+        }
 
-                //console.log("fichas");
-                //console.log(this.props.fichas);
-            },
-            error => alert(error),
-            () => console.log('termino submit')
-            );
 
     }
 
@@ -346,7 +364,7 @@ export class ResumenDistribuidorComponent {
                 //console.log("fichas");
                 //console.log(this.props.fichas);
             },
-            error => alert(error),
+            error => console.log(error),
             () => console.log('termino submit')
             );
 
@@ -358,13 +376,54 @@ export class ResumenDistribuidorComponent {
 
         console.log(ordenes);
         var outer = this;
+        var MontoTotal=0;
+        var MontoFee=0;
+        var MontoImpuestoFee=0;
+        var ValorImpuesto=0;
+        var TotalFee=0;
+        var MontoFee=0;
+        var MontoRefacciones=0;
+        var MontoTAMov=0;
+        var MontoCambio=0;
+        var MontoDespiece=0;
+        var MontoOtro=0;
+        var MontoReciclaje=0;
+
         ordenes.forEach(function (e) {
             //console.log('orden');
-            //console.log(e);
-            outer.montoTotal += parseFloat(String(e.CostoLanded)) + parseFloat(String(e.OtroCostoDistribuidor));
+            console.log("el valor de e>>>>>>", e);
+            //outer.montoTotal += parseFloat(String(e.MontoTotal));
+            //
+            MontoFee += parseFloat(String(e.TarifaMensual));
+            MontoImpuestoFee = MontoImpuestoFee + parseFloat(String(e.ImpuestoTarifaMensual));
+            ValorImpuesto = MontoFee * MontoImpuestoFee;
+            TotalFee = TotalFee + (MontoFee + ValorImpuesto);
+
+            MontoRefacciones +=  parseFloat(String(e.MontoRefacciones));
+            MontoTAMov += parseFloat(String(e.MontoReparacion)) + parseFloat(String(e.MontoMovilizacion));
+            MontoDespiece =  parseFloat(String(e.MontoDespiece));
+            MontoReciclaje =  parseFloat(String(e.MontoReciclaje));
+            MontoOtro =  parseFloat(String(e.MontoOtro));
+
+            MontoCambio = MontoCambio + (MontoDespiece + MontoReciclaje + MontoOtro);
         });
 
-        this.montoTotal = parseFloat(this.montoTotal.toFixed(2));
+        console.log("MontoFee", MontoFee);
+        console.log("MontoImpuestoFee", MontoImpuestoFee);
+        console.log("ValorImpuesto", ValorImpuesto);
+        console.log("TotalFee", TotalFee);
+        console.log("MontoRefacciones", MontoRefacciones);
+        console.log("MontoTAMov", MontoTAMov);
+        console.log("MontoDespiece", MontoDespiece);
+        console.log("MontoReciclaje", MontoReciclaje);
+        console.log("MontoOtro", MontoOtro);
+        console.log("MontoCambio", MontoCambio);
+
+
+        MontoTotal = MontoRefacciones + MontoTAMov + TotalFee + MontoCambio;
+        console.log("MontoTotal", MontoTotal);
+
+        this.montoTotal = parseFloat(MontoTotal.toFixed(2));
 
 
     }
@@ -384,7 +443,10 @@ export class ResumenDistribuidorComponent {
 
         var params = {};
         params['Ordenes'] = JSON.stringify(ids);
-        params['IDCentro'] = this._global.user.IDCentro;
+        params['IDMaster'] = this._global.user.IDCentro;
+        params['IDOperadorAdmin'] = this._global.user.id;
+        params['Categoria'] = this.filterForm.controls.Categoria.value;
+        params['IDCentro'] = this.filterForm.controls.Cds.value;
         params['MontoTotal'] = this.montoTotal;
         params['Mes'] = this.filterForm.controls.Mes.value;
         params['Ano'] = this.filterForm.controls.Ano.value;
@@ -403,14 +465,24 @@ export class ResumenDistribuidorComponent {
                 this._global.appstatus.loading = false;
 
                 if (data.res == 'ok') {
+                  this.statusPago = data.pagos.StatusPago;
+                  //this.obtenerPagos();
+                  swal({
+                      title: 'Se ha enviado la solicitud de pago a HP',
+                      showConfirmButton: true,
+                      confirmButtonText: 'Confirmar',
+                      showCancelButton: true,
+                      cancelButtonText: 'Cancelar',
+                      customClass: 'swal2-overflow',
 
-                    //this._global.guardarObjPagos(data.pagos);
-                    this._global.pagos.objpagos = this._global.parseJSON(data.pagos);
-                    //localStorage.setItem('objpagos', data.pagos);
-                    console.log('pagos');
-                    console.log(this._global.pagos.objpagos);
-                    this._router.navigate(['administracion/historial-de-pagos']);
-
+                  }).then((result) => {
+                      if (result.value) {
+                          //Registro de notificación
+                          this._global.notificaciones.modulo = "/resumen-de-servicios";
+                          this._global.notificaciones.descripcion = "Solicitud de pago de servicios enviada por " + this._global.user.NombreCentro;
+                          this._global.registrarNotificacion(0);
+                      }
+                  });
                 } else if (data.res = 'error') {
                     this._global.appstatus.mensaje = data.error;
                 }

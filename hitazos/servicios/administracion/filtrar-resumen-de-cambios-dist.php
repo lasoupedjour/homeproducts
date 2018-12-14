@@ -61,8 +61,10 @@ left join
 on centros.idMaster = centros1.id
 where clientes.id = reportes.IDCliente
 and StatusReporte = 'Orden de Servicio'
+and TipoReclamoDiagnostico='Cambio'
 and (reportes.Distribuidor='" . $arre["Nombre"] . "' or
 reportes.Distribuidor='" . $arre["CustomerID"] . "')
+and StatusCostoLanded='Aprobado'
 :filtros
 order by FechaOrdenServicio desc;
           ";

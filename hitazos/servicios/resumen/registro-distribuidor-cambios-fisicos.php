@@ -14,6 +14,7 @@ $json = $_POST['json'];
 $arre = json_decode($json, true);
 
 $CostoLanded = utf8_decode(urldecode($arre['CostoLanded']));
+$OtroCostoDistribuidor = utf8_decode(urldecode($arre['OtroCostoDistribuidor']));
 $FechaEntregaCambio = utf8_decode(urldecode($arre['FechaEntregaCambio']));
 $IDReporte = utf8_decode(urldecode($arre['IDReporte']));
 
@@ -26,6 +27,7 @@ if ($stmt = $mysqli->prepare("
 
 update reportes set
 CostoLanded = ?,
+OtroCostoDistribuidor = ?,
 FechaEntregaCambio = ?,
 FechaCostoLanded = now(),
 StatusCostoLanded = '',
@@ -33,8 +35,9 @@ FechaStatusCostoLanded = '0000-00-00 00:00:00'
 where id = ?
 
 ")) {
-	$stmt->bind_param("dsd",
+	$stmt->bind_param("ddsd",
 	$arre['CostoLanded'],
+  $arre['OtroCostoDistribuidor'],
 	$FechaEntregaCambio,
 	$arre['IDReporte']
 

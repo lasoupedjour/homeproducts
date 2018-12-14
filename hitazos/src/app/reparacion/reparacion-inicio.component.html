@@ -193,7 +193,7 @@
               <table>
                 <tr>
                   <th>Refacción/No. de parte</th>
-                  <th>Paquete Técnico</th>
+                  <!--th>Paquete Técnico</th-->
                   <th>Existencia</th>
                   <th>Cantidad</th>
                   <th>Costo Unitario</th>
@@ -209,10 +209,10 @@
                     {{item.NombreRefaccion}} - {{item.NoParte}}
                   </td>
 
-                  <td>
+                  <!--td>
                     <a class="btndiagrama" href="#" title="Diagrama Explosivo"><i class="fa fa-file"></i></a>
                     <a class="btndiagrama" href="#" title="Manual de servicio"><i class="fa fa-file"></i></a>
-                  </td>
+                  </td-->
                   <td>
                     <select class="form-control form-control-sm existencia" (change)="changeExistencia(i, $event.target.value)" >
                       <option value="" hidden>Seleccionar</option>

@@ -1,16 +1,11 @@
 <?php
+include "../dbci.php";
 
 if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Origin: {$_SERVER['HTTP_ORIGIN']}");
     header('Access-Control-Allow-Credentials: true');
     header('Access-Control-Max-Age: 86400');    // cache for 1 day
 }
-
-include "../dbci.php";
-
-
-$json = $_POST['json'];
-$arre = json_decode($json, true);
 
 $current_charset = 'ISO-8859-15';//or what it is now
 array_walk_recursive($arre,function(&$value) use ($current_charset){
@@ -21,9 +16,13 @@ $res = array();
 
 $res['res'] = 'ok';
 
+$json = $_POST['json'];
+$arre = json_decode($json, true);
+
 $notificaciones = array();
 
 $id_usuario = utf8_decode(urldecode($arre['id_usuario']));
+$id_centro = utf8_decode(urldecode($arre['id_centro']));
 $nivel= utf8_decode(urldecode($arre['nivel']));
 $IDDistribuidor = utf8_decode(urldecode($arre['IDDistribuidor']));
 
@@ -33,7 +32,7 @@ if($nivel=='administrador'){
   $query = "
             select n.*, DATE_FORMAT(n.timestamp,  '%d/%m/%Y %H:%i:%s' ) as timestampNF from
             (select notificaciones.* from notificaciones) as n
-            join
+            left join
             (select * from usuarios_admin where (nivel='administrador')) as ua
             on ua.id = n.id_usuario
             join
@@ -42,6 +41,7 @@ if($nivel=='administrador'){
             join
             (select * from usuarios_admin where ID=$id_usuario) as u
             on r.idcentro = u.idcentro
+            Where (id_usuario=$id_usuario or (modulo='/cambio-fisico-dist-asigna' and id_centro=$id_centro)) or r.IDCentro=$id_centro
             group by id
             order by id desc
             ";

@@ -27,7 +27,6 @@ $cds = $arre['cds'];
 $ano = $arre['ano'];
 $mes = $arre['mes'];
 $categoria = $arre['categoria'];
-$master = $arre['master'];
 
 /*
 $mesnext =
@@ -60,15 +59,16 @@ on centros.idGrupotarifa = tarifas.idGrupoTarifa
 left join
 (select * from centros) as centros1
 on centros.idMaster = centros1.id
-where clientes.id = reportes.IDCliente and
-StatusReporte = 'Orden de Servicio'
+where clientes.id = reportes.IDCliente
+and StatusReporte = 'Orden de Servicio'
+and TipoReclamoDiagnostico='Cambio'
 :filtros
 order by FechaOrdenServicio desc;
           ";
 
 $filtroFecha  = "";
 $filtroCds    = "";
-$filtroCat    = "";
+$filtroCcat    = "";
 
 if ($cds!="" && $cds!="Todos"){
   $filtroCds = " and reportes.IDCentro=$cds";
@@ -86,25 +86,20 @@ if ($categoria!=""){
 
 if($filtroCds!="" && $filtroFecha!="" && $filtroCat!=""){
   $query = str_replace(":filtros", $filtroCds . $filtroFecha . $filtroCat, $query);
-}elseif($filtroCds!="" && $filtroFecha=="" && $filtroCat==""){
+}elseif($filtroCds!="" && $filtroFecha=="" && $filtroCcat==""){
   $query = str_replace(":filtros", $filtroCds, $query);
-}elseif($filtroCds=="" && $filtroFecha!="" && $filtroCat==""){
+}elseif($filtroCds=="" && $filtroFecha!="" && $filtroCcat==""){
   $query = str_replace(":filtros", $filtroFecha, $query);
-}elseif($filtroCds=="" && $filtroFecha=="" && $filtroCat!=""){
+}elseif($filtroCds=="" && $filtroFecha=="" && $filtroCcat!=""){
   $query = str_replace(":filtros", $filtroCat, $query);
-}elseif($filtroCds!="" && $filtroFecha!="" && $filtroCat==""){
+}elseif($filtroCds!="" && $filtroFecha!="" && $filtroCcat==""){
   $query = str_replace(":filtros", $filtroCds . $filtroFecha, $query);
-}elseif($filtroCds!="" && $filtroFecha=="" && $filtroCat==""){
-  $query = str_replace(":filtros", $filtroCds . $filtroCat, $query);
-}elseif($filtroCds=="" && $filtroFecha!="" && $filtroCat!=""){
-  $query = str_replace(":filtros", $filtroFecha . $filtroCat, $query);
+}elseif($filtroCds!="" && $filtroFecha=="" && $filtroCcat==""){
+  $query = str_replace(":filtros", $filtroCds . $filtroCcat, $query);
 }else{
   $query = str_replace(":filtros", "", $query);
 }
-/*
-echo($query);
-die();
-*/
+
 $q = mysql_query($query) or die(mysql_error());
 
 /*
@@ -130,32 +125,6 @@ while ($row = mysql_fetch_array($q))
 	array_push($reportes, $temp);
 }
 $res['reportes'] = $reportes;
-
-$pagos = array();
-
-if($IDCentro>0){
-  $query = "
-            select * from pagos where IDMaster=$master and IDCentro=$cds and Categoria='$categoria' and Ano='$ano' and Mes='$mes' order by FechaRegistro desc;
-           ";
-}else{
-  $query = "
-            select * from pagos where IDMaster=$master and Categoria='$categoria' and Ano='$ano' and Mes='$mes' order by FechaRegistro desc;
-           ";
-}
-
-$q = mysql_query($query) or die(mysql_error());
-
-while ($row = mysql_fetch_array($q))
-{
-	$current_charset = 'ISO-8859-15';//or what it is now
-	array_walk_recursive($row,function(&$value) use ($current_charset){
-		 //$value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
-		$value = utf8_encode($value);
-	});
-	$temp = json_encode($row);
-	array_push($pagos, $temp);
-}
-$res['pagos'] = $pagos;
 
 echo json_encode($res);
 
