@@ -184,6 +184,8 @@ $fecha = strftime('%d de %B, %Y', strtotime($row["FechaStatusCambioFisico"]));
         //$mail->AddAddress('slazo@pautacreativa.com.mx');
         //$mail->AddBCC('lasoupedjour@gmail.com');
         $mail->AddAddress('jguillen@pautacreativa.com.mx');
+        $mail->AddBCC('slazo@pautacreativa.com.mx');
+        $mail->AddBCC('nguzman@pautacreativa.com.mx');
 
         $mail->Subject  = utf8_decode("Autorización de Cambio Físico");
 
