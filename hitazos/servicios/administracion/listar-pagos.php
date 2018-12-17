@@ -32,15 +32,43 @@ if($IDMaster>0 && $arre["Nivel"]!="administrador"){
   REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Mes, '12', 'Diciembre'), '11', 'Noviembre'), '10', 'Octubre'), '09', 'Septiembre'), '08', 'Agosto'), '07', 'Julio'), '06', 'Junio'), '05', 'Mayo'), '04', 'Abril'), '03', 'Marzo'), '02', 'Febrero'), '01', 'Enero') AS  Mes, Ano, Status
   FROM  pagos where IDMaster=$IDMaster order by id desc";
 }elseif($IDDistribuidor>0){
-  $queryPagos = "SELECT  id, IDMaster, IDCentro, IDOperadorAdmin, IDDistribuidor,  replace(Categoria, '', 'No seleccionada') as Categoria, ODS, MontoTotal, StatusPago, Comprobante, FechaRegistro, FechaPago,
+  $queryPagos = "select pagos.id, pagos.IDMaster, pagos.IDCentro, pagos.IDOperadorAdmin, replace(pagos.Categoria, '', 'No seleccionada') as Categoria, pagos.ODS, pagos.MontoTotal, pagos.StatusPago, pagos.Comprobante, pagos.FechaRegistro, pagos.FechaPago, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Mes, '12', 'Diciembre'), '11', 'Noviembre'), '10', 'Octubre'), '09', 'Septiembre'), '08', 'Agosto'), '07', 'Julio'), '06', 'Junio'), '05', 'Mayo'), '04', 'Abril'), '03', 'Marzo'), '02', 'Febrero'), '01', 'Enero') AS Mes, pagos.Ano, pagos.Status, distribuidores.IDDistribuidor from
+                 (SELECT * FROM pagos where IDDistribuidor=$IDDistribuidor) as pagos
+                 left join
+                 (select * from distribuidores) as distribuidores
+                 on pagos.IDDistribuidor=distribuidores.id
+                 order by pagos.id desc";
+
+  /*
+  "SELECT  id, IDMaster, IDCentro, IDOperadorAdmin, IDDistribuidor,  replace(Categoria, '', 'No seleccionada') as Categoria, ODS, MontoTotal, StatusPago, Comprobante, FechaRegistro, FechaPago,
   REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Mes, '12', 'Diciembre'), '11', 'Noviembre'), '10', 'Octubre'), '09', 'Septiembre'), '08', 'Agosto'), '07', 'Julio'), '06', 'Junio'), '05', 'Mayo'), '04', 'Abril'), '03', 'Marzo'), '02', 'Febrero'), '01', 'Enero') AS  Mes, Ano, Status
-  FROM  pagos where mes='" . $mes . "' and ano='" . $ano . "' and IDDistribuidor=$IDDistribuidor order by id desc";
+  FROM  pagos where IDDistribuidor=$IDDistribuidor order by id desc";
+  */
 }elseif($arre["Nivel"]=="administrador"){
-  $queryPagos = "SELECT  id, IDMaster, IDCentro, IDOperadorAdmin, IDDistribuidor,  replace(Categoria, '', 'No seleccionada') as Categoria, ODS, MontoTotal, StatusPago, Comprobante, FechaRegistro, FechaPago,
+  $queryPagos = "select pagos.id, pagos.IDMaster, pagos.IDCentro, pagos.IDOperadorAdmin, replace(pagos.Categoria, '', 'No seleccionada') as Categoria, pagos.ODS, pagos.MontoTotal, pagos.StatusPago, pagos.Comprobante, pagos.FechaRegistro, pagos.FechaPago, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Mes, '12', 'Diciembre'), '11', 'Noviembre'), '10', 'Octubre'), '09', 'Septiembre'), '08', 'Agosto'), '07', 'Julio'), '06', 'Junio'), '05', 'Mayo'), '04', 'Abril'), '03', 'Marzo'), '02', 'Febrero'), '01', 'Enero') AS Mes, pagos.Ano, pagos.Status, distribuidores.IDDistribuidor from
+                 (SELECT * FROM pagos) as pagos
+                 left join
+                 (select * from distribuidores) as distribuidores
+                 on pagos.IDDistribuidor=distribuidores.id
+                 order by pagos.id desc";
+  /*
+  "SELECT  id, IDMaster, IDCentro, IDOperadorAdmin, IDDistribuidor,  replace(Categoria, '', 'No seleccionada') as Categoria, ODS, MontoTotal, StatusPago, Comprobante, FechaRegistro, FechaPago,
   REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Mes, '12', 'Diciembre'), '11', 'Noviembre'), '10', 'Octubre'), '09', 'Septiembre'), '08', 'Agosto'), '07', 'Julio'), '06', 'Junio'), '05', 'Mayo'), '04', 'Abril'), '03', 'Marzo'), '02', 'Febrero'), '01', 'Enero') AS  Mes, Ano, Status
   FROM  pagos order by id desc";
+  */
 }
+/*
+echo($queryPagos);
+die();
 
+
+select pagos.id, pagos.IDMaster, pagos.IDCentro, pagos.IDOperadorAdmin, pagos.IDDistribuidor, replace(pagos.Categoria, '', 'No seleccionada') as Categoria, pagos.ODS, pagos.MontoTotal, pagos.StatusPago, pagos.Comprobante, pagos.FechaRegistro, pagos.FechaPago, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Mes, '12', 'Diciembre'), '11', 'Noviembre'), '10', 'Octubre'), '09', 'Septiembre'), '08', 'Agosto'), '07', 'Julio'), '06', 'Junio'), '05', 'Mayo'), '04', 'Abril'), '03', 'Marzo'), '02', 'Febrero'), '01', 'Enero') AS Mes, pagos.Ano, pagos.Status, distribuidores.IDDistribuidor from
+(SELECT * FROM pagos) as pagos
+left join
+(select * from distribuidores) as distribuidores
+on pagos.IDDistribuidor=distribuidores.id
+order by pagos.id desc
+*/
 $pagos = array();
 $qPagos = mysql_query($queryPagos) or die(mysql_error());
 
@@ -72,7 +100,7 @@ $res['pagos'] = $pagos;
 
 echo json_encode($res);
 
-function detallePago($cds, $ano, $mes, $categoria, $CustomerID, $IDDistribuidor, $IDMaster){
+function detallePago($cds, $ano, $mes, $categoria, $CustomerID, $Nombre, $IDMaster){
   $fechaIni = $ano.'-'.$mes.'-'.'01';
   $fechaFin = $ano.'-'.$mes.'-'.'31';
 
@@ -86,6 +114,7 @@ function detallePago($cds, $ano, $mes, $categoria, $CustomerID, $IDDistribuidor,
               MontoReciclaje as MontoReciclaje,
               MontoOtro as MontoOtro,
               CostoLanded as CostoLanded,
+              OtroCostoDistribuidor as OtroCostoDistribuidor,
               StatusReporte, FechaOrdenServicio, reportes.IDCentro, reportes.Categoria, reportes.Distribuidor, reportes.id
               from
               (select * from reportes) as reportes
@@ -193,6 +222,7 @@ function detallePago($cds, $ano, $mes, $categoria, $CustomerID, $IDDistribuidor,
     }
   }
 
+
   $qMontos = mysql_query($queryMontos) or die(mysql_error());
   $qFee = mysql_query($queryFee) or die(mysql_error());
 
@@ -206,6 +236,7 @@ function detallePago($cds, $ano, $mes, $categoria, $CustomerID, $IDDistribuidor,
   $MontoReciclaje = 0;
   $MontoOtro = 0;
   $CostoLanded = 0;
+  $OtroCostoDistribuidor = 0;
   $reportes = array();
 
   while ($row = mysql_fetch_array($qMontos))
@@ -215,11 +246,12 @@ function detallePago($cds, $ano, $mes, $categoria, $CustomerID, $IDDistribuidor,
     $MontoDespiece = floatval($row["MontoDespiece"]);
     $MontoReciclaje = floatval($row["MontoReciclaje"]);
     $MontoOtro = floatval($row["MontoOtro"]);
+    $OtroCostoDistribuidor = floatval($row["OtroCostoDistribuidor"]);
     $CostoLanded = $CostoLanded + floatval($row["CostoLanded"]);
     if($IDCentro>0)
       $MontoCambio = $MontoCambio + ($MontoDespiece + $MontoReciclaje + $MontoOtro);
     else
-      $MontoCambio = $MontoCambio + $CostoLanded;
+      $MontoCambio = $MontoCambio + ($CostoLanded + $OtroCostoDistribuidor);
 
     array_push($reportes, $row["id"]);
   }

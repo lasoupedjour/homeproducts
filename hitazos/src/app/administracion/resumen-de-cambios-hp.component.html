@@ -9,10 +9,10 @@
 <div class="container fM2 menuadmin">
   <div class="row">
 
-    <div class="offset-sm-6  col-sm-2 text-center active" *ngIf="this._global.user.nivel!='distribuidor'">
+    <div class="offset-sm-6  col-sm-2 text-center" *ngIf="this._global.user.nivel!='distribuidor'">
       <a routerLink="/administracion/inicio/">Resumen de Servicios</a>
     </div>
-    <div class="col-sm-2 text-center" *ngIf="this._global.user.nivel!='distribuidor'">
+    <div class="col-sm-2 text-center active" *ngIf="this._global.user.nivel!='distribuidor'">
       <a routerLink="/administracion/resumen-de-cambios-hp/">Resumen de Cambios</a>
     </div>
     <div class="col-sm-2 text-center" *ngIf="this._global.user.nivel!='distribuidor'">

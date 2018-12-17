@@ -58,7 +58,16 @@ function subirAdjuntos($idreporte, $field, $size){
 }
 
 $res['nombrenota'] = $nombrenota;
-
+$IDReporte = $arre['IDReporte'];
+/*
+$query="update pagos set
+StatusPago = 'Pagado',
+FechaPago = now(),
+Comprobante = $nombrenota,
+where id = $IDReporte";
+echo($query);
+die();
+*/
 if ($stmt = $mysqli->prepare("
 
 update pagos set
@@ -70,7 +79,7 @@ where id = ?
 ")) {
 	$stmt->bind_param("ss",
 		$nombrenota,
-		$arre['IDReporte']
+		$IDReporte
 	);
 	if($stmt->execute()){
 		$res['res'] = 'ok';

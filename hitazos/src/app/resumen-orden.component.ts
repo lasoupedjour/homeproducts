@@ -32,6 +32,15 @@ export class ResumenOrdenComponent {
         "ImpuestoTarifaMensual": 0,
     };
 
+    resolucion = {
+      "id": 0,
+      "info_completa": 0,
+      "reclamo": 0,
+      "razon_rechazo": "",
+      "procesado_por": "",
+      "fecha": ""
+    }
+
     formulariostatus = {
         "success": 1
     };
@@ -125,6 +134,48 @@ export class ResumenOrdenComponent {
             this._global.reporte.objreporte.StatusCostoLanded=='Aprobado' && !this._global.esDistribuidor()){
               this.editarReciclaje = true;
             }
+
+        this.obtenerDetalleResolucion();
+    }
+
+    obtenerDetalleResolucion(){
+      var params = {};
+      params["IDReporte"] = this._global.reporte.idreporte;
+
+      this._global.appstatus.loading = true;
+
+      this._httpService.postJSON(params, 'resumen/get-resolucion.php')
+          .subscribe(
+          data => {
+              console.log('data');
+              console.log(data);
+              this._global.appstatus.loading = false;
+
+              if (data.res == 'ok') {
+                console.log("resolucion", data.resolucion);
+
+                this.resolucion.id=JSON.parse(data.resolucion).id;
+                this.resolucion.info_completa=JSON.parse(data.resolucion).info_completa;
+                this.resolucion.reclamo=JSON.parse(data.resolucion).reclamo;
+                this.resolucion.razon_rechazo=JSON.parse(data.resolucion).razon_rechazo;
+                this.resolucion.procesado_por=JSON.parse(data.resolucion).procesado_por;
+                this.resolucion.fecha=JSON.parse(data.resolucion).fecha;
+
+                //console.log("this.resolucion.id", this.resolucion.id);
+                  /*
+                  this.RazonSocialDistribuidor = JSON.parse(data.distribuidor).RazonSocial;
+                  //console.log(this.RazonSocialDistribuidor);
+                  if (data.distribuidor.length == 0) {
+                      //this._global.appstatus.mensaje = 'No se encontraron datos con estas características.';
+                  }
+                  */
+              } else if (data.res = 'error') {
+                  this._global.appstatus.mensaje = data.error;
+              }
+          },
+          error => console.log(error),
+          () => console.log('termino submit')
+          );
     }
 
     changeMontoDespiece(){

@@ -74,7 +74,14 @@
    </div>
    <form  name="formulariofiltros" [formGroup]="filterForm" >
    <div class="row mt-3">
-     <div class="offset-sm-6 col-2 text-right">
+     <div class="offset-sm-4 col-2 text-right">
+       <select class="form-control form-control-sm" formControlName="Categoria">
+         <option value="">Categoría</option>
+         <option value="LINEA BLANCA">LINEA BLANCA</option>
+         <option value="MENAJE">MENAJE</option>
+       </select>
+     </div>
+     <div class="col-2 text-right">
        <select class="form-control form-control-sm" formControlName="Ano">
          <option value="">Año</option>
          <option value="2018">2018</option>

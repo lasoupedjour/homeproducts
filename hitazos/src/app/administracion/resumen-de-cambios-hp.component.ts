@@ -10,10 +10,10 @@ import { ISubscription } from "rxjs/Subscription";
 import swal from 'sweetalert2';
 
 @Component({
-    selector: 'resumen-de-servicios',
-    templateUrl: './resumen-de-servicios.component.html'
+    selector: 'resumen-de-cambios-hp',
+    templateUrl: './resumen-de-cambios-hp.component.html'
 })
-export class ResumenDeServiciosComponent {
+export class ResumenDeCambiosHPComponent {
     title = 'app';
 
     montoTotal = 0;
@@ -113,7 +113,6 @@ export class ResumenDeServiciosComponent {
         this.changePais();
         this.filterForm.controls.Ano.setValue('0');
         this.filterForm.controls.Mes.setValue('0');
-        this.changeMaster();
         //this.traeOrdenes();
 
         //this.filtrarReporte();
@@ -153,7 +152,7 @@ export class ResumenDeServiciosComponent {
         params['Pais'] = this.filterForm.controls.Pais.value;
         params['IDCentro'] = this._global.user.IDCentro;
         params['Nivel'] = this._global.user.nivel;
-        params['IDMaster'] = this._global.user.IDCentro;
+        params['IDMaster'] = this.filterForm.controls.Master.value;
         params['IDGrupoTarifa'] = this._global.user.IDGrupoTarifa;
 
         this._global.appstatus.loading = true;
@@ -247,7 +246,7 @@ export class ResumenDeServiciosComponent {
 
         if(centro!="" ){
           var params = {};
-          params['master']   = this._global.user.IDCentro;
+          params['master']   = this.filterForm.controls.Master.value;
           params['cds']   = this.filterForm.controls.Cds.value;
           params['mes']   = this.filterForm.controls.Mes.value;
           params['ano']   = this.filterForm.controls.Ano.value;
@@ -255,7 +254,7 @@ export class ResumenDeServiciosComponent {
 
           this._global.appstatus.loading = true;
 
-          this.subscription = this._httpService.postJSON(params, 'administracion/filtrar-resumen-de-servicios.php')
+          this.subscription = this._httpService.postJSON(params, 'administracion/filtrar-resumen-de-cambios.php')
               .subscribe(
               data => {
                   console.log('data');
@@ -270,7 +269,8 @@ export class ResumenDeServiciosComponent {
                       this._global.separaFechaOrdenServicio();
 
                       this.calculaMontoTotal();
-                      try { this.statusPago = JSON.parse(data.pagos[0]).StatusPago; } catch (e) {
+
+                      try { this.statusPago = JSON.parse(data.statuspago).StatusPago; } catch (e) {
                           this.statusPago = 'Por Enviar';
                       }
                       console.log('status pago');
@@ -281,13 +281,12 @@ export class ResumenDeServiciosComponent {
                           this._global.appstatus.mensaje = 'No se encontraron clientes con estos datos.';
                       }*/
 
-                      /*
+
                       setTimeout(() => {
                           //this.trigger.destroy();
                           this.trigger.next();
                           this.rerender();
                       });
-                      */
 
                   } else if (data.res = 'error') {
                       this._global.appstatus.mensaje = data.error;
@@ -478,8 +477,8 @@ export class ResumenDeServiciosComponent {
                   }).then((result) => {
                       if (result.value) {
                           //Registro de notificación
-                          this._global.notificaciones.modulo = "/resumen-de-servicios";
-                          this._global.notificaciones.descripcion = "Solicitud de pago de servicios enviada por " + this._global.user.NombreCentro;
+                          this._global.notificaciones.modulo = "/resumen-de-cambios-hp";
+                          this._global.notificaciones.descripcion = "Solicitud de pago de cambios enviada por " + this._global.user.NombreCentro;
                           this._global.registrarNotificacion(0);
                       }
                   });

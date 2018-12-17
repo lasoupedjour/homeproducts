@@ -15,8 +15,11 @@
           <li class="nav-item text-center" [hidden]="this._global.user.id == ''">
             <a class="nav-link" routerLink="/registro-de-casos" routerLinkActive="active">Registro de Casos</a>
           </li>
-          <li class="nav-item text-center" [hidden]="this._global.user.id == ''" *ngIf="_global.user.IDMaster == '0'">
+          <li class="nav-item text-center" [hidden]="this._global.user.id == ''" *ngIf="_global.user.nivel == 'administrador'">
             <a class="nav-link" routerLink="/administracion/inicio" routerLinkActive="active">Administración</a>
+          </li>
+          <li class="nav-item text-center" [hidden]="this._global.user.id == ''" *ngIf="_global.user.IDMaster == '0' && _global.user.nivel == 'operador'">
+            <a class="nav-link" routerLink="/administracion/resumen-de-servicios" routerLinkActive="active">Administración</a>
           </li>
           <li class="nav-item text-center" [hidden]="this._global.user.id == ''" *ngIf="this._global.user.nivel=='distribuidor'">
             <a class="nav-link" routerLink="/administracion/resumen-distribuidor" routerLinkActive="active">Administración</a>

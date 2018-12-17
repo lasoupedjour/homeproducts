@@ -99,7 +99,8 @@ export class ResumenDistribuidorComponent {
             Mes: [],
             Pais: [this._global.user.Pais],
             Master: [''],
-            Cds: ['']
+            Cds: [''],
+            Categoria: ['']
         });
 
         this.precargaPaises();
@@ -109,8 +110,9 @@ export class ResumenDistribuidorComponent {
         this.filterForm.controls.Mes.setValue('0');
         */
 
-        this.changePais();
+        //this.changePais();
         //this.traeOrdenes();
+        this.filterForm.controls.Categoria.setValue('');
         this.filterForm.controls.Ano.setValue('');
         this.filterForm.controls.Mes.setValue('0');
     }
@@ -242,6 +244,7 @@ export class ResumenDistribuidorComponent {
         var params = {};
         params['Nombre']   = this._global.user.nombre;
         params['CustomerID']   = this._global.user.CustomerID;
+        params['Categoria'] = this.filterForm.controls.Categoria.value;
         params['mes']   = this.filterForm.controls.Mes.value;
         params['ano']   = this.filterForm.controls.Ano.value;
 
@@ -369,9 +372,6 @@ export class ResumenDistribuidorComponent {
 
     }
 
-
-
-
     generaReporte() {
         console.log('genera reporte');
         console.log(Object(this._global.ordenesServicio.recientes).length);
@@ -384,7 +384,10 @@ export class ResumenDistribuidorComponent {
 
         var params = {};
         params['Ordenes'] = JSON.stringify(ids);
-        params['IDCentro'] = this._global.user.IDCentro;
+        params['IDOperadorAdmin'] = this._global.user.id;
+        params['IDDistribuidor'] = this._global.user.IDDistribuidor;
+        params['Categoria'] = this.filterForm.controls.Categoria.value;
+        params['IDMaster'] = 0;
         params['MontoTotal'] = this.montoTotal;
         params['Mes'] = this.filterForm.controls.Mes.value;
         params['Ano'] = this.filterForm.controls.Ano.value;

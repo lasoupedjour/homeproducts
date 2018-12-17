@@ -26,7 +26,7 @@ $res['res'] = 'ok';
 $cds = $arre['cds'];
 $ano = $arre['ano'];
 $mes = $arre['mes'];
-$categoria = $arre['categoria'];
+$categoria = $arre['Categoria'];
 
 /*
 $mesnext =
@@ -75,12 +75,23 @@ if($mes!=0 && $ano!=0){
   $filtroFecha = " and (FechaOrdenServicio >= '$fechaIni' and FechaOrdenServicio <= '$fechaFin')";
 }
 
-if($filtroFecha!=""){
+if ($categoria!=""){
+  $filtroCat = " and reportes.Categoria='$categoria'";
+}
+
+if($filtroFecha!="" && $categoria==""){
   $query = str_replace(":filtros", $filtroFecha, $query);
+}elseif($filtroFecha!="" && $categoria!=""){
+  $query = str_replace(":filtros", $filtroFecha . $filtroCat, $query);
+}elseif($filtroFecha=="" && $categoria!=""){
+  $query = str_replace(":filtros", $filtroCat, $query);
 }else{
   $query = str_replace(":filtros", "", $query);
 }
-
+/*
+echo($query);
+die();
+*/
 $q = mysql_query($query) or die(mysql_error());
 
 /*

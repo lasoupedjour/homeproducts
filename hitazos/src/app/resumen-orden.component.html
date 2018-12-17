@@ -504,7 +504,56 @@
         <hr />
       </div>
     </div>
-    <form class="formulario formularioRegistro my-3" name="formularioresolicion" [formGroup]="genericForm" (ngSubmit)="submitResolucion()" *ngIf="formulariostatus.success == 1 && this.resolucionDisabled()==null && this._global.reporte.objreporte.TipoReclamoDiagnostico=='Reparación'">
+    <div class="row grayed" *ngIf="formulariostatus.success == 1 && this.resolucionDisabled()==null && this._global.reporte.objreporte.TipoReclamoDiagnostico=='Reparación' && this.resolucion.id>0">
+      <div class="col-sm-6">
+        <div class="row mb-1">
+          <div class="col-4 text-right">
+            Información completa:
+          </div>
+          <div class="col-8">
+            <span *ngIf="this.resolucion.info_completa==1"><b>Sí</b></span>
+            <span *ngIf="this.resolucion.info_completa==0"><b>No</b></span>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-4 text-right">
+            Reclamo:
+          </div>
+          <div class="col-8">
+            <span *ngIf="this.resolucion.reclamo==1"><b>Aceptado</b></span>
+            <span *ngIf="this.resolucion.reclamo==0"><b>Rechazado</b></span>
+          </div>
+        </div>
+        <div class="row mb-1" [hidden]="!(this.genericForm.controls.reclamo.value == 0 && this.genericForm.controls.reclamo.value != '')">
+          <div class="col-4 text-right">
+            Razón del rechazo:
+          </div>
+          <div class="col-8">
+            <b>{{this.resolucion.razon_rechazo}}</b>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6">
+
+        <div class="row mb-1">
+          <div class="col-4 text-right">
+            Procesado por:
+          </div>
+          <div class="col-8">
+            <b>{{this.resolucion.procesado_por}}</b>
+          </div>
+        </div>
+        <div class="row mb-1">
+          <div class="col-4 text-right">
+            Fecha:
+          </div>
+          <div class="col-8">
+            <b>{{this.resolucion.fecha}}</b>
+          </div>
+        </div>
+      </div>
+    </div>
+    <form class="formulario formularioRegistro my-3" name="formularioresolicion" [formGroup]="genericForm" (ngSubmit)="submitResolucion()" *ngIf="formulariostatus.success == 1 && this.resolucionDisabled()==null && this._global.reporte.objreporte.TipoReclamoDiagnostico=='Reparación' && this.resolucion.id==0">
     <div class="row grayed">
       <div class="col-sm-6">
         <div class="row mb-1">

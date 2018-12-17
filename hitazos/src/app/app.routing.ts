@@ -40,6 +40,7 @@ import { ResumenDistribuidorComponent } from './administracion/resumen-distribui
 import { HistorialComponent } from './administracion/historial.component';
 import { ResumenPagosComponent } from './administracion/resumen-de-pagos.component';
 import { ResumenDeCambiosComponent } from './administracion/resumen-de-cambios.component';
+import { ResumenDeCambiosHPComponent } from './administracion/resumen-de-cambios-hp.component';
 import { ResumenDeServiciosComponent } from './administracion/resumen-de-servicios.component';
 
 //Notificaciones
@@ -84,6 +85,7 @@ export const routing = RouterModule.forRoot([
     { path: 'administracion/historial-de-pagos', component: HistorialComponent, canActivate: [GlobalService] },
     { path: 'administracion/resumen-de-pagos', component: ResumenPagosComponent, canActivate: [GlobalService] },
     { path: 'administracion/resumen-de-cambios', component: ResumenDeCambiosComponent, canActivate: [GlobalService] },
+    { path: 'administracion/resumen-de-cambios-hp', component: ResumenDeCambiosHPComponent, canActivate: [GlobalService] },
     { path: 'administracion/resumen-de-servicios', component: ResumenDeServiciosComponent, canActivate: [GlobalService] },
 
 

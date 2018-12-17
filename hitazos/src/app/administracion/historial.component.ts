@@ -76,7 +76,7 @@ export class HistorialComponent {
       this._global.clearMessages();
 
       this.dtOptions = {
-          pageLength: 5,
+          pageLength: 15,
           scrollX: false,
           language: {
               "processing": "Procesando...",
@@ -540,12 +540,12 @@ export class HistorialComponent {
     this.montoPago = montototal_pago;
     this.comprobantePago = comprobante_pago;
     this.fechaRegistroPago = fecha_pago;
-    alert(this.id_pago);
   }
 
   obtenerPagos() {
       var params = {};
       params['IDMaster'] = this._global.user.IDCentro;
+      params['IDDistribuidor'] = this._global.user.IDDistribuidor;
       params['Nivel'] = this._global.user.nivel;
 
       this._global.appstatus.loading = true;
@@ -560,7 +560,7 @@ export class HistorialComponent {
 
                   this.precargaPaises();
                   this.setMesResumen();
-                  this.changeMaster();
+                  //this.changeMaster();
 
                   this.filterForm.controls.Cds.setValue('');
                   this.filterForm.controls.Categoria.setValue('');
@@ -607,8 +607,8 @@ export class HistorialComponent {
 
           var params = {};
           params = this.pagosForm.getRawValue();
-
-          params["IDReporte"] = this.idPago;
+          //alert(this.id_pago);
+          params["IDReporte"] = this.id_pago;
           params["ComprobantePago"] = this.AdjuntosComprobante;
 
 
@@ -631,9 +631,14 @@ export class HistorialComponent {
                       confirmButtonText: 'Ok',
                       customClass: 'swal2-overflow',
                   }).then((result) => {
+                      console.log("antes del result");
                       if (result.value) {
-                          //this.filtrarReporte();
+                        console.log("dentor del result");
+                        //this.obtenerPagos();
+                        window.location.reload();
+                          //this._router.navigate(['/administracion/historial-de-pagos']);
                       }
+
                   });
 
                 } else if (data.res = 'error') {

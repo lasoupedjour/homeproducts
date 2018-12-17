@@ -29,6 +29,7 @@ $res['res'] = 'ok';
 
 $IDCentro = 0;
 $IDDistribuidor = 0;
+$IDMaster = 0;
 
 $IDOperadorAdmin = $arre['IDOperadorAdmin'];
 $IDMaster = $arre['IDMaster'];
@@ -38,6 +39,9 @@ if($arre['IDCentro']!="")
 
 if($arre['IDDistribuidor']!="")
 	$IDDistribuidor = $arre['IDDistribuidor'];
+
+if($arre['IDMaster']!="")
+	$IDMaster = $arre['IDMaster'];
 //insertar
 if ($stmt = $mysqli->prepare("
 
