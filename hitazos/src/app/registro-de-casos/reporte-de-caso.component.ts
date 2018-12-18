@@ -62,6 +62,8 @@ export class ReporteCasoComponent {
         public _httpService: HTTPService, public _router: Router, public _global: GlobalService, public route: ActivatedRoute) { }
 
     ngOnInit() {
+
+        //console.log("Tipo cliente", this._global.cliente.objeto.TipoPersona);
         console.log('init registro');
         console.log(this._global.user);
 
@@ -707,10 +709,7 @@ export class ReporteCasoComponent {
 
     changeSubcategoria(Subcategoria = null) {
       var valido = true;
-      if(this.genericForm.controls.Uso.value=='' && this.genericForm.controls.Categoria.value=='MENAJE'){
-        alert("Favor de seleccionar el uso del producto.");
-        valido = false;
-      }
+
       if(valido){
         this._global.appstatus.mensaje = '';
         console.log('submit busqueda');
@@ -728,7 +727,18 @@ export class ReporteCasoComponent {
         params['Pais'] = this._global.user.Pais;
         params['nivel'] = this._global.user.nivel;
         params['Categoria'] = this.genericForm.controls.Categoria.value;
-        params['Uso'] = this.genericForm.controls.Uso.value;
+        if(this._global.cliente.objeto.TipoPersona =='Persona Física'){
+          params['Cliente'] = "PERSONA FÍSICA";
+        }else{
+          params['Cliente'] = "EMPRESA";
+        }
+        /*
+        if(this._global.cliente.objeto.TipoPersona !='Persona Física'){
+          params['Uso'] = "Comercial";
+        }else{
+          params['Uso'] = "Privado";
+        }
+        */
 
         this._global.appstatus.loading = true;
 

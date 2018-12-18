@@ -24,7 +24,7 @@ $res['res'] = 'ok';
 
 if($arre['Categoria']=="MENAJE"){
   $q = mysql_query("
-  SELECT distinct Falla FROM fallas where Subcategoria = '".$arre['Subcategoria']."' and Uso='".$arre['Uso']."' order by Falla asc
+  SELECT distinct Falla FROM fallas where Subcategoria = '".$arre['Subcategoria']."' and Cliente='".$arre['Cliente']."' order by Falla asc
   ") or die(mysql_error());
 }else{
   $q = mysql_query("

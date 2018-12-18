@@ -269,7 +269,9 @@
 
       </div>
 
-      <!--REVISION -->
+      <!--REVISION
+       || this.genericForm.controls.Categoria.value=='MENAJE'
+      -->
       <div [hidden]="this.genericForm.controls.TipoCaso.value != 'Garantía'" class="col-12" *ngIf="!(this._global.user.IDDistribuidor>0)">
         <div class="row">
 
@@ -505,6 +507,18 @@
       </label>
 
     </div>
+
+    <!--Campos para menahe-->
+    <!--div class="row" [hidden]="this.genericForm.controls.TipoCaso.value == null || this.genericForm.controls.TipoCaso.value == '' || !this.status.mostrarDescripcion ">
+
+      <label>
+        <textarea class="form-control form-control-sm" formControlName="Descripcion" rows="4" placeholder="Descripcion de {{this.genericForm.controls.TipoCaso.value}}" maxlength="1000"></textarea>
+        <span class="alert alert-danger" *ngIf="!genericForm.controls.Descripcion.valid && genericForm.controls.Descripcion.touched">
+          Este campo es requerido
+        </span>
+      </label>
+
+    </div-->
 
     <!--<div class="row" [hidden]="this.genericForm.controls.TipoCaso.value == '' ">
       <label class="text-right mt-4">

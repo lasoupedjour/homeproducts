@@ -230,6 +230,7 @@
 
           </div>
         </div>
+        <div class="mb-5" *ngIf="!_global.refacciones[0]">No requiere refacciones.</div>
       </div>
       <!--termina REFACCIONES -->
 
@@ -282,7 +283,7 @@
       <div class="col-sm-4 mb-5">
         <div class="row">
           <div class="col-4 text-right">
-            <div class="sform mb-3">10. <i>Factura o ticket de compra</i> del producto:</div>
+            <div class="sform mb-3">11. <i>Factura o ticket de compra</i> del producto:</div>
           </div>
           <div class="col-8">
             <div class="row no-gutters">
@@ -300,7 +301,7 @@
       <div class="col-sm-4 mb-5">
         <div class="row">
           <div class="col-4 text-right">
-            <div class="sform mb-3">11. <i>Fotos del modelo y no. serie</i> de producto:</div>
+            <div class="sform mb-3">12. <i>Fotos del modelo y no. serie</i> de producto:</div>
           </div>
           <div class="col-8">
             <div class="row">
@@ -317,7 +318,7 @@
       <div class="col-sm-4 mb-5">
         <div class="row">
           <div class="col-4 text-right">
-            <div class="sform mb-3">12. <i>Facturas de repuestos</i> utilizados:</div>
+            <div class="sform mb-3">13. <i>Facturas de repuestos</i> utilizados:</div>
           </div>
           <div class="col-8">
             <div class="row">
@@ -331,10 +332,10 @@
         </div>
       </div>
 
-      <div class="col-sm-4 mb-5">
+      <div class="col-sm-4 mb-5" *ngIf="_global.AdjuntosFacturasNotasCompraArre[0]==''">
         <div class="row">
           <div class="col-4 text-right">
-            <div class="sform mb-3">13. Adjuntar <i>otro</i>:</div>
+            <div class="sform mb-3">14. Adjuntar <i>otro</i>:</div>
           </div>
           <div class="col-8">
             <div class="row">
