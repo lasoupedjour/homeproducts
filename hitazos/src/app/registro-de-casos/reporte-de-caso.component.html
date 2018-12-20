@@ -269,10 +269,8 @@
 
       </div>
 
-      <!--REVISION
-       || this.genericForm.controls.Categoria.value=='MENAJE'
-      -->
-      <div [hidden]="this.genericForm.controls.TipoCaso.value != 'Garantía'" class="col-12" *ngIf="!(this._global.user.IDDistribuidor>0)">
+      <!--REVISION-->
+      <div [hidden]="this.genericForm.controls.TipoCaso.value != 'Garantía' || this.genericForm.controls.Categoria.value=='MENAJE'" class="col-12" *ngIf="!(this._global.user.IDDistribuidor>0)">
         <div class="row">
 
           <div class="col-12 pt-3">
@@ -508,26 +506,88 @@
 
     </div>
 
-    <!--Campos para menahe-->
-    <!--div class="row" [hidden]="this.genericForm.controls.TipoCaso.value == null || this.genericForm.controls.TipoCaso.value == '' || !this.status.mostrarDescripcion ">
+    <!--Campos para menaje-->
 
-      <label>
-        <textarea class="form-control form-control-sm" formControlName="Descripcion" rows="4" placeholder="Descripcion de {{this.genericForm.controls.TipoCaso.value}}" maxlength="1000"></textarea>
-        <span class="alert alert-danger" *ngIf="!genericForm.controls.Descripcion.valid && genericForm.controls.Descripcion.touched">
-          Este campo es requerido
-        </span>
-      </label>
+    <div class="row" *ngIf="this.genericForm.controls.TipoCaso.value == 'Garantía' && this.genericForm.controls.Categoria.value=='MENAJE'">
+      <div class="col-sm-6">
+        <label>
+          <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="NoSerie" placeholder="No. de Serie" maxlength="20" />
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.NoSerie.valid && genericForm.controls.NoSerie.touched">
+            Este campo es requerido
+          </span>
+        </label>
+        <label>
+          <span class="simbolo">$</span> <input class="form-control form-control-sm w-50" OnlyNumber="true" placeholder="Costo Landed" formControlName="CostoLanded" >&nbsp;USD
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.CostoLanded.valid && genericForm.controls.CostoLanded.touched">
+            Este campo es requerido
+          </span>
+        </label>
+        <label>
+          <span class="simbolo">$</span> <input class="form-control form-control-sm w-50" OnlyNumber="true" placeholder="Otro costo" formControlName="OtroCostoDistribuidor" >&nbsp;USD
+        </label>
+      </div>
+      <div class="col-sm-6">
+        <label>
+          <textarea class="form-control form-control-sm" formControlName="CondicionProductoDiagnostico" rows="5" placeholder="* Condición general del producto" maxlength="1000"></textarea>
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.CondicionProductoDiagnostico.valid && genericForm.controls.CondicionProductoDiagnostico.touched">
+            Este campo es requerido
+          </span>
+        </label>
+      </div>
+    </div>
+    <div class="row" *ngIf="this.genericForm.controls.TipoCaso.value == 'Garantía' && this.genericForm.controls.Categoria.value=='MENAJE'">
+      <div class="col-sm-12 my-3">
+        <h4 class="mt-3 naranja"><b>Archivos adjuntos</b></h4>
+        <hr />
+      </div>
+    </div>
+    <div class="row" *ngIf="this.genericForm.controls.TipoCaso.value == 'Garantía' && this.genericForm.controls.Categoria.value=='MENAJE' && _global.AdjuntosFacturasNotasCompraArre.length==0">
+      <div class="col-sm-6 mb-5">
+        <div class="row">
+          <div class="col-4 text-right">
+            <div class="sform mb-3">Factura o comprobante de entrega:</div>
+          </div>
+          <div class="col-8">
+            <div class="row no-gutters" >
+              <div class="col-12 mb-1">
+                <ng2-file-input (onAction)="onActionFacturasNotasCompra($event)" ></ng2-file-input>
+                <span class="alert alert-danger" *ngIf="this.FacturasNotasCompraLenght==0 && this.adjuntosValidos==false">
+                  Este campo es requerido
+                </span>
+              </div>
 
-    </div-->
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 mb-5">
+        <div class="row">
+          <div class="col-4 text-right">
+            <div class="sform mb-3">Fotos del producto:</div>
+          </div>
+          <div class="col-8">
+            <div class="row">
+              <div class="col-12 mb-1">
+                <ng2-file-input (onAction)="onActionFotosProducto($event)"></ng2-file-input>
+
+                <span class="alert alert-danger" *ngIf="this.FotosProductoLenght==0 && this.adjuntosValidos==false">
+                  Este campo es requerido
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!--<div class="row" [hidden]="this.genericForm.controls.TipoCaso.value == '' ">
       <label class="text-right mt-4">
         <button class="btn btn-sm" type="submit">Guardar cambios</button>
       </label>
     </div>-->
-
-
-
 
   </form>
 

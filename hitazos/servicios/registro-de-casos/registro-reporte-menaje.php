@@ -22,6 +22,38 @@ array_walk_recursive($arre,function(&$value) use ($current_charset){
      $value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
 });
 
+function subirAdjuntos($idreporte, $field, $size){
+
+  $arrebd = Array();
+
+  for($i = 0; $i < $size; $i++){
+    if(!empty($_FILES[$field.$i]['name'])){
+      $uploadedFile = '';
+      if(!empty($_FILES[$field.$i]["type"])){
+        $fileName = $idreporte.'_'.time().'_'.$_FILES[$field.$i]['name'];
+        $valid_extensions = array("jpeg", "jpg", "png", "pdf", "mp4", "mov", "avi", "webm");
+        $temporary = explode(".", $_FILES[$field.$i]["name"]);
+        $file_extension = end($temporary);
+        if((($_FILES["hard_file"]["type"] == "image/png") || ($_FILES[$field.$i]["type"] == "image/jpg") || ($_FILES[$field.$i]["type"] == "image/jpeg") || ($_FILES[$field.$i]["type"] == "image/png") ||
+        ($_FILES[$field.$i]["type"] == "video/mp4") ||
+        ($_FILES[$field.$i]["type"] == "video/mov") ||
+        ($_FILES[$field.$i]["type"] == "video/avi") ||
+        ($_FILES[$field.$i]["type"] == "video/webm") || ($_FILES[$field.$i]["type"] == "application/pdf")) && in_array($file_extension, $valid_extensions)){
+          $sourcePath = $_FILES[$field.$i]['tmp_name'];
+          $targetPath = "../orden-de-servicio/uploads-ordenes/".$fileName;
+          if(move_uploaded_file($sourcePath,$targetPath)){
+            $uploadedFile = $fileName;
+            array_push($arrebd, $uploadedFile);
+          }
+        }
+      }
+    }
+
+  }
+
+  return $arrebd;
+
+}
 
 $res = array();
 
@@ -82,10 +114,10 @@ if($arre['IDDistribuidor']==0){
 if(!$arre['Update']){
   //insertar
 	if ($stmt = $mysqli->prepare("
-	insert into reportes (IDCliente, IDCentro, IDDistribuidor, IDOperadorDistribuidor, IDOperadorCentro, TipoCaso, Categoria, Subcategoria, Tipo, Modelo, CodigoSAP, FechaCompra, Sello, AplicaGarantia, Uso, Distribuidor, LugarCompra, Falla, FallaDescripcion, Comentarios, TipoRevision, IDTarifas, StatusMovilidad, MontoMovilizacion, FechaRevision, Descripcion, StatusReporte)
-	values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Reporte')
+	insert into reportes (IDCliente, IDCentro, IDDistribuidor, IDOperadorDistribuidor, IDOperadorCentro, TipoCaso, Categoria, Subcategoria, Tipo, Modelo, CodigoSAP, FechaCompra, Sello, AplicaGarantia, Uso, Distribuidor, LugarCompra, Falla, FallaDescripcion, Comentarios, TipoRevision, IDTarifas, StatusMovilidad, MontoMovilizacion, FechaRevision, Descripcion, StatusReporte, NoSerie, CondicionProductoDiagnostico, CostoLanded, OtroCostoDistribuidor)
+	values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Reporte', ?, ?, ?, ?)
 	")) {
-		$stmt->bind_param("dddddssssssssssssssssdsdss",
+		$stmt->bind_param("dddddssssssssssssssssdsdssssss",
 		$arre['IDCliente'],
 		$IDCentro,
     $IDDistribuidor,
@@ -111,8 +143,11 @@ if(!$arre['Update']){
 		utf8_decode($StatusMovilidad),
 		$arre['CostoKilometraje'],
 		$FechaRevision,
-		$arre['Descripcion']
-
+		$arre['Descripcion'],
+    $arre['NoSerie'],
+    $arre['CondicionProductoDiagnostico'],
+    $arre['CostoLanded'],
+    $arre['OtroCostoDistribuidor']
 		);
 
 		if($stmt->execute()){
@@ -138,6 +173,41 @@ if(!$arre['Update']){
 					array_push($reporte, $temp);
 				}
 				$result->close();
+
+
+        /*Actualizamos los adjuntos*/
+        $AdjuntosFacturasNotasCompra = Array();
+        $AdjuntosFotosProducto = Array();
+
+        $AdjuntosFacturasNotasCompra = subirAdjuntos($id_reporte, 'AdjuntosFacturasNotasCompra', $arre['AdjuntosFacturasNotasCompraSize']);
+        $AdjuntosFotosProducto = subirAdjuntos($id_reporte, 'AdjuntosFotosProducto', $arre['AdjuntosFotosProductoSize']);
+        $queryUpdate = "
+                                      update clientes set
+                                      AdjuntosFacturasNotasCompra = '$AdjuntosFacturasNotasCompra',
+                                      AdjuntoFotosProducto = '$AdjuntosFotosProducto'
+                                      where id = $id_reporte
+                                      ";
+
+        /*
+        print_r($AdjuntosFacturasNotasCompra);
+        echo("<br>");
+        print_r($AdjuntosFotosProducto);
+        die();
+        */
+        if ($stmt = $mysqli->prepare("
+                                      update clientes set
+                                      AdjuntosFacturasNotasCompra = ?,
+                                      AdjuntoFotosProducto = ?
+                                      where id = ?
+                                      ")) {
+          $stmt->bind_param("ssd",
+          $AdjuntosFacturasNotasCompra,
+          $AdjuntosFotosProducto,
+          $id_reporte
+          );
+
+          $stmt->execute();
+        }
 
         //Se verifica si el registro lo realiza un distribuidores
         if(!$arre["IDDistribuidor"]>0){
@@ -177,7 +247,7 @@ if(!$arre['Update']){
       select centros.Nombre as NombreCentro, centros.Email, centros.Direccion, centros.Pais, reportes.Modelo, reportes.NoFactura, clientes.RazonSocial, clientes.Nombre as NombreCliente, clientes.APaterno, clientes.AMaterno, clientes.Email as EmailCliente, reportes.FechaStatusCambioFisico, reportes.Categoria
       from reportes, centros, clientes
       where
-      reportes.id = ".$arre["IDReporte"]." and
+      reportes.id = ".$id_reporte." and
       reportes.IDCentro = centros.id and
       reportes.IDCliente = clientes.id
       ");
@@ -192,7 +262,7 @@ if(!$arre['Update']){
       $emailcliente = "jguillen@pautacreativa.com.mx";
       $categoria = $row["Categoria"];
       $imagenHeader = "logo-hp.jpg";
-      if($categoria=="MENAJE"){
+      if($categoria!="LINEA BLANCA"){
         $imagenHeader = "logo-hpgroup.jpg";
       }
       $modelo = $row["Modelo"];

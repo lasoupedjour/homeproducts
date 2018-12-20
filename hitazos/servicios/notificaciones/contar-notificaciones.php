@@ -23,6 +23,7 @@ $id_usuario = utf8_decode(urldecode($arre['id_usuario']));
 $id_centro = utf8_decode(urldecode($arre['id_centro']));
 $nivel= utf8_decode(urldecode($arre['nivel']));
 $IDDistribuidor = utf8_decode(urldecode($arre['IDDistribuidor']));
+$CustomerID = $arre['CustomerID'];
 
 if($nivel=='administrador'){
   $query = "SELECT notificaciones.id FROM notificaciones,usuarios_admin where notificaciones.id_usuario=usuarios_admin.id and usuarios_admin.nivel <> 'administrador' and leida=0 order by notificaciones.id desc";
@@ -49,13 +50,13 @@ if($nivel=='administrador'){
             select n.id from
             (select notificaciones.* from notificaciones where leida=0) as n
             join
-            (select * from usuarios_admin where (nivel='administrador')) as ua
+            (select * from usuarios_admin) as ua
             on ua.id = n.id_usuario
             join
             (select * from reportes) as r
             on n.id_reporte = r.id
             join
-            (select * from distribuidores where id=$IDDistribuidor) as d
+            (select * from distribuidores where id=$IDDistribuidor or IDDistribuidor='$CustomerID') as d
             on r.Distribuidor = d.IDDistribuidor
             group by id
             order by id desc

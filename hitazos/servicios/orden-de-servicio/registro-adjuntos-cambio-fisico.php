@@ -74,6 +74,9 @@ function subirAdjuntos($idreporte, $field, $size){
 if ($stmt = $mysqli->prepare("
 update reportes set
 MontoDespiece = ?,
+MontoReciclaje = ?,
+MontoOtro = ?,
+MontoOtroDescripcion = ?,
 MontoSubtotal = ?,
 MontoIVA = ?,
 MontoTotal = ?,
@@ -81,8 +84,11 @@ AdjuntosReciclaje = ?,
 FechaAdjuntosCambioFisico = now()
 where id = ?
 ")) {
-	$stmt->bind_param("ddddsd",
+	$stmt->bind_param("dddsdddsd",
   $arre['MontoDespiece'],
+  $arre['MontoReciclaje'],
+  $arre['MontoOtro'],
+  $arre['MontoOtroDescripcion'],
   $arre['MontoSubtotal'],
   $arre['MontoIVA'],
   $arre['MontoTotal'],

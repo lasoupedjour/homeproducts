@@ -15,7 +15,6 @@
           <li class="nav-item text-center" [hidden]="this._global.user.id == ''">
             <a class="nav-link" routerLink="/registro-de-casos" routerLinkActive="active">Registro de Casos</a>
           </li>
-          <!--
           <li class="nav-item text-center" [hidden]="this._global.user.id == ''" *ngIf="_global.user.nivel == 'administrador'">
             <a class="nav-link" routerLink="/administracion/inicio" routerLinkActive="active">Administración</a>
           </li>
@@ -25,7 +24,6 @@
           <li class="nav-item text-center" [hidden]="this._global.user.id == ''" *ngIf="this._global.user.nivel=='distribuidor'">
             <a class="nav-link" routerLink="/administracion/resumen-distribuidor" routerLinkActive="active">Administración</a>
           </li>
-          -->
           <li class="nav-item text-center" [hidden]="this._global.user.id == ''">
             <a class="nav-link" routerLink="/notificaciones" routerLinkActive="#"><i class="far fa-bell"></i></a>
             <div id="bell-counter" *ngIf="this._global.notificaciones.nuevas > 0">{{this._global.notificaciones.nuevas}}</div>

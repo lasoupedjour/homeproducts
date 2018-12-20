@@ -7,6 +7,7 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 import { userValidators } from '../userValidators';
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
+import { Ng2FileInputModule } from 'ng2-file-input';
 import swal from 'sweetalert2';
 
 @Component({
@@ -21,6 +22,11 @@ export class ReporteCasoComponent {
 
     modelfechacompra: NgbDateStruct;
     modelfecharevision: NgbDateStruct;
+
+    FacturasNotasCompraLenght: 0;
+    FotosProductoLenght: 0;
+
+    adjuntosValidos;
 
     maxDate: Date;
     maxDateObj: Object;
@@ -127,10 +133,24 @@ export class ReporteCasoComponent {
             Refaccion: [''],
             NoParte: [''],
             IDCentro: 0,
+            NoSerie: [this._global.reporte.objreporte.NoSerie],
+            CondicionProductoDiagnostico: [this._global.reporte.objreporte.CondicionProductoDiagnostico],
+            CostoLanded: [this._global.reporte.objreporte.CostoLanded],
+            OtroCostoDistribuidor: [''],
+            FacturasNotasCompra: [''],
+            FotosProducto: [''],
 
 
         });
 
+        /*
+        NoSerie: [this._global.reporte.objreporte.NoSerie, Validators.required],
+        CondicionProductoDiagnostico: [this._global.reporte.objreporte.CondicionProductoDiagnostico, Validators.required],
+        CostoLanded: [this._global.reporte.objreporte.CostoLanded, Validators.required],
+        OtroCostoDistribuidor: [''],
+        FacturasNotasCompra: [''],
+        FotosProducto: [''],
+        */
         this.cotizacionForm = this.formBuilder.group({
             /*usuario: ['', Validators.compose([
                 Validators.required,
@@ -188,8 +208,68 @@ export class ReporteCasoComponent {
         //this.precargaTarifasMovilizacion();
 
         this.genericForm.controls.TipoRevision.setValue(Object(this._global.reporte.objreporte).TipoRevision);
+
+        if(this._global.reporte.objreporte.AdjuntosFacturasNotasCompra!=""){
+            try { this._global.AdjuntosFacturasNotasCompraArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosFacturasNotasCompra); } catch (e) { };
+        }else{
+            this._global.AdjuntosFacturasNotasCompraArre = [];
+        }
+
+        if(this._global.reporte.objreporte.AdjuntosFotosProducto!=""){
+            try { this._global.AdjuntosFotosProductoArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosFotosProducto); } catch (e) { };
+        }else{
+            this._global.AdjuntosFotosProductoArre = [];
+        }
     }
 
+    onActionFacturasNotasCompra(event: any) {
+        console.log(event);
+        this._global.AdjuntosFacturasNotasCompra = event;
+    }
+    onActionFotosProducto(event: any) {
+        console.log(event);
+        this._global.AdjuntosFotosProducto = event;
+    }
+
+    validarAdjuntos(){
+      try { this.FacturasNotasCompraLenght = Object(this._global.AdjuntosFacturasNotasCompra).currentFiles.length; } catch (e) { this.FacturasNotasCompraLenght = 0; }
+      //try { this.FacturasRepuestosLenght = Object(this._global.AdjuntosFotosModeloSerie).currentFiles.length; } catch (e) { this.FacturasRepuestosLenght = 0; }
+      try { this.FotosProductoLenght = Object(this._global.AdjuntosFotosProducto).currentFiles.length; } catch (e) { this.FotosProductoLenght = 0; }
+
+      this.adjuntosValidos = false;
+
+      if(this.FacturasNotasCompraLenght>0 && this.FotosProductoLenght>0){
+        this.adjuntosValidos = true;
+      }
+
+      //alert(this.adjuntosValidos);
+    }
+
+    prevAttach(item) {
+        var tipo = '';
+        var html = '';
+        console.log(item);
+        if (item.includes('.jpg') || item.includes('.jpeg') || item.includes('.png')) {
+            html = `
+              <a class="img" href="${this._global.base}orden-de-servicio/uploads-ordenes/${item}" target="_blank" title="${item}">
+                <img src="${this._global.base}orden-de-servicio/uploads-ordenes/${item}" >
+              </a>
+            `;
+        } else if (item.includes('.pdf')) {
+            html = `
+              <a class="pdf" href="${this._global.base}orden-de-servicio/uploads-ordenes/${item}" target="_blank" title="${item}">
+                <i class="fa fa-file-pdf"></i>
+              </a>
+            `;
+        } else if (item.includes('.mp4') || item.includes('.mov') || item.includes('.avi') || item.includes('.webm')) {
+            html = `
+              <a class="pdf" href="${this._global.base}orden-de-servicio/uploads-ordenes/${item}" target="_blank" title="${item}">
+                <i class="fa fa-file-video"></i>
+              </a>
+            `;
+        }
+        return html;
+    }
 
 
     precargaTarifasMovilizacion(Subcategoria) {
@@ -1229,112 +1309,202 @@ export class ReporteCasoComponent {
     submitRegistro() {
         console.log('submit prevalidation');
         //alert(this.genericForm.valid);
-        if (this.genericForm.valid) {
+        //alert(this.genericForm.controls.Categoria.value);
+        //Validamos si se trata de un casi de menaje
+        if(this.genericForm.controls.Categoria.value=='MENAJE'){
+          //Validamos los archivos adjuntos
+          this.validarAdjuntos();
 
-            console.log('submit registro');
-            this._global.clearMessages();
-            var Categoria = this.genericForm.controls.Categoria.value;
+          if (this.genericForm.valid && this.adjuntosValidos) {
 
-            var params = {};
-            params = this.genericForm.getRawValue();
-            params["Update"] = this.status.update;
-            params["IDCentro"] = this._global.user.IDCentro;
-            params["IDReporte"] = this._global.reporte.idreporte;
-            params["IDDistribuidor"] = this._global.user.IDDistribuidor;
-            params["IDUsuario"] = this._global.user.id;
-            params["IDCliente"] = Object(this._global.cliente.objeto).id;
-            params["Refacciones"] = JSON.stringify(this._global.refacciones);
-            params["NecesitaAutorizacion"] = this.formulariostatus.necesitaAutorizacion;
+              console.log('submit registro');
+              this._global.clearMessages();
+              var Categoria = this.genericForm.controls.Categoria.value;
 
-            this._global.appstatus.loading = true;
+              var params = {};
+              params = this.genericForm.getRawValue();
+              params["Update"] = this.status.update;
+              params["IDCentro"] = this._global.user.IDCentro;
+              params["IDReporte"] = this._global.reporte.idreporte;
+              params["IDDistribuidor"] = this._global.user.IDDistribuidor;
+              params["IDUsuario"] = this._global.user.id;
+              params["IDCliente"] = Object(this._global.cliente.objeto).id;
+              params["Refacciones"] = JSON.stringify(this._global.refacciones);
+              params["NecesitaAutorizacion"] = this.formulariostatus.necesitaAutorizacion;
 
-            console.log("registro reporte", params);
+              params["NoSerie"] = this.genericForm.controls.NoSerie.value;
+              params["Condicion"] = this.genericForm.controls.Condicion.value;
+              params["CostoLanded"] = this.genericForm.controls.CostoLanded.value;
+              params["OtroCostoDistribuidor"] = this.genericForm.controls.OtroCostoDistribuidor.value;
 
-            this._httpService.postJSON(params, 'registro-de-casos/registro-reporte.php')
-                .subscribe(
-                data => {
-                    console.log('data');
-                    console.log(data);
-                    this._global.appstatus.loading = false;
+              params["AdjuntosFacturasNotasCompra"] = this._global.AdjuntosFacturasNotasCompra;
+              try { params["AdjuntosFacturasNotasCompraSize"] = Object(this._global.AdjuntosFacturasNotasCompra).currentFiles.length; } catch (e) { params["AdjuntosFacturasNotasCompraSize"] = 0; };
 
-                    if (data.res == 'ok') {
+              params["AdjuntosFotosProducto"] = this._global.AdjuntosFotosProducto;
+              try { params["AdjuntosFotosProductoSize"] = Object(this._global.AdjuntosFotosProducto).currentFiles.length; } catch (e) { params["AdjuntosFotosProductoSize"] = 0; };
 
-                        console.log("objReporte", data.objreporte);
-                        this._global.guardarIdReporte(data.idreporte);
-                        this._global.guardarObjReporte(data.objreporte);
-                        //this._global.guardarObjReporte(data.objreporte);
+              this._global.appstatus.loading = true;
+
+              console.log("registro reporte", params);
+
+              this._httpService.postFormData(params, 'registro-de-casos/registro-reporte-menaje.php')
+                  .subscribe(
+                  data => {
+                      console.log('data');
+                      console.log(data);
+                      this._global.appstatus.loading = false;
+
+                      if (data.res == 'ok') {
+
+                          console.log("objReporte", data.objreporte);
+                          this._global.guardarIdReporte(data.idreporte);
+                          this._global.guardarObjReporte(data.objreporte);
+                          //this._global.guardarObjReporte(data.objreporte);
 
 
-                        this.genericForm.reset();
-                        // this.status.paso = 2;
+                          this.genericForm.reset();
+                          // this.status.paso = 2;
+                          swal({
+                              title: 'Solicitud Enviada',
+                              text: 'Se ha enviado la solicitud.',
+                              type: 'success',
+                              showConfirmButton: true,
+                              confirmButtonText: 'Ok',
+                              customClass: 'swal2-overflow',
+                          }).then((result) => {
+                            ////Registro de notificación para HP
+                            this._global.notificaciones.modulo = "/registro-de-casos/reporte-de-caso-menaje";
+                            this._global.notificaciones.descripcion = "Se ha registrado un reporte de menaje con el No. de orden: " + this._global.reporte.idreporte;
+                            this._global.registrarNotificacion(this._global.reporte.idreporte);
 
-                        if (this.formulariostatus.necesitaAutorizacion == 1) {
-                            //Registro de notificación
-                            this._global.notificaciones.modulo = "/inicio/resumen/orden";
-                            this._global.notificaciones.descripcion = "Se ha enviado la solicitud de autorización de kilometraje a HP." + this._global.reporte.idreporte;
-                            this._global.registrarNotificacion(data.idreporte);
-                            swal({
-                                title: 'Solicitud Enviada',
-                                text: 'Se ha enviado la solicitud de autorización de kilometraje a HP.',
-                                type: 'success',
-                                showConfirmButton: true,
-                                confirmButtonText: 'Ok',
-                                customClass: 'swal2-overflow',
-                            }).then((result) => {
-                                if (result.value) {
-                                  if(this._global.user.IDDistribuidor){
-                                    this._router.navigate(['inicio']);
-                                  }else{
-                                    this._router.navigate(['inicio/resumen']);
-                                  }
-                                }
-                            });
-
-                        } else {
-                          if(parseInt(this._global.user.IDDistribuidor)>0 && Categoria=='LINEA BLANCA'){
-                            swal({
-                                title: 'Solicitud Enviada',
-                                text: 'Se ha enviado la solicitud.',
-                                type: 'success',
-                                showConfirmButton: true,
-                                confirmButtonText: 'Ok',
-                                customClass: 'swal2-overflow',
-                            }).then((result) => {
-                              ////Registro de notificación para HP
-                              this._global.notificaciones.modulo = "/cambio-fisico-distribuidor";
-                              this._global.notificaciones.descripcion = "Se ha registrado una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
-                              this._global.registrarNotificacion(this._global.reporte.idreporte);
-
-                              this._global.notificaciones.modulo = "/cambio-fisico-dist-asigna";
-                              this._global.notificaciones.descripcion = "Se ha registrado y asignado a su CDs una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
-                              this._global.registrarNotificacion(this._global.reporte.idreporte, this._global.user.IDCentro);
-                              this._router.navigate(['inicio']);
-                            });
-                          }else{
                             this._router.navigate(['inicio/resumen']);
+                          });
+                      } else if (data.res == 'error') {
+
+                          this._global.appstatus.mensaje = data.msg;
+
+                      }
+
+
+
+                  },
+                  error => alert(error),
+                  () => console.log('termino submit')
+                  );
+
+
+          } else {
+              this._global.validateAllFormFields(this.genericForm);
+          }
+        }else{//Si es un caso de línea blanca sigue el flujo normal
+          if (this.genericForm.valid) {
+
+              console.log('submit registro');
+              this._global.clearMessages();
+              var Categoria = this.genericForm.controls.Categoria.value;
+
+              var params = {};
+              params = this.genericForm.getRawValue();
+              params["Update"] = this.status.update;
+              params["IDCentro"] = this._global.user.IDCentro;
+              params["IDReporte"] = this._global.reporte.idreporte;
+              params["IDDistribuidor"] = this._global.user.IDDistribuidor;
+              params["IDUsuario"] = this._global.user.id;
+              params["IDCliente"] = Object(this._global.cliente.objeto).id;
+              params["Refacciones"] = JSON.stringify(this._global.refacciones);
+              params["NecesitaAutorizacion"] = this.formulariostatus.necesitaAutorizacion;
+
+              this._global.appstatus.loading = true;
+
+              console.log("registro reporte", params);
+
+              this._httpService.postJSON(params, 'registro-de-casos/registro-reporte.php')
+                  .subscribe(
+                  data => {
+                      console.log('data');
+                      console.log(data);
+                      this._global.appstatus.loading = false;
+
+                      if (data.res == 'ok') {
+
+                          console.log("objReporte", data.objreporte);
+                          this._global.guardarIdReporte(data.idreporte);
+                          this._global.guardarObjReporte(data.objreporte);
+                          //this._global.guardarObjReporte(data.objreporte);
+
+
+                          this.genericForm.reset();
+                          // this.status.paso = 2;
+
+                          if (this.formulariostatus.necesitaAutorizacion == 1) {
+                              //Registro de notificación
+                              this._global.notificaciones.modulo = "/inicio/resumen/orden";
+                              this._global.notificaciones.descripcion = "Se ha enviado la solicitud de autorización de kilometraje a HP." + this._global.reporte.idreporte;
+                              this._global.registrarNotificacion(data.idreporte);
+                              swal({
+                                  title: 'Solicitud Enviada',
+                                  text: 'Se ha enviado la solicitud de autorización de kilometraje a HP.',
+                                  type: 'success',
+                                  showConfirmButton: true,
+                                  confirmButtonText: 'Ok',
+                                  customClass: 'swal2-overflow',
+                              }).then((result) => {
+                                  if (result.value) {
+                                    if(this._global.user.IDDistribuidor){
+                                      this._router.navigate(['inicio']);
+                                    }else{
+                                      this._router.navigate(['inicio/resumen']);
+                                    }
+                                  }
+                              });
+
+                          } else {
+                            if(parseInt(this._global.user.IDDistribuidor)>0 && Categoria=='LINEA BLANCA'){
+                              swal({
+                                  title: 'Solicitud Enviada',
+                                  text: 'Se ha enviado la solicitud.',
+                                  type: 'success',
+                                  showConfirmButton: true,
+                                  confirmButtonText: 'Ok',
+                                  customClass: 'swal2-overflow',
+                              }).then((result) => {
+                                ////Registro de notificación para HP
+                                this._global.notificaciones.modulo = "/cambio-fisico-distribuidor";
+                                //this._global.notificaciones.descripcion = "Se ha registrado una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
+                                this._global.notificaciones.descripcion = "Se ha registrado un caso de Línea Blanca con No. de orden " + this._global.reporte.idreporte;
+                                this._global.registrarNotificacion(this._global.reporte.idreporte);
+
+                                this._global.notificaciones.modulo = "/cambio-fisico-dist-asigna";
+                                this._global.notificaciones.descripcion = "Se ha registrado y asignado a su CDs una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
+                                this._global.registrarNotificacion(this._global.reporte.idreporte, this._global.user.IDCentro);
+                                this._router.navigate(['inicio']);
+                              });
+                            }else{
+                              this._router.navigate(['inicio/resumen']);
+                            }
                           }
-                        }
 
 
 
 
 
-                    } else if (data.res == 'error') {
+                      } else if (data.res == 'error') {
 
-                        this._global.appstatus.mensaje = data.msg;
+                          this._global.appstatus.mensaje = data.msg;
 
-                    }
-
-
-
-                },
-                error => alert(error),
-                () => console.log('termino submit')
-                );
+                      }
 
 
-        } else {
-            this._global.validateAllFormFields(this.genericForm);
+
+                  },
+                  error => alert(error),
+                  () => console.log('termino submit')
+                  );
+
+
+          } else {
+              this._global.validateAllFormFields(this.genericForm);
+          }
         }
     }
 

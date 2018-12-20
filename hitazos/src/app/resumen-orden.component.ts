@@ -77,7 +77,10 @@ export class ResumenOrdenComponent {
             procesadoPor: ['',
                 Validators.required
             ],
-            MontoDespiece: [0]
+            MontoDespiece: [0],
+            MontoReciclaje: [0],
+            MontoOtro: [0],
+            MontoOtroDescripcion: ['']
         });
 
         this.adjuntosCambioFisicoForm = this.formBuilder.group({
@@ -180,27 +183,33 @@ export class ResumenOrdenComponent {
 
     changeMontoDespiece(){
       var MontoSubtotal = 0;
-      var MontoDespiece = this.genericForm.controls.MontoDespiece.value;
+
+      var MontoDespiece = $("#MontoDespiece").val();
+      var MontoReciclaje = $("#MontoReciclaje").val();
+      var MontoOtro = $("#MontoOtro").val()
       var MontoIVA = 0;
       var MontoTotal = 0;
 
       MontoSubtotal = parseFloat(this._global.reporte.objreporte.MontoRefacciones) + parseFloat(this._global.reporte.objreporte.MontoReparacion) + parseFloat(this._global.reporte.objreporte.MontoMovilizacion);
+      MontoSubtotal = parseFloat(String(this._global.reporte.objreporte.MontoSubtotal));
 
-      MontoSubtotal = parseFloat(this._global.reporte.objreporte.MontoSubtotal) + parseFloat(MontoDespiece);
-      MontoSubtotal = parseFloat(this._global.reporte.objreporte.MontoSubtotal) + parseFloat(this._global.reporte.objreporte.MontoReciclaje);
-      MontoSubtotal = parseFloat(this._global.reporte.objreporte.MontoSubtotal) + parseFloat(this._global.reporte.objreporte.MontoOtro);
+      MontoSubtotal = parseFloat(String(MontoSubtotal)) + parseFloat(String(MontoDespiece)) + parseFloat(String(MontoReciclaje)) + parseFloat(String(MontoOtro));
+      MontoSubtotal = parseFloat(String(MontoSubtotal)) + parseFloat(String(this._global.reporte.objreporte.MontoReciclaje));
+      MontoSubtotal = parseFloat(String(MontoSubtotal)) + parseFloat(String(this._global.reporte.objreporte.MontoOtro));
 
       //alert(this.tiporeparacion.Impuesto);
       if(String(this.tiporeparacion.Impuesto)=='0')
         MontoIVA = 0;
       else
-        MontoIVA = parseFloat(String(this.tiporeparacion.Impuesto)) * parseFloat(this._global.reporte.objreporte.MontoSubtotal);
+        MontoIVA = parseFloat(String(this.tiporeparacion.Impuesto)) * parseFloat(String(MontoSubtotal));
 
-      MontoTotal = parseFloat(this._global.reporte.objreporte.MontoSubtotal) + parseFloat(this._global.reporte.objreporte.MontoIVA);
+      MontoTotal = parseFloat(String(MontoSubtotal)) + parseFloat(String(MontoIVA));
 
       this._global.reporte.objreporte.MontoIVA = String(MontoIVA);
       this._global.reporte.objreporte.MontoTotal = String(MontoTotal);
-      this._global.reporte.objreporte.MontoDespiece = MontoDespiece;
+      this._global.reporte.objreporte.MontoDespiece = String(MontoDespiece);
+      this._global.reporte.objreporte.MontoReciclaje = String(MontoReciclaje);
+      this._global.reporte.objreporte.MontoOtro = String(MontoOtro);
     }
 
     setFechaEntregaCambio(){
@@ -367,16 +376,28 @@ export class ResumenOrdenComponent {
         params["IDReporte"] = this._global.reporte.idreporte;
         params["IDUsuario"] = this._global.user.id;
         params["IDCliente"] = this._global.cliente.id;
+
+        params["MontoDespiece"] = $("#MontoDespiece").val();
+        params["MontoReciclaje"] = $("#MontoReciclaje").val();
+        params["MontoOtro"] = $("#MontoOtro").val();
+        params["MontoOtroDescripcion"] = $("#MontoOtroDescripcion").val();
+
+        params["MontoSubtotal"] = this._global.reporte.objreporte.MontoSubtotal;
+        params["MontoIVA"] = this._global.reporte.objreporte.MontoIVA;
+        params["MontoTotal"] = this._global.reporte.objreporte.MontoTotal;
+
+        /*
         params["MontoDespiece"] = this._global.reporte.objreporte.MontoDespiece;
         params["MontoSubtotal"] = this._global.reporte.objreporte.MontoSubtotal;
         params["MontoIVA"] = this._global.reporte.objreporte.MontoIVA;
         params["MontoTotal"] = this._global.reporte.objreporte.MontoTotal;
+        */
         params["TipoReclamoDiagnostico"] = this._global.reporte.objreporte.TipoReclamoDiagnostico;
 
         params["AdjuntosReciclaje"] = this._global.AdjuntosReciclaje;
         try { params["AdjuntosReciclajeSize"] = Object(this._global.AdjuntosReciclaje).currentFiles.length; } catch (e) { params["AdjuntosReciclajeSize"] = 0; };
 
-        console.log(params);
+        console.log("los parametros---->", params);
 
         this._httpService.postFormDataCambioFisico(params, 'orden-de-servicio/registro-adjuntos-cambio-fisico.php')
             .subscribe(
@@ -392,8 +413,21 @@ export class ResumenOrdenComponent {
 
                   this._global.appstatus.loading = false;
 
-                  swal('Guardado','Se han guardado correctamente los comprobantes para la orden de servicio #'+this._global.reporte.idreporte,'success');
+                  swal({
+                      title: 'Guardado',
+                      text: 'Se han guardado correctamente los comprobantes para la orden de servicio #'+this._global.reporte.idreporte,
+                      type: 'success',
+                      showConfirmButton: true,
+                      confirmButtonText: 'Ok',
+                      customClass: 'swal2-overflow',
+                  }).then((result) => {
+                    ////Registro de notificación para HP
+                    //this._global.notificaciones.modulo = "/registro-de-casos/reporte-de-caso-menaje";
+                    //this._global.notificaciones.descripcion = "Se ha registrado un reporte de menaje con el No. de orden: " + this._global.reporte.idreporte;
+                    //this._global.registrarNotificacion(this._global.reporte.idreporte);
 
+                    this._router.navigate(['inicio']);
+                  });
 
                   //Registro de notificación
                   this._global.notificaciones.modulo = "/resumen/orden/adjuntos-cambio-fisico";

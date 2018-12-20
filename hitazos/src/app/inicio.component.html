@@ -159,7 +159,7 @@
                <th>Selección</th>
              </tr>
 
-             <tr *ngFor="let item of _global.cotizacionesXAutorizar.recientes;" class="formulario">
+             <tr *ngFor="let item of _global.cotizacionesXAutorizar.recientes;" class="formulario" [hidden]="!(item.Refacciones.Status=='En revisión')">
 
                <td>
                  {{item.Pais}}
@@ -342,11 +342,13 @@
               <th>Fecha de Registro</th>
               <th>Tipo de Caso</th>
 
-              <th>Tarifa Despiece</th>
+              <!--th>Tarifa Despiece</th>
               <th>Tarifa Reciclaje</th>
-              <th>Tarifa Otro Monto</th>
+              <th>Tarifa Otro Monto</th-->
               <!--th>Descripcion Otro Monto</th-->
 
+              <th>Costo Landed</th>
+              <th>Otro Costo</th>
 
               <th>Días Transcurridos</th>
               <th>Status Costo Landed</th>
@@ -378,7 +380,7 @@
                 {{item.TipoCaso}}
               </td>
 
-              <td>
+              <!--td>
                 {{item.MontoDespiece|currency}} USD
               </td>
               <td>
@@ -386,10 +388,16 @@
               </td>
               <td>
                 {{item.MontoOtro|currency}} USD
-              </td>
+              </td-->
               <!--td>
                 {{item.MontoOtroDescripcion}}
               </td-->
+              <td>
+                {{item.CostoLanded|currency}} USD
+              </td>
+              <td>
+                {{item.OtroCostoDistribuidor|currency}} USD
+              </td>
 
               <td [ngClass]="this._global.diasTranscurridosColor(item.FechaRegistroReporte)">
                 {{this._global.diasTranscurridos(item.FechaRegistroReporte)}}
@@ -544,7 +552,8 @@
              <th [hidden]="this._global.user.nivel=='distribuidor'">Tarifa Despiece</th>
              <th [hidden]="this._global.user.nivel=='distribuidor'">Tarifa Reciclaje</th>
              <th [hidden]="this._global.user.nivel=='distribuidor'">Tarifa Otro Monto</th>
-             <th>Costo Landed</th>
+             <th hidden>Costo Landed</th>
+             <th hidden>Otro Costo</th>
              <!--th>Descripcion Otro Monto</th-->
 
 
@@ -587,8 +596,11 @@
              <td [hidden]="this._global.user.nivel=='distribuidor'">
                {{item.MontoOtro|currency}} USD
              </td>
-             <td>
+             <td hidden>
                {{item.CostoLanded|currency}} USD
+             </td>
+             <td hidden>
+               {{item.OtroCostoDistribuidor|currency}} USD
              </td>
              <!--td>
                {{item.MontoOtroDescripcion}}

@@ -148,6 +148,7 @@ export class GlobalService implements CanActivate{
                 "AdjuntosFotosModeloSerie": "",
                 "AdjuntosOtros": "",
                 "AdjuntosReciclaje": "",
+                "AdjuntosFotosProducto": "",
                 "AplicaGarantia": "",
                 "Categoria": "",
                 "CodigoSAP": "",
@@ -303,6 +304,7 @@ export class GlobalService implements CanActivate{
         "FacturasNotasCompra": ['1'],
         "FotosModeloSerie": ['1'],
         "FacturasRespuestos": ['1'],
+        "FotosProducto": ['1'],
         "Otros": ['1'],
     }
 
@@ -312,7 +314,7 @@ export class GlobalService implements CanActivate{
     AdjuntosFacturasRepuestos = {};
     AdjuntosOtros = {};
     AdjuntosReciclaje = {};
-
+    AdjuntosFotosProducto = {};
     AdjuntosNota = {};
 
 
@@ -321,7 +323,7 @@ export class GlobalService implements CanActivate{
     AdjuntosFacturasRepuestosArre = [];
     AdjuntosOtrosArre = [];
     AdjuntosReciclajeArre = [];
-
+    AdjuntosFotosProductoArre = [];
     AdjuntosNotaArre = [];
 
 
@@ -1001,6 +1003,15 @@ export class GlobalService implements CanActivate{
         this.adjuntos.FacturasNotasCompra.splice(index, 1);
     }
 
+    adjuntarOtraFotoProducto() {
+        this.adjuntos.FotosProducto.push('1');
+    }
+    eliminarFotoProducto(index) {
+        console.log(index);
+        console.log(this.adjuntos.FotosProducto);
+        this.adjuntos.FotosProducto.splice(index, 1);
+    }
+
     adjuntarOtraFotoModeloSerie() {
         this.adjuntos.FotosModeloSerie.push('1');
     }
@@ -1038,6 +1049,7 @@ export class GlobalService implements CanActivate{
                 "AdjuntosFotosModeloSerie": "",
                 "AdjuntosOtros": "",
                 "AdjuntosReciclaje": "",
+                "AdjuntosFotosProducto": "",
                 "AplicaGarantia": "",
                 "Categoria": "",
                 "CodigoSAP": "",
@@ -1151,6 +1163,7 @@ export class GlobalService implements CanActivate{
         try { this.AdjuntosFacturasRepuestosArre = JSON.parse(Object(this.reporte.objreporte).AdjuntosFacturasRepuestos); } catch (e) { };
         try { this.AdjuntosOtrosArre = JSON.parse(Object(this.reporte.objreporte).AdjuntosOtros); } catch (e) { };
         try { this.AdjuntosReciclajeArre = JSON.parse(Object(this.reporte.objreporte).AdjuntosReciclaje); } catch (e) { };
+        try { this.AdjuntosFotosProductoArre = JSON.parse(Object(this.reporte.objreporte).AdjuntosFotosProducto); } catch (e) { };
     }
 
     parseJSON(arre) {
@@ -1704,7 +1717,8 @@ export class GlobalService implements CanActivate{
       params['id_centro'] = this.user.IDCentro;
       params['nivel'] = this.user.nivel;
       params['IDDistribuidor'] = this.user.IDDistribuidor;
-
+      params['CustomerID'] = this.user.CustomerID;
+      
       console.log("contar notificaciones");
       this._httpService.postJSON(params, 'notificaciones/contar-notificaciones.php')
           .subscribe(
@@ -1732,6 +1746,7 @@ export class GlobalService implements CanActivate{
       params['id_centro'] = this.user.IDCentro;
       params['nivel'] = this.user.nivel;
       params['IDDistribuidor'] = this.user.IDDistribuidor;
+      params['CustomerID'] = this.user.CustomerID;
 
       this.appstatus.loading = true;
       console.log("listar notificaciones");
@@ -1758,7 +1773,7 @@ export class GlobalService implements CanActivate{
       //localStorage.setItem("cliente", JSON.stringify(this._global.cliente));
     }
 
-    registrarNotificacion(id_reporte = null, id_centro = null) {
+    registrarNotificacion(id_reporte = null, id_centro = null, id_distribuidor = null) {
         console.log('registrar notificación');
 
         var params = {};
@@ -1769,6 +1784,11 @@ export class GlobalService implements CanActivate{
         if(id_centro>0){
           params['id_centro'] = id_centro;
         }
+
+        if(id_distribuidor>0){
+          params['id_distribuidor'] = id_distribuidor;
+        }
+
         console.log(params);
 
         this._httpService.postJSON(params, 'notificaciones/regisrtrar-notificacion.php')

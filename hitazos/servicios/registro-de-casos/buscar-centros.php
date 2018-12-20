@@ -25,6 +25,7 @@ $res['res'] = 'ok';
 if($arre["nivel"] == "administrador" || $arre["nivel"] == "MKT"){
   $query = "SELECT id, Nombre, Ciudad from centros order by Nombre asc";
 }else{
+  /*
   $query = "
             SELECT id, Nombre, Ciudad, Categoria from centros
             where Pais = '".$arre['Pais']."'
@@ -33,6 +34,7 @@ if($arre["nivel"] == "administrador" || $arre["nivel"] == "MKT"){
 }
 
 if($arre["IDDistribuidor"]>0){
+*/
   $query = "
             SELECT id, Nombre, Ciudad, Categoria from centros
             where Pais = '".$arre['Pais']."' and IDMaster=0 order by Nombre asc";

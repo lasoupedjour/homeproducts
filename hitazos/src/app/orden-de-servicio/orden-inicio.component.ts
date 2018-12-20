@@ -25,6 +25,11 @@ export class OrdenInicioComponent {
 
     RazonSocialDistribuidor: string;
 
+    MontoMovilizacion = 0;
+    MontoDespiece = 0;
+    MontoReciclaje = 0;
+    MontoOtro = 0;
+    MontoAtencionTecnica = 0;
     MontoRefacciones = 0;
     MontoSubtotal = 0;
     MontoIVA = 0;
@@ -420,14 +425,16 @@ export class OrdenInicioComponent {
                 this.tiporeparacion = this._global.tarifas[i];
             }
         }
+
+        this.tiporeparacion.Valor = this.tiporeparacion[5];
         if(idtipo=='No requerido'){
           this.AtencionNoRequerida = true;
           this.tiporeparacion.Valor = 0;
         }else if(idtipo==''){
           this.AtencionNoRequerida = false;
         }
-
-        console.log(this.tiporeparacion.Valor);
+        console.log("this.tiporeparacion", this.tiporeparacion);
+        console.log(this.tiporeparacion[5]);
 
         this.calculaCostoTotal(true);
 
@@ -459,9 +466,11 @@ export class OrdenInicioComponent {
       this.MontoSubtotal = parseFloat(String(this.MontoRefacciones)) + parseFloat(String(this.tiporeparacion.Valor)) + parseFloat(this._global.reporte.objreporte.MontoMovilizacion);
 
       if(CahngeTipoRevision){
+        /*
         if(this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio'){
           this._global.reporte.objreporte.MontoDespiece = String(0.5 * parseFloat(String(this.tiporeparacion.Valor)));
         }
+        */
       }else{
         this._global.reporte.objreporte.MontoDespiece = this.genericForm.controls.MontoDespiece.value;
       }
@@ -493,6 +502,22 @@ export class OrdenInicioComponent {
       this.MontoTotal = parseFloat(String(this.MontoSubtotal)) + parseFloat(String(this.MontoIVA));
       if(this.tiporeparacion.NecesitaAutorizacion==0)
           this.tiporeparacion.NecesitaAutorizacionRO = true;
+
+       this.MontoRefacciones = Number(parseFloat(String(this.MontoRefacciones)));
+       //alert(this.tiporeparacion.Valor);
+       this.MontoAtencionTecnica = Number(parseFloat(String(this.tiporeparacion.Valor)).toFixed(2));
+       //alert(this.MontoAtencionTecnica);
+       //alert(this._global.reporte.objreporte.MontoMovilizacion);
+       this.MontoMovilizacion = Number(parseFloat(String(this._global.reporte.objreporte.MontoMovilizacion)).toFixed(2));
+       //alert(this.MontoMovilizacion);
+       this.MontoDespiece = Number(parseFloat(String(this._global.reporte.objreporte.MontoDespiece)).toFixed(2));
+       this.MontoReciclaje = Number(parseFloat(String(this._global.reporte.objreporte.MontoReciclaje)).toFixed(2));
+       this.MontoOtro = Number(parseFloat(String(this._global.reporte.objreporte.MontoOtro)).toFixed(2));
+
+       this.MontoSubtotal = Number(this.MontoSubtotal.toFixed(2));
+       this.MontoIVA = Number(this.MontoIVA.toFixed(2));
+       this.MontoTotal = Number(this.MontoTotal.toFixed(2));
+//       this.MontoTotal = 122555.25515456 + this.MontoTotal.toFixed(2);
     }
 
     onActionFacturasNotasCompra(event: any) {
@@ -654,6 +679,11 @@ export class OrdenInicioComponent {
                         this._global.notificaciones.modulo = "/cambio-fisico";
 
                         this._global.registrarNotificacion(this._global.reporte.idreporte);
+
+                        //Registramos la notificación para el distribuidor
+                        this._global.notificaciones.modulo = "/cambio-fisico-para-distribuidor";
+
+                        this._global.registrarNotificacion(this._global.reporte.idreporte, 0, this._global.reporte.objreporte.Distribuidor);
                       }
 
 

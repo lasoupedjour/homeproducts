@@ -220,7 +220,7 @@
                   <!--${{item.CostoTotal}}-->
                 </td>
                 <td>
-                  {{item.Status}}
+                  {{item.Existencia}}
                   <!--${{item.CostoTotal}}-->
                 </td>
 
@@ -253,13 +253,17 @@
       <div class="vform"><div class="vformleft aright">Movilización: </div> <div class="vformright"> {{this._global.reporte.objreporte.MontoMovilizacion | currency}} &nbsp;USD</div></div>
 
       <div [hidden]="!(this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio')">
-        <div class="vform" *ngIf="this.editarReciclaje==true"><div class="vformleft aright">Despiece: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoDespiece"  value={{this._global.reporte.objreporte.MontoDespiece}} (change)="changeMontoDespiece()" />&nbsp;USD</div></div>
+        <div class="vform" *ngIf="this.editarReciclaje==true"><div class="vformleft aright">Despiece: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoDespiece" id="MontoDespiece"  value={{this._global.reporte.objreporte.MontoDespiece}} (change)="changeMontoDespiece()" />&nbsp;USD</div></div>
         <div class="vform" *ngIf="this.editarReciclaje==false"><div class="vformleft aright">Despiece: </div> <div class="vformright"> {{this._global.reporte.objreporte.MontoDespiece | currency}} &nbsp;USD</div></div>
 
+        <div class="vform" *ngIf="this.editarReciclaje==true"><div class="vformleft aright">Reciclaje: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoReciclaje" id="MontoReciclaje"  value={{this._global.reporte.objreporte.MontoReciclaje}} (change)="changeMontoDespiece()" />&nbsp;USD</div></div>
+        <div class="vform" *ngIf="this.editarReciclaje==false"><div class="vformleft aright">Reciclaje: </div> <div class="vformright"> {{this._global.reporte.objreporte.MontoReciclaje | currency}} &nbsp;USD</div></div>
 
-        <div class="vform"><div class="vformleft aright">Reciclaje: </div> <div class="vformright"> {{this._global.reporte.objreporte.MontoReciclaje | currency}} &nbsp;USD</div></div>
-        <div class="vform"><div class="vformleft aright">Otro Costo: </div> <div class="vformright"> {{this._global.reporte.objreporte.MontoOtro | currency}} &nbsp;USD</div></div>
-        <div class="vform"><div class="vformleft aright">Otro Costo (Descripción): </div> <div class="vformright"> {{this._global.reporte.objreporte.MontoOtroDescripcion}}</div></div>
+        <div class="vform" *ngIf="this.editarReciclaje==true"><div class="vformleft aright">Otro Costo: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoOtro" id="MontoOtro" value={{this._global.reporte.objreporte.MontoOtro}} (change)="changeMontoDespiece()" />&nbsp;USD</div></div>
+        <div class="vform" *ngIf="this.editarReciclaje==false"><div class="vformleft aright">Otro Costo: </div> <div class="vformright"> {{this._global.reporte.objreporte.MontoOtro | currency}} &nbsp;USD</div></div>
+
+        <div class="vform" *ngIf="this.editarReciclaje==true"><div class="vformleft aright">Otro Costo (Descripción): </div> <div class="vformright"> <input type="text" min="0" class="form-control-static" formControlName="MontoOtroDescripcion"  id="MontoOtroDescripcion" value={{this._global.reporte.objreporte.MontoOtroDescripcion}} /></div></div>
+        <div class="vform" *ngIf="this.editarReciclaje==false"><div class="vformleft aright">Otro Costo (Descripción): </div> <div class="vformright"> {{this._global.reporte.objreporte.MontoOtroDescripcion}}</div></div>
       </div>
 
       <!--<div class="vform"><div class="vformleft aright">Costo Landed: </div> <div class="vformright"> $<span [innerHTML]="calculaValorRepuestos()"></span> USD</div></div>-->
@@ -435,6 +439,20 @@
   <div class="col-sm-4 mb-5">
     <div class="row">
       <div class="vform w-100">
+        <div class="vformleft">Otro costo: </div>
+        <div class="vformright">
+          <label class="fecha">
+            <span class="simbolo">$</span> <input class="form-control form-control-sm w-50" OnlyNumber="true" placeholder="Otro costo" formControlName="OtroCostoDistribuidor" >&nbsp;USD
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+  <div class="col-sm-4 mb-5">
+    <div class="row">
+      <div class="vform w-100">
         <div class="vformleft">Fecha de entrega del cambio a cliente: </div>
         <div class="vformright">
           <label class="fecha">
@@ -454,21 +472,6 @@
     </div>
 
   </div>
-  <div class="col-sm-4 mb-5">
-    <div class="row">
-      <div class="vform w-100">
-        <div class="vformleft">Otro costo: </div>
-        <div class="vformright">
-          <label class="fecha">
-            <span class="simbolo">$</span> <input class="form-control form-control-sm w-50" OnlyNumber="true" placeholder="Otro costo" formControlName="OtroCostoDistribuidor" >&nbsp;USD
-          </label>
-        </div>
-      </div>
-
-    </div>
-
-  </div>
-
 
 </div>
 
@@ -482,13 +485,30 @@
 
 <!--INFO DISTRIBUIDOR CAMBIO FISICO PARA OTRO USUARIOS-->
 <div class="row sameheight mt-2"  *ngIf="((!(this._global.esDistribuidor()) && this._global.user.nivel!='operador') && this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio') || (this._global.reporte.objreporte.StatusCostoLanded=='Aprobado' && this._global.user.nivel!='operador')">
-  <div class="col-sm-6">
+  <div class="col-sm-4">
+    <div class="vform">
+      <div class="vformleft">Estatus Costo Landed: </div>
+      <div class="vformright" *ngIf="this._global.reporte.objreporte.StatusCostoLanded!=''">{{this._global.reporte.objreporte.StatusCostoLanded}} </div>
+      <div class="vformright" *ngIf="this._global.reporte.objreporte.StatusCostoLanded==''">En revisión </div>
+    </div>
+  </div>
+  <div class="col-sm-4"></div>
+  <div class="col-sm-4"></div>
+</div>
+<div class="row sameheight mt-2"  *ngIf="((!(this._global.esDistribuidor()) && this._global.user.nivel!='operador') && this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio') || (this._global.reporte.objreporte.StatusCostoLanded=='Aprobado' && this._global.user.nivel!='operador')">
+  <div class="col-sm-4">
     <div class="vform">
       <div class="vformleft">Costo Landed: </div>
       <div class="vformright">${{this._global.reporte.objreporte.CostoLanded}} </div>
     </div>
   </div>
-  <div class="col-sm-6">
+  <div class="col-sm-4">
+    <div class="vform">
+      <div class="vformleft">Otro Costo: </div>
+      <div class="vformright">${{this._global.reporte.objreporte.OtroCostoDistribuidor}} </div>
+    </div>
+  </div>
+  <div class="col-sm-4">
     <div class="vform">
       <div class="vformleft">Fecha Entrega de Cambio: </div>
       <div class="vformright" [innerHTML]="this.fechaentregacambio"> </div>

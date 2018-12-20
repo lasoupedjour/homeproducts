@@ -20,15 +20,19 @@ $id_centro = 0;
 if($arre['id_centro']!="")
   $id_centro = $arre['id_centro'];
 
+$distribuidor = '';
+if($arre['id_distribuidor']!="")
+  $distribuidor = $arre['id_distribuidor'];
+
 $res = array();
 if($modulo!="" &&
    $descripcion!=""){
   $res['res'] = 'ok';
   $query = "
   insert into notificaciones
-  (id_reporte, id_usuario, id_centro, leida, modulo, descripcion)
+  (id_reporte, id_usuario, id_centro, distribuidor, leida, modulo, descripcion)
   values
-  ($id_reporte, $id_usuario, $id_centro, 0, '$modulo','$descripcion')
+  ($id_reporte, $id_usuario, $id_centro, '$distribuidor', 0, '$modulo','$descripcion')
   ";
 
   $q = mysql_query($query) or die(mysql_error());

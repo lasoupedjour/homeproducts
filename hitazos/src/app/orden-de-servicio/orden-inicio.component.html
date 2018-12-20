@@ -292,21 +292,21 @@
       <div class="offset-sm-4 col-sm-4">
         <div class="vform"><div class="vformleft aright">Valor de Refacciones: </div> <div class="vformright"> $<input type="text" class="form-control-static" formControlName="MontoRefacciones" readonly [ngModel]="MontoRefacciones"/>&nbsp;USD</div></div>
         <div class="vform"><div class="vformleft aright">Atención Técnica: </div>
-          <div class="vformright" *ngIf="this.AtencionNoRequerida==false"> $<input type="text" min="0" class="form-control-static" formControlName="MontoReparacion" [ngModel]="this.tiporeparacion.Valor" />&nbsp;USD</div>
-          <div class="vformright" *ngIf="this.AtencionNoRequerida==true"> $<input type="text" min="0" class="form-control-static" formControlName="MontoReparacion" readonly [ngModel]="this.tiporeparacion.Valor" />&nbsp;USD</div>
+          <div class="vformright" *ngIf="this.AtencionNoRequerida==false"> $<input type="text" min="0" class="form-control-static" formControlName="MontoReparacion" [ngModel]="MontoAtencionTecnica" />&nbsp;USD</div>
+          <div class="vformright" *ngIf="this.AtencionNoRequerida==true"> $<input type="text" min="0" class="form-control-static" formControlName="MontoReparacion" readonly [ngModel]="MontoAtencionTecnica" />&nbsp;USD</div>
         </div>
-        <div class="vform"><div class="vformleft aright">Movilización: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoMovilizacion" readonly="{{this.tiporeparacion.NecesitaAutorizacionRO}}" [ngModel]="this._global.reporte.objreporte.MontoMovilizacion" />&nbsp;USD</div></div>
+        <div class="vform"><div class="vformleft aright">Movilización: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoMovilizacion" readonly="{{this.tiporeparacion.NecesitaAutorizacionRO}}" [ngModel]="MontoMovilizacion" />&nbsp;USD</div></div>
         <!--<div class="vform"><div class="vformleft aright">Costo Landed: </div> <div class="vformright"> $<span [innerHTML]="calculaValorRepuestos()"></span> USD</div></div>-->
 
         <div [hidden]="!(this._global.reporte.objreporte.TipoReclamoDiagnostico== 'Cambio')">
-          <div class="vform"><div class="vformleft aright">Despiece: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoDespiece"  [ngModel]="this._global.reporte.objreporte.MontoDespiece" (change)="changeMontoDespiece()" />&nbsp;USD</div>
+          <div class="vform"><div class="vformleft aright">Despiece: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoDespiece"  [ngModel]="MontoDespiece" (change)="changeMontoDespiece()" />&nbsp;USD</div>
           </div>
-          <div class="vform"><div class="vformleft aright">Reciclaje: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoReciclaje"  [ngModel]="this._global.reporte.objreporte.MontoReciclaje" (change)="changeMontoReciclaje()" />&nbsp;USD</div>
+          <div class="vform"><div class="vformleft aright">Reciclaje: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoReciclaje"  [ngModel]="MontoReciclaje" (change)="changeMontoReciclaje()" />&nbsp;USD</div>
             <div class="alert alert-danger" *ngIf="!genericForm.controls.MontoReciclaje.valid && genericForm.controls.MontoReciclaje.touched">
               Este campo es requerido
             </div>
           </div>
-          <div class="vform"><div class="vformleft aright">Otro Costo: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoOtro"  [ngModel]="this._global.reporte.objreporte.MontoOtro" (change)="changeMontoOtro()" />&nbsp;USD</div>
+          <div class="vform"><div class="vformleft aright">Otro Costo: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoOtro"  [ngModel]="MontoOtro" (change)="changeMontoOtro()" />&nbsp;USD</div>
             <div class="alert alert-danger" *ngIf="!genericForm.controls.MontoOtro.valid && genericForm.controls.MontoOtro.touched">
               Este campo es requerido
             </div>
