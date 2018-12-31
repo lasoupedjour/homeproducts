@@ -177,32 +177,32 @@ if(!$arre['Update']){
 
         /*Actualizamos los adjuntos*/
         $AdjuntosFacturasNotasCompra = Array();
-        $AdjuntosFotosProducto = Array();
+        $AdjuntosFotosModeloSerie = Array();
 
         $AdjuntosFacturasNotasCompra = subirAdjuntos($id_reporte, 'AdjuntosFacturasNotasCompra', $arre['AdjuntosFacturasNotasCompraSize']);
-        $AdjuntosFotosProducto = subirAdjuntos($id_reporte, 'AdjuntosFotosProducto', $arre['AdjuntosFotosProductoSize']);
-        $queryUpdate = "
-                                      update clientes set
-                                      AdjuntosFacturasNotasCompra = '$AdjuntosFacturasNotasCompra',
-                                      AdjuntoFotosProducto = '$AdjuntosFotosProducto'
-                                      where id = $id_reporte
-                                      ";
-
+        $AdjuntosFotosModeloSerie = subirAdjuntos($id_reporte, 'AdjuntosFotosModeloSerie', $arre['AdjuntosFotosModeloSerieSize']);
         /*
+        $queryUpdate = "update clientes set
+                        AdjuntosFacturasNotasCompra = '" . json_encode($AdjuntosFacturasNotasCompra) . "',
+                        AdjuntoFotosProducto = '" . json_encode($AdjuntosFotosProducto) . "'
+                        where id = $id_reporte
+                        ";
+
+
         print_r($AdjuntosFacturasNotasCompra);
         echo("<br>");
         print_r($AdjuntosFotosProducto);
         die();
         */
         if ($stmt = $mysqli->prepare("
-                                      update clientes set
+                                      update reportes set
                                       AdjuntosFacturasNotasCompra = ?,
-                                      AdjuntoFotosProducto = ?
+                                      AdjuntosFotosModeloSerie = ?
                                       where id = ?
                                       ")) {
           $stmt->bind_param("ssd",
-          $AdjuntosFacturasNotasCompra,
-          $AdjuntosFotosProducto,
+          json_encode($AdjuntosFacturasNotasCompra),
+          json_encode($AdjuntosFotosModeloSerie),
           $id_reporte
           );
 

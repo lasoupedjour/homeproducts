@@ -24,7 +24,7 @@ export class ReporteCasoComponent {
     modelfecharevision: NgbDateStruct;
 
     FacturasNotasCompraLenght: 0;
-    FotosProductoLenght: 0;
+    FotosModeloSerieLenght: 0;
 
     adjuntosValidos;
 
@@ -128,6 +128,7 @@ export class ReporteCasoComponent {
             Kilometraje: '',
             CostoKilometraje: 0,
             TipoRevision: [Object(this._global.reporte.objreporte).TipoRevision],
+            TipoCentro: [''],
             FechaRevision: [''],
             Descripcion: [Object(this._global.reporte.objreporte).Descripcion],
             Refaccion: [''],
@@ -138,7 +139,7 @@ export class ReporteCasoComponent {
             CostoLanded: [this._global.reporte.objreporte.CostoLanded],
             OtroCostoDistribuidor: [''],
             FacturasNotasCompra: [''],
-            FotosProducto: [''],
+            FotosModeloSerie: [''],
 
 
         });
@@ -149,7 +150,7 @@ export class ReporteCasoComponent {
         CostoLanded: [this._global.reporte.objreporte.CostoLanded, Validators.required],
         OtroCostoDistribuidor: [''],
         FacturasNotasCompra: [''],
-        FotosProducto: [''],
+        FotosModeloSerie: [''],
         */
         this.cotizacionForm = this.formBuilder.group({
             /*usuario: ['', Validators.compose([
@@ -215,10 +216,10 @@ export class ReporteCasoComponent {
             this._global.AdjuntosFacturasNotasCompraArre = [];
         }
 
-        if(this._global.reporte.objreporte.AdjuntosFotosProducto!=""){
-            try { this._global.AdjuntosFotosProductoArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosFotosProducto); } catch (e) { };
+        if(this._global.reporte.objreporte.AdjuntosFotosModeloSerie!=""){
+            try { this._global.AdjuntosFotosModeloSerieArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosFotosModeloSerie); } catch (e) { };
         }else{
-            this._global.AdjuntosFotosProductoArre = [];
+            this._global.AdjuntosFotosModeloSerieArre = [];
         }
     }
 
@@ -226,19 +227,45 @@ export class ReporteCasoComponent {
         console.log(event);
         this._global.AdjuntosFacturasNotasCompra = event;
     }
-    onActionFotosProducto(event: any) {
+    onActionFotosModeloSerie(event: any) {
         console.log(event);
-        this._global.AdjuntosFotosProducto = event;
+        this._global.AdjuntosFotosModeloSerie = event;
+    }
+
+    changeNoSerie(){
+      var NoSerie = this.genericForm.controls.NoSerie.value;
+
+      this._global.clearMessages();
+      this._global.appstatus.loading = true;
+
+      var params = {};
+      params["NoSerie"] = NoSerie;
+
+      console.log(params);
+
+      this._httpService.postJSON(params, 'reparacion/validar-noserie.php')
+        .subscribe(
+        data => {
+          this._global.appstatus.loading = false;
+            console.log('data Serie');
+            console.log(data);
+            if (data.res == 'error') {
+              swal('', 'Ya existe una orden de servicio de este No. de Serie.', 'warning');
+            }
+        },
+        error => alert(error),
+        () => console.log('termino submit')
+        );
     }
 
     validarAdjuntos(){
       try { this.FacturasNotasCompraLenght = Object(this._global.AdjuntosFacturasNotasCompra).currentFiles.length; } catch (e) { this.FacturasNotasCompraLenght = 0; }
       //try { this.FacturasRepuestosLenght = Object(this._global.AdjuntosFotosModeloSerie).currentFiles.length; } catch (e) { this.FacturasRepuestosLenght = 0; }
-      try { this.FotosProductoLenght = Object(this._global.AdjuntosFotosProducto).currentFiles.length; } catch (e) { this.FotosProductoLenght = 0; }
+      try { this.FotosModeloSerieLenght = Object(this._global.AdjuntosFotosModeloSerie).currentFiles.length; } catch (e) { this.FotosModeloSerieLenght = 0; }
 
       this.adjuntosValidos = false;
 
-      if(this.FacturasNotasCompraLenght>0 && this.FotosProductoLenght>0){
+      if(this.FacturasNotasCompraLenght>0 && this.FotosModeloSerieLenght>0){
         this.adjuntosValidos = true;
       }
 
@@ -333,50 +360,59 @@ export class ReporteCasoComponent {
     }
 
     precargaCentros(){
+      this._global.appstatus.mensaje = '';
+      var params = {};
+      var IDMaster = 0;
 
-        var params = {};
+      params['Pais'] = Object(this._global.user).Pais;
+      params['nivel'] = Object(this._global.user).nivel;
 
-        params['Pais'] = Object(this._global.user).Pais;
-        params['nivel'] = Object(this._global.user).nivel;
-        params['IDMaster'] = Object(this._global.user).IDCentro;
-        params['IDDistribuidor'] = Object(this._global.user).IDDistribuidor;
+      if(this.genericForm.controls.TipoCentro.value=='Red')
+         IDMaster = Object(this._global.user).IDCentro;
 
-        this._global.appstatus.loading = true;
-
-        /*console.log('Precarga distribuidores');
-        console.log(params);*/
-
-        this._httpService.postJSON(params, 'registro-de-casos/buscar-centros.php')
-            .subscribe(
-            data => {
-                console.log('data');
-                console.log(data);
-                this._global.appstatus.loading = false;
-
-                if (data.res == 'ok') {
-
-                    this._global.centros = this._global.parseJSON(data.centros);
-
-                    console.log('centros');
-                    console.log(this._global.centros);
-
-                    if (data.centros.length == 0) {
-                        this._global.appstatus.mensaje = 'No se encontraron datos con estas características.';
-                    }else{
-                      this.genericForm.controls.IDCentro.setValue("");
-                    }
-
-                } else if (data.res = 'error') {
-
-                    this._global.appstatus.mensaje = data.error;
-
-                }
-            },
-            error => alert(error),
-            () => console.log('termino submit')
-            );
+      params['IDMaster'] = IDMaster;
+      params['IDDistribuidor'] = Object(this._global.user).IDDistribuidor;
+      params['Flujo'] = "MENAJE";
 
 
+      this._global.appstatus.loading = true;
+
+      /*console.log('Precarga distribuidores');
+      console.log(params);*/
+
+      this._httpService.postJSON(params, 'registro-de-casos/buscar-centros.php')
+          .subscribe(
+          data => {
+              console.log('data');
+              console.log(data);
+              this._global.appstatus.loading = false;
+
+              if (data.res == 'ok') {
+
+                  this._global.centros = this._global.parseJSON(data.centros);
+
+                  console.log('centros');
+                  console.log(this._global.centros);
+
+                  if (data.centros.length == 0) {
+                    if(IDMaster!=0){
+                      this.genericForm.controls.TipoCentro.setValue('');
+                      this._global.appstatus.mensaje = 'No se encontraron Cds en la red.';
+                    }else
+                      this._global.appstatus.mensaje = 'No se encontraron datos con estas características.';
+                  }else{
+                    this.genericForm.controls.IDCentro.setValue("");
+                  }
+
+              } else if (data.res = 'error') {
+
+                  this._global.appstatus.mensaje = data.error;
+
+              }
+          },
+          error => alert(error),
+          () => console.log('termino submit')
+          );
     }
 
     precargaDistribuidores() {
@@ -1117,8 +1153,6 @@ export class ReporteCasoComponent {
             }
 
 
-        }else if(this.genericForm.controls.TipoRevision.value == "otro centro"){
-          this.precargaCentros();
         }else{
 
             this.genericForm.controls.TipoKilometraje.setValidators([]);
@@ -1126,6 +1160,10 @@ export class ReporteCasoComponent {
 
         }
 
+    }
+
+    changeTipoCentro(){
+      this.precargaCentros();
     }
 
     changeTipoKilometraje() {
@@ -1311,7 +1349,8 @@ export class ReporteCasoComponent {
         //alert(this.genericForm.valid);
         //alert(this.genericForm.controls.Categoria.value);
         //Validamos si se trata de un casi de menaje
-        if(this.genericForm.controls.Categoria.value=='MENAJE'){
+        var Modelo = this.genericForm.controls.Modelo.value;
+        if(this.genericForm.controls.Categoria.value=='MENAJE' && this.genericForm.controls.Modelo.value!='OS-17001' && this.genericForm.controls.Modelo.value!='OS-17001-1'){
           //Validamos los archivos adjuntos
           this.validarAdjuntos();
 
@@ -1324,9 +1363,21 @@ export class ReporteCasoComponent {
               var params = {};
               params = this.genericForm.getRawValue();
               params["Update"] = this.status.update;
-              params["IDCentro"] = this._global.user.IDCentro;
+
+              if(this._global.user.IDCentro!='')
+                params["IDCentro"] = this._global.user.IDCentro;
+              else
+                params["IDCentro"] = this.genericForm.controls.IDCentro.value;
+
               params["IDReporte"] = this._global.reporte.idreporte;
-              params["IDDistribuidor"] = this._global.user.IDDistribuidor;
+
+              if(this._global.user.IDDistribuidor!=''){
+                params["IDCentro"] = 0;
+                params["IDDistribuidor"] = this._global.user.IDDistribuidor;
+              }
+              else
+                params["IDDistribuidor"] = this.genericForm.controls.Distribuidor.value;
+
               params["IDUsuario"] = this._global.user.id;
               params["IDCliente"] = Object(this._global.cliente.objeto).id;
               params["Refacciones"] = JSON.stringify(this._global.refacciones);
@@ -1340,8 +1391,8 @@ export class ReporteCasoComponent {
               params["AdjuntosFacturasNotasCompra"] = this._global.AdjuntosFacturasNotasCompra;
               try { params["AdjuntosFacturasNotasCompraSize"] = Object(this._global.AdjuntosFacturasNotasCompra).currentFiles.length; } catch (e) { params["AdjuntosFacturasNotasCompraSize"] = 0; };
 
-              params["AdjuntosFotosProducto"] = this._global.AdjuntosFotosProducto;
-              try { params["AdjuntosFotosProductoSize"] = Object(this._global.AdjuntosFotosProducto).currentFiles.length; } catch (e) { params["AdjuntosFotosProductoSize"] = 0; };
+              params["AdjuntosFotosModeloSerie"] = this._global.AdjuntosFotosModeloSerie;
+              try { params["AdjuntosFotosModeloSerieSize"] = Object(this._global.AdjuntosFotosModeloSerie).currentFiles.length; } catch (e) { params["AdjuntosFotosModeloSerieSize"] = 0; };
 
               this._global.appstatus.loading = true;
 
@@ -1384,9 +1435,6 @@ export class ReporteCasoComponent {
                           this._global.appstatus.mensaje = data.msg;
 
                       }
-
-
-
                   },
                   error => alert(error),
                   () => console.log('termino submit')
@@ -1406,19 +1454,43 @@ export class ReporteCasoComponent {
               var params = {};
               params = this.genericForm.getRawValue();
               params["Update"] = this.status.update;
-              params["IDCentro"] = this._global.user.IDCentro;
+
+              if(this._global.user.IDCentro!='')
+                params["IDCentro"] = this._global.user.IDCentro;
+              else
+                params["IDCentro"] = this.genericForm.controls.IDCentro.value;
+
               params["IDReporte"] = this._global.reporte.idreporte;
-              params["IDDistribuidor"] = this._global.user.IDDistribuidor;
-              params["IDUsuario"] = this._global.user.id;
-              params["IDCliente"] = Object(this._global.cliente.objeto).id;
-              params["Refacciones"] = JSON.stringify(this._global.refacciones);
-              params["NecesitaAutorizacion"] = this.formulariostatus.necesitaAutorizacion;
 
-              this._global.appstatus.loading = true;
+              if(this._global.user.IDDistribuidor!=''){
+                params["IDDistribuidor"] = this._global.user.IDDistribuidor;
+                params["TipoRevision"] = "otro centro";
+              }else{
+                params["IDDistribuidor"] = this.genericForm.controls.Distribuidor.value;
+              }
 
-              console.log("registro reporte", params);
 
-              this._httpService.postJSON(params, 'registro-de-casos/registro-reporte.php')
+                params["IDUsuario"] = this._global.user.id;
+                params["IDCliente"] = Object(this._global.cliente.objeto).id;
+                params["Refacciones"] = JSON.stringify(this._global.refacciones);
+                params["NecesitaAutorizacion"] = this.formulariostatus.necesitaAutorizacion;
+
+                params["NoSerie"] = this.genericForm.controls.NoSerie.value;
+                params["Condicion"] = this.genericForm.controls.Condicion.value;
+                params["CostoLanded"] = this.genericForm.controls.CostoLanded.value;
+                params["OtroCostoDistribuidor"] = this.genericForm.controls.OtroCostoDistribuidor.value;
+
+                params["AdjuntosFacturasNotasCompra"] = this._global.AdjuntosFacturasNotasCompra;
+                try { params["AdjuntosFacturasNotasCompraSize"] = Object(this._global.AdjuntosFacturasNotasCompra).currentFiles.length; } catch (e) { params["AdjuntosFacturasNotasCompraSize"] = 0; };
+
+                params["AdjuntosFotosModeloSerie"] = this._global.AdjuntosFotosModeloSerie;
+                try { params["AdjuntosFotosModeloSerieSize"] = Object(this._global.AdjuntosFotosModeloSerie).currentFiles.length; } catch (e) { params["AdjuntosFotosModeloSerieSize"] = 0; };
+
+                this._global.appstatus.loading = true;
+
+                console.log("registro reporte", params);
+
+                this._httpService.postFormData(params, 'registro-de-casos/registro-reporte-menaje.php')
                   .subscribe(
                   data => {
                       console.log('data');
@@ -1477,10 +1549,15 @@ export class ReporteCasoComponent {
                                 this._global.notificaciones.modulo = "/cambio-fisico-dist-asigna";
                                 this._global.notificaciones.descripcion = "Se ha registrado y asignado a su CDs una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
                                 this._global.registrarNotificacion(this._global.reporte.idreporte, this._global.user.IDCentro);
+
                                 this._router.navigate(['inicio']);
                               });
                             }else{
-                              this._router.navigate(['inicio/resumen']);
+
+                              if((Categoria=='LINEA BLANCA' || Modelo=='OS-17001' || Modelo=='OS-17001-1') && this._global.user.nivel!='operador')
+                                this._router.navigate(['inicio']);
+                              else
+                                this._router.navigate(['inicio/resumen']);
                             }
                           }
 

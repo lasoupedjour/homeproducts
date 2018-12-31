@@ -61,7 +61,7 @@
       <div class="col-3 fM3">
         <div class="row">
           <div class="col-12">
-            <h5><strong>Monto Total: ${{montoTotal}} USD</strong></h5>
+            <h5><strong>Monto Total: {{montoTotal|currency}} USD</strong></h5>
           </div>
         </div>
         <div class="row">
@@ -120,7 +120,7 @@
        <table datatable [dtOptions]="this.dtOptions" [dtTrigger]="trigger"  id="tabla" class="table table-striped table-bordered">
            <thead>
            <tr>
-             <th>Centro - Master</th>
+             <th>Centro</th>
              <th>No. Orden</th>
              <th>Año</th>
              <th>Mes</th>
@@ -144,7 +144,7 @@
            <tbody>
            <tr *ngFor="let item of _global.ordenesServicio.recientes;">
              <td>
-               {{item.nombre}}<span *ngIf="item.Master!='N/A'"> - {{item.Master}}</span>
+               {{item.Centro}}
              </td>
              <td>
                {{item.id}}
@@ -192,10 +192,10 @@
                {{item.TipoReclamoDiagnostico}}
              </td>
              <td>
-               {{item.CostoLanded}}
+               {{item.CostoLanded|currency}}
              </td>
              <td>
-               {{item.OtroCostoDistribuidor}}
+               {{item.OtroCostoDistribuidor|currency}}
              </td>
            </tr>
            </tbody>

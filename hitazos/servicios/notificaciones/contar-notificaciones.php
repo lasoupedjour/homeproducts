@@ -50,13 +50,13 @@ if($nivel=='administrador'){
             select n.id from
             (select notificaciones.* from notificaciones where leida=0) as n
             join
-            (select * from usuarios_admin) as ua
+            (select id from usuarios_admin) as ua
             on ua.id = n.id_usuario
             join
-            (select * from reportes) as r
+            (select id, Distribuidor from reportes) as r
             on n.id_reporte = r.id
             join
-            (select * from distribuidores where id=$IDDistribuidor or IDDistribuidor='$CustomerID') as d
+            (select IDDistribuidor from distribuidores where id=$IDDistribuidor) as d
             on r.Distribuidor = d.IDDistribuidor
             group by id
             order by id desc

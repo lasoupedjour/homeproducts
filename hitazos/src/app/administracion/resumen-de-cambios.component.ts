@@ -16,7 +16,7 @@ import swal from 'sweetalert2';
 export class ResumenDeCambiosComponent {
     title = 'app';
 
-    montoTotal = 0;
+    //montoTotal = 0;
     dtOptions: any = {};
     @ViewChild(DataTableDirective)
     dtElement: DataTableDirective;
@@ -33,6 +33,13 @@ export class ResumenDeCambiosComponent {
     };
 
     statusPago = "Por Enviar";
+
+    /*Montos*/
+    montoTotal = 0;
+    GarantiaDePartes = 0;
+    GarantiaMOyKms = 0;
+    GarantiaDeCambios = 0;
+    ReembolsoGarantiaFee = 0;
 
     constructor(
         public formBuilder: FormBuilder,
@@ -117,7 +124,7 @@ export class ResumenDeCambiosComponent {
         //this.traeOrdenes();
 
         //this.filtrarReporte();
-
+        this._global.ordenesServicio.recientes = [];
     }
 
     changePais() {
@@ -258,12 +265,11 @@ export class ResumenDeCambiosComponent {
           this.subscription = this._httpService.postJSON(params, 'administracion/filtrar-resumen-de-cambios.php')
               .subscribe(
               data => {
-                  console.log('data');
+                  console.log('Reporte cambios CDS');
                   console.log(data);
                   this._global.appstatus.loading = false;
 
                   if (data.res == 'ok') {
-
 
                       this._global.ordenesServicio.recientes = this._global.parseJSON(data.reportes);
 
@@ -405,7 +411,7 @@ export class ResumenDeCambiosComponent {
             MontoReciclaje =  parseFloat(String(e.MontoReciclaje));
             MontoOtro =  parseFloat(String(e.MontoOtro));
 
-            MontoCambio = MontoCambio + (MontoDespiece + MontoReciclaje + MontoOtro);
+            MontoCambio = MontoCambio;
         });
 
         console.log("MontoFee", MontoFee);
@@ -419,6 +425,10 @@ export class ResumenDeCambiosComponent {
         console.log("MontoOtro", MontoOtro);
         console.log("MontoCambio", MontoCambio);
 
+        this.GarantiaDePartes = MontoRefacciones;
+        this.GarantiaMOyKms = MontoTAMov;
+        this.GarantiaDeCambios = MontoCambio;
+        this.ReembolsoGarantiaFee = TotalFee;
 
         MontoTotal = MontoRefacciones + MontoTAMov + TotalFee + MontoCambio;
         console.log("MontoTotal", MontoTotal);
@@ -448,6 +458,10 @@ export class ResumenDeCambiosComponent {
         params['Categoria'] = this.filterForm.controls.Categoria.value;
         params['IDCentro'] = this.filterForm.controls.Cds.value;
         params['MontoTotal'] = this.montoTotal;
+        params['GarantiaDePartes'] = this.GarantiaDePartes;
+        params['GarantiaMOyKms'] = this.GarantiaMOyKms;
+        params['GarantiaDeCambios'] = this.GarantiaDeCambios;
+        params['ReembolsoGarantiaFee'] = this.ReembolsoGarantiaFee;
         params['Mes'] = this.filterForm.controls.Mes.value;
         params['Ano'] = this.filterForm.controls.Ano.value;
 

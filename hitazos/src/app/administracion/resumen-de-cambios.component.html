@@ -45,14 +45,18 @@
       PAIS: {{this._global.user.Pais}}<br>
       </div>
 
-      <div class="col-4">
+      <div class="col-3">
         DIRECCIÓN: {{this._global.user.Direccion}}<br>
         TELÉFONOS: {{this._global.user.Telefono1}} {{this._global.user.Telefono2}} {{this._global.user.Telefono3}}<br>
         RED: {{this._global.user.Red}}<br>
       </div>
 
 
-      <div class="col-3 fM3">
+      <div class="col-4 fM3">
+        <!--h5>Garantia de Partes: <strong>{{this.GarantiaDePartes|currency}} USD</strong></h5>
+        <h5>Garantia de M.O. & Kms: <strong>{{this.GarantiaMOyKms|currency}} USD</strong></h5>
+        <h5>Reembolso Garantia FEE : <strong>{{this.ReembolsoGarantiaFee|currency}} USD</strong></h5>
+        <h5>Garantia de Cambios y Reemplazo: <strong>{{this.GarantiaDeCambios|currency}} USD</strong></h5>-->
         <h5>Monto Total: <strong>{{montoTotal|currency}} USD</strong></h5>
         <!--div class="row">
           <div class="col-12">
@@ -129,7 +133,11 @@
 
 
   <hr>
-
+  <div class="row my-3">
+    <div class="offset-sm-9 col-3 mb-1">
+      <a *ngIf="this.statusPago != 'Enviado' && this._global.ordenesServicio.recientes.length != 0" class="btn btn-sm btnicono" (click)="generaReporte()"> Generar reporte y enviar </a>
+    </div>
+  </div>
    <div *ngIf="_global.ordenesServicio.recientes[0]">
      <div class="overflow">
 
@@ -153,7 +161,7 @@
              <th>Fecha de recepción</th>
              <th>Fecha de entrega</th>
              <th>Tipo de Reclamo</th>
-             <th>Costo Refacciones</th>
+             <!--th>Costo Refacciones</th>
              <th>Costo Reparacion</th>
              <th>Costo Movilización</th>
              <th>Costo Despiece</th>
@@ -163,7 +171,9 @@
              <th>Fee Mensual</th>
              <th>Impuesto Fee Mensual</th>
              <th>Costo Impuesto</th>
-             <th>Total</th>
+             <th>Total</th-->
+             <th>Costo Landed</th>
+             <th>Otro Costo</th>
            </tr>
            </thead>
 
@@ -220,7 +230,7 @@
              <td>
                {{item.TipoReclamoDiagnostico}}
              </td>
-             <td>
+             <!--td>
                {{item.MontoRefacciones | currency}}
              </td>
              <td>
@@ -252,6 +262,12 @@
              </td>
              <td>
                ${{item.MontoTotal | currency}}
+             </td-->
+             <td>
+               {{item.CostoLanded | currency}}
+             </td>
+             <td>
+               {{item.OtroCostoDistribuidor | currency}}
              </td>
 
            </tr>

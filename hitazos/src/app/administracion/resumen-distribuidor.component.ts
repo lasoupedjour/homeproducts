@@ -115,6 +115,7 @@ export class ResumenDistribuidorComponent {
         this.filterForm.controls.Categoria.setValue('');
         this.filterForm.controls.Ano.setValue('');
         this.filterForm.controls.Mes.setValue('0');
+        this._global.ordenesServicio.recientes = [];
     }
 
     changePais() {

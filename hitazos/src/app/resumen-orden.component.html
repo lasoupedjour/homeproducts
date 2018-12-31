@@ -199,7 +199,8 @@
                 <th>Descripción/No. Parte</th>
                 <th>Precio Unitario</th>
                 <th>Importe</th>
-                <th>Status</th>
+                <th>Status cotización</th>
+                <th>Status refacción</th>
 
               </tr>
 
@@ -220,8 +221,10 @@
                   <!--${{item.CostoTotal}}-->
                 </td>
                 <td>
+                  {{item.StatusCotizacion}}
+                </td>
+                <td>
                   {{item.Existencia}}
-                  <!--${{item.CostoTotal}}-->
                 </td>
 
               </tr>
@@ -319,7 +322,7 @@
         </div>
       </div>
 
-      <div class="col-sm-4 mb-5">
+      <div class="col-sm-4 mb-5" *ngIf="_global.AdjuntosFacturasNotasCompraArre[0]=='' && this._global.reporte.objreporte.Categoria!='MENAJE'">
         <div class="row">
           <div class="col-4 text-right">
             <div class="sform mb-3">13. <i>Facturas de repuestos</i> utilizados:</div>
@@ -336,7 +339,7 @@
         </div>
       </div>
 
-      <div class="col-sm-4 mb-5" *ngIf="_global.AdjuntosFacturasNotasCompraArre[0]==''">
+      <div class="col-sm-4 mb-5" *ngIf="_global.AdjuntosFacturasNotasCompraArre[0]=='' && this._global.reporte.objreporte.Categoria!='MENAJE'">
         <div class="row">
           <div class="col-4 text-right">
             <div class="sform mb-3">14. Adjuntar <i>otro</i>:</div>

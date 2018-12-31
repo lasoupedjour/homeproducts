@@ -7,19 +7,20 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
     header('Access-Control-Allow-Credentials: true');
     header('Access-Control-Max-Age: 86400');    // cache for 1 day
 }
-	
+
 include "../dbci.php";
 
 
 
 $json = $_POST['json'];
 $arre = json_decode($json, true);
-	
+$NoParte = $arre["NoParte"];
+
 $current_charset = 'ISO-8859-15';//or what it is now
 array_walk_recursive($arre,function(&$value) use ($current_charset){
      $value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
 });
-	
+
 
 $res = array();
 
@@ -34,36 +35,31 @@ $reportes = array();
 
 
 
-while ($row = mysqli_fetch_array($q))   
-{  
+while ($row = mysqli_fetch_array($q))
+{
 	//echo 'aqui';
 	$current_charset = 'ISO-8859-15';//or what it is now
 	array_walk_recursive($row,function(&$value) use ($current_charset){
 		//$value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
 		$value = utf8_encode($value);
 	});
-	
-	
+
 	$refacciones = json_decode($row['Refacciones']);
 	$agregar = false;
 	//print_r($refacciones);
-	
+
 	foreach($refacciones as $refaccion){
-		
 		$noparte = $refaccion->NoParte;
-		//echo $noparte;
-		
-		if($noparte == $arre["NoParte"]){
-		
+
+		if($noparte == $NoParte){
+      $refaccion->NoParte = $NoParte;
 			$refaccion->Status = $arre["Status"];
 			$refaccion->FechaStatusCotizacion = date('Y-m-d H:i:s');
-			
-		}
-		
-	}
-	
 
-	
+		}
+
+	}
+
 	$q = mysqli_query($con,"update reportes set Refacciones = '".utf8_decode(json_encode($refacciones, JSON_UNESCAPED_UNICODE))."' where id = ".$arre["IDReporte"]);
 
 
@@ -87,15 +83,15 @@ order by FechaRegistroReporte desc LIMIT 5
 
 $reportes = array();
 
-while ($row = mysqli_fetch_array($q))   
-{  
+while ($row = mysqli_fetch_array($q))
+{
 	$current_charset = 'ISO-8859-15';//or what it is now
 	array_walk_recursive($row,function(&$value) use ($current_charset){
 		 //$value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
 		$value = utf8_encode($value);
 	});
-	
-	
+
+
 	$refacciones = json_decode($row['Refacciones']);
 	$agregar = false;
 	foreach($refacciones as $refaccion){
@@ -126,5 +122,5 @@ echo json_encode($res);
 
 
 
-	
+
 ?>

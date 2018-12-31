@@ -149,7 +149,6 @@ export class HistorialComponent {
 
       this.obtenerPagos();
       //this.filtrarReporte();
-
   }
 
   validarAdjuntos(){

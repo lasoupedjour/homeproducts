@@ -28,11 +28,11 @@ $nivel = $arre['nivel'];
 $IDDistribuidor = $arre['IDDistribuidor'];
 
 if($IDMaster>0 && $arre["Nivel"]!="administrador"){
-  $queryPagos = "SELECT  id, IDMaster, IDCentro, IDOperadorAdmin, IDDistribuidor, replace(Categoria, '', 'No seleccionada') as Categoria, ODS, GarantiaDePartes, GarantiaMOyKms, GarantiaDeCambios, ReembolsoGarantiaFee, MontoTotal, StatusPago, Comprobante, FechaRegistro, FechaPago,
+  $queryPagos = "SELECT  id, IDMaster, IDCentro, IDOperadorAdmin, IDDistribuidor, replace(Categoria, '', 'No seleccionada') as Categoria, ODS, MontoTotal, StatusPago, Comprobante, FechaRegistro, FechaPago,
   REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Mes, '12', 'Diciembre'), '11', 'Noviembre'), '10', 'Octubre'), '09', 'Septiembre'), '08', 'Agosto'), '07', 'Julio'), '06', 'Junio'), '05', 'Mayo'), '04', 'Abril'), '03', 'Marzo'), '02', 'Febrero'), '01', 'Enero') AS  Mes, Ano, Status
   FROM  pagos where IDMaster=$IDMaster order by id desc";
 }elseif($IDDistribuidor>0){
-  $queryPagos = "select pagos.id, pagos.IDMaster, pagos.IDCentro, pagos.IDOperadorAdmin, replace(pagos.Categoria, '', 'No seleccionada') as Categoria, pagos.ODS, GarantiaDePartes, GarantiaMOyKms, GarantiaDeCambios, ReembolsoGarantiaFee, pagos.MontoTotal, pagos.StatusPago, pagos.Comprobante, pagos.FechaRegistro, pagos.FechaPago, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Mes, '12', 'Diciembre'), '11', 'Noviembre'), '10', 'Octubre'), '09', 'Septiembre'), '08', 'Agosto'), '07', 'Julio'), '06', 'Junio'), '05', 'Mayo'), '04', 'Abril'), '03', 'Marzo'), '02', 'Febrero'), '01', 'Enero') AS Mes, pagos.Ano, pagos.Status, distribuidores.IDDistribuidor from
+  $queryPagos = "select pagos.id, pagos.IDMaster, pagos.IDCentro, pagos.IDOperadorAdmin, replace(pagos.Categoria, '', 'No seleccionada') as Categoria, pagos.ODS, pagos.MontoTotal, pagos.StatusPago, pagos.Comprobante, pagos.FechaRegistro, pagos.FechaPago, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Mes, '12', 'Diciembre'), '11', 'Noviembre'), '10', 'Octubre'), '09', 'Septiembre'), '08', 'Agosto'), '07', 'Julio'), '06', 'Junio'), '05', 'Mayo'), '04', 'Abril'), '03', 'Marzo'), '02', 'Febrero'), '01', 'Enero') AS Mes, pagos.Ano, pagos.Status, distribuidores.IDDistribuidor from
                  (SELECT * FROM pagos where IDDistribuidor=$IDDistribuidor) as pagos
                  left join
                  (select * from distribuidores) as distribuidores
@@ -45,7 +45,7 @@ if($IDMaster>0 && $arre["Nivel"]!="administrador"){
   FROM  pagos where IDDistribuidor=$IDDistribuidor order by id desc";
   */
 }elseif($arre["Nivel"]=="administrador"){
-  $queryPagos = "select pagos.id, pagos.IDMaster, pagos.IDCentro, pagos.IDOperadorAdmin, replace(pagos.Categoria, '', 'No seleccionada') as Categoria, pagos.ODS, GarantiaDePartes, GarantiaMOyKms, GarantiaDeCambios, ReembolsoGarantiaFee, pagos.MontoTotal, pagos.StatusPago, pagos.Comprobante, pagos.FechaRegistro, pagos.FechaPago, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Mes, '12', 'Diciembre'), '11', 'Noviembre'), '10', 'Octubre'), '09', 'Septiembre'), '08', 'Agosto'), '07', 'Julio'), '06', 'Junio'), '05', 'Mayo'), '04', 'Abril'), '03', 'Marzo'), '02', 'Febrero'), '01', 'Enero') AS Mes, pagos.Ano, pagos.Status, distribuidores.IDDistribuidor from
+  $queryPagos = "select pagos.id, pagos.IDMaster, pagos.IDCentro, pagos.IDOperadorAdmin, replace(pagos.Categoria, '', 'No seleccionada') as Categoria, pagos.ODS, pagos.MontoTotal, pagos.StatusPago, pagos.Comprobante, pagos.FechaRegistro, pagos.FechaPago, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Mes, '12', 'Diciembre'), '11', 'Noviembre'), '10', 'Octubre'), '09', 'Septiembre'), '08', 'Agosto'), '07', 'Julio'), '06', 'Junio'), '05', 'Mayo'), '04', 'Abril'), '03', 'Marzo'), '02', 'Febrero'), '01', 'Enero') AS Mes, pagos.Ano, pagos.Status, distribuidores.IDDistribuidor from
                  (SELECT * FROM pagos) as pagos
                  left join
                  (select * from distribuidores) as distribuidores
@@ -74,7 +74,7 @@ $qPagos = mysql_query($queryPagos) or die(mysql_error());
 
 while ($row = mysql_fetch_array($qPagos))
 {
-  //$detalle = detallePago($row['IDCentro'], $row['Mes'], $row['Ano'], $row['Categoria'], $row['IDDistribuidor'], $row['IDDistribuidor'], $row['IDMaster']);
+  $detalle = detallePago($row['IDCentro'], $row['Mes'], $row['Ano'], $row['Categoria'], $row['IDDistribuidor'], $row['IDDistribuidor'], $row['IDMaster']);
   $temp["cuentas"] = $detalle;
 
   $temp["detalle"]["id"] = $row["id"];
@@ -84,10 +84,6 @@ while ($row = mysql_fetch_array($qPagos))
   $temp["detalle"]["IDDistribuidor"] = $row["IDDistribuidor"];
   $temp["detalle"]["Categoria"] = $row["Categoria"];
   $temp["detalle"]["ODS"] = $row["ODS"];
-  $temp["detalle"]["GarantiaDePartes"] = $row["GarantiaDePartes"];
-  $temp["detalle"]["GarantiaMOyKms"] = $row["GarantiaMOyKms"];
-  $temp["detalle"]["GarantiaDeCambios"] = $row["GarantiaDeCambios"];
-  $temp["detalle"]["ReembolsoGarantiaFee"] = $row["ReembolsoGarantiaFee"];
   $temp["detalle"]["MontoTotal"] = $row["MontoTotal"];
   $temp["detalle"]["StatusPago"] = $row["StatusPago"];
   $temp["detalle"]["Comprobante"] = $row["Comprobante"];

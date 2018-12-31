@@ -32,8 +32,9 @@
              {{item.timestampNF}}
            </td>
            <td>
+             <button *ngIf="item.modulo=='/registro-caso-menaje-reparacion-a-centro'" (click)="this._global.seleccionarReporte(item.id_reporte, 'registro-de-casos/orden-de-servicio/inicio')" class="btn btn-sm">Seleccionar</button>
              <button *ngIf="item.modulo=='/cambio-estatus-cambio-fisico-rechazado'" (click)="this._global.seleccionarReporte(item.id_reporte, 'registro-de-casos/orden-de-servicio/inicio')" class="btn btn-sm">Seleccionar</button>
-             <button *ngIf="item.modulo!='/cambio-estatus-cambio-fisico-rechazado'" (click)="this._global.seleccionarReporte(item.id_reporte, 'inicio/resumen/orden')" class="btn btn-sm">Seleccionar</button>
+             <button *ngIf="item.modulo!='/cambio-estatus-cambio-fisico-rechazado' && item.modulo!='/registro-caso-menaje-reparacion-a-centro'" (click)="this._global.seleccionarReporte(item.id_reporte, 'inicio/resumen/orden')" class="btn btn-sm">Seleccionar</button>
            </td>
          </tr>
 

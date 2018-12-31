@@ -99,7 +99,8 @@ if($filtroCds!="" && $filtroFecha!="" && $filtroCat!=""){
 }else{
   $query = str_replace(":filtros", "", $query);
 }
-
+echo($query);
+die();
 $q = mysql_query($query) or die(mysql_error());
 
 /*

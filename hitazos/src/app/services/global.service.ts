@@ -184,6 +184,7 @@ export class GlobalService implements CanActivate{
                 "MontoOtro": "",
                 "MontoOtroDescripcion": "",
                 "CostoLanded": "",
+                "OtroCostoDistribuidor": "",
                 "FechaEntregaCambio": "",
                 "FechaCostoLanded": "",
                 "MontoSubtotal": "",
@@ -214,7 +215,8 @@ export class GlobalService implements CanActivate{
                 "id": "",
                 "Valor": "",
                 "SubtipoServicio": "",
-                "IDTarifas": ""
+                "IDTarifas": "",
+                "RequiereRecoleccion": ""
             },
             "objrefacciones": [],
             "participaciones": [],
@@ -439,10 +441,10 @@ export class GlobalService implements CanActivate{
                                 if (result.value) {
                                   //Registro de notificación
                                   this.notificaciones.modulo = "/inicio";
-                                  this.notificaciones.descripcion = "Refacción con No. de parte " + noparte + " disponible para el reporte No. " + this.reporte.idreporte;
+                                  this.notificaciones.descripcion = "Refacción con No. de parte " + noparte + " disponible para el reporte No. " + id;
                                   this.registrarNotificacion(id);
 
-                                    this.cambioStatusRefacciones(id, noparte, disponibilidad, fechaentrega, costo, noguia);
+                                  this.cambioStatusRefacciones(id, noparte, disponibilidad, fechaentrega, costo, noguia);
                                 }
                             });
 
@@ -465,7 +467,7 @@ export class GlobalService implements CanActivate{
                             if (result.value) {
                               //Registro de notificación
                               this.notificaciones.modulo = "/inicio";
-                              this.notificaciones.descripcion = "Refacción con No. de parte " + noparte + " NO disponible para el reporte No. " + this.reporte.idreporte;
+                              this.notificaciones.descripcion = "Refacción con No. de parte " + noparte + " NO disponible para el reporte No. " + id;
                               this.registrarNotificacion(id);
 
                                 this.cambioStatusRefacciones(id, noparte, disponibilidad, fechaentrega)
@@ -885,7 +887,7 @@ export class GlobalService implements CanActivate{
 
                     //Registro de notificación
                     this.notificaciones.modulo = "/registro-de-casos/reparacion/inicio";
-                    this.notificaciones.descripcion = "Movilización del repotte No. " + id + " ha sido " + aprobacion;
+                    this.notificaciones.descripcion = "Movilización del repote No. " + id + " ha sido " + aprobacion;
                     this.registrarNotificacion(id);
 
                 } else if (data.res == 'error') {
@@ -1085,6 +1087,7 @@ export class GlobalService implements CanActivate{
                 "MontoOtro": "",
                 "MontoOtroDescripcion": "",
                 "CostoLanded": "",
+                "OtroCostoDistribuidor": "",
                 "FechaEntregaCambio": "",
                 "FechaCostoLanded": "",
                 "MontoSubtotal": "",
@@ -1115,7 +1118,8 @@ export class GlobalService implements CanActivate{
                 "id": "",
                 "Valor": "",
                 "SubtipoServicio": "",
-                "IDTarifas": ""
+                "IDTarifas": "",
+                "RequiereRecoleccion": ""
             },
             "objrefacciones": [],
             "participaciones": [],
@@ -1163,7 +1167,7 @@ export class GlobalService implements CanActivate{
         try { this.AdjuntosFacturasRepuestosArre = JSON.parse(Object(this.reporte.objreporte).AdjuntosFacturasRepuestos); } catch (e) { };
         try { this.AdjuntosOtrosArre = JSON.parse(Object(this.reporte.objreporte).AdjuntosOtros); } catch (e) { };
         try { this.AdjuntosReciclajeArre = JSON.parse(Object(this.reporte.objreporte).AdjuntosReciclaje); } catch (e) { };
-        try { this.AdjuntosFotosProductoArre = JSON.parse(Object(this.reporte.objreporte).AdjuntosFotosProducto); } catch (e) { };
+
     }
 
     parseJSON(arre) {
@@ -1718,7 +1722,7 @@ export class GlobalService implements CanActivate{
       params['nivel'] = this.user.nivel;
       params['IDDistribuidor'] = this.user.IDDistribuidor;
       params['CustomerID'] = this.user.CustomerID;
-      
+
       console.log("contar notificaciones");
       this._httpService.postJSON(params, 'notificaciones/contar-notificaciones.php')
           .subscribe(

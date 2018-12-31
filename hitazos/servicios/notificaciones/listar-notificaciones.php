@@ -34,13 +34,13 @@ if($nivel=='administrador'){
             select n.*, DATE_FORMAT(n.timestamp,  '%d/%m/%Y %H:%i:%s' ) as timestampNF from
             (select notificaciones.* from notificaciones) as n
             left join
-            (select * from usuarios_admin where (nivel='administrador')) as ua
+            (select id from usuarios_admin where (nivel='administrador')) as ua
             on ua.id = n.id_usuario
             join
-            (select * from reportes) as r
+            (select id, idcentro from reportes) as r
             on n.id_reporte = r.id
             join
-            (select * from usuarios_admin where ID=$id_usuario) as u
+            (select idcentro from usuarios_admin where ID=$id_usuario) as u
             on r.idcentro = u.idcentro
             Where (id_usuario=$id_usuario or (modulo='/cambio-fisico-dist-asigna' and id_centro=$id_centro)) or r.IDCentro=$id_centro
             group by id
@@ -52,19 +52,18 @@ if($nivel=='administrador'){
             select n.*, DATE_FORMAT(n.timestamp,  '%d/%m/%Y %H:%i:%s' ) as timestampNF from
             (select notificaciones.* from notificaciones) as n
             join
-            (select * from usuarios_admin) as ua
+            (select id from usuarios_admin) as ua
             on ua.id = n.id_usuario
             join
-            (select * from reportes) as r
+            (select id, Distribuidor from reportes) as r
             on n.id_reporte = r.id
             join
-            (select * from distribuidores where id=$IDDistribuidor or IDDistribuidor='$CustomerID') as d
+            (select IDDistribuidor from distribuidores where id=$IDDistribuidor) as d
             on r.Distribuidor = d.IDDistribuidor
             group by id
             order by id desc
             ";
 }
-
 
 if ($result = $mysqli->query($query)) {
 	while ($row = $result->fetch_array()) {

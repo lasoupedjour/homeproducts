@@ -66,7 +66,7 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
     join
     (select * from clientes) as clientes
     on reportes.IDCliente = clientes.id
-    Where StatusReporte <> 'Orden de Servicio'
+    Where (StatusReporte <> 'Orden de Servicio' and StatusReporte <> 'Cerrado')
     and (reportes.IDOperadorDistribuidor = ".$arre["IDDistribuidor"]." or reportes.IDDistribuidor = ".$arre["IDDistribuidor"].")
     order by FechaRegistroReporte desc LIMIT 5;
     ";
@@ -77,7 +77,7 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
     join
     (select * from clientes) as clientes
     on reportes.IDCliente = clientes.id
-    Where StatusReporte <> 'Orden de Servicio'
+    Where (StatusReporte <> 'Orden de Servicio' and StatusReporte <> 'Cerrado')
     and reportes.IDCentro = ".$arre["IDCentro"]."
     order by FechaRegistroReporte desc LIMIT 5;
     ";
@@ -89,10 +89,10 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
   join
   (select * from clientes) as clientes
   on reportes.IDCliente = clientes.id
-  join
+  left join
   (select * from centros) as centros
   on reportes.IDCentro = centros.id
-  Where StatusReporte <> 'Orden de Servicio'
+  Where (StatusReporte <> 'Orden de Servicio' and StatusReporte <> 'Cerrado') 
   :filtroCds
   order by FechaRegistroReporte desc LIMIT 5;
   ";

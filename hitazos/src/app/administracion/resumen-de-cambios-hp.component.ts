@@ -16,7 +16,6 @@ import swal from 'sweetalert2';
 export class ResumenDeCambiosHPComponent {
     title = 'app';
 
-    montoTotal = 0;
     dtOptions: any = {};
     @ViewChild(DataTableDirective)
     dtElement: DataTableDirective;
@@ -33,6 +32,13 @@ export class ResumenDeCambiosHPComponent {
     };
 
     statusPago = "Por Enviar";
+
+    /*Montos*/
+    montoTotal = 0;
+    GarantiaDePartes = 0;
+    GarantiaMOyKms = 0;
+    GarantiaDeCambios = 0;
+    ReembolsoGarantiaFee = 0;
 
     constructor(
         public formBuilder: FormBuilder,
@@ -116,7 +122,7 @@ export class ResumenDeCambiosHPComponent {
         //this.traeOrdenes();
 
         //this.filtrarReporte();
-
+        this._global.ordenesServicio.recientes = [];
     }
 
     changePais() {
@@ -418,6 +424,10 @@ export class ResumenDeCambiosHPComponent {
         console.log("MontoOtro", MontoOtro);
         console.log("MontoCambio", MontoCambio);
 
+        this.GarantiaDePartes = MontoRefacciones;
+        this.GarantiaMOyKms = MontoTAMov;
+        this.GarantiaDeCambios = MontoCambio;
+        this.ReembolsoGarantiaFee = TotalFee;
 
         MontoTotal = MontoRefacciones + MontoTAMov + TotalFee + MontoCambio;
         console.log("MontoTotal", MontoTotal);
@@ -447,6 +457,10 @@ export class ResumenDeCambiosHPComponent {
         params['Categoria'] = this.filterForm.controls.Categoria.value;
         params['IDCentro'] = this.filterForm.controls.Cds.value;
         params['MontoTotal'] = this.montoTotal;
+        params['GarantiaDePartes'] = this.GarantiaDePartes;
+        params['GarantiaMOyKms'] = this.GarantiaMOyKms;
+        params['GarantiaDeCambios'] = this.GarantiaDeCambios;
+        params['ReembolsoGarantiaFee'] = this.ReembolsoGarantiaFee;
         params['Mes'] = this.filterForm.controls.Mes.value;
         params['Ano'] = this.filterForm.controls.Ano.value;
 

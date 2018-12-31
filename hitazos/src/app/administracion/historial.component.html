@@ -176,19 +176,19 @@
                {{item.detalle.Categoria}}
              </td>
              <td *ngIf="_global.user.nivel!='distribuidor'">
-               {{item.cuentas.MontoRefacciones | currency}}
+               {{item.detalle.GarantiaDePartes | currency}}
              </td>
              <td *ngIf="_global.user.nivel!='distribuidor'">
-               {{item.cuentas.MontoTAMov | currency}}
+               {{item.detalle.GarantiaMOyKms | currency}}
              </td>
              <td *ngIf="_global.user.nivel!='distribuidor'">
-               {{item.cuentas.MontoFee | currency}}
+               {{item.detalle.ReembolsoGarantiaFee | currency}}
              </td>
              <td>
-               {{item.cuentas.MontoCambio | currency}}
+               {{item.detalle.GarantiaDeCambios | currency}}
              </td>
              <td *ngIf="_global.user.nivel!='distribuidor'">
-               {{item.cuentas.MontoTotal | currency}}
+               {{item.detalle.MontoTotal | currency}}
              </td>
              <td>
                {{item.detalle.StatusPago}}

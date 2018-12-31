@@ -38,6 +38,8 @@ while ($num > 0)
 	$num --;
 }
 
+if($arre['Modelo']=='OS-17001' || $arre['Modelo']=='OS-17001-1')
+  $tipoTarifa = "OLLA PRESION";
 
 $q = mysql_query("
 SELECT distinct id, IDGrupoTarifa, TipoTarifa, TipoServicio, SubtipoServicio, Valor, Impuesto, TarifaMensual, ImpuestoTarifaMensual, NecesitaAutorizacion FROM tarifas where TipoTarifa = '$tipoTarifa' and IDGrupoTarifa = ".$arre["IDGrupoTarifa"]."

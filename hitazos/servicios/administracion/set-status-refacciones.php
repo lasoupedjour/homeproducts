@@ -79,12 +79,13 @@ while ($row = mysqli_fetch_array($q))
 	}
 
 
-	if($arre["Existencia"]=="No Disponible")
-	 $q = mysqli_query($con,"update reportes set TipoReclamoDiagnostico='Cambio', Refacciones = '".utf8_decode(json_encode($refacciones, JSON_UNESCAPED_UNICODE))."' where id = ".$arre["IDReporte"]);
-  else
-   $q = mysqli_query($con,"update reportes set Refacciones = '".utf8_decode(json_encode($refacciones, JSON_UNESCAPED_UNICODE))."' where id = ".$arre["IDReporte"]);
-
-
+	if($arre["Existencia"]=="No Disponible"){
+    //echo("1................" . "update reportes set TipoReclamoDiagnostico='Cambio', Refacciones = '".utf8_decode(json_encode($refacciones, JSON_UNESCAPED_UNICODE))."' where id = ".$arre["IDReporte"]);
+    $q = mysqli_query($con,"update reportes set TipoReclamoDiagnostico='Cambio', Refacciones = '".utf8_decode(json_encode($refacciones, JSON_UNESCAPED_UNICODE))."' where id = ".$arre["IDReporte"]);
+  }else{
+    //echo("2................");
+    $q = mysqli_query($con,"update reportes set Refacciones = '".utf8_decode(json_encode($refacciones, JSON_UNESCAPED_UNICODE))."' where id = ".$arre["IDReporte"]);
+  }
 }
 
 

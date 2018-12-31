@@ -45,25 +45,8 @@ StatusReporte = 'Orden de Servicio'
 order by FechaOrdenServicio desc;
 */
 $query = "
-Select DISTINCT reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, centros.nombre,  IFNULL( centros1.nombre,  'N/A' ) AS  'Master', tarifas.TarifaMensual, tarifas.ImpuestoTarifaMensual from
-(select * from reportes) as reportes
-join
-(select * from clientes) as clientes
-on reportes.idcliente = clientes.id
-join
-(select * from centros) as centros
-on centros.id = reportes.idCentro
-join
-(select * from tarifas) as tarifas
-on centros.idGrupotarifa = tarifas.idGrupoTarifa
-left join
-(select * from centros) as centros1
-on centros.idMaster = centros1.id
-where clientes.id = reportes.IDCliente
-and StatusReporte = 'Orden de Servicio'
-and TipoReclamoDiagnostico='Cambio'
-and (reportes.Distribuidor='" . $arre["Nombre"] . "' or
-reportes.Distribuidor='" . $arre["CustomerID"] . "')
+Select * From vista_reporte_cambios
+where Distribuidor='" . $arre["CustomerID"] . "'
 and StatusCostoLanded='Aprobado'
 :filtros
 order by FechaOrdenServicio desc;
@@ -76,7 +59,7 @@ if($mes!=0 && $ano!=0){
 }
 
 if ($categoria!=""){
-  $filtroCat = " and reportes.Categoria='$categoria'";
+  $filtroCat = " and Categoria='$categoria'";
 }
 
 if($filtroFecha!="" && $categoria==""){

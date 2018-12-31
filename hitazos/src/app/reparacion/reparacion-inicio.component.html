@@ -18,7 +18,8 @@
           <div class="wrap">
             <span>3</span>
           </div>
-          <div>Reparación</div>
+          <div *ngIf="this._global.reporte.objreporte.Categoria=='MENAJE'">Revisión/Reparación</div>
+          <div *ngIf="this._global.reporte.objreporte.Categoria!='MENAJE'">Reparación</div>
         </div>
         <div class="paso">
           <div class="wrap">
@@ -30,7 +31,6 @@
     </div>
   </div>
 </div>
-
 <!--Cliente-->
 <div class="container">
   <div class="row mt-5">
@@ -63,10 +63,15 @@
             Este campo es requerido
           </span>
         </label>
+        <label *ngIf="this._global.reporte.objreporte.Categoria=='MENAJE' && this._global.user.nivel!='operador'">
+          <span class="simbolo">$</span> <input class="form-control form-control-sm w-50" OnlyNumber="true" placeholder="Costo Landed" formControlName="CostoLanded" readonly >&nbsp;USD
+        </label>
+        <label *ngIf="this._global.reporte.objreporte.Categoria=='MENAJE' && this._global.user.nivel!='operador'">
+          <span class="simbolo">$</span> <input class="form-control form-control-sm w-50" OnlyNumber="true" placeholder="Otro costo" formControlName="OtroCostoDistribuidor" readonly >&nbsp;USD
+        </label>
       </div>
       <div class="col-6">
         <h3><i class="fas fa-clipboard-list"></i> Diagnóstico</h3>
-
 
         <div class="row my-3">
           <div class="col-sm-12">
@@ -92,8 +97,9 @@
             <label>
               <select class="form-control form-control-sm" formControlName="TipoReclamoDiagnostico" (change)="changeTipoReclamoDiagnostico()">
                 <option value="" hidden="">*Selecciona el tipo de reclamo</option>
-                <option [hidden]="(_global.reporte.objreporte.Categoria.toUpperCase() == 'MENAJE' && _global.reporte.objreporte.Subcategoria.toUpperCase() != 'OLLAS Y SARTENES')" value="Revisión">Revisión</option>
-                <option [hidden]="(_global.reporte.objreporte.Categoria.toUpperCase() == 'MENAJE' && _global.reporte.objreporte.Subcategoria.toUpperCase() != 'OLLAS Y SARTENES')" value="Reparación">Reparación</option>
+                <option [hidden]="(_global.reporte.objreporte.Categoria.toUpperCase() == 'MENAJE' && _global.reporte.objreporte.Modelo.value!='OS-17001' && _global.reporte.objreporte.Modelo.value!='OS-17001-1')" value="Revisión">Revisión</option>
+                <option [hidden]="(_global.reporte.objreporte.Categoria.toUpperCase() == 'MENAJE' && _global.reporte.objreporte.Modelo.value!='OS-17001' && _global.reporte.objreporte.Modelo.value!='OS-17001-1')" value="Reparación">Reparación</option>
+                <option *ngIf="(_global.reporte.objreporte.Categoria.toUpperCase() == 'MENAJE')" value="Reparación">Reparación</option>
                 <!--option value="Reparación">Reparación</option-->
                 <option value="Cambio">Cambio</option>
                 <option value="Instrucciones de uso">Instrucciones de uso</option>
@@ -101,6 +107,26 @@
 
               </select>
               <span class="alert alert-danger" *ngIf="!genericForm.controls.TipoReclamoDiagnostico.valid && genericForm.controls.TipoReclamoDiagnostico.touched">
+                Este campo es requerido
+              </span>
+            </label>
+          </div>
+          <div class="col-sm-12" *ngIf="(this.genericForm.controls.TipoReclamoDiagnostico.value == 'Reparación' || this.genericForm.controls.TipoReclamoDiagnostico.value == 'Cambio') && this._global.reporte.objreporte.Categoria=='MENAJE' && this._global.user.nivel=='administrador'">
+            <label>
+              <select class="form-control form-control-sm" formControlName="RequiereRecoleccion">
+                <option value="">¿Se requiere recoleción?</option>
+                <option value="1">Sí</option>
+                <option value="0">No</option>
+              </select>
+            </label>
+          </div>
+          <div class="col-sm-12" *ngIf="(this.genericForm.controls.TipoReclamoDiagnostico.value == 'Reparación' || this.genericForm.controls.TipoReclamoDiagnostico.value == 'Cambio') && this._global.reporte.objreporte.Categoria=='MENAJE' && this._global.user.nivel=='administrador' && this.genericForm.controls.RequiereRecoleccion.value==1">
+            <label class="fecha">
+              <select class="form-control form-control-sm" formControlName="IDCentro" id="idcentro">
+                <option value="">Selecciona el CDs</option>
+                <option *ngFor="let item of _global.centros; let i = index" value="{{item.id}}">{{item.Nombre}}<label *ngIf="item.Ciudad!=''"> - {{item.Ciudad}}</label></option>
+              </select>
+              <span class="alert alert-danger" *ngIf="!genericForm.controls.IDCentro.valid && genericForm.controls.IDCentro.touched">
                 Este campo es requerido
               </span>
             </label>
@@ -130,7 +156,7 @@
             </label>
           </div>
 
-          <div class="col-sm-12" [hidden]="this.genericForm.controls.TipoReclamoDiagnostico.value == 'Cambio'">
+          <div class="col-sm-12" [hidden]="this.genericForm.controls.TipoReclamoDiagnostico.value == 'Cambio' || this._global.reporte.objreporte.Categoria=='MENAJE'">
             <label class="pointer">
               <input class="form-control form-control-sm fecha" formControlName="RequiereRefacciones" type="checkbox" (change)="changeRequiereRefacciones()" /> ¿Se requieren refacciones?
             </label>
@@ -140,7 +166,41 @@
 
       </div>
      </div>
+     <div class="row" [hidden]="this._global.reporte.objreporte.Categoria!='MENAJE' && this._global.user.nivel=='operador'">
+       <div class="col-sm-12 my-3">
+         <h4 class="mt-3 naranja"><b>Archivos adjuntos</b></h4>
+         <hr />
+       </div>
+     </div>
+     <div class="row" [hidden]="this._global.reporte.objreporte.Categoria!='MENAJE' && this._global.user.nivel=='operador'">
+       <div class="col-sm-12 mb-3">
+         <div class="row">
+           <div class="col-3 text-right">
+             <div class="sform mb-3">Factura o ticket de compra del producto:</div>
+           </div>
+           <div class="col-3">
+             <div class="row no-gutters">
+               <div class="col-12 mb-1 attachments">
+                 <div class="prev" *ngFor="let item of _global.AdjuntosFacturasNotasCompraArre; let i = index"  [innerHTML]="prevAttach(item)"></div>
+                 <div *ngIf="!_global.AdjuntosFacturasNotasCompraArre[0]">No hay</div>
+               </div>
+             </div>
+           </div>
+           <div class="col-3 text-right">
+             <div class="sform mb-3">Fotos del modelo y no. serie de producto:</div>
+           </div>
+           <div class="col-3">
+             <div class="row no-gutters">
+               <div class="col-12 mb-1 attachments">
+                 <div class="prev" *ngFor="let item of _global.AdjuntosFotosModeloSerieArre; let i = index" [innerHTML]="prevAttach(item)"></div>
+                 <div *ngIf="!_global.AdjuntosFotosModeloSerieArre[0]">No hay</div>
+               </div>
 
+             </div>
+            </div>
+         </div>
+       </div>
+     </div>
       <!--REFACCIONES -->
       <div class="row">
         <div class="col-12">
@@ -274,13 +334,24 @@
             </div>
           </div><!--termina REFACCIONES -->
 
-          <div class="row  mt-4">
+          <div class="row  mt-4" *ngIf="(this._global.reporte.objreporte.TipoReclamoDiagnostico!='Instrucciones de uso' && this._global.reporte.objreporte.TipoReclamoDiagnostico!='No aplica garantía')">
             <div class="col-sm-7">
               <a class="btn btn-sm btnicono" routerLink="/registro-de-casos/reporte-de-caso"><i class="fa fa-angle-left"></i> Anterior</a>
             </div>
             <div class="col-sm-5">
               <button class="btn btn-sm" type="submit">Guardar cambios</button>&nbsp;
-              <button *ngIf="(this.status.habilitarOrden == true)" class="btn btn-sm" type="button" routerLink="/registro-de-casos/orden-de-servicio/inicio" >Crear Orden de Servicio</button>
+              <button *ngIf="this._global.reporte.objreporte.TipoReclamoDiagnostico!='' && this.status.habilitarOrden==true" class="btn btn-sm" type="button" routerLink="/registro-de-casos/orden-de-servicio/inicio" >Crear Orden de Servicio</button>
+              <button *ngIf="this._global.reporte.objreporte.TipoReclamoDiagnostico!='' && this._global.reporte.objreporte.Categoria=='MENAJE' && this._global.user.nivel=='administrador'" class="btn btn-sm" type="button" routerLink="/inicio">Inicio</button>
+
+            </div>
+          </div>
+
+          <div class="row  mt-4" *ngIf="(this._global.reporte.objreporte.TipoReclamoDiagnostico=='Instrucciones de uso' || this._global.reporte.objreporte.TipoReclamoDiagnostico == 'No aplica garantía')">
+            <div class="col-sm-7">
+              <!--a class="btn btn-sm btnicono" routerLink="/registro-de-casos/reporte-de-caso"><i class="fa fa-angle-left"></i> Anterior</a-->
+            </div>
+            <div class="col-sm-5">
+              <a class="btn btn-sm btnicono" routerLink="/inicio"><i class="fa fa-angle-left"></i> Inicio</a>
             </div>
           </div>
 

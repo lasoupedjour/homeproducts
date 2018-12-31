@@ -34,7 +34,7 @@ if($arre["Nivel"] == "administrador" || $arre["Nivel"] == "MKT"){
   and (IDMaster=0 and id = ".$arre["IDCentro"].")";
 }
 
-$query = utf8_encode($query);
+//$query = utf8_encode($query);
 
 $result = mysql_query($query) or die(mysql_error());
 echo "<option value='' hidden>Master</option>";

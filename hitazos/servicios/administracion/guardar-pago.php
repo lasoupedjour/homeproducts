@@ -45,19 +45,23 @@ if($arre['IDMaster']!="")
 //insertar
 if ($stmt = $mysqli->prepare("
 
-insert into pagos(IDMaster, IDCentro, IDOperadorAdmin, IDDistribuidor, Categoria, ODS, MontoTotal, StatusPago,Comprobante,FechaRegistro,Mes,Ano)
+insert into pagos(IDMaster, IDCentro, IDOperadorAdmin, IDDistribuidor, Categoria, ODS, GarantiaDePartes, GarantiaMOyKms, GarantiaDeCambios, ReembolsoGarantiaFee, MontoTotal, StatusPago,Comprobante,FechaRegistro,Mes,Ano)
 values
-(?,?,?,?,?,?,?,'Enviado','Pago sin realizar',now(),?,?)
+(?,?,?,?,?,?,?,?,?,?,?,'Enviado','Pago sin realizar',now(),?,?)
 
 ")) {
-	$stmt->bind_param("ddddssdss",
+	$stmt->bind_param("ddddssdddddss",
 	$IDMaster,
   $IDCentro,
   $IDOperadorAdmin,
 	$IDDistribuidor,
   $arre['Categoria'],
 	$arre['Ordenes'],
-	$arre['MontoTotal'],
+  $arre['GarantiaDePartes'],
+  $arre['GarantiaMOyKms'],
+  $arre['GarantiaDeCambios'],
+  $arre['ReembolsoGarantiaFee'],
+  $arre['MontoTotal'],
 	$arre['Mes'],
 	$arre['Ano']
 	);

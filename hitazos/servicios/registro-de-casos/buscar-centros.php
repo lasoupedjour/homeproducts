@@ -23,7 +23,12 @@ $res = array();
 $res['res'] = 'ok';
 
 if($arre["nivel"] == "administrador" || $arre["nivel"] == "MKT"){
-  $query = "SELECT id, Nombre, Ciudad from centros order by Nombre asc";
+  if($arre['Flujo']=='MENAJE'){
+    $query = "SELECT id, Nombre, Ciudad from centros Where IDMaster=0 order by Nombre asc";
+  }else{
+    $query = "SELECT id, Nombre, Ciudad from centros order by Nombre asc";
+  }
+
 }else{
   /*
   $query = "
@@ -35,9 +40,15 @@ if($arre["nivel"] == "administrador" || $arre["nivel"] == "MKT"){
 
 if($arre["IDDistribuidor"]>0){
 */
-  $query = "
+  if($arre['Flujo']=='MENAJE'){
+    $query = "
+            SELECT id, Nombre, Ciudad, Categoria from centros
+            where Pais = '".$arre['Pais']."' and IDMaster=".$arre['IDMaster']." order by Nombre asc";
+  }else{
+    $query = "
             SELECT id, Nombre, Ciudad, Categoria from centros
             where Pais = '".$arre['Pais']."' and IDMaster=0 order by Nombre asc";
+  }
 }
 
 $q = mysql_query($query) or die(mysql_error());

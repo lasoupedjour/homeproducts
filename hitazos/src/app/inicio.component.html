@@ -739,7 +739,9 @@
              <button *ngIf="item.Categoria=='MENAJE'" (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Seleccionar</button>
            </td>
            <td *ngIf="this._global.user.nivel!='distribuidor'">
-             <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Seleccionar</button>
+             <button *ngIf="(this._global.user.nivel!='administrador') && (item.Categoria!='MENAJE' || item.Modelo=='OS-17001' || item.Modelo=='OS-17001-1')" (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Seleccionar</button>
+             <button *ngIf="this._global.user.nivel!='administrador' && item.Categoria=='MENAJE' && item.Modelo!='OS-17001' && item.Modelo!=='OS-17001-1'" (click)="this._global.seleccionarReporte(item.id, 'registro-de-casos/orden-de-servicio/inicio')" class="btn btn-sm">Seleccionar</button>
+             <button *ngIf="this._global.user.nivel=='administrador'" (click)="this._global.seleccionarReporte(item.id, 'registro-de-casos/reparacion/inicio')" class="btn btn-sm">Seleccionar</button>
            </td>
          </tr>
 

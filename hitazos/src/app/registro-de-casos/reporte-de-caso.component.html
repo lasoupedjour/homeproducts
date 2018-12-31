@@ -175,7 +175,12 @@
           </span>
 
         </label>
-
+        <div *ngIf="this.genericForm.controls.AplicaGarantia.value == 'no' && this.genericForm.controls.FechaCompra.valid" class="alert-danger alert-danger-2 mt-2">
+          No aplica garantía
+        </div>
+        <div *ngIf="this.genericForm.controls.AplicaGarantia.value  == 'si' && this.genericForm.controls.FechaCompra.valid" class="alert-success mt-2">
+          Aplica garantía
+        </div>
 
         <input type="hidden" formControlName="AplicaGarantia">
       </div>
@@ -259,238 +264,7 @@
             Este campo es requerido
           </span>
         </label>
-
-        <div *ngIf="this.genericForm.controls.AplicaGarantia.value == 'no' && this.genericForm.controls.FechaCompra.valid" class="alert-danger alert-danger-2 mt-2">
-          No aplica garantía
-        </div>
-        <div *ngIf="this.genericForm.controls.AplicaGarantia.value  == 'si' && this.genericForm.controls.FechaCompra.valid" class="alert-success mt-2">
-          Aplica garantía
-        </div>
-
       </div>
-
-      <!--REVISION-->
-      <div [hidden]="this.genericForm.controls.TipoCaso.value != 'Garantía' || this.genericForm.controls.Categoria.value=='MENAJE'" class="col-12" *ngIf="!(this._global.user.IDDistribuidor>0)">
-        <div class="row">
-
-          <div class="col-12 pt-3">
-            <h3>Revisión</h3>
-          </div>
-
-          <div class="col-sm-2">
-            <label>
-              <select class="form-control form-control-sm" formControlName="TipoRevision" (change)="changeTipoRevision()">
-                <option value="" hidden="">Seleccionar tipo de revisión</option>
-                <option value="domicilio" *ngIf="this.formulariostatus.habilitaDomicilio" >En Domicilio Cliente</option>
-                <option value="mostrador">En Mostrador</option>
-                <option value="otro centro">En otro Centro de Servicio</option>
-              </select>
-              <span class="alert alert-danger" *ngIf="!genericForm.controls.TipoRevision.valid && genericForm.controls.TipoRevision.touched">
-                Este campo es requerido
-              </span>
-            </label>
-          </div>
-          <!--En otro centro de servicio -->
-          <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'otro centro')" class="col-sm-2">
-            <label class="fecha">
-              <select class="form-control form-control-sm" formControlName="IDCentro" id="idcentro" (change)="changeCentro()">
-                <option value="">Selecciona el CDs</option>
-                <option *ngFor="let item of _global.centros; let i = index" value="{{item.id}}">{{item.Nombre}}<label *ngIf="item.Ciudad!=''"> - {{item.Ciudad}}</label></option>
-              </select>
-              <span class="alert alert-danger" *ngIf="!genericForm.controls.IDCentro.valid && genericForm.controls.IDCentro.touched">
-                Este campo es requerido
-              </span>
-            </label>
-          </div>
-          <!--termina en otro centro de servicio -->
-          <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'domicilio') || (this.genericForm.controls.Subcategoria.value=='MICROONDA' || this.genericForm.controls.Subcategoria.value=='DISPENSADOR DE AGUA')" class="col-sm-2">
-            <label class="fecha">
-              <select class="form-control form-control-sm" formControlName="TipoKilometraje" (change)="changeTipoKilometraje()">
-                <option value="" hidden="">Selecciona el kilometraje</option>
-                <option *ngFor="let item of _global.subtiposervicio; let i = index" value="{{item.id}}">{{item.SubtipoServicio}}</option>
-              </select>
-              <span class="alert alert-danger" *ngIf="!genericForm.controls.TipoKilometraje.valid && genericForm.controls.TipoKilometraje.touched">
-                Este campo es requerido
-              </span>
-            </label>
-          </div>
-
-          <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'domicilio') || (this.genericForm.controls.Subcategoria.value=='MICROONDA' || this.genericForm.controls.Subcategoria.value=='DISPENSADOR DE AGUA')" class="col-sm-2">
-            <label class="fecha">
-              <input class="form-control form-control-sm fecha" placeholder="Elegir Fecha de Revisión"
-                     formControlName="FechaRevision" ngbDatepicker #d2="ngbDatepicker"  [(ngModel)]="modelfecharevision"  >
-              <button class="input-group-addon" (click)="d2.toggle()" type="button">
-                <i class="fa fa-calendar"></i>
-              </button>
-              <span class="alert alert-danger" *ngIf="!genericForm.controls.FechaRevision.valid && genericForm.controls.FechaRevision.touched">
-                Este campo es requerido
-              </span>
-            </label>
-          </div>
-
-
-          <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'domicilionomostrar') || (this.genericForm.controls.Subcategoria.value=='MICROONDA' || this.genericForm.controls.Subcategoria.value=='DISPENSADOR DE AGUA')" class="col-sm-2">
-            <label class="fecha">
-              <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="Kilometraje" placeholder="Ingresa el kilometraje" maxlength="20" />
-              <span class="alert alert-danger" *ngIf="!genericForm.controls.Kilometraje.valid && genericForm.controls.Kilometraje.touched">
-                Este campo es requerido
-              </span>
-            </label>
-          </div>
-
-          <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'domicilio')" class="col-sm-2">
-            <label class="">
-              <span class="spanleft">$</span>
-              <div *ngIf="this.formulariostatus.necesitaAutorizacion!=0">
-                <input autocomplete="off" type="number" class="w-50 form-control form-control-sm" formControlName="CostoKilometraje" placeholder="Ingresa el costo" min="0" />
-              </div>
-              <div *ngIf="this.formulariostatus.necesitaAutorizacion==0">
-                <input autocomplete="off" type="number" class="w-50 form-control form-control-sm" formControlName="CostoKilometraje" placeholder="Ingresa el costo" min="0" readonly />
-              </div>
-
-              <span class="spanleft">&nbsp;&nbsp;&nbsp;&nbsp;USD</span>
-              <span class="alert alert-danger" *ngIf="!genericForm.controls.CostoKilometraje.valid && genericForm.controls.CostoKilometraje.touched">
-                Este campo es requerido
-              </span>
-            </label>
-          </div>
-          <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'domicilio' && this.formulariostatus.necesitaAutorizacion == 1)" class="col-sm-2">
-            Se enviará solicitud de autorización a HP.
-          </div>
-
-        </div>
-      </div>
-
-
-      <!--REFACCIONES -->
-      <div [hidden]="!(this.genericForm.controls.TipoCaso.value == 'Refacciones')" class="col-12">
-        <div class="row">
-          <div class="col-12 pt-3">
-            <h3>Refacciones</h3>
-            <p>Registra las refacciones necesarias.</p>
-          </div>
-          <div class="col-sm-4">
-            <label>
-              <select class="form-control form-control-sm" formControlName="Refaccion" (change)="changeRefaccion()">
-                <option value="" hidden="">Seleccionar refacción</option>
-                <option value="Refaccion 1">Refaccion 1</option>
-                <option value="Refaccion 2">Refaccion 2</option>
-                <option value="Refaccion 3">Refaccion 3</option>
-              </select>
-
-            </label>
-          </div>
-          <div class="col-sm-4">
-            <label>
-              <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="NoParte" placeholder="No. Parte" maxlength="18" />
-              <span class="alert alert-danger" *ngIf="!this.status.agregaRefaccionValid">
-                Por favor selecciona una refacción y escribe No.de Parte antes de continuar
-              </span>
-            </label>
-          </div>
-          <div class="col-sm-4">
-            <button type="button" class="btn btn-sm" (click)="agregarRefaccion()"><i class="fa fa-plus-circle"></i> Agregar Refacción</button>
-          </div>
-
-        </div>
-
-        <!--tabla-->
-        <div class="row my-5" *ngIf="_global.refacciones[0]">
-          <div class="col-12 mb-5">
-
-            <table>
-              <tr>
-                <th>Refacción</th>
-                <th>No. de parte</th>
-                <th>Diagrama</th>
-                <th>Existencia</th>
-                <th>Cantidad</th>
-                <th>Costo Unitario</th>
-                <th>Costo Total</th>
-                <th>Cotizaciones</th>
-                <th>Status</th>
-                <th>Eliminar</th>
-              </tr>
-
-              <tr *ngFor="let item of _global.refacciones; let i = index">
-
-                <td>
-                  {{item.NombreRefaccion}}
-                </td>
-
-                <td>
-                  {{item.NoParte}}
-                </td>
-                <td>
-                  <a class="btndiagrama" href="#"><i class="fa fa-file"></i></a>
-                </td>
-                <td>
-                  <select class="form-control form-control-sm existencia" (change)="changeExistencia(i, $event.target.value)">
-                    <option value="" hidden>Seleccionar</option>
-                    <option value="Disponible">Disponible</option>
-                    <option value="No Disponible">No Disponible</option>
-                    <option value="No Encontrada">No Encontrada</option>
-                  </select>
-                </td>
-                <td>
-                  <div>
-                    <input  type="number" class="form-control form-control-sm cantidad text-center" (keyup)="changeCantidad(i, $event.target.value)" (change)="changeCantidad(i, $event.target.value)" />
-                  </div>
-                </td>
-                <td>
-                  <div *ngIf="item.Existencia == 'Disponible'">
-                    <span class="spanleft">$</span> <input type="text" class="spanleft form-control form-control-sm costo" (keyup)="changeCosto(i, $event.target.value)" (change)="changeCosto(i, $event.target.value)" value="{{_global.refacciones[i].CostoUnitario}}" />
-                  </div>
-                  <div *ngIf="item.Existencia == 'No Disponible' || item.Existencia == 'No Encontrada'">
-                    <span class="spanleft">$</span> <input type="text" class="spanleft form-control form-control-sm costo" (keyup)="changeCosto(i, $event.target.value)" (change)="changeCosto(i, $event.target.value)"  value="{{_global.refacciones[i].CostoUnitario}}" readonly />
-                  </div>
-                </td>
-                <td>
-                  <div *ngIf="item.Existencia != ''">
-                    <span class="spanleft">$</span><input  type="text" class="form-control form-control-sm costototal spanleft" value="{{_global.refacciones[i].CostoTotal}}" readonly />
-                  </div>
-                </td>
-                <td>
-                  <div *ngIf="item.Existencia == 'Disponible'">
-                    No Aplica
-                  </div>
-
-                  <div *ngIf="item.Existencia == 'No Disponible' && _global.refacciones[i].Status == 'Por definir'">
-                    <button type="button" class="btn btn-sm" (click)="cotizar(i)">Cotizar</button>
-                  </div>
-                  <div *ngIf="item.Existencia == 'No Encontrada' && _global.refacciones[i].Status == 'Por definir'">
-                    <button type="button" class="btn btn-sm" (click)="solicitar(i)">Solicitar a HP</button>
-                  </div>
-
-                  <div *ngIf="item.Existencia == 'No Disponible' && (_global.refacciones[i].Status == 'Por enviar' || _global.refacciones[i].Status == 'En revisión')">
-                    {{_global.refacciones[i].StatusCotizacion}}
-                  </div>
-                  <div *ngIf="item.Existencia == 'No Encontrada' && (_global.refacciones[i].Status == 'Por enviar' || _global.refacciones[i].Status == 'En revisión')">
-                    {{_global.refacciones[i].StatusCotizacion}}
-                  </div>
-                </td>
-                <td>
-
-                  <div>
-                    {{_global.refacciones[i].Status}}
-                  </div>
-
-
-                </td>
-                <td>
-                  <a class="btneliminar" (click)="eliminarRefaccion(i)"><i class="fa fa-trash"></i></a>
-                </td>
-              </tr>
-
-            </table>
-
-          </div>
-        </div><!--termina REFACCIONES -->
-
-
-
-      </div>
-
 
     </div><!--row-->
 
@@ -511,7 +285,7 @@
     <div class="row" *ngIf="this.genericForm.controls.TipoCaso.value == 'Garantía' && this.genericForm.controls.Categoria.value=='MENAJE'">
       <div class="col-sm-6">
         <label>
-          <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="NoSerie" placeholder="No. de Serie" maxlength="20" />
+          <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="NoSerie" placeholder="No. de Serie" maxlength="20" (change)="changeNoSerie()" />
           <span class="alert alert-danger" *ngIf="!genericForm.controls.NoSerie.valid && genericForm.controls.NoSerie.touched">
             Este campo es requerido
           </span>
@@ -565,14 +339,14 @@
       <div class="col-sm-6 mb-5">
         <div class="row">
           <div class="col-4 text-right">
-            <div class="sform mb-3">Fotos del producto:</div>
+            <div class="sform mb-3">12. <i>Fotos del modelo y no. serie</i> de producto:</div>
           </div>
           <div class="col-8">
             <div class="row">
               <div class="col-12 mb-1">
-                <ng2-file-input (onAction)="onActionFotosProducto($event)"></ng2-file-input>
+                <ng2-file-input (onAction)="onActionFotosModeloSerie($event)"></ng2-file-input>
 
-                <span class="alert alert-danger" *ngIf="this.FotosProductoLenght==0 && this.adjuntosValidos==false">
+                <span class="alert alert-danger" *ngIf="this.FotosModeloSerieLenght==0 && this.adjuntosValidos==false">
                   Este campo es requerido
                 </span>
               </div>
@@ -588,7 +362,239 @@
         <button class="btn btn-sm" type="submit">Guardar cambios</button>
       </label>
     </div>-->
+    <!--REVISION-->
+    <div *ngIf="!(this._global.user.IDDistribuidor>0) && this.genericForm.controls.TipoCaso.value == 'Garantía' && (this.genericForm.controls.Categoria.value!='MENAJE' || this.genericForm.controls.Modelo.value=='OS-17001' || this.genericForm.controls.Modelo.value=='OS-17001-1')" class="col-12">
+      <div class="row">
 
+        <div class="col-12 pt-3">
+          <h3>Revisión</h3>
+        </div>
+
+        <div class="col-sm-2">
+          <label>
+            <select class="form-control form-control-sm" formControlName="TipoRevision" (change)="changeTipoRevision()">
+              <option value="" hidden="">Seleccionar tipo de revisión</option>
+              <option value="domicilio" *ngIf="this.formulariostatus.habilitaDomicilio" >En Domicilio Cliente</option>
+              <option value="mostrador">En Mostrador</option>
+              <option value="otro centro">En otro Centro de Servicio</option>
+            </select>
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.TipoRevision.valid && genericForm.controls.TipoRevision.touched">
+              Este campo es requerido
+            </span>
+          </label>
+        </div>
+        <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'otro centro')" class="col-sm-2">
+          <label>
+            <select class="form-control form-control-sm" formControlName="TipoCentro" (change)="changeTipoCentro()">
+              <option value="">Seleccionar tipo de Cds</option>
+              <option value="Master">Master</option>
+              <option value="Red">Red</option>
+            </select>
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.TipoRevision.valid && genericForm.controls.TipoRevision.touched">
+              Este campo es requerido
+            </span>
+          </label>
+        </div>
+        <!--En otro centro de servicio -->
+        <div [hidden]="!(this.genericForm.controls.TipoCentro.value != '')" class="col-sm-2">
+          <label class="fecha">
+            <select class="form-control form-control-sm" formControlName="IDCentro" id="idcentro" (change)="changeCentro()">
+              <option value="">Selecciona el CDs</option>
+              <option *ngFor="let item of _global.centros; let i = index" value="{{item.id}}">{{item.Nombre}}<label *ngIf="item.Ciudad!=''"> - {{item.Ciudad}}</label></option>
+            </select>
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.IDCentro.valid && genericForm.controls.IDCentro.touched">
+              Este campo es requerido
+            </span>
+          </label>
+        </div>
+        <!--termina en otro centro de servicio -->
+        <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'domicilio') || (this.genericForm.controls.Subcategoria.value=='MICROONDA' || this.genericForm.controls.Subcategoria.value=='DISPENSADOR DE AGUA')" class="col-sm-2">
+          <label class="fecha">
+            <select class="form-control form-control-sm" formControlName="TipoKilometraje" (change)="changeTipoKilometraje()">
+              <option value="" hidden="">Selecciona el kilometraje</option>
+              <option *ngFor="let item of _global.subtiposervicio; let i = index" value="{{item.id}}">{{item.SubtipoServicio}}</option>
+            </select>
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.TipoKilometraje.valid && genericForm.controls.TipoKilometraje.touched">
+              Este campo es requerido
+            </span>
+          </label>
+        </div>
+
+        <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'domicilio') || (this.genericForm.controls.Subcategoria.value=='MICROONDA' || this.genericForm.controls.Subcategoria.value=='DISPENSADOR DE AGUA')" class="col-sm-2">
+          <label class="fecha">
+            <input class="form-control form-control-sm fecha" placeholder="Elegir Fecha de Revisión"
+                   formControlName="FechaRevision" ngbDatepicker #d2="ngbDatepicker"  [(ngModel)]="modelfecharevision"  >
+            <button class="input-group-addon" (click)="d2.toggle()" type="button">
+              <i class="fa fa-calendar"></i>
+            </button>
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.FechaRevision.valid && genericForm.controls.FechaRevision.touched">
+              Este campo es requerido
+            </span>
+          </label>
+        </div>
+
+
+        <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'domicilionomostrar') || (this.genericForm.controls.Subcategoria.value=='MICROONDA' || this.genericForm.controls.Subcategoria.value=='DISPENSADOR DE AGUA')" class="col-sm-2">
+          <label class="fecha">
+            <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="Kilometraje" placeholder="Ingresa el kilometraje" maxlength="20" />
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.Kilometraje.valid && genericForm.controls.Kilometraje.touched">
+              Este campo es requerido
+            </span>
+          </label>
+        </div>
+
+        <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'domicilio')" class="col-sm-2">
+          <label class="">
+            <span class="spanleft">$</span>
+            <div *ngIf="this.formulariostatus.necesitaAutorizacion!=0">
+              <input autocomplete="off" type="number" class="w-50 form-control form-control-sm" formControlName="CostoKilometraje" placeholder="Ingresa el costo" min="0" />
+            </div>
+            <div *ngIf="this.formulariostatus.necesitaAutorizacion==0">
+              <input autocomplete="off" type="number" class="w-50 form-control form-control-sm" formControlName="CostoKilometraje" placeholder="Ingresa el costo" min="0" readonly />
+            </div>
+
+            <span class="spanleft">&nbsp;&nbsp;&nbsp;&nbsp;USD</span>
+            <span class="alert alert-danger" *ngIf="!genericForm.controls.CostoKilometraje.valid && genericForm.controls.CostoKilometraje.touched">
+              Este campo es requerido
+            </span>
+          </label>
+        </div>
+        <div [hidden]="!(this.genericForm.controls.TipoRevision.value == 'domicilio' && this.formulariostatus.necesitaAutorizacion == 1)" class="col-sm-2">
+          Se enviará solicitud de autorización a HP.
+        </div>
+
+      </div>
+    </div>
+
+
+    <!--REFACCIONES -->
+    <div [hidden]="!(this.genericForm.controls.TipoCaso.value == 'Refacciones')" class="col-12">
+      <div class="row">
+        <div class="col-12 pt-3">
+          <h3>Refacciones</h3>
+          <p>Registra las refacciones necesarias.</p>
+        </div>
+        <div class="col-sm-4">
+          <label>
+            <select class="form-control form-control-sm" formControlName="Refaccion" (change)="changeRefaccion()">
+              <option value="" hidden="">Seleccionar refacción</option>
+              <option value="Refaccion 1">Refaccion 1</option>
+              <option value="Refaccion 2">Refaccion 2</option>
+              <option value="Refaccion 3">Refaccion 3</option>
+            </select>
+
+          </label>
+        </div>
+        <div class="col-sm-4">
+          <label>
+            <input autocomplete="off" type="text" class="form-control form-control-sm" formControlName="NoParte" placeholder="No. Parte" maxlength="18" />
+            <span class="alert alert-danger" *ngIf="!this.status.agregaRefaccionValid">
+              Por favor selecciona una refacción y escribe No.de Parte antes de continuar
+            </span>
+          </label>
+        </div>
+        <div class="col-sm-4">
+          <button type="button" class="btn btn-sm" (click)="agregarRefaccion()"><i class="fa fa-plus-circle"></i> Agregar Refacción</button>
+        </div>
+
+      </div>
+
+      <!--tabla-->
+      <div class="row my-5" *ngIf="_global.refacciones[0]">
+        <div class="col-12 mb-5">
+
+          <table>
+            <tr>
+              <th>Refacción</th>
+              <th>No. de parte</th>
+              <th>Diagrama</th>
+              <th>Existencia</th>
+              <th>Cantidad</th>
+              <th>Costo Unitario</th>
+              <th>Costo Total</th>
+              <th>Cotizaciones</th>
+              <th>Status</th>
+              <th>Eliminar</th>
+            </tr>
+
+            <tr *ngFor="let item of _global.refacciones; let i = index">
+
+              <td>
+                {{item.NombreRefaccion}}
+              </td>
+
+              <td>
+                {{item.NoParte}}
+              </td>
+              <td>
+                <a class="btndiagrama" href="#"><i class="fa fa-file"></i></a>
+              </td>
+              <td>
+                <select class="form-control form-control-sm existencia" (change)="changeExistencia(i, $event.target.value)">
+                  <option value="" hidden>Seleccionar</option>
+                  <option value="Disponible">Disponible</option>
+                  <option value="No Disponible">No Disponible</option>
+                  <option value="No Encontrada">No Encontrada</option>
+                </select>
+              </td>
+              <td>
+                <div>
+                  <input  type="number" class="form-control form-control-sm cantidad text-center" (keyup)="changeCantidad(i, $event.target.value)" (change)="changeCantidad(i, $event.target.value)" />
+                </div>
+              </td>
+              <td>
+                <div *ngIf="item.Existencia == 'Disponible'">
+                  <span class="spanleft">$</span> <input type="text" class="spanleft form-control form-control-sm costo" (keyup)="changeCosto(i, $event.target.value)" (change)="changeCosto(i, $event.target.value)" value="{{_global.refacciones[i].CostoUnitario}}" />
+                </div>
+                <div *ngIf="item.Existencia == 'No Disponible' || item.Existencia == 'No Encontrada'">
+                  <span class="spanleft">$</span> <input type="text" class="spanleft form-control form-control-sm costo" (keyup)="changeCosto(i, $event.target.value)" (change)="changeCosto(i, $event.target.value)"  value="{{_global.refacciones[i].CostoUnitario}}" readonly />
+                </div>
+              </td>
+              <td>
+                <div *ngIf="item.Existencia != ''">
+                  <span class="spanleft">$</span><input  type="text" class="form-control form-control-sm costototal spanleft" value="{{_global.refacciones[i].CostoTotal}}" readonly />
+                </div>
+              </td>
+              <td>
+                <div *ngIf="item.Existencia == 'Disponible'">
+                  No Aplica
+                </div>
+
+                <div *ngIf="item.Existencia == 'No Disponible' && _global.refacciones[i].Status == 'Por definir'">
+                  <button type="button" class="btn btn-sm" (click)="cotizar(i)">Cotizar</button>
+                </div>
+                <div *ngIf="item.Existencia == 'No Encontrada' && _global.refacciones[i].Status == 'Por definir'">
+                  <button type="button" class="btn btn-sm" (click)="solicitar(i)">Solicitar a HP</button>
+                </div>
+
+                <div *ngIf="item.Existencia == 'No Disponible' && (_global.refacciones[i].Status == 'Por enviar' || _global.refacciones[i].Status == 'En revisión')">
+                  {{_global.refacciones[i].StatusCotizacion}}
+                </div>
+                <div *ngIf="item.Existencia == 'No Encontrada' && (_global.refacciones[i].Status == 'Por enviar' || _global.refacciones[i].Status == 'En revisión')">
+                  {{_global.refacciones[i].StatusCotizacion}}
+                </div>
+              </td>
+              <td>
+
+                <div>
+                  {{_global.refacciones[i].Status}}
+                </div>
+
+
+              </td>
+              <td>
+                <a class="btneliminar" (click)="eliminarRefaccion(i)"><i class="fa fa-trash"></i></a>
+              </td>
+            </tr>
+
+          </table>
+
+        </div>
+      </div><!--termina REFACCIONES -->
+
+
+
+    </div>
   </form>
 
 </div>

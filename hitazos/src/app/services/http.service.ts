@@ -149,6 +149,31 @@ export class HTTPService {
 
     }
 
+    postFormDataMenaje(params: any, url: string) {
+
+        const fd = new FormData();
+
+        var json = JSON.stringify(params);
+        fd.append('json', json);
+
+        for (var i = 0; i < params["AdjuntosFacturasNotasCompraSize"]; i++) {
+            fd.append('AdjuntosFacturasNotasCompra'+i, params["AdjuntosFacturasNotasCompra"].currentFiles[i], params["AdjuntosFacturasNotasCompra"].currentFiles[i].name);
+            /*console.log('AdjuntosFacturasNotasCompra' + i);
+            console.log(params["AdjuntosFacturasNotasCompra"].currentFiles[i].name)*/
+        }
+        for (var i = 0; i < params["AdjuntosFotosProductoSize"]; i++) {
+            fd.append('AdjuntosFotosProducto' + i, params["AdjuntosFotosProducto"].currentFiles[i], params["AdjuntosFotosProducto"].currentFiles[i].name);
+            //console.log('AdjuntosFotosModeloSerie' + i);
+            //console.log(params["AdjuntosFotosModeloSerie"].currentFiles[i].name)
+        }
+
+        console.log(this.base + url);
+
+        return this._http.post(this.base + url, fd)
+            .map(res => res.json())
+
+    }
+
     postFormDataCotizaciones(params: any, url: string) {
 
         console.log('servicio');

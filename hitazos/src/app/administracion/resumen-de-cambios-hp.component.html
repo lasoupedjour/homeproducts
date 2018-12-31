@@ -45,14 +45,18 @@
       PAIS: {{this._global.user.Pais}}<br>
       </div>
 
-      <div class="col-4">
+      <div class="col-3">
         DIRECCIÓN: {{this._global.user.Direccion}}<br>
         TELÉFONOS: {{this._global.user.Telefono1}} {{this._global.user.Telefono2}} {{this._global.user.Telefono3}}<br>
         RED: {{this._global.user.Red}}<br>
       </div>
 
 
-      <div class="col-3 fM3">
+      <div class="col-4 fM3">
+        <h5>Garantia de Partes: <strong>{{this.GarantiaDePartes|currency}} USD</strong></h5>
+        <h5>Garantia de M.O. & Kms: <strong>{{this.GarantiaMOyKms|currency}} USD</strong></h5>
+        <h5>Reembolso Garantia FEE : <strong>{{this.ReembolsoGarantiaFee|currency}} USD</strong></h5>
+        <h5>Garantia de Cambios y Reemplazo: <strong>{{this.GarantiaDeCambios|currency}} USD</strong></h5>
         <h5>Monto Total: <strong>{{montoTotal|currency}} USD</strong></h5>
         <!--div class="row">
           <div class="col-12">
