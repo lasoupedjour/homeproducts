@@ -97,9 +97,7 @@ export class ResumenOrdenComponent {
         });
 
         this.distribuidorCambioFisicoForm = this.formBuilder.group({
-            FechaEntregaCambio: ['',
-                Validators.required
-            ],
+            FechaEntregaCambio: [''],
             CostoLanded: [this._global.reporte.objreporte.CostoLanded, Validators.required],
             OtroCostoDistribuidor: [''],
         });
@@ -134,7 +132,7 @@ export class ResumenOrdenComponent {
 
         if(
             this._global.reporte.objreporte.StatusCambioFisico=='Aprobado' &&
-            this._global.reporte.objreporte.StatusCostoLanded=='Aprobado' && !this._global.esDistribuidor()){
+            this._global.reporte.objreporte.SubStatusReporte=='Abierto' && !this._global.esDistribuidor()){
               this.editarReciclaje = true;
             }
 
@@ -453,7 +451,7 @@ export class ResumenOrdenComponent {
       console.log("submit distribuidor cambio físico");
       console.log(this.distribuidorCambioFisicoForm.valid);
 
-      if (this.distribuidorCambioFisicoForm.valid) {
+      if (this.distribuidorCambioFisicoForm.controls.CostoLanded.value>0) {
         this._global.clearMessages();
 
         var params = {};
@@ -546,8 +544,7 @@ export class ResumenOrdenComponent {
               this.genericForm.reset();
               this.formulariostatus.success = 2;
 
-              swal("Notificación Enviada","Se ha enviado una notificación al CDS informando sobre el status de la orden de servicio.", "success");
-
+              swal("Resolución registrada","Se ha registrado correctamente la resolución de la orden de servicio.", "success");
 
             } else if (data.res == 'error') {
                 this._global.appstatus.mensaje = data.error;

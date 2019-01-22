@@ -13,9 +13,9 @@
       <a routerLink="/administracion/inicio/" *ngIf="_global.user.nivel == 'administrador'">Resumen de Servicios</a>
       <a routerLink="/administracion/resumen-de-servicios/" *ngIf="_global.user.IDMaster == '0' && _global.user.nivel == 'operador'">Resumen de Servicios</a>
     </div>
-    <div class="col-sm-2 text-center" *ngIf="this._global.user.nivel!='distribuidor'">
+    <div class="col-sm-2 text-center" *ngIf="this._global.user.nivel=='administrador'">
       <a routerLink="/administracion/resumen-de-cambios-hp/" *ngIf="_global.user.nivel == 'administrador'">Resumen de Cambios</a>
-      <a routerLink="/administracion/resumen-de-cambios/" *ngIf="_global.user.IDMaster == '0' && _global.user.nivel == 'operador'">Resumen de Cambios</a>
+      <!--a routerLink="/administracion/resumen-de-cambios/" *ngIf="_global.user.IDMaster == '0' && _global.user.nivel == 'operador'">Resumen de Cambios</a-->
     </div>
     <div class="col-sm-2 text-center active" *ngIf="this._global.user.nivel!='distribuidor'">
       <a routerLink="/administracion/historial-de-pagos/">Resumen de Pagos</a>
@@ -43,14 +43,16 @@
         <i class="fa fa-building fa-2x"></i>
       </div>
       <div class="col-4 fM">
-      {{this._global.user.NombreCentro}}<br>
-      PAIS: {{this._global.user.Pais}}<br>
+        {{this._global.user.NombreCentro}}<br>
+        PAIS: {{this._global.user.Pais}}<br>
       </div>
 
       <div class="col-4">
-        DIRECCIÓN: {{this._global.user.Direccion}}<br>
-        TELÉFONOS: {{this._global.user.Telefono1}} {{this._global.user.Telefono2}} {{this._global.user.Telefono3}}<br>
-        RED: {{this._global.user.Red}}<br>
+        <span *ngIf="_global.user.nivel=='administrador'">
+          DIRECCIÓN: {{this._global.user.Direccion}}<br>
+          TELÉFONOS: {{this._global.user.Telefono1}} {{this._global.user.Telefono2}} {{this._global.user.Telefono3}}<br>
+          RED: {{this._global.user.Red}}<br>
+        </span>
       </div>
 
       <div class="col-3 fM3">
@@ -133,12 +135,15 @@
            <thead>
            <tr>
              <th>#</th>
+             <th *ngIf="_global.user.nivel=='administrador'">Cds o Distribuidor</th>
              <th>Mes</th>
              <th>Categoría</th>
              <th *ngIf="_global.user.nivel!='distribuidor'">Garantia de Partes</th>
              <th *ngIf="_global.user.nivel!='distribuidor'">Garantia de M.O. & Kms</th>
              <th *ngIf="_global.user.nivel!='distribuidor'">Reembolso Garantia FEE </th>
-             <th>Garantia de Cambios y Reemplazo</th>
+             <th *ngIf="_global.user.nivel!='distribuidor'">Garantia de Perdidas y Daños </th>
+             <th *ngIf="_global.user.nivel=='distribuidor' || _global.user.nivel=='administrador'">Garantia de Cambios y Reemplazo</th>
+             <th *ngIf="_global.user.nivel!='distribuidor'">Impuesto</th>
              <th *ngIf="_global.user.nivel!='distribuidor'">Monto USD</th>
              <th>Status</th>
              <th>Comprobante</th>
@@ -148,6 +153,7 @@
              <tr>
                <td></td>
                <td></td>
+               <td *ngIf="_global.user.nivel=='administrador'"></td>
                <td></td>
                <td *ngIf="_global.user.nivel!='distribuidor'">
                  Cta # 7210000026
@@ -155,19 +161,23 @@
                <td *ngIf="_global.user.nivel!='distribuidor'">
                  Cta # 7210000027
                </td>
+               <td *ngIf="_global.user.nivel=='distribuidor' || _global.user.nivel=='administrador'">Cta # 7210000028</td>
+               <td *ngIf="_global.user.nivel!='distribuidor'">Cta # 7210000029</td>
                <td *ngIf="_global.user.nivel!='distribuidor'">
                  Cta # 7210000030
-               </td>
-               <td>
-                  Cta # 7210000028
                </td>
                <td *ngIf="_global.user.nivel!='distribuidor'"></td>
                <td></td>
                <td></td>
+               <td *ngIf="_global.user.nivel!='distribuidor'"></td>
              </tr>
            <tr *ngFor="let item of _global.pagos.objpagos;">
              <td>
                {{item.detalle.id}}
+             </td>
+             <td *ngIf="_global.user.nivel=='administrador'">
+               <span *ngIf="item.detalle.Nombre!=''">{{item.detalle.Nombre}}</span>
+               <span *ngIf="item.detalle.RazonSocial!=''">{{item.detalle.RazonSocial}}</span>
              </td>
              <td>
                {{item.detalle.Mes}} {{item.detalle.Ano}}
@@ -182,10 +192,18 @@
                {{item.detalle.GarantiaMOyKms | currency}}
              </td>
              <td *ngIf="_global.user.nivel!='distribuidor'">
+               {{item.detalle.GarantiaDeCambios | currency}}
+             </td>
+             <td *ngIf="_global.user.nivel!='operador'">
+               <span *ngIf="item.detalle.IDDistribuidor==''">{{0 | currency}}</span>
+               <span *ngIf="item.detalle.IDDistribuidor!=''">{{item.detalle.GarantiaDeCambios | currency}}</span>
+             </td>
+             <td *ngIf="_global.user.nivel!='distribuidor'">
                {{item.detalle.ReembolsoGarantiaFee | currency}}
              </td>
-             <td>
-               {{item.detalle.GarantiaDeCambios | currency}}
+
+             <td *ngIf="_global.user.nivel!='distribuidor'">
+               {{item.detalle.IVA | currency}}
              </td>
              <td *ngIf="_global.user.nivel!='distribuidor'">
                {{item.detalle.MontoTotal | currency}}

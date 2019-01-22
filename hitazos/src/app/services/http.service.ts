@@ -121,6 +121,12 @@ export class HTTPService {
             //console.log(params["AdjuntosOtros"].currentFiles[i].name)
         }
 
+        for (var i = 0; i < params["AdjuntosReciclajeSize"]; i++) {
+            fd.append('AdjuntosReciclaje' + i, params["AdjuntosReciclaje"].currentFiles[i], params["AdjuntosReciclaje"].currentFiles[i].name);
+            //console.log('AdjuntosOtros' + i);
+            //console.log(params["AdjuntosOtros"].currentFiles[i].name)
+        }
+
 
         console.log(this.base + url);
 

@@ -58,6 +58,11 @@ if($nivel=='administrador'){
             join
             (select IDDistribuidor from distribuidores where id=$IDDistribuidor) as d
             on r.Distribuidor = d.IDDistribuidor
+            Where modulo not like '%cambio-fisico%' and modulo<>'/registro-caso-menaje-reparacion-a-centro'
+            and modulo<>'/registro-caso-menaje-reparacion'
+            and (descripcion not like '%Movilización del repot%')
+            and (descripcion not like '%La movilización del report%')
+            and r.IDDistribuidor=$id_usuario
             group by id
             order by id desc
             ";

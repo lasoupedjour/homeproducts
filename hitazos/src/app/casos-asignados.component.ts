@@ -12,8 +12,8 @@ import { ISubscription } from "rxjs/Subscription";
 var dt = require('datatables.net');
 var buttons = require('datatables.net-buttons');
 var buttonscv = require('datatables.net-buttons/js/buttons.colVis.js');
-var buttonshtml5 = require('datatables.net-buttons/js/buttons.html5.js'); 
-var buttonsflash = require('datatables.net-buttons/js/buttons.flash.js'); 
+var buttonshtml5 = require('datatables.net-buttons/js/buttons.html5.js');
+var buttonsflash = require('datatables.net-buttons/js/buttons.flash.js');
 var buttonsprint = require('datatables.net-buttons/js/buttons.print.js'); */
 
 
@@ -54,14 +54,14 @@ export class CasosAsignadosComponent {
             AMaterno: [''],
             RazonSocial: [''],
             Email: [''],
- 
-            
+
+
         });
 
 
         this.nuevosCasosAsignados();
-        
-        
+
+
 
     }
 
@@ -73,7 +73,7 @@ export class CasosAsignadosComponent {
             data: this._global.casosAsignados.recientes
         });*/
 
-        
+
     }
     ngOnDestroy() {
         console.log('destroy');
@@ -107,7 +107,7 @@ export class CasosAsignadosComponent {
                 if (data.res == 'ok') {
 
                     this._global.casosAsignados.recientes = this._global.parseJSON(data.reportes);
-                    console.log('casos');
+                    console.log('casos asignados');
                     console.log(this._global.casosAsignados.recientes);
 
                     if (data.reportes.length == 0) {
@@ -178,7 +178,7 @@ export class CasosAsignadosComponent {
     nuevosClientes() {
 
         var params = {};
-        
+
         this._global.appstatus.loading = true;
 
         this._httpService.postJSON(params, 'inicio/nuevos-clientes.php')
@@ -267,9 +267,9 @@ export class CasosAsignadosComponent {
 
                     if (data.res == 'ok') {
 
-                        
+
                         this._global.busqueda.clientes = this._global.parseJSON(data.clientes);
-                        
+
 
                         console.log(this._global.busqueda.clientes);
 
@@ -311,5 +311,3 @@ export class CasosAsignadosComponent {
     }
 
 }
-
-

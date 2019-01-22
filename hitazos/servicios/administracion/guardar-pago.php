@@ -42,26 +42,55 @@ if($arre['IDDistribuidor']!="")
 
 if($arre['IDMaster']!="")
 	$IDMaster = $arre['IDMaster'];
+
+$GarantiaDePartes = 0;
+$GarantiaMOyKms = 0;
+$GarantiaDeCambios = 0;
+$ReembolsoGarantiaFee = 0;
+$MontoTotal = 0;
+$IVA = 0;
+
+if($arre['GarantiaDePartes']!="")
+  $GarantiaDePartes = $arre['GarantiaDePartes'];
+
+if($arre['GarantiaMOyKms']!="")
+$GarantiaMOyKms = $arre['GarantiaMOyKms'];
+
+if($arre['GarantiaDeCambios']!="")
+  $GarantiaDeCambios = $arre['GarantiaDeCambios'];
+
+if($arre['ReembolsoGarantiaFee']!="")
+  $ReembolsoGarantiaFee = $arre['ReembolsoGarantiaFee'];
+
+if($arre['MontoTotal']!="")
+  $MontoTotal = $arre['MontoTotal'];
+
+if($arre['MontoIVA']!="")
+  $IVA = $arre['MontoIVA'];
+
+if($IDDistribuidor>0)
+  $GarantiaDeCambios = $MontoTotal;
 //insertar
 if ($stmt = $mysqli->prepare("
 
-insert into pagos(IDMaster, IDCentro, IDOperadorAdmin, IDDistribuidor, Categoria, ODS, GarantiaDePartes, GarantiaMOyKms, GarantiaDeCambios, ReembolsoGarantiaFee, MontoTotal, StatusPago,Comprobante,FechaRegistro,Mes,Ano)
+insert into pagos(IDMaster, IDCentro, IDOperadorAdmin, IDDistribuidor, Categoria, ODS, GarantiaDePartes, GarantiaMOyKms, GarantiaDeCambios, ReembolsoGarantiaFee, IVA, MontoTotal, StatusPago,Comprobante,FechaRegistro,Mes,Ano)
 values
-(?,?,?,?,?,?,?,?,?,?,?,'Enviado','Pago sin realizar',now(),?,?)
+(?,?,?,?,?,?,?,?,?,?,?,?,'Enviado','Pago sin realizar',now(),?,?)
 
 ")) {
-	$stmt->bind_param("ddddssdddddss",
+	$stmt->bind_param("ddddssddddddss",
 	$IDMaster,
   $IDCentro,
   $IDOperadorAdmin,
 	$IDDistribuidor,
   $arre['Categoria'],
 	$arre['Ordenes'],
-  $arre['GarantiaDePartes'],
-  $arre['GarantiaMOyKms'],
-  $arre['GarantiaDeCambios'],
-  $arre['ReembolsoGarantiaFee'],
-  $arre['MontoTotal'],
+  $GarantiaDePartes,
+  $GarantiaMOyKms,
+  $GarantiaDeCambios,
+  $ReembolsoGarantiaFee,
+  $IVA,
+  $MontoTotal,
 	$arre['Mes'],
 	$arre['Ano']
 	);

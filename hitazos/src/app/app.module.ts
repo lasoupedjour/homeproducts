@@ -59,6 +59,9 @@ import { NuevasRefaccionesComponent } from './nuevas-refacciones.component';
 import { NuevasCotizacionesComponent } from './nuevas-cotizaciones.component';
 import { NuevasMovilizacionesComponent } from './nuevas-movilizaciones.component';
 
+import { NuevosCambiosFisicosDistComponent } from './nuevos-cambios-fisicos-dist.component';
+import { NuevosCambiosFisicosComponent } from './nuevos-cambios-fisicos.component';
+
 import { HttpModule } from '@angular/http';
 import { HTTPService } from './services/http.service';
 import { GlobalService } from './services/global.service';
@@ -125,6 +128,8 @@ import 'datatables.net-fixedheader';
         NuevasRefaccionesComponent,
         NuevasCotizacionesComponent,
         NuevasMovilizacionesComponent,
+        NuevosCambiosFisicosDistComponent,
+        NuevosCambiosFisicosComponent,
 
   ],
   imports: [

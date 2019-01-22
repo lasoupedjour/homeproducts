@@ -92,7 +92,7 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
   left join
   (select * from centros) as centros
   on reportes.IDCentro = centros.id
-  Where (StatusReporte <> 'Orden de Servicio' and StatusReporte <> 'Cerrado') 
+  Where (StatusReporte <> 'Orden de Servicio' and StatusReporte <> 'Cerrado')
   :filtroCds
   order by FechaRegistroReporte desc LIMIT 5;
   ";

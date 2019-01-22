@@ -105,8 +105,7 @@ export class ResumenDeCambiosHPComponent {
             Ano: [],
             Mes: [],
             Pais: [this._global.user.Pais],
-            Master: [''],
-            Cds: [''],
+            Distribuidor: [''],
             Categoria: ['']
         });
 
@@ -129,21 +128,20 @@ export class ResumenDeCambiosHPComponent {
         //console.log(this.filterForm.controls.Pais.value);
         var params = {};
         params['Pais'] = this.filterForm.controls.Pais.value;
-        params['IDCentro'] = this._global.user.IDCentro;
         params['Nivel'] = this._global.user.nivel;
         params['IDMaster'] = this._global.user.IDMaster;
         params['IDGrupoTarifa'] = this._global.user.IDGrupoTarifa;
 
         this._global.appstatus.loading = true;
 
-        this._httpService.postHTML(params, 'administracion/listarmaster.php')
+        this._httpService.postHTML(params, 'administracion/listardist.php')
             .subscribe(
             data => {
-                console.log('data cds');
+                console.log('data dist');
                 console.log(data);
 
                 this._global.appstatus.loading = false;
-                document.getElementById('master').innerHTML = data;
+                document.getElementById('distribuidor').innerHTML = data;
                 //console.log("fichas");
                 //console.log(this.props.fichas);
             },
@@ -248,74 +246,60 @@ export class ResumenDeCambiosHPComponent {
     }
 
     filtrarReporte() {
-        var centro = this.filterForm.controls.Cds.value;
+      var params = {};
+      params['CustomerID'] = this.filterForm.controls.Distribuidor.value;
+      params['mes']   = this.filterForm.controls.Mes.value;
+      params['ano']   = this.filterForm.controls.Ano.value;
+      params['categoria']   = this.filterForm.controls.Categoria.value;
 
-        if(centro!="" ){
-          var params = {};
-          params['master']   = this.filterForm.controls.Master.value;
-          params['cds']   = this.filterForm.controls.Cds.value;
-          params['mes']   = this.filterForm.controls.Mes.value;
-          params['ano']   = this.filterForm.controls.Ano.value;
-          params['categoria']   = this.filterForm.controls.Categoria.value;
+      this._global.appstatus.loading = true;
 
-          this._global.appstatus.loading = true;
+      this.subscription = this._httpService.postJSON(params, 'administracion/filtrar-resumen-de-cambios-dist.php')
+          .subscribe(
+          data => {
+              console.log('data');
+              console.log(data);
+              this._global.appstatus.loading = false;
 
-          this.subscription = this._httpService.postJSON(params, 'administracion/filtrar-resumen-de-cambios.php')
-              .subscribe(
-              data => {
-                  console.log('data');
-                  console.log(data);
-                  this._global.appstatus.loading = false;
-
-                  if (data.res == 'ok') {
+              if (data.res == 'ok') {
 
 
-                      this._global.ordenesServicio.recientes = this._global.parseJSON(data.reportes);
+                  this._global.ordenesServicio.recientes = this._global.parseJSON(data.reportes);
 
-                      this._global.separaFechaOrdenServicio();
+                  this._global.separaFechaOrdenServicio();
 
-                      this.calculaMontoTotal();
+                  this.calculaMontoTotal();
 
-                      try { this.statusPago = JSON.parse(data.statuspago).StatusPago; } catch (e) {
-                          this.statusPago = 'Por Enviar';
-                      }
-                      console.log('status pago');
-                      console.log(this.statusPago);
-                      /*console.log(this._global.busqueda.clientes);
-
-                      if (data.clientes.length == 0) {
-                          this._global.appstatus.mensaje = 'No se encontraron clientes con estos datos.';
-                      }*/
-
-
-                      setTimeout(() => {
-                          //this.trigger.destroy();
-                          this.trigger.next();
-                          this.rerender();
-                      });
-
-                  } else if (data.res = 'error') {
-                      this._global.appstatus.mensaje = data.error;
+                  try { this.statusPago = JSON.parse(data.statuspago).StatusPago; } catch (e) {
+                      this.statusPago = 'Por Enviar';
                   }
+                  console.log('status pago');
+                  console.log(this.statusPago);
+                  /*console.log(this._global.busqueda.clientes);
 
-                  //console.log('data ordenes..', this._global.ordenesServicio.recientes.master);
-
-                  //console.log("fichas");
-                  //console.log(this.props.fichas);
-              },
-              error => console.log(error),
-              () => console.log('termino submit')
-              );
-        }else{
-          swal({
-              title: 'CDs requerido',
-              text: 'Favor de seleccionar el CDs',
-              type: 'error',
-              customClass: 'swal2-overflow',
-          });
-        }
+                  if (data.clientes.length == 0) {
+                      this._global.appstatus.mensaje = 'No se encontraron clientes con estos datos.';
+                  }*/
 
 
+                  setTimeout(() => {
+                      //this.trigger.destroy();
+                      this.trigger.next();
+                      this.rerender();
+                  });
+
+              } else if (data.res = 'error') {
+                  this._global.appstatus.mensaje = data.error;
+              }
+
+              //console.log('data ordenes..', this._global.ordenesServicio.recientes.master);
+
+              //console.log("fichas");
+              //console.log(this.props.fichas);
+          },
+          error => console.log(error),
+          () => console.log('termino submit')
+          );
     }
 
     traeOrdenes() {
@@ -381,58 +365,13 @@ export class ResumenDeCambiosHPComponent {
 
         console.log(ordenes);
         var outer = this;
-        var MontoTotal=0;
-        var MontoFee=0;
-        var MontoImpuestoFee=0;
-        var ValorImpuesto=0;
-        var TotalFee=0;
-        var MontoFee=0;
-        var MontoRefacciones=0;
-        var MontoTAMov=0;
-        var MontoCambio=0;
-        var MontoDespiece=0;
-        var MontoOtro=0;
-        var MontoReciclaje=0;
-
         ordenes.forEach(function (e) {
             //console.log('orden');
-            console.log("el valor de e>>>>>>", e);
-            //outer.montoTotal += parseFloat(String(e.MontoTotal));
-            //
-            MontoFee += parseFloat(String(e.TarifaMensual));
-            MontoImpuestoFee = MontoImpuestoFee + parseFloat(String(e.ImpuestoTarifaMensual));
-            ValorImpuesto = MontoFee * MontoImpuestoFee;
-            TotalFee = TotalFee + (MontoFee + ValorImpuesto);
-
-            MontoRefacciones +=  parseFloat(String(e.MontoRefacciones));
-            MontoTAMov += parseFloat(String(e.MontoReparacion)) + parseFloat(String(e.MontoMovilizacion));
-            MontoDespiece =  parseFloat(String(e.MontoDespiece));
-            MontoReciclaje =  parseFloat(String(e.MontoReciclaje));
-            MontoOtro =  parseFloat(String(e.MontoOtro));
-
-            MontoCambio = MontoCambio + (MontoDespiece + MontoReciclaje + MontoOtro);
+            //console.log(e);
+            outer.montoTotal += parseFloat(String(e.CostoLanded)) + parseFloat(String(e.OtroCostoDistribuidor));
         });
 
-        console.log("MontoFee", MontoFee);
-        console.log("MontoImpuestoFee", MontoImpuestoFee);
-        console.log("ValorImpuesto", ValorImpuesto);
-        console.log("TotalFee", TotalFee);
-        console.log("MontoRefacciones", MontoRefacciones);
-        console.log("MontoTAMov", MontoTAMov);
-        console.log("MontoDespiece", MontoDespiece);
-        console.log("MontoReciclaje", MontoReciclaje);
-        console.log("MontoOtro", MontoOtro);
-        console.log("MontoCambio", MontoCambio);
-
-        this.GarantiaDePartes = MontoRefacciones;
-        this.GarantiaMOyKms = MontoTAMov;
-        this.GarantiaDeCambios = MontoCambio;
-        this.ReembolsoGarantiaFee = TotalFee;
-
-        MontoTotal = MontoRefacciones + MontoTAMov + TotalFee + MontoCambio;
-        console.log("MontoTotal", MontoTotal);
-
-        this.montoTotal = parseFloat(MontoTotal.toFixed(2));
+        this.montoTotal = parseFloat(this.montoTotal.toFixed(2));
 
 
     }

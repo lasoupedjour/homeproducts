@@ -207,7 +207,7 @@
     </div>
 
     <!--COSTOS DE REPARACIÓN-->
-    <div class="row mt-2">
+    <div class="row mt-2" *ngIf="_global.user.nivel!='distribuidor'">
       <div class="col-sm-12 my-3">
         <h4 class="mt-3 naranja"><b>Costos de Refacciones</b></h4>
         <hr />
@@ -215,7 +215,7 @@
     </div>
 
     <!--REFACCIONES -->
-    <div class="row mt-2">
+    <div class="row mt-2" *ngIf="_global.user.nivel!='distribuidor'">
       <div class="col-12">
         <div class="sform mb-3">9. Partes utilizadas</div>
 
@@ -269,7 +269,7 @@
 
     </div>
 
-    <div class="row">
+    <div class="row" [hidden]="this._global.user.nivel=='distribuidor'">
       <div class="col-sm-4">
         <div class="sform mb-3">10. Tarifa</div>
         <div *ngIf="this._global.reporte.objreporte.TipoRevision=='domicilio'">
@@ -317,7 +317,7 @@
               Este campo es requerido
             </div>
           </div>
-          <div class="vform"><div class="vformleft aright">Otro Costo (Descripción): </div> <div class="vformright"> &nbsp;&nbsp;<input type="text" class="form-control-static" formControlName="MontoOtroDescripcion" maxlength="250"  [ngModel]="this._global.reporte.objreporte.MontoOtroDescripcion" /></div>
+          <div class="vform"><div class="vformleft aright">Otro Costo (Descripción): </div> <div class="vformright"> &nbsp;&nbsp;<input type="text" class="form-control-static maxUSD" formControlName="MontoOtroDescripcion" maxlength="250"  [ngModel]="this._global.reporte.objreporte.MontoOtroDescripcion" /></div>
             <div class="alert alert-danger" *ngIf="!genericForm.controls.MontoOtroDescripcion.valid && genericForm.controls.MontoOtroDescripcion.touched">
               Este campo es requerido
             </div>
@@ -338,7 +338,7 @@
         <div class="vform"><div class="vformleft aright">Despiece: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoDespiece"  [ngModel]="MontoDespiece" (change)="changeMontoOtro()" />&nbsp;USD</div></div>
         <div class="vform"><div class="vformleft aright">Reciclaje: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoReciclaje"  [ngModel]="MontoReciclaje" (change)="changeMontoOtro()" />&nbsp;USD</div></div>
         <div class="vform"><div class="vformleft aright">Otro Costo: </div> <div class="vformright"> $<input type="text" min="0" class="form-control-static" formControlName="MontoOtro"  [ngModel]="MontoOtro" (change)="changeMontoOtro()" />&nbsp;USD</div></div>
-        <div class="vform"><div class="vformleft aright">Otro Costo (Descripción): </div> <div class="vformright"> &nbsp;&nbsp;<input type="text" class="form-control-static" formControlName="MontoOtroDescripcion" maxlength="250"  [ngModel]="this._global.reporte.objreporte.MontoOtroDescripcion" /></div>
+        <div class="vform"><div class="vformleft aright">Otro Costo (Descripción): </div> <div class="vformright"> &nbsp;&nbsp;<input type="text" class="form-control-static maxUSD" formControlName="MontoOtroDescripcion" maxlength="250" [ngModel]="this._global.reporte.objreporte.MontoOtroDescripcion" /></div>
           <div class="alert alert-danger" *ngIf="!genericForm.controls.MontoOtroDescripcion.valid && genericForm.controls.MontoOtroDescripcion.touched">
             Este campo es requerido
           </div>
@@ -395,7 +395,7 @@
       <div class="col-sm-4 mb-5" *ngIf="(_global.AdjuntosFacturasRepuestosArre>0)">
         <div class="row">
           <div class="col-4 text-right">
-            <div class="sform mb-3">13. <i>Facturas de repuestos</i> utilizados5555555:</div>
+            <div class="sform mb-3">13. <i>Facturas de repuestos</i> utilizados:</div>
           </div>
           <div class="col-8">
             <div class="row">
@@ -497,8 +497,27 @@
           </div>
         </div>
       </div>
-
     </div><!--termina Archivos Adjuntos-->
+    <div class="row" *ngIf="_global.reporte.objreporte.RequiereRecoleccion==1">
+      <div class="col-sm-4 mb-5">
+        <div class="row">
+          <div class="col-4 text-right">
+            <div class="sform mb-3">13. <i>Comprobante reciclaje</i>:</div>
+          </div>
+          <div class="col-8">
+            <div class="row">
+              <div class="col-12 mb-1">
+                <ng2-file-input (onAction)="onActionAdjuntosReciclaje($event)"></ng2-file-input>
+                <span class="alert alert-danger" *ngIf="this.onActionAdjuntosReciclajeLenght==0 && this.adjuntosValidos==false">
+                  Este campo es requerido
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
     <!--HP-->
     <!--div class="row">
       <div class="col-sm-12 my-3 mt-5 grayed">

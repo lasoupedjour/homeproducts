@@ -80,7 +80,7 @@
 
       <div class="col-sm-4">
         <div class="px-4">
-          <div class="sform">3. Tipo Reclamo9:</div>
+          <div class="sform">3. Tipo Reclamo:</div>
           <div class="vform">{{this._global.reporte.objreporte.TipoReclamoDiagnostico}} </div>
         </div>
       </div>
@@ -177,7 +177,7 @@
     </div>
 
     <!--COSTOS DE REPARACIÓN-->
-    <div class="row mt-2">
+    <div class="row mt-2" *ngIf="_global.user.nivel!='distribuidor'">
       <div class="col-sm-12 my-3">
         <h4 class="mt-3 naranja"><b>Costos de Refacciones</b></h4>
         <hr />
@@ -185,7 +185,7 @@
     </div>
 
     <!--REFACCIONES -->
-    <div class="row mt-2">
+    <div class="row mt-2" *ngIf="_global.user.nivel!='distribuidor'">
       <div class="col-12">
         <div class="sform mb-3">9. Partes utilizadas</div>
 
@@ -238,8 +238,8 @@
       <!--termina REFACCIONES -->
 
     </div>
-
-  <div class="row" [hidden]="this._global.reporte.objreporte.TipoReclamoDiagnostico=='Cambio' && this._global.user.nivel=='distribuidor'">
+    <!--this._global.reporte.objreporte.TipoReclamoDiagnostico=='Cambio' && this._global.user.nivel!='distribuidor'-->
+  <div class="row" [hidden]="this._global.user.nivel=='distribuidor'">
     <div class="col-sm-4">
       <div class="ml-3">
         <div class="sform mb-3">10. Tarifa</div>
@@ -322,7 +322,7 @@
         </div>
       </div>
 
-      <div class="col-sm-4 mb-5" *ngIf="_global.AdjuntosFacturasNotasCompraArre[0]=='' && this._global.reporte.objreporte.Categoria!='MENAJE'">
+      <div class="col-sm-4 mb-5" *ngIf="_global.AdjuntosFacturasRepuestosArre[0]>0">
         <div class="row">
           <div class="col-4 text-right">
             <div class="sform mb-3">13. <i>Facturas de repuestos</i> utilizados:</div>
@@ -355,6 +355,22 @@
           </div>
         </div>
       </div>
+      <div class="col-sm-4 mb-5" *ngIf="_global.AdjuntosReciclajeArre[0]!='' && this._global.reporte.objreporte.RequiereRecoleccion=='1'">
+        <div class="row">
+          <div class="col-4 text-right">
+            <div class="sform mb-3">13. <i>Comprobante reciclaje</i>:</div>
+          </div>
+          <div class="col-8">
+            <div class="row">
+              <div class="col-12 mb-1 attachments">
+                <div class="prev" *ngFor="let item of _global.AdjuntosReciclajeArre; let i = index"  [innerHTML]="prevAttach(item)"></div>
+                <div *ngIf="!_global.AdjuntosReciclajeArre[0]">No hay</div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
 
 
     </div><!--termina Archivos Adjuntos-->
@@ -366,8 +382,23 @@
         <hr />
       </div>
     </div>
+    <div class="col-sm-4 mb-5" *ngIf="_global.AdjuntosReciclajeArre[0]!='' && this._global.reporte.objreporte.StatusCambioFisico=='Aprobado' && this._global.reporte.objreporte.SubStatusReporte=='Cerrado' && !this._global.esDistribuidor()">
+      <div class="row">
+        <div class="col-4 text-right">
+          <div class="sform mb-3">13. <i>Comprobante reciclaje</i>:</div>
+        </div>
+        <div class="col-8">
+          <div class="row">
+            <div class="col-12 mb-1 attachments">
+              <div class="prev" *ngFor="let item of _global.AdjuntosReciclajeArre; let i = index"  [innerHTML]="prevAttach(item)"></div>
+              <div *ngIf="!_global.AdjuntosReciclajeArre[0]">No hay</div>
+            </div>
+          </div>
 
-    <form class="formulario formularioRegistro my-3" name="formulariocambiofisico" [formGroup]="adjuntosCambioFisicoForm" (ngSubmit)="submitAdjuntosCambioFisico()" *ngIf="this._global.reporte.objreporte.StatusCambioFisico=='Aprobado' && this._global.reporte.objreporte.StatusCostoLanded=='Aprobado' && !this._global.esDistribuidor()">
+        </div>
+      </div>
+    </div>
+    <form class="formulario formularioRegistro my-3" name="formulariocambiofisico" [formGroup]="adjuntosCambioFisicoForm" (ngSubmit)="submitAdjuntosCambioFisico()" *ngIf="this._global.reporte.objreporte.StatusCambioFisico=='Aprobado' && this._global.reporte.objreporte.SubStatusReporte=='Abierto' && !this._global.esDistribuidor()">
     <div class="row" *ngIf="this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio'">
 
       <div class="col-sm-4 mb-5">
@@ -423,7 +454,7 @@
         <div class="vformright">
           <label class="">
             <span class="simbolo">$</span> <input class="form-control form-control-sm w-50" OnlyNumber="true" placeholder="Costo Landed" formControlName="CostoLanded" >&nbsp;USD
-            <span class="alert alert-danger" *ngIf="!distribuidorCambioFisicoForm.controls.CostoLanded.valid && distribuidorCambioFisicoForm.controls.CostoLanded.touched">
+            <span class="alert alert-danger" *ngIf="distribuidorCambioFisicoForm.controls.CostoLanded.value=='0' || distribuidorCambioFisicoForm.controls.CostoLanded.value==''">
               Este campo es requerido
             </span>
           </label>
@@ -465,9 +496,6 @@
             <button class="input-group-addon" (click)="d1.toggle()" type="button">
               <i class="fa fa-calendar"></i>
             </button>
-            <span class="alert alert-danger" *ngIf="!distribuidorCambioFisicoForm.controls.FechaEntregaCambio.valid && distribuidorCambioFisicoForm.controls.FechaEntregaCambio.touched">
-              Este campo es requerido
-            </span>
           </label>
         </div>
       </div>

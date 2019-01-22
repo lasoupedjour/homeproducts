@@ -20,7 +20,7 @@ $pwd = urldecode($arre['pwd']);
 $res = array();
 
 $q = mysql_query("
-select usuarios_admin.id, usuarios_admin.IDCentro, centros.IDMaster, usuarios_admin.nombre, usuarios_admin.nivel, centros.Nombre as NombreCentro, centros.Red, centros.Categoria, centros.Pais, centros.Ciudad, centros.Direccion, centros.Telefono1, centros.Telefono2, centros.Telefono3, centros.Email, centros.Horarios, centros.Responsable, centros.TelefonoResponsable, centros.IDGrupoTarifa
+select usuarios_admin.id, usuarios_admin.IDCentro, centros.IDMaster, usuarios_admin.nombre, usuarios_admin.nivel, centros.Nombre as NombreCentro, centros.Red, centros.Categoria, centros.Pais, centros.Ciudad, centros.Direccion, centros.Telefono1, centros.Telefono2, centros.Telefono3, centros.Email, centros.Horarios, centros.Responsable, centros.TelefonoResponsable, centros.IDGrupoTarifa, centros.ModoDePago
 from usuarios_admin, centros
 where
 usuario = '$usuario' and pwd = '$pwd'
@@ -56,10 +56,11 @@ if($num == 0){
   	$res['nivel'] = $nivel;
   	$res['Pais'] = $Pais;
   	$res['CustomerID'] = $CustomerID;
+    $res['MedioDePago'] = "";
   }
 }else if($num > 0){
 	$res['res'] = 'ok';
-	list($id, $IDCentro, $IDMaster, $nombre, $nivel, $NombreCentro, $Red, $Categoria, $Pais, $Ciudad, $Direccion, $Telefono1, $Telefono2, $Telefono3, $Email, $Horarios, $Responsable, $TelefonoResponsable, $IDGrupoTarifa) = mysql_fetch_row($q);
+	list($id, $IDCentro, $IDMaster, $nombre, $nivel, $NombreCentro, $Red, $Categoria, $Pais, $Ciudad, $Direccion, $Telefono1, $Telefono2, $Telefono3, $Email, $Horarios, $Responsable, $TelefonoResponsable, $IDGrupoTarifa, $MedioDePago) = mysql_fetch_row($q);
 	$res['id'] = $id;
 	$res['IDCentro'] = $IDCentro;
   $res['IDDistribuidor'] = 0;
@@ -80,6 +81,7 @@ if($num == 0){
 	$res['Responsable'] = $Responsable;
 	$res['TelefonoResponsable'] = $TelefonoResponsable;
 	$res['IDGrupoTarifa'] = $IDGrupoTarifa;
+  $res['MedioDePago'] = $MedioDePago;
 
 }
 $current_charset = 'ISO-8859-15';//or what it is now

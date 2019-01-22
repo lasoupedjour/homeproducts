@@ -15,15 +15,11 @@ array_walk_recursive($arre,function(&$value) use ($current_charset){
      $value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
 });
 
-
-
-
 $res = array();
 
 $res['res'] = 'ok';
 
-$q = mysql_query("
-SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
+$query = "SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
 FROM reportes, clientes, centros
 where clientes.id = reportes.IDCliente
 and centros.id = reportes.IDCentro
@@ -33,8 +29,14 @@ and StatusReporte = 'Orden de Servicio'
 and TipoReclamoDiagnostico = 'Cambio'
 and (CostoLanded = 0 or StatusCostoLanded='Rechazado')
 and StatusCambioFisico='Aprobado'
-order by FechaRegistroReporte desc LIMIT 5;
-") or die(mysql_error());
+order by FechaRegistroReporte desc :LIMIT;";
+
+if($arre["limit"]=="")
+  $query = str_replace(":LIMIT", "", $query);
+else
+  $query = str_replace(":LIMIT", "LIMIT 5", $query);
+
+$q = mysql_query($query) or die(mysql_error());
 
 $reportes = array();
 

@@ -399,6 +399,7 @@ if(!$arre['Update']){
 	if ($stmt = $mysqli->prepare("
 
 	update reportes set
+  IDDistribuidor = ?,
 	TipoCaso = ?,
 	Categoria = ?,
 	Subcategoria = ?,
@@ -423,9 +424,10 @@ if(!$arre['Update']){
 	where id = ?
 
 	")) {
-		$stmt->bind_param("ssssssssssssssssdsdssd",
+		$stmt->bind_param("dssssssssssssssssdsdssd",
 
-		$arre['TipoCaso'],
+		$IDDistribuidor,
+    $arre['TipoCaso'],
 		$arre['Categoria'],
 		$arre['Subcategoria'],
 		$arre['Tipo'],

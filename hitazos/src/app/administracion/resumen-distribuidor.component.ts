@@ -277,12 +277,13 @@ export class ResumenDistribuidorComponent {
                     if (data.clientes.length == 0) {
                         this._global.appstatus.mensaje = 'No se encontraron clientes con estos datos.';
                     }*/
-
+                    /*
                     setTimeout(() => {
                         //this.trigger.destroy();
                         this.trigger.next();
                         this.rerender();
                     });
+                    */
 
                 } else if (data.res = 'error') {
                     this._global.appstatus.mensaje = data.error;

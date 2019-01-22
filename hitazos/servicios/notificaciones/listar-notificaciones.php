@@ -48,6 +48,8 @@ if($nivel=='administrador'){
             ";
 }else if($nivel=='distribuidor'){
   $res['nivel'] = $IDDistribuidor;
+  $id_usuario = $arre['id_usuario'];
+
   $query = "
             select n.*, DATE_FORMAT(n.timestamp,  '%d/%m/%Y %H:%i:%s' ) as timestampNF from
             (select notificaciones.* from notificaciones) as n
@@ -55,16 +57,24 @@ if($nivel=='administrador'){
             (select id from usuarios_admin) as ua
             on ua.id = n.id_usuario
             join
-            (select id, Distribuidor from reportes) as r
+            (select id, Distribuidor, iddistribuidor from reportes) as r
             on n.id_reporte = r.id
             join
             (select IDDistribuidor from distribuidores where id=$IDDistribuidor) as d
             on r.Distribuidor = d.IDDistribuidor
+            Where modulo not like '%cambio-fisico%' and modulo<>'/registro-caso-menaje-reparacion-a-centro'
+            and modulo<>'/registro-caso-menaje-reparacion'
+            and (descripcion not like '%Movilización del repot%')
+            and (descripcion not like '%La movilización del report%')
+            and r.IDDistribuidor=$id_usuario
             group by id
             order by id desc
             ";
 }
-
+/*
+echo($query);
+die();
+*/
 if ($result = $mysqli->query($query)) {
 	while ($row = $result->fetch_array()) {
 

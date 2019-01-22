@@ -49,7 +49,8 @@ export class GlobalService implements CanActivate{
         "TelefonoResponsable": "",
         "IDGrupoTarifa": "",
         "IDDistribuidor": "",
-        "CustomerID": ""
+        "CustomerID": "",
+        "ModoDePago": ""
     };
 
     paises = [];
@@ -200,6 +201,7 @@ export class GlobalService implements CanActivate{
                 "Sello": "",
                 "Status": "",
                 "StatusReporte": "",
+                "SubStatusReporte": "",
                 "StatusMovilidad": "",
                 "StatusCambioFisico": "",
                 "StatusCostoLanded": "",
@@ -932,7 +934,11 @@ export class GlobalService implements CanActivate{
                     console.log('cambios fisicos por autorizar');
                     console.log(this.cambiosFisicosXAutorizar.recientes);
 
-                    swal('¡Guardado!', 'Se ha enviado una notificacion al CDS.', 'success');
+                    if(this.user.nivel=='administrador')
+                      swal('¡Guardado!', 'Se ha enviado una notificacion al CDS.', 'success');
+                    else
+                      swal('¡Guardado!', 'Se ha enviado una notificacion a HP.', 'success');
+
 
 
                 } else if (data.res == 'error') {
@@ -1103,6 +1109,7 @@ export class GlobalService implements CanActivate{
                 "Sello": "",
                 "Status": "",
                 "StatusReporte": "",
+                "SubStatusReporte": "",
                 "StatusMovilidad": "",
                 "StatusCambioFisico": "",
                 "StatusCostoLanded": "",
@@ -1162,6 +1169,7 @@ export class GlobalService implements CanActivate{
 
     setAdjuntos() {
         console.log('set adjuntos');
+        console.log(this.reporte.objreporte);
         try { this.AdjuntosFacturasNotasCompraArre = JSON.parse(Object(this.reporte.objreporte).AdjuntosFacturasNotasCompra); } catch (e) { };
         try { this.AdjuntosFotosModeloSerieArre = JSON.parse(Object(this.reporte.objreporte).AdjuntosFotosModeloSerie); } catch (e) { };
         try { this.AdjuntosFacturasRepuestosArre = JSON.parse(Object(this.reporte.objreporte).AdjuntosFacturasRepuestos); } catch (e) { };
@@ -1591,6 +1599,7 @@ export class GlobalService implements CanActivate{
         this.user.IDGrupoTarifa = jsonstr.IDGrupoTarifa;
         this.user.IDDistribuidor = jsonstr.IDDistribuidor;
         this.user.CustomerID = jsonstr.CustomerID;
+        this.user.ModoDePago = jsonstr.MedioDePago;
 
         console.log(this.user);
 
@@ -1636,7 +1645,8 @@ export class GlobalService implements CanActivate{
             "TelefonoResponsable": "",
             "IDGrupoTarifa": "",
             "IDDistribuidor": "",
-            "CustomerID": ""
+            "CustomerID": "",
+            "ModoDePago": ""
         };
         localStorage.setItem('user', JSON.stringify(this.user));
 

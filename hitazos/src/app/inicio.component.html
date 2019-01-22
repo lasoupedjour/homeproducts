@@ -327,7 +327,7 @@
           <h3>Cambios físicos por autorizar - Distribuidores</h3>
         </div>
         <div class="col-4 text-right">
-          <a routerLink="../nuevos-cambios-fisicos/">Ver todos</a>
+          <a routerLink="../nuevos-cambios-fisicos-dist/">Ver todos</a>
         </div>
       </div>
       <div class="row mb-3" *ngIf="_global.cambiosFisicosXAutorizarDist.recientes[0]">
@@ -351,9 +351,9 @@
               <th>Otro Costo</th>
 
               <th>Días Transcurridos</th>
-              <th>Status Costo Landed</th>
+              <!--th>Status Costo Landed</th>
 
-              <th>Status</th>
+              <th>Status</th-->
 
               <th>Acción</th>
 
@@ -402,12 +402,12 @@
               <td [ngClass]="this._global.diasTranscurridosColor(item.FechaRegistroReporte)">
                 {{this._global.diasTranscurridos(item.FechaRegistroReporte)}}
               </td>
-              <td>
+              <!--td>
                 {{item.StatusCostoLanded}}
               </td>
               <td>
                 {{item.StatusCambioFisico}}
-              </td>
+              </td-->
 
 
 
@@ -457,7 +457,7 @@
 
               <th>Días Transcurridos</th>
 
-              <th>Status</th>
+              <!--th>Status</th-->
 
 
               <th>Acción</th>
@@ -501,9 +501,9 @@
               <td [ngClass]="this._global.diasTranscurridosColor(item.FechaRegistroReporte)">
                 {{this._global.diasTranscurridos(item.FechaRegistroReporte)}}
               </td>
-              <td>
+              <!--td>
                 {{item.StatusCambioFisico}}
-              </td>
+              </td-->
 
 
 
@@ -736,6 +736,7 @@
              {{item.Categoria}}
            </td>
            <td *ngIf="this._global.user.nivel=='distribuidor'">
+             <button *ngIf="(item.Categoria!='MENAJE' || item.Modelo=='OS-17001' || item.Modelo=='OS-17001-1') && item.StatusCambioFisico=='Aprobado'" (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen/orden')" class="btn btn-sm">Seleccionar</button>
              <button *ngIf="item.Categoria=='MENAJE'" (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Seleccionar</button>
            </td>
            <td *ngIf="this._global.user.nivel!='distribuidor'">

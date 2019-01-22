@@ -1371,7 +1371,7 @@ export class ReporteCasoComponent {
 
               params["IDReporte"] = this._global.reporte.idreporte;
 
-              if(this._global.user.IDDistribuidor!=''){
+              if(this._global.user.IDDistribuidor!='' && this._global.user.IDDistribuidor!='0'){
                 params["IDCentro"] = 0;
                 params["IDDistribuidor"] = this._global.user.IDDistribuidor;
               }
@@ -1446,7 +1446,6 @@ export class ReporteCasoComponent {
           }
         }else{//Si es un caso de línea blanca sigue el flujo normal
           if (this.genericForm.valid) {
-
               console.log('submit registro');
               this._global.clearMessages();
               var Categoria = this.genericForm.controls.Categoria.value;
@@ -1462,7 +1461,7 @@ export class ReporteCasoComponent {
 
               params["IDReporte"] = this._global.reporte.idreporte;
 
-              if(this._global.user.IDDistribuidor!=''){
+              if(this._global.user.IDDistribuidor!='' && this._global.user.IDDistribuidor!='0'){
                 params["IDDistribuidor"] = this._global.user.IDDistribuidor;
                 params["TipoRevision"] = "otro centro";
               }else{

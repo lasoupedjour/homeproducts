@@ -72,9 +72,7 @@ export class ReparacionInicioComponent {
             CondicionProductoDiagnostico: [Object(this._global.reporte.objreporte).CondicionProductoDiagnostico,
             Validators.required
             ],
-            NoSerie: [Object(this._global.reporte.objreporte).NoSerie,
-                Validators.required
-            ],
+            NoSerie: [Object(this._global.reporte.objreporte).NoSerie],
             /*MotivoFallaDiagnostico: [Object(this._global.reporte.objreporte).MotivoFallaDiagnostico,
                 Validators.required
             ],*/
@@ -172,7 +170,7 @@ export class ReparacionInicioComponent {
                     console.log('centros');
                     console.log(this._global.centros);
 
-                    if (data.centros.length == 0) {
+                    if (data.centros.length == 0 && this._global.user.nivel=='administrador') {
                         this._global.appstatus.mensaje = 'No se encontraron datos con estas características.';
                     }else{
                       if(Object(this._global.reporte.objreporte).IDCentro!='')
@@ -321,26 +319,29 @@ export class ReparacionInicioComponent {
       var NoSerie = this.genericForm.controls.NoSerie.value;
 
       this._global.clearMessages();
-      this._global.appstatus.loading = true;
 
-      var params = {};
-      params["NoSerie"] = NoSerie;
+      if(NoSerie!=""){
+        this._global.appstatus.loading = true;
 
-      console.log(params);
+        var params = {};
+        params["NoSerie"] = NoSerie;
 
-      this._httpService.postJSON(params, 'reparacion/validar-noserie.php')
-        .subscribe(
-        data => {
-          this._global.appstatus.loading = false;
-            console.log('data Serie');
-            console.log(data);
-            if (data.res == 'error') {
-              swal('', 'Ya existe una orden de servicio de este No. de Serie.', 'warning');
-            }
-        },
-        error => alert(error),
-        () => console.log('termino submit')
-        );
+        console.log(params);
+
+        this._httpService.postJSON(params, 'reparacion/validar-noserie.php')
+          .subscribe(
+          data => {
+            this._global.appstatus.loading = false;
+              console.log('data Serie');
+              console.log(data);
+              if (data.res == 'error') {
+                swal('', 'Ya existe una orden de servicio de este No. de Serie.', 'warning');
+              }
+          },
+          error => alert(error),
+          () => console.log('termino submit')
+          );
+      }
     }
     changeTipoReclamoDiagnostico() {
 
@@ -632,10 +633,15 @@ export class ReparacionInicioComponent {
                     params["IDUsuario"] = this._global.user.id;
                     params["IDCliente"] = this._global.cliente.id;
                     params["TipoReclamoDiagnostico"] = this.genericForm.controls.TipoReclamoDiagnostico.value;
-                    if(this.genericForm.controls.IDCentro.value!='')
+
+                    if(this.genericForm.controls.IDCentro.value!='' && this.genericForm.controls.IDCentro.value!=0)
                       params["IDCentro"] = this.genericForm.controls.IDCentro.value;
-                    else
-                      params["IDCentro"] = this._global.reporte.objreporte.IDCentro;
+                    else{
+                      if(this._global.reporte.objreporte.IDCentro!='0' && this._global.reporte.objreporte.IDCentro!='')
+                        params["IDCentro"] = this._global.reporte.objreporte.IDCentro;
+                      else
+                        params["IDCentro"] = this._global.user.IDCentro;
+                    }
 
                     this._global.setRefaccionesEnRevision();
                     params["Refacciones"] = JSON.stringify(this._global.refacciones);
@@ -673,7 +679,7 @@ export class ReparacionInicioComponent {
                                      this._global.registrarNotificacion(this._global.reporte.idreporte);
 
                                      this._global.notificaciones.modulo = "/registro-caso-menaje-reparacion-a-centro";
-                                     this._global.notificaciones.descripcion = "Se ha registrado y asignado a su Cds un caso de Menaje para el reporte No. " + this._global.reporte.idreporte;
+                                     this._global.notificaciones.descripcion = "Se ha registrado y asignado a su Cds un caso para el reporte No. " + this._global.reporte.idreporte;
                                      this._global.registrarNotificacion(this._global.reporte.idreporte, this.genericForm.controls.IDCentro.value);
                                 }else if(this.genericForm.controls.TipoReclamoDiagnostico.value=='Instrucciones de uso'){
                                     this._global.notificaciones.modulo = "/registro-caso-menaje-instrucciones-de-uso";
@@ -684,11 +690,13 @@ export class ReparacionInicioComponent {
                                     this._global.notificaciones.descripcion = "Se ha determinado que no aplica garantía del caso " + this._global.reporte.idreporte;
                                     this._global.registrarNotificacion(this._global.reporte.idreporte);
                                 }else{//Cambio físico
+                                  /*
                                     this._global.cambioStatusCambioFisico(this._global.reporte.idreporte, "Aprobado");
                                     //Registro de notificación
                                     this._global.notificaciones.modulo = "/cambio-estatus-cambio-fisico";
                                     this._global.notificaciones.descripcion = "El cambio físico del reporte No. " + this._global.reporte.idreporte + " ha sido Aprobado";
                                     this._global.registrarNotificacion(this._global.reporte.idreporte);
+                                    */
                                 }
 
                                 this.habilitarOrdenServicio();

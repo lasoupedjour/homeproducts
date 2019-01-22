@@ -44,16 +44,33 @@ if($modulo!="" &&
     /*ENVÍO DE MAIL*/
     require '../phpmailer/class.phpmailer.php';
     require "../baseurl.php";
+    $query = "
+              select reportes.Categoria, centros.Nombre as NombreCentro, centros.Email, centros.Direccion, centros.Pais, reportes.Modelo, reportes.NoFactura, clientes.RazonSocial, clientes.Nombre as NombreCliente, clientes.APaterno, clientes.AMaterno, reportes.FechaStatusCambioFisico
+              from reportes, centros, clientes
+              where
+              reportes.id = ".$arre["id_reporte"]." and
+              reportes.IDCentro = centros.id and
+              reportes.IDCliente = clientes.id
+              ";
 
-    $q = mysqli_query($con, "
-    select centros.Nombre as NombreCentro, centros.Email, centros.Direccion, centros.Pais, reportes.Modelo, reportes.NoFactura, clientes.RazonSocial, clientes.Nombre as NombreCliente, clientes.APaterno, clientes.AMaterno, reportes.FechaStatusCambioFisico
-    from reportes, centros, clientes
-    where
-    reportes.id = ".$arre["IDReporte"]." and
-    reportes.IDCentro = centros.id and
-    reportes.IDCliente = clientes.id
-    ");
-    $row = mysqli_fetch_array($q);
+    $q = mysql_query($query) or die(mysql_error());
+
+    while ($row = mysql_fetch_array($q))
+    {
+    	$current_charset = 'ISO-8859-15';//or what it is now
+    	array_walk_recursive($row,function(&$value) use ($current_charset){
+    		 //$value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
+    		$value = utf8_encode($value);
+    	});
+
+      $categoria = $row["Categoria"];
+    }
+
+    $imagenHeader = "logo-hp.jpg";
+    if($categoria!="LINEA BLANCA"){
+      $imagenHeader = "logo-hpgroup.jpg";
+    }
+
     array_walk_recursive($row,function(&$value) use ($current_charset){
       $value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
       //$value = utf8_encode($value);
@@ -69,12 +86,15 @@ if($modulo!="" &&
     //
     // }
 
+
     $nombrecentro = $row["NombreCentro"];
     $emailcentro = $row["Email"];
+
     //$nombrecliente = $row["NombreCliente"];
     setlocale(LC_TIME, 'es_ES');
     //$date=date_create($row["FechaStatusCambioFisico"]);
     //$fecha = date_format($date,"d").' de '.date_format($date,"F, Y");
+
 
       try {
             $mail = new PHPMailer(true); //New instance, with exceptions enabled
@@ -121,7 +141,7 @@ if($modulo!="" &&
             <table align='center' border='0' cellpadding='0' cellspacing='0' width='600' style='border: 1px solid #DDDDDD; border-collapse: collapse; padding: 0px; width: 600px; margin: 0 auto; background-color: #ffffff;' class='breacktable'>
               <tr>
               <td bgcolor='#fff' align='left' valign='middle' height='130'>
-                <img src='$baseurl/email/cambios/logo-hp.jpg' width='400'  border='0' alt='Household Solutions' style='display:block;' />
+                <img src='$baseurl/email/cambios/$imagenHeader' width='400'  border='0' alt='Household Solutions' style='display:block;' />
               </td>
               </tr>
 
@@ -152,7 +172,6 @@ if($modulo!="" &&
                 </table>
 
                 <br><br>
-
               </td>
               </tr>
             </table>

@@ -23,31 +23,43 @@ $res = array();
 $res['res'] = 'ok';
 
 if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
-	$q = mysql_query("
+	$query = "
 	SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
 	FROM reportes, clientes, centros
 	where clientes.id = reportes.IDCliente
   and centros.id = reportes.IDCentro
 	and reportes.IDOperadorCentro = ".$arre["IDCentro"]."
 	and StatusReporte = 'Orden de Servicio'
+  and SubStatusReporte <> 'Cerrado'
   and TipoReclamoDiagnostico = 'Cambio'
+  and StatusCostoLanded = ''
   and CostoLanded > 0
-	order by FechaRegistroReporte desc LIMIT 5;
-	") or die(mysql_error());
+	order by FechaRegistroReporte desc :LIMIT;
+	";
 }else{
-	$q = mysql_query("
+	$query = "
 	SELECT distinct reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
 	FROM reportes, clientes, centros
 	where clientes.id = reportes.IDCliente
   and centros.id = reportes.IDCentro
 	and StatusReporte = 'Orden de Servicio'
+  and SubStatusReporte <> 'Cerrado'
   and TipoReclamoDiagnostico = 'Cambio'
+  and StatusCostoLanded = ''
   and CostoLanded > 0
-	order by FechaRegistroReporte desc LIMIT 5;
-	") or die(mysql_error());
+	order by FechaRegistroReporte desc :LIMIT;
+	";
 }
 
-
+if($arre["limit"]=="")
+  $query = str_replace(":LIMIT", "", $query);
+else
+  $query = str_replace(":LIMIT", "LIMIT 5", $query);
+/*
+echo($query);
+die();
+*/
+$q = mysql_query($query) or die(mysql_error());
 
 $reportes = array();
 

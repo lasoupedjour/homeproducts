@@ -28,7 +28,7 @@ $ano = $arre['ano'];
 $mes = $arre['mes'];
 $categoria = $arre['categoria'];
 $master = $arre['master'];
-
+$pais = $arre['pais'];
 /*
 $mesnext =
 if($mes)*/
@@ -46,7 +46,7 @@ StatusReporte = 'Orden de Servicio'
 order by FechaOrdenServicio desc;
 */
 $query = "
-Select DISTINCT reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, centros.nombre,  IFNULL( centros1.nombre,  'N/A' ) AS  'Master', tarifas.TarifaMensual, tarifas.ImpuestoTarifaMensual from
+Select DISTINCT reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, centros.nombre,  IFNULL( centros1.nombre,  'N/A' ) AS  'Master', tarifas.TarifaMensual, tarifas.ImpuestoTarifaMensual, (reportes.MontoTotal - CostoLanded - OtroCostoDistribuidor) as MontoTotal1, replace(replace(replace(CAST(resolucion.reclamo as CHAR(1)), '1', 'Aceptado'), '0', 'Rechazado'), '', 'Sin resolución') as Reclamo  from
 (select * from reportes) as reportes
 join
 (select * from clientes) as clientes
@@ -60,6 +60,9 @@ on centros.idGrupotarifa = tarifas.idGrupoTarifa
 left join
 (select * from centros) as centros1
 on centros.idMaster = centros1.id
+left join
+(select id_reporte, reclamo from resolucion) as resolucion
+on resolucion.id_reporte = reportes.id
 where clientes.id = reportes.IDCliente and
 StatusReporte = 'Orden de Servicio'
 :filtros
@@ -74,6 +77,8 @@ if ($cds!="" && $cds!="Todos"){
   $filtroCds = " and reportes.IDCentro=$cds";
 }else if($cds!="Todos"){
   $filtroCds = " and centros.idMaster=$master";
+}else{
+  $filtroCds = " and centros.Pais='$pais'";
 }
 
 if($mes!=0 && $ano!=0){
@@ -101,10 +106,8 @@ if($filtroCds!="" && $filtroFecha!="" && $filtroCat!=""){
 }else{
   $query = str_replace(":filtros", "", $query);
 }
-/*
-echo($query);
-die();
-*/
+
+
 $q = mysql_query($query) or die(mysql_error());
 
 /*

@@ -69,22 +69,49 @@ function subirAdjuntos($idreporte, $field, $size){
 }
 
 //actualizar
+/*Obtenemos el estatus del costolanded*/
+$query = "
+select StatusCostoLanded from reportes Where id='" . $arre['IDReporte'] . "';
+";
 
+if ($result = $mysqli->query($query)) {
+  while ($row = $result->fetch_array()) {
+    $StatusCostoLanded = $row["StatusCostoLanded"];
+  }
+}
+if($StatusCostoLanded==""){
+  $query = "
+            update reportes set
+            MontoDespiece = ?,
+            MontoReciclaje = ?,
+            MontoOtro = ?,
+            MontoOtroDescripcion = ?,
+            MontoSubtotal = ?,
+            MontoIVA = ?,
+            MontoTotal = ?,
+            AdjuntosReciclaje = ?,
+            FechaAdjuntosCambioFisico = now()
+            where id = ?
+            ";
+}else{
+  $query = "
+            update reportes set
+            MontoDespiece = ?,
+            MontoReciclaje = ?,
+            MontoOtro = ?,
+            MontoOtroDescripcion = ?,
+            MontoSubtotal = ?,
+            MontoIVA = ?,
+            MontoTotal = ?,
+            AdjuntosReciclaje = ?,
+            SubStatusReporte = 'Cerrado',
+            FechaAdjuntosCambioFisico = now()
+            where id = ?
+            ";
+}
 
-if ($stmt = $mysqli->prepare("
-update reportes set
-MontoDespiece = ?,
-MontoReciclaje = ?,
-MontoOtro = ?,
-MontoOtroDescripcion = ?,
-MontoSubtotal = ?,
-MontoIVA = ?,
-MontoTotal = ?,
-AdjuntosReciclaje = ?,
-FechaAdjuntosCambioFisico = now()
-where id = ?
-")) {
-	$stmt->bind_param("dddsdddsd",
+if ($stmt = $mysqli->prepare($query)) {
+  $stmt->bind_param("dddsdddsd",
   $arre['MontoDespiece'],
   $arre['MontoReciclaje'],
   $arre['MontoOtro'],
@@ -92,44 +119,43 @@ where id = ?
   $arre['MontoSubtotal'],
   $arre['MontoIVA'],
   $arre['MontoTotal'],
-	json_encode($AdjuntosReciclaje),
-	$arre['IDReporte']
-	);
-	if($stmt->execute()){
+  json_encode($AdjuntosReciclaje),
+  $arre['IDReporte']
+  );
+  if($stmt->execute()){
 
-		$reporte = array();
+    $reporte = array();
 
-		$query = "
-		select * from reportes where id = ".$arre['IDReporte'].";
-		";
+    $query = "
+    select * from reportes where id = ".$arre['IDReporte'].";
+    ";
 
-		if ($result = $mysqli->query($query)) {
-			while ($row = $result->fetch_array()) {
+    if ($result = $mysqli->query($query)) {
+      while ($row = $result->fetch_array()) {
 
-				$current_charset = 'ISO-8859-15';//or what it is now
-				array_walk_recursive($row,function(&$value) use ($current_charset){
-					 //$value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
-					$value = utf8_encode($value);
-				});
-				$temp = json_encode($row);
-				array_push($reporte, $temp);
-			}
-			$result->close();
-		}else{
-			print_r (mysqli_error());
-		}
+        $current_charset = 'ISO-8859-15';//or what it is now
+        array_walk_recursive($row,function(&$value) use ($current_charset){
+           //$value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
+          $value = utf8_encode($value);
+        });
+        $temp = json_encode($row);
+        array_push($reporte, $temp);
+      }
+      $result->close();
+    }else{
+      print_r (mysqli_error());
+    }
 
 
-		$res['idreporte'] = $arre['IDReporte'];
-		$res['objreporte'] = $reporte[0];
+    $res['idreporte'] = $arre['IDReporte'];
+    $res['objreporte'] = $reporte[0];
 
-	}else{
-		$res['res'] = 'error';
-		$res['msg'] = $stmt->error;
+  }else{
+    $res['res'] = 'error';
+    $res['msg'] = $stmt->error;
 
-	}
+  }
 }
-
 
 $mysqli->close();
 

@@ -35,6 +35,7 @@ export class AdministracionComponent {
 
     /*Montos*/
     montoTotal = 0;
+    MontoIVA = 0;
     GarantiaDePartes = 0;
     GarantiaMOyKms = 0;
     GarantiaDeCambios = 0;
@@ -263,7 +264,7 @@ export class AdministracionComponent {
           this.subscription = this._httpService.postJSON(params, 'administracion/filtrar-resumen-de-servicios.php')
               .subscribe(
               data => {
-                  console.log('data');
+                  console.log('Resumen de servicios', );
                   console.log(data);
                   this._global.appstatus.loading = false;
 
@@ -393,6 +394,7 @@ export class AdministracionComponent {
         var MontoDespiece=0;
         var MontoOtro=0;
         var MontoReciclaje=0;
+        var MontoIVA = 0;
 
         ordenes.forEach(function (e) {
             //console.log('orden');
@@ -410,6 +412,8 @@ export class AdministracionComponent {
             MontoReciclaje =  parseFloat(String(e.MontoReciclaje));
             MontoOtro =  parseFloat(String(e.MontoOtro));
 
+            MontoIVA +=  parseFloat(String(e.MontoIVA));
+
             MontoCambio = MontoCambio + (MontoDespiece + MontoReciclaje + MontoOtro);
         });
 
@@ -424,6 +428,7 @@ export class AdministracionComponent {
         console.log("MontoOtro", MontoOtro);
         console.log("MontoCambio", MontoCambio);
 
+        this.MontoIVA = MontoIVA;
         this.GarantiaDePartes = MontoRefacciones;
         this.GarantiaMOyKms = MontoTAMov;
         this.GarantiaDeCambios = MontoCambio;

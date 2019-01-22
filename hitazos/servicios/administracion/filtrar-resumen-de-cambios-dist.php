@@ -43,14 +43,18 @@ where clientes.id = reportes.IDCliente and
 StatusReporte = 'Orden de Servicio'
 :filtros
 order by FechaOrdenServicio desc;
+replace(replace(replace(CAST(resolucion.reclamo as CHAR(1)), '1', 'Aceptado'), '0', 'Rechazado'), '', 'Sin resolución') as Reclamo  from
 */
-$query = "
-Select * From vista_reporte_cambios
+
+$query = "select cambios.*, replace(replace(replace(CAST(resolucion.reclamo as CHAR(1)), '1', 'Aceptado'), '0', 'Rechazado'), '', 'Sin resolución') as Reclamo  from
+(Select * From vista_reporte_cambios) as cambios
+left join
+(select id_reporte, reclamo from resolucion) as resolucion
+on resolucion.id_reporte = cambios.id
 where Distribuidor='" . $arre["CustomerID"] . "'
 and StatusCostoLanded='Aprobado'
 :filtros
-order by FechaOrdenServicio desc;
-          ";
+order by FechaOrdenServicio desc";
 
 $filtroFecha  = "";
 

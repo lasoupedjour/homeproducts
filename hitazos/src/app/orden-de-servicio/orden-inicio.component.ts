@@ -45,6 +45,7 @@ export class OrdenInicioComponent {
     FacturasNotasCompraLenght: 0;
     FacturasRepuestosLenght: 0;
     FotosModeloSerieLenght: 0;
+    AdjuntosReciclajeLenght: 0;
 
     adjuntosValidos;
 
@@ -221,6 +222,12 @@ export class OrdenInicioComponent {
             try { this._global.AdjuntosOtrosArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosOtros); } catch (e) { };
         }else{
             this._global.AdjuntosOtrosArre = [];
+        }
+
+        if(this._global.reporte.objreporte.AdjuntosReciclaje!=""){
+            try { this._global.AdjuntosReciclajeArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosReciclaje); } catch (e) { };
+        }else{
+            this._global.AdjuntosReciclajeArre = [];
         }
      }
 
@@ -582,6 +589,10 @@ export class OrdenInicioComponent {
         console.log(event);
         this._global.AdjuntosOtros = event;
     }
+    onActionAdjuntosReciclaje(event: any) {
+        console.log(event);
+        this._global.AdjuntosReciclaje = event;
+    }
 
     /*submitRegistro2() {
         console.log('submit prevalidation');
@@ -671,8 +682,17 @@ export class OrdenInicioComponent {
         if(this._global.reporte.objreporte.Categoria=='MENAJE')
           this.adjuntosValidos = true;
 
-        if (this.genericForm.valid && this.adjuntosValidos) {
+        if(this._global.reporte.objreporte.RequiereRecoleccion=='1'){
+          try { this.AdjuntosReciclajeLenght = Object(this._global.AdjuntosReciclaje).currentFiles.length; } catch (e) { this.AdjuntosReciclajeLenght = 0; }
 
+          this.adjuntosValidos = false;
+
+          if(this.AdjuntosReciclajeLenght>0){
+            this.adjuntosValidos = true;
+          }
+        }
+
+        if (this.genericForm.valid && this.adjuntosValidos) {
             this._global.clearMessages();
             this._global.appstatus.loading = true;
 
@@ -694,9 +714,17 @@ export class OrdenInicioComponent {
 
             params["AdjuntosOtros"] = this._global.AdjuntosOtros;
             try { params["AdjuntosOtrosSize"] = Object(this._global.AdjuntosOtros).currentFiles.length; } catch (e) { params["AdjuntosOtrosSize"] = 0; };
+
+
+            params["AdjuntosReciclaje"] = this._global.AdjuntosReciclaje;
+            try { params["AdjuntosReciclajeSize"] = Object(this._global.AdjuntosReciclaje).currentFiles.length; } catch (e) { params["AdjuntosReciclaje"] = 0; };
+
             params["Update"] = false;
 
             if(this._global.reporte.objreporte.StatusCambioFisico=='Rechazado')
+              params["Update"] = true;
+
+            if(this._global.reporte.objreporte.RequiereRecoleccion=='1' || this._global.reporte.objreporte.TipoReclamoDiagnostico=='Cambio')
               params["Update"] = true;
 
             console.log(params);

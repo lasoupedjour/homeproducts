@@ -64,11 +64,13 @@ if(!$update){
   $AdjuntosFotosModeloSerie = Array();
   $AdjuntosFacturasRepuestos = Array();
   $AdjuntosOtros = Array();
+  $AdjuntosReciclaje = Array();
 
   $AdjuntosFacturasNotasCompra = subirAdjuntos($arre['IDReporte'], 'AdjuntosFacturasNotasCompra', $arre['AdjuntosFacturasNotasCompraSize']);
   $AdjuntosFotosModeloSerie = subirAdjuntos($arre['IDReporte'], 'AdjuntosFotosModeloSerie', $arre['AdjuntosFotosModeloSerieSize']);
   $AdjuntosFacturasRepuestos = subirAdjuntos($arre['IDReporte'], 'AdjuntosFacturasRepuestos', $arre['AdjuntosFacturasRepuestosSize']);
   $AdjuntosOtros = subirAdjuntos($arre['IDReporte'], 'AdjuntosOtros', $arre['AdjuntosOtrosSize']);
+  $AdjuntosReciclaje = subirAdjuntos($arre['IDReporte'], 'AdjuntosReciclaje', $arre['AdjuntosReciclajeSize']);
 
   $query = "
   update reportes set
@@ -82,6 +84,7 @@ if(!$update){
   FechaOrdenServicio = now(),
   MontoRefacciones = ?,
   MontoReparacion = ?,
+  MontoMovilizacion = ?,
   MontoDespiece = ?,
   MontoReciclaje = ?,
   MontoOtro = ?,
@@ -93,38 +96,87 @@ if(!$update){
   AdjuntosFotosModeloSerie = ?,
   AdjuntosFacturasRepuestos = ?,
   AdjuntosOtros = ?,
+  AdjuntosReciclaje = ?,
   StatusReporte = 'Orden de Servicio',
   SubStatusReporte = ?,
   StatusCambioFisico = ''
   where id = ?
   ";
-  $params = "sssssssdddddsdddsssssd";
+  $params = "sssssssddddddsdddssssssd";
 }else{
-  $query = "
-  update reportes set
-  HomeProductsGroupNo = ?,
-  NoFactura = ?,
-  FechaFactura = ?,
-  NoParteCausoDano = ?,
-  Resolucion = ?,
-  TipoReparacion = ?,
-  TipoMovilidad = ?,
-  FechaOrdenServicio = now(),
-  MontoRefacciones = ?,
-  MontoReparacion = ?,
-  MontoDespiece = ?,
-  MontoReciclaje = ?,
-  MontoOtro = ?,
-  MontoOtroDescripcion = ?,
-  MontoSubtotal = ?,
-  MontoIVA = ?,
-  MontoTotal = ?,
-  StatusReporte = 'Orden de Servicio',
-  SubStatusReporte = ?,
-  StatusCambioFisico = ''
-  where id = ?
-  ";
-  $params = "sssssssdddddsdddsd";
+  $AdjuntosFacturasNotasCompra = Array();
+  $AdjuntosFotosModeloSerie = Array();
+  $AdjuntosFacturasRepuestos = Array();
+  $AdjuntosOtros = Array();
+  $AdjuntosReciclaje = Array();
+
+  $AdjuntosFacturasNotasCompra = subirAdjuntos($arre['IDReporte'], 'AdjuntosFacturasNotasCompra', $arre['AdjuntosFacturasNotasCompraSize']);
+  $AdjuntosFotosModeloSerie = subirAdjuntos($arre['IDReporte'], 'AdjuntosFotosModeloSerie', $arre['AdjuntosFotosModeloSerieSize']);
+  $AdjuntosFacturasRepuestos = subirAdjuntos($arre['IDReporte'], 'AdjuntosFacturasRepuestos', $arre['AdjuntosFacturasRepuestosSize']);
+  $AdjuntosOtros = subirAdjuntos($arre['IDReporte'], 'AdjuntosOtros', $arre['AdjuntosOtrosSize']);
+  $AdjuntosReciclaje = subirAdjuntos($arre['IDReporte'], 'AdjuntosReciclaje', $arre['AdjuntosReciclajeSize']);
+
+  if($arre['AdjuntosFacturasNotasCompraSize']>0 && $arre['AdjuntosFotosModeloSerieSize']>0 && $arre['AdjuntosFacturasRepuestosSize']>0 && $arre['AdjuntosReciclaje']==0){
+    $query = "
+    update reportes set
+    HomeProductsGroupNo = ?,
+    NoFactura = ?,
+    FechaFactura = ?,
+    NoParteCausoDano = ?,
+    Resolucion = ?,
+    TipoReparacion = ?,
+    TipoMovilidad = ?,
+    FechaOrdenServicio = now(),
+    MontoRefacciones = ?,
+    MontoReparacion = ?,
+    MontoMovilizacion = ?,
+    MontoDespiece = ?,
+    MontoReciclaje = ?,
+    MontoOtro = ?,
+    MontoOtroDescripcion = ?,
+    MontoSubtotal = ?,
+    MontoIVA = ?,
+    MontoTotal = ?,
+    AdjuntosFacturasNotasCompra = ?,
+    AdjuntosFotosModeloSerie = ?,
+    AdjuntosFacturasRepuestos = ?,
+    AdjuntosOtros = ?,
+    StatusReporte = 'Orden de Servicio',
+    SubStatusReporte = ?,
+    StatusCambioFisico = ''
+    where id = ?
+    ";
+    $params = "sssssssddddddsdddsssssd";
+  }else{
+    $query = "
+    update reportes set
+    HomeProductsGroupNo = ?,
+    NoFactura = ?,
+    FechaFactura = ?,
+    NoParteCausoDano = ?,
+    Resolucion = ?,
+    TipoReparacion = ?,
+    TipoMovilidad = ?,
+    FechaOrdenServicio = now(),
+    MontoRefacciones = ?,
+    MontoReparacion = ?,
+    MontoMovilizacion = ?,
+    MontoDespiece = ?,
+    MontoReciclaje = ?,
+    MontoOtro = ?,
+    MontoOtroDescripcion = ?,
+    MontoSubtotal = ?,
+    MontoIVA = ?,
+    MontoTotal = ?,
+    AdjuntosReciclaje = ?,
+    StatusReporte = 'Orden de Servicio',
+    SubStatusReporte = ?,
+    StatusCambioFisico = ''
+    where id = ?
+    ";
+    $params = "sssssssddddddsdddssd";
+  }
+
 }
 
 
@@ -148,7 +200,8 @@ if ($stmt = $mysqli->prepare($query)) {
   	$arre['TipoReparacion'],
   	$arre['TipoMovilidad'],
   	$arre['MontoRefacciones'],
-  	$arre['MontoReparacion'],
+    $arre['MontoReparacion'],
+    $arre['MontoMovilizacion'],
     $arre['MontoDespiece'],
     $arre['MontoReciclaje'],
     $arre['MontoOtro'],
@@ -160,31 +213,62 @@ if ($stmt = $mysqli->prepare($query)) {
   	json_encode($AdjuntosFotosModeloSerie),
   	json_encode($AdjuntosFacturasRepuestos),
   	json_encode($AdjuntosOtros),
+    json_encode($AdjuntosReciclaje),
     $SubStatusReporte,
   	$arre['IDReporte']
 
   	);
   }else{
-    $stmt->bind_param($params,
-  	$arre['HomeProductsGroupNo'],
-  	$arre['NoFactura'],
-  	$FechaFactura,
-  	$arre['NoParteCausoDano'],
-  	$arre['Resolucion'],
-  	$arre['TipoReparacion'],
-  	$arre['TipoMovilidad'],
-  	$arre['MontoRefacciones'],
-  	$arre['MontoReparacion'],
-    $arre['MontoDespiece'],
-    $arre['MontoReciclaje'],
-    $arre['MontoOtro'],
-    $arre['MontoOtroDescripcion'],
-  	$arre['MontoSubtotal'],
-  	$arre['MontoIVA'],
-  	$arre['MontoTotal'],
-    $SubStatusReporte,
-  	$arre['IDReporte']
-  	);
+    if($arre['AdjuntosFacturasNotasCompraSize']>0 && $arre['AdjuntosFotosModeloSerieSize']>0 && $arre['AdjuntosFacturasRepuestosSize']>0 && $arre['AdjuntosReciclaje']==0){
+      $stmt->bind_param($params,
+    	$arre['HomeProductsGroupNo'],
+    	$arre['NoFactura'],
+    	$FechaFactura,
+    	$arre['NoParteCausoDano'],
+    	$arre['Resolucion'],
+    	$arre['TipoReparacion'],
+    	$arre['TipoMovilidad'],
+    	$arre['MontoRefacciones'],
+    	$arre['MontoReparacion'],
+      $arre['MontoMovilizacion'],
+      $arre['MontoDespiece'],
+      $arre['MontoReciclaje'],
+      $arre['MontoOtro'],
+      $arre['MontoOtroDescripcion'],
+    	$arre['MontoSubtotal'],
+    	$arre['MontoIVA'],
+    	$arre['MontoTotal'],
+    	json_encode($AdjuntosFacturasNotasCompra),
+    	json_encode($AdjuntosFotosModeloSerie),
+    	json_encode($AdjuntosFacturasRepuestos),
+    	json_encode($AdjuntosOtros),
+      $SubStatusReporte,
+    	$arre['IDReporte']
+    	);
+    }else{
+      $stmt->bind_param($params,
+    	$arre['HomeProductsGroupNo'],
+    	$arre['NoFactura'],
+    	$FechaFactura,
+    	$arre['NoParteCausoDano'],
+    	$arre['Resolucion'],
+    	$arre['TipoReparacion'],
+    	$arre['TipoMovilidad'],
+    	$arre['MontoRefacciones'],
+    	$arre['MontoReparacion'],
+      $arre['MontoMovilizacion'],
+      $arre['MontoDespiece'],
+      $arre['MontoReciclaje'],
+      $arre['MontoOtro'],
+      $arre['MontoOtroDescripcion'],
+    	$arre['MontoSubtotal'],
+    	$arre['MontoIVA'],
+    	$arre['MontoTotal'],
+      json_encode($AdjuntosReciclaje),
+      $SubStatusReporte,
+    	$arre['IDReporte']
+    	);
+    }
   }
 
 	if($stmt->execute()){

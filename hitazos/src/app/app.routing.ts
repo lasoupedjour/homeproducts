@@ -51,6 +51,9 @@ import { NuevasRefaccionesComponent } from './nuevas-refacciones.component';
 import { NuevasCotizacionesComponent } from './nuevas-cotizaciones.component';
 import { NuevasMovilizacionesComponent } from './nuevas-movilizaciones.component';
 
+import { NuevosCambiosFisicosDistComponent } from './nuevos-cambios-fisicos-dist.component';
+import { NuevosCambiosFisicosComponent } from './nuevos-cambios-fisicos.component';
+
 import { GlobalService } from './services/global.service';
 
 export const routing = RouterModule.forRoot([
@@ -97,6 +100,9 @@ export const routing = RouterModule.forRoot([
     { path: 'nuevas-refacciones', component: NuevasRefaccionesComponent, canActivate: [GlobalService] },
     { path: 'nuevas-cotizaciones', component: NuevasCotizacionesComponent, canActivate: [GlobalService] },
     { path: 'nuevas-movilizaciones', component: NuevasMovilizacionesComponent, canActivate: [GlobalService] },
+
+    { path: 'nuevos-cambios-fisicos-dist', component: NuevosCambiosFisicosDistComponent, canActivate: [GlobalService] },
+    { path: 'nuevos-cambios-fisicos', component: NuevosCambiosFisicosComponent, canActivate: [GlobalService] },
 
 
     /*{ path: 'conductor', component: HomeConductorComponent },

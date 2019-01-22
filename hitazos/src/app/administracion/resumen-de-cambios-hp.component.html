@@ -53,10 +53,10 @@
 
 
       <div class="col-4 fM3">
-        <h5>Garantia de Partes: <strong>{{this.GarantiaDePartes|currency}} USD</strong></h5>
+        <!--h5>Garantia de Partes: <strong>{{this.GarantiaDePartes|currency}} USD</strong></h5>
         <h5>Garantia de M.O. & Kms: <strong>{{this.GarantiaMOyKms|currency}} USD</strong></h5>
-        <h5>Reembolso Garantia FEE : <strong>{{this.ReembolsoGarantiaFee|currency}} USD</strong></h5>
-        <h5>Garantia de Cambios y Reemplazo: <strong>{{this.GarantiaDeCambios|currency}} USD</strong></h5>
+        <h5>Reembolso Garantia FEE : <strong>{{this.ReembolsoGarantiaFee|currency}} USD</strong></h5-->
+        <!--h5>Garantia de Cambios y Reemplazo: <strong>{{this.GarantiaDeCambios|currency}} USD</strong></h5-->
         <h5>Monto Total: <strong>{{montoTotal|currency}} USD</strong></h5>
         <!--div class="row">
           <div class="col-12">
@@ -79,14 +79,8 @@
        </select>
      </div>
      <div class="col-2 text-right">
-       <select class="form-control form-control-sm" formControlName="Master" id="master" (change)="changeMaster()">
-         <option value="" hidden>Master</option>
-       </select>
-     </div>
-     <div class="col-2 text-right">
-       <select class="form-control form-control-sm" formControlName="Cds" id="centros">
-         <option value="" hidden>CDS</option>
-         <option value="Todos">Todos</option>
+       <select class="form-control form-control-sm" formControlName="Distribuidor" id="distribuidor">
+         <option value="" hidden>Distribuidor</option>
        </select>
      </div>
      <div class="col-2 text-right">
@@ -99,6 +93,7 @@
      <div class="col-2 text-right">
        <select class="form-control form-control-sm" formControlName="Ano">
          <option value="0">Año</option>
+         <option value="2019">2019</option>
          <option value="2018">2018</option>
          <option value="2017">2017</option>
        </select>
@@ -140,9 +135,9 @@
        <table datatable [dtOptions]="this.dtOptions" [dtTrigger]="trigger"  id="tabla" class="table table-striped table-bordered">
            <thead>
            <tr>
-             <th>Orden de Servicio</th>
-             <th>Centro - Master</th>
+             <th>Centro</th>
              <th>No. Orden</th>
+             <th>Resolución</th>
              <th>Año</th>
              <th>Mes</th>
              <th>Día</th>
@@ -157,30 +152,21 @@
              <th>Fecha de recepción</th>
              <th>Fecha de entrega</th>
              <th>Tipo de Reclamo</th>
-             <th>Costo Refacciones</th>
-             <th>Costo Reparacion</th>
-             <th>Costo Movilización</th>
-             <th>Costo Despiece</th>
-             <th>Costo Reciclaje</th>
+             <th>Costo Landed</th>
              <th>Otro Costo</th>
-             <th>Desc. otro Costo</th>
-             <th>Fee Mensual</th>
-             <th>Impuesto Fee Mensual</th>
-             <th>Costo Impuesto</th>
-             <th>Total</th>
            </tr>
            </thead>
 
            <tbody>
            <tr *ngFor="let item of _global.ordenesServicio.recientes;">
              <td>
-               <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen/orden')" class="btn btn-sm">Consultar</button>
-             </td>
-             <td>
-               {{item.nombre}}<span *ngIf="item.Master!='N/A'"> - {{item.Master}}</span>
+               {{item.Centro}}
              </td>
              <td>
                {{item.id}}
+             </td>
+             <td>
+               {{item.Reclamo}}
              </td>
              <td>
                {{item.FechaOrdenAno}}
@@ -225,39 +211,11 @@
                {{item.TipoReclamoDiagnostico}}
              </td>
              <td>
-               {{item.MontoRefacciones | currency}}
+               {{item.CostoLanded|currency}}
              </td>
              <td>
-               {{item.MontoReparacion | currency}}
+               {{item.OtroCostoDistribuidor|currency}}
              </td>
-             <td>
-               {{item.MontoMovilizacion | currency}}
-             </td>
-             <td>
-               {{item.MontoDespiece | currency}}
-             </td>
-             <td>
-               {{item.MontoReciclaje | currency}}
-             </td>
-             <td>
-               {{item.MontoOtro | currency}}
-             </td>
-             <td>
-               {{item.MontoOtroDescripcion}}
-             </td>
-             <td>
-               {{item.TarifaMensual | currency}}
-             </td>
-             <td>
-               {{item.ImpuestoTarifaMensual | currency}}
-             </td>
-             <td>
-               {{item.MontoIVA | currency}}
-             </td>
-             <td>
-               ${{item.MontoTotal | currency}}
-             </td>
-
            </tr>
            </tbody>
 </table>

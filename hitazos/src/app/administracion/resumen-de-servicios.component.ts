@@ -35,6 +35,7 @@ export class ResumenDeServiciosComponent {
 
     /*Montos*/
     montoTotal = 0;
+    MontoIVA = 0;
     GarantiaDePartes = 0;
     GarantiaMOyKms = 0;
     GarantiaDeCambios = 0;
@@ -49,7 +50,7 @@ export class ResumenDeServiciosComponent {
 
         this._global.clearMessages();
 
-
+        console.log("el usuario", this._global.user);
 
         //this.rerender();
 
@@ -258,6 +259,7 @@ export class ResumenDeServiciosComponent {
           params['mes']   = this.filterForm.controls.Mes.value;
           params['ano']   = this.filterForm.controls.Ano.value;
           params['categoria']   = this.filterForm.controls.Categoria.value;
+          params['pais']   = this._global.user.Pais;
 
           this._global.appstatus.loading = true;
 
@@ -394,23 +396,28 @@ export class ResumenDeServiciosComponent {
         var MontoDespiece=0;
         var MontoOtro=0;
         var MontoReciclaje=0;
+        var MontoIVA = 0;
 
         ordenes.forEach(function (e) {
             //console.log('orden');
             console.log("el valor de e>>>>>>", e);
             //outer.montoTotal += parseFloat(String(e.MontoTotal));
             //
+            /*
             MontoFee += parseFloat(String(e.TarifaMensual));
             MontoImpuestoFee = MontoImpuestoFee + parseFloat(String(e.ImpuestoTarifaMensual));
             ValorImpuesto = MontoFee * MontoImpuestoFee;
             TotalFee = TotalFee + (MontoFee + ValorImpuesto);
-
+            */
             MontoRefacciones +=  parseFloat(String(e.MontoRefacciones));
             MontoTAMov += parseFloat(String(e.MontoReparacion)) + parseFloat(String(e.MontoMovilizacion));
             MontoDespiece =  parseFloat(String(e.MontoDespiece));
             MontoReciclaje =  parseFloat(String(e.MontoReciclaje));
             MontoOtro =  parseFloat(String(e.MontoOtro));
 
+            MontoIVA +=  parseFloat(String(e.MontoIVA));
+
+            TotalFee = TotalFee + (parseFloat(String(e.TarifaMensual)) + parseFloat(String(e.ImpuestoTarifaMensual)));
             MontoCambio = MontoCambio + (MontoDespiece + MontoReciclaje + MontoOtro);
         });
 
@@ -425,6 +432,7 @@ export class ResumenDeServiciosComponent {
         console.log("MontoOtro", MontoOtro);
         console.log("MontoCambio", MontoCambio);
 
+        this.MontoIVA = MontoIVA;
         this.GarantiaDePartes = MontoRefacciones;
         this.GarantiaMOyKms = MontoTAMov;
         this.GarantiaDeCambios = MontoCambio;
@@ -457,6 +465,7 @@ export class ResumenDeServiciosComponent {
         params['IDOperadorAdmin'] = this._global.user.id;
         params['Categoria'] = this.filterForm.controls.Categoria.value;
         params['IDCentro'] = this.filterForm.controls.Cds.value;
+        params['MontoIVA'] = this.MontoIVA;
         params['MontoTotal'] = this.montoTotal;
         params['GarantiaDePartes'] = this.GarantiaDePartes;
         params['GarantiaMOyKms'] = this.GarantiaMOyKms;
