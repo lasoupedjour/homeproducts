@@ -390,6 +390,7 @@ export class ResumenOrdenComponent {
         params["MontoIVA"] = this._global.reporte.objreporte.MontoIVA;
         params["MontoTotal"] = this._global.reporte.objreporte.MontoTotal;
         */
+        
         params["TipoReclamoDiagnostico"] = this._global.reporte.objreporte.TipoReclamoDiagnostico;
 
         params["AdjuntosReciclaje"] = this._global.AdjuntosReciclaje;

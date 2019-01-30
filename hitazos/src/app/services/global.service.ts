@@ -9,7 +9,6 @@ import swal from 'sweetalert2';
 @Injectable()
 export class GlobalService implements CanActivate{
 
-
     //base = '';
     base = 'http://apps.pautacreativatemporales.com.mx/oster/homeproducts/servicios/';
     //base = 'https://www.homeproductslatam.com.mx/servicios/';

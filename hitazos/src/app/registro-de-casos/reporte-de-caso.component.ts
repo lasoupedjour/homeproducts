@@ -43,7 +43,6 @@ export class ReporteCasoComponent {
         "cotizar": -1,
         "solicitar": -1,
         "update": false
-
     }
 
     formulariostatus = {

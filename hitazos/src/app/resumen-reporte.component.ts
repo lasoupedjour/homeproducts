@@ -39,8 +39,6 @@ export class ResumenReporteComponent {
             AMaterno: [''],
             RazonSocial: [''],
             Email: [''],
-
-
         });
 
 
