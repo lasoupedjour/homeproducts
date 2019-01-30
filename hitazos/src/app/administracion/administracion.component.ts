@@ -315,6 +315,8 @@ export class AdministracionComponent {
               customClass: 'swal2-overflow',
           });
         }
+
+
     }
 
     traeOrdenes() {

@@ -12,20 +12,9 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
 
 })
 export class AppComponent {
-    currentPage = '';
-    nameApp = '';
-
     constructor(
         public formBuilder: FormBuilder,
-        public _httpService: HTTPService, public _router: Router, public _global: GlobalService) {
-          var currentURL = window.location.href;
-          var location_href = currentURL.split("/");
-          this.currentPage = location_href[location_href.length-1];
-          console.log("this.currentPage", this.currentPage);
-          if(this.currentPage!=''){
-            this.nameApp = 'Oster Solution Center';
-          }
-        }
+        public _httpService: HTTPService, public _router: Router, public _global: GlobalService) { }
 
     ngOnInit() {
       console.log("init app.component");

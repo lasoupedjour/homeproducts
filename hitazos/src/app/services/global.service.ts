@@ -840,9 +840,9 @@ export class GlobalService implements CanActivate{
                     swal('¡Guardado!', 'Se ha enviado una notificacion al CDS.', 'success');
 
                     //Registro de notificación
-                    //this.notificaciones.modulo = "/registro-de-casos/reparacion/inicio";
-                    //this.notificaciones.descripcion = "Cotización con No. de parte " + noparte + " fue " + aprobacion;
-                    //this.registrarNotificacion(id);
+                    this.notificaciones.modulo = "/registro-de-casos/reparacion/inicio";
+                    this.notificaciones.descripcion = "Cotización con No. de parte " + noparte + " fue " + aprobacion;
+                    this.registrarNotificacion(id);
 
                 } else if (data.res == 'error') {
 
@@ -888,9 +888,9 @@ export class GlobalService implements CanActivate{
                     swal('¡Guardado!', 'Se ha enviado una notificacion al CDS.', 'success');
 
                     //Registro de notificación
-                    //this.notificaciones.modulo = "/registro-de-casos/reparacion/inicio";
-                    //this.notificaciones.descripcion = "Movilización del repote No. " + id + " ha sido " + aprobacion;
-                    //this.registrarNotificacion(id);
+                    this.notificaciones.modulo = "/registro-de-casos/reparacion/inicio";
+                    this.notificaciones.descripcion = "Movilización del repote No. " + id + " ha sido " + aprobacion;
+                    this.registrarNotificacion(id);
 
                 } else if (data.res == 'error') {
 
@@ -1161,8 +1161,8 @@ export class GlobalService implements CanActivate{
     setRefaccionesBd() {
         var refacciones = Object(this.reporte.objreporte).Refacciones;
         if (refacciones[0]) {
-          console.log(JSON.parse(refacciones));
             console.log('set refacciones bd');
+            console.log(JSON.parse(refacciones));
             this.refacciones = JSON.parse(refacciones);
         }
     }
@@ -1859,7 +1859,5 @@ export class GlobalService implements CanActivate{
       return flag;
     }
 
-    stringToJson(cadena){
-      return JSON.parse(cadena);
-    }
+
 }

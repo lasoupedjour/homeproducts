@@ -15,8 +15,6 @@ $naranja: #ea8735;
 
 $gris: #edeef0;
 
-$gris_header: #f8f9fa;
-
 .naranja, .naranja *{
   color:$naranja;
 }
@@ -115,7 +113,7 @@ select.has-error {
 }
 
 header{
-  background:$gris_header;
+  background:$gris;
 }
 
 .navbar-brand{
