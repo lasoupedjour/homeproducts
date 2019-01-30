@@ -421,7 +421,6 @@ export class ResumenOrdenComponent {
                   }).then((result) => {
                     ////Registro de notificación para HP
                     //this._global.notificaciones.modulo = "/registro-de-casos/reporte-de-caso-menaje";
-                    //this._global.notificaciones.descripcion = "Se ha registrado un reporte de menaje con el No. de orden: " + this._global.reporte.idreporte;
                     //this._global.registrarNotificacion(this._global.reporte.idreporte);
 
                     this._router.navigate(['inicio']);
@@ -545,7 +544,7 @@ export class ResumenOrdenComponent {
               this.formulariostatus.success = 2;
 
               swal("Resolución registrada","Se ha registrado correctamente la resolución de la orden de servicio.", "success");
-
+              this._router.navigate(['inicio']);
             } else if (data.res == 'error') {
                 this._global.appstatus.mensaje = data.error;
             }

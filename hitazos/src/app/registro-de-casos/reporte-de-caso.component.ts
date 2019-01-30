@@ -1345,12 +1345,13 @@ export class ReporteCasoComponent {
 
 
     submitRegistro() {
+
         console.log('submit prevalidation');
-        //alert(this.genericForm.valid);
         //alert(this.genericForm.controls.Categoria.value);
         //Validamos si se trata de un casi de menaje
         var Modelo = this.genericForm.controls.Modelo.value;
         if(this.genericForm.controls.Categoria.value=='MENAJE' && this.genericForm.controls.Modelo.value!='OS-17001' && this.genericForm.controls.Modelo.value!='OS-17001-1'){
+          alert(this.genericForm.controls.TipoCaso.value);
           //Validamos los archivos adjuntos
           this.validarAdjuntos();
 
@@ -1530,7 +1531,10 @@ export class ReporteCasoComponent {
                               });
 
                           } else {
-                            if(parseInt(this._global.user.IDDistribuidor)>0 && Categoria=='LINEA BLANCA'){
+                            if(this.genericForm.controls.TipoCaso.value!='Garantía'){
+                              this._router.navigate(['inicio']);
+                            }
+                            else if(parseInt(this._global.user.IDDistribuidor)>0 && Categoria=='LINEA BLANCA'){
                               swal({
                                   title: 'Solicitud Enviada',
                                   text: 'Se ha enviado la solicitud.',
@@ -1541,7 +1545,7 @@ export class ReporteCasoComponent {
                               }).then((result) => {
                                 ////Registro de notificación para HP
                                 this._global.notificaciones.modulo = "/cambio-fisico-distribuidor";
-                                //this._global.notificaciones.descripcion = "Se ha registrado una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
+
                                 this._global.notificaciones.descripcion = "Se ha registrado un caso de Línea Blanca con No. de orden " + this._global.reporte.idreporte;
                                 this._global.registrarNotificacion(this._global.reporte.idreporte);
 
