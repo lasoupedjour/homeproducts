@@ -761,7 +761,10 @@
       <a class="btn btn-sm btnicono" routerLink="/inicio/cliente/detalle"><i class="fa fa-angle-left"></i> Anterior</a>
     </div>
     <!-- <div class="col-6 text-right my-5 "  [hidden]="(this.genericForm.controls.TipoKilometraje.value == 'Más de 20 kilómetros')"> -->
-    <div class="col-6 text-right my-5 "  >
+    <div class="col-6 text-right my-5 " *ngIf="this.genericForm.controls.TipoCaso.value!='Garantía'" >
+      <button class="btn btn-sm btnicono" (click)="submitRegistro()"> Registrar reporte <i class="fa fa-angle-right"></i></button>
+    </div>
+    <div class="col-6 text-right my-5 " *ngIf="this.genericForm.controls.TipoCaso.value=='Garantía'" >
       <button class="btn btn-sm btnicono" (click)="submitRegistro()"  *ngIf="!(this._global.user.IDDistribuidor>0) || this.genericForm.controls.Categoria.value=='MENAJE'"> Siguiente <i class="fa fa-angle-right"></i></button>
       <button class="btn btn-sm btnicono" (click)="submitRegistro()"  *ngIf="this._global.user.IDDistribuidor>0 && this.genericForm.controls.Categoria.value=='LINEA BLANCA'"> Registrar reporte <i class="fa fa-angle-right"></i></button>
     </div>

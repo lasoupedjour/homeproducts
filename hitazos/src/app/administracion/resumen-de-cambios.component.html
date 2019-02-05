@@ -153,6 +153,7 @@
              <th>No. Serie</th>
              <th>Descripción del Producto</th>
              <th>Modelo</th>
+             <th>Refacciones</th>
              <th>Descripción Falla</th>
              <th>Motivo de Falla</th>
              <th>Nombre Cliente</th>
@@ -209,6 +210,26 @@
              </td>
              <td>
                {{item.Modelo}}
+             </td>
+             <td>
+               <table *ngIf="item.Refacciones!='' && item.Refacciones!='[]'">
+                 <tr>
+                   <th>Cantidad</th>
+                   <th>Descripción/No. Parte</th>
+                   <th>Precio Unitario</th>
+                   <th>Importe</th>
+                   <th>Status cotización</th>
+                   <th>Status refacción</th>
+                 </tr>
+                 <tr *ngFor="let refaccion of _global.stringToJson(item.Refacciones);">
+                   <td>{{refaccion.Cantidad}}</td>
+                   <td>{{refaccion.NombreRefaccion}}-{{refaccion.NombreRefaccion}}</td>
+                   <td>{{refaccion.CostoUnitario}}</td>
+                   <td>{{refaccion.CostoTotal}}</td>
+                   <td>{{refaccion.StatusCotizacion}}</td>
+                   <td>{{refaccion.Status}}</td>
+                 </tr>
+               </table>
              </td>
              <td>
                {{item.Comentarios}}

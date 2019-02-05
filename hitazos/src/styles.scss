@@ -13,6 +13,7 @@ $rojo-transparente:rgba(224, 31, 31, 0.8);
 $naranja: #ea8735;
 
 $gris: #edeef0;
+$gris_header: #f8f9fa;
 
 .naranja, .naranja *{
   color:$naranja;
@@ -112,7 +113,7 @@ select.has-error {
 }
 
 header{
-  background:$gris;
+  background:$gris_header;
 }
 
 .navbar-brand{

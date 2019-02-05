@@ -390,7 +390,7 @@ export class ResumenOrdenComponent {
         params["MontoIVA"] = this._global.reporte.objreporte.MontoIVA;
         params["MontoTotal"] = this._global.reporte.objreporte.MontoTotal;
         */
-        
+
         params["TipoReclamoDiagnostico"] = this._global.reporte.objreporte.TipoReclamoDiagnostico;
 
         params["AdjuntosReciclaje"] = this._global.AdjuntosReciclaje;
@@ -547,6 +547,7 @@ export class ResumenOrdenComponent {
 
               swal("Resolución registrada","Se ha registrado correctamente la resolución de la orden de servicio.", "success");
 
+              this._router.navigate(['inicio']);
             } else if (data.res == 'error') {
                 this._global.appstatus.mensaje = data.error;
             }

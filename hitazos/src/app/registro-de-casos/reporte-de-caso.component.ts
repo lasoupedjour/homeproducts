@@ -1529,7 +1529,10 @@ export class ReporteCasoComponent {
                               });
 
                           } else {
-                            if(parseInt(this._global.user.IDDistribuidor)>0 && Categoria=='LINEA BLANCA'){
+                            if(this.genericForm.controls.TipoCaso.value!='Garantía'){
+                              this._router.navigate(['inicio']);
+                            }
+                            else if(parseInt(this._global.user.IDDistribuidor)>0 && Categoria=='LINEA BLANCA'){
                               swal({
                                   title: 'Solicitud Enviada',
                                   text: 'Se ha enviado la solicitud.',
