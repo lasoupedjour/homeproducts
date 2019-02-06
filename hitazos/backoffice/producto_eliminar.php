@@ -1,4 +1,5 @@
 <?php
+$_global_active = "productos";
 include 'inc_header.php';
 include "../servicios/dbc.php";
 

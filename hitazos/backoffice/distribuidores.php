@@ -1,4 +1,5 @@
 <?php
+$_global_active = "distribuidores";
 include 'inc_header.php';
 include "../servicios/dbc.php";
 
@@ -8,7 +9,7 @@ $q = mysql_query($query) or die(mysql_error());
 <div class="col-md-12 span_3">
  <div class="bs-example1" data-example-id="contextual-table">
    <div class="text-right m-b">
-     <button type="reset" class="btn btn-primary" onclick="javaScript: window.location.href='productos_registrar.php'">Registrar nuevo producto</button>
+     <button type="reset" class="btn btn-primary" onclick="javaScript: window.location.href='distribuidor_registrar.php'">Registrar nuevo distribuidor</button>
    </div>
    <table class="table" id="myTable">
      <thead>

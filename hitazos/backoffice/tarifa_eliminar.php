@@ -1,4 +1,5 @@
 <?php
+$_global_active = "tarifas";
 error_reporting(E_ERROR | E_PARSE);
 
 

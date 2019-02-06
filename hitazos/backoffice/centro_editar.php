@@ -1,9 +1,7 @@
 <?php
+$_global_active = "centros";
 include 'inc_header.php';
 include "../servicios/dbc.php";
-
-
-
 
 //echo("postback->" . $_POST["postback"]);
 if($_POST["postback"]){
