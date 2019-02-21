@@ -82,6 +82,19 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
     order by FechaRegistroReporte desc LIMIT 5;
     ";
   }
+
+  if($arre["nivel"] == "contactcenter"){
+    $query = "
+    select reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno , DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF from
+    (select * from reportes) as reportes
+    join
+    (select * from clientes) as clientes
+    on reportes.IDCliente = clientes.id
+    Where (StatusReporte <> 'Orden de Servicio' and StatusReporte <> 'Cerrado')
+    and reportes.IDCentroAsigno = ".$arre["IDCentro"]."
+    order by FechaRegistroReporte desc LIMIT 5;
+    ";
+  }
 }else{
   $query = "
   select reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno , DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF from

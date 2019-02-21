@@ -363,7 +363,12 @@ export class ReporteCasoComponent {
       var params = {};
       var IDMaster = 0;
 
-      params['Pais'] = Object(this._global.user).Pais;
+      if(this._global.user.nivel=='contactcenter'){
+        params['Pais'] = Object(this._global.cliente.objeto).Pais;
+      }else{
+        params['Pais'] = Object(this._global.user).Pais;
+      }
+
       params['nivel'] = Object(this._global.user).nivel;
 
       if(this.genericForm.controls.TipoCentro.value=='Red')
@@ -419,7 +424,13 @@ export class ReporteCasoComponent {
         var params = {};
 
         params['Categoria'] = this.genericForm.controls.Categoria.value;
-        params['Pais'] = Object(this._global.user).Pais;
+
+        if(this._global.user.nivel=='contactcenter'){
+          params['Pais'] = Object(this._global.cliente.objeto).Pais;
+        }else{
+          params['Pais'] = Object(this._global.user).Pais;
+        }
+
         params['nivel'] = Object(this._global.user).nivel;
 
         this._global.appstatus.loading = true;
@@ -1349,6 +1360,7 @@ export class ReporteCasoComponent {
         //alert(this.genericForm.controls.Categoria.value);
         //Validamos si se trata de un casi de menaje
         var Modelo = this.genericForm.controls.Modelo.value;
+
         if(this.genericForm.controls.Categoria.value=='MENAJE' && this.genericForm.controls.Modelo.value!='OS-17001' && this.genericForm.controls.Modelo.value!='OS-17001-1'){
           //Validamos los archivos adjuntos
           this.validarAdjuntos();
@@ -1363,10 +1375,15 @@ export class ReporteCasoComponent {
               params = this.genericForm.getRawValue();
               params["Update"] = this.status.update;
 
-              if(this._global.user.IDCentro!='')
+              if(this.genericForm.controls.IDCentro.value=='')
                 params["IDCentro"] = this._global.user.IDCentro;
               else
                 params["IDCentro"] = this.genericForm.controls.IDCentro.value;
+
+              if(this._global.user.nivel=="contactcenter")
+                params["IDCentroAsigno"] = this._global.user.IDCentro;
+              else
+                params["IDCentroAsigno"] = 0;
 
               params["IDReporte"] = this._global.reporte.idreporte;
 
@@ -1448,15 +1465,21 @@ export class ReporteCasoComponent {
               console.log('submit registro');
               this._global.clearMessages();
               var Categoria = this.genericForm.controls.Categoria.value;
+              var TipoCaso = this.genericForm.controls.TipoCaso.value;
 
               var params = {};
               params = this.genericForm.getRawValue();
               params["Update"] = this.status.update;
 
-              if(this._global.user.IDCentro!='')
+              if(this.genericForm.controls.IDCentro.value=='')
                 params["IDCentro"] = this._global.user.IDCentro;
               else
                 params["IDCentro"] = this.genericForm.controls.IDCentro.value;
+
+              if(this._global.user.nivel=="contactcenter")
+                params["IDCentroAsigno"] = this._global.user.IDCentro;
+              else
+                params["IDCentroAsigno"] = 0;
 
               params["IDReporte"] = this._global.reporte.idreporte;
 
@@ -1477,13 +1500,13 @@ export class ReporteCasoComponent {
                 params["Condicion"] = this.genericForm.controls.Condicion.value;
                 params["CostoLanded"] = this.genericForm.controls.CostoLanded.value;
                 params["OtroCostoDistribuidor"] = this.genericForm.controls.OtroCostoDistribuidor.value;
-
+                /*
                 params["AdjuntosFacturasNotasCompra"] = this._global.AdjuntosFacturasNotasCompra;
                 try { params["AdjuntosFacturasNotasCompraSize"] = Object(this._global.AdjuntosFacturasNotasCompra).currentFiles.length; } catch (e) { params["AdjuntosFacturasNotasCompraSize"] = 0; };
 
                 params["AdjuntosFotosModeloSerie"] = this._global.AdjuntosFotosModeloSerie;
                 try { params["AdjuntosFotosModeloSerieSize"] = Object(this._global.AdjuntosFotosModeloSerie).currentFiles.length; } catch (e) { params["AdjuntosFotosModeloSerieSize"] = 0; };
-
+                */
                 this._global.appstatus.loading = true;
 
                 console.log("registro reporte", params);
@@ -1529,7 +1552,8 @@ export class ReporteCasoComponent {
                               });
 
                           } else {
-                            if(this.genericForm.controls.TipoCaso.value!='Garantía'){
+                            //alert(TipoCaso);
+                            if(TipoCaso!='Garantía'){
                               this._router.navigate(['inicio']);
                             }
                             else if(parseInt(this._global.user.IDDistribuidor)>0 && Categoria=='LINEA BLANCA'){
@@ -1587,7 +1611,7 @@ export class ReporteCasoComponent {
     }
 
     changeCentro(){
-      this._global.user.IDCentro = this.genericForm.controls.IDCentro.value;
+      //this._global.user.IDCentro = this.genericForm.controls.IDCentro.value;
       //alert(this._global.user.IDCentro);
     }
 

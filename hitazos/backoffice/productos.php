@@ -60,5 +60,5 @@ $q = mysql_query($query) or die(mysql_error());
 <script type="text/javascript">
 $(document).ready( function () {
   $('#myTable').DataTable();
-} );
+});
 </script>

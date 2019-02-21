@@ -114,13 +114,14 @@ if($arre['IDDistribuidor']==0){
 if(!$arre['Update']){
   //insertar
 	if ($stmt = $mysqli->prepare("
-	insert into reportes (IDCliente, IDCentro, IDDistribuidor, IDOperadorDistribuidor, IDOperadorCentro, TipoCaso, Categoria, Subcategoria, Tipo, Modelo, CodigoSAP, FechaCompra, Sello, AplicaGarantia, Uso, Distribuidor, LugarCompra, Falla, FallaDescripcion, Comentarios, TipoRevision, IDTarifas, StatusMovilidad, MontoMovilizacion, FechaRevision, Descripcion, StatusReporte, NoSerie, CondicionProductoDiagnostico, CostoLanded, OtroCostoDistribuidor)
-	values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Reporte', ?, ?, ?, ?)
+	insert into reportes (IDCliente, IDCentro, IDDistribuidor, IDCentroAsigno, IDOperadorDistribuidor, IDOperadorCentro, TipoCaso, Categoria, Subcategoria, Tipo, Modelo, CodigoSAP, FechaCompra, Sello, AplicaGarantia, Uso, Distribuidor, LugarCompra, Falla, FallaDescripcion, Comentarios, TipoRevision, IDTarifas, StatusMovilidad, MontoMovilizacion, FechaRevision, Descripcion, StatusReporte, NoSerie, CondicionProductoDiagnostico, CostoLanded, OtroCostoDistribuidor)
+	values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Reporte', ?, ?, ?, ?)
 	")) {
-		$stmt->bind_param("dddddssssssssssssssssdsdssssss",
+		$stmt->bind_param("ddddddssssssssssssssssdsdssssss",
 		$arre['IDCliente'],
 		$IDCentro,
     $IDDistribuidor,
+    $arre['IDCentroAsigno'],
     $IDOperadorDistribuidor,
     $IDOperadorCentro,
     $arre['TipoCaso'],

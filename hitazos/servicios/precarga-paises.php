@@ -9,7 +9,7 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
 
 $json = $_POST['json'];
 $arre = json_decode($json, true);
-	
+
 $current_charset = 'ISO-8859-15';//or what it is now
 array_walk_recursive($arre,function(&$value) use ($current_charset){
      $value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
@@ -22,7 +22,7 @@ $res = array();
 
 $res['res'] = 'ok';
 
-if($arre['nivel'] == 'administrador' || $arre['nivel'] == 'MKT'){
+if($arre['nivel'] == 'administrador' || $arre['nivel'] == 'MKT' || $arre['nivel'] == 'contactcenter'){
 	$arre["Pais"] = '';
 }
 
@@ -33,8 +33,8 @@ $q = mysql_query($query) or die(mysql_error());
 
 $paises = array();
 
-while ($row = mysql_fetch_array($q))   
-{  
+while ($row = mysql_fetch_array($q))
+{
 	$current_charset = 'ISO-8859-15';//or what it is now
 	array_walk_recursive($row,function(&$value) use ($current_charset){
 		 //$value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
@@ -50,5 +50,5 @@ echo json_encode($res);
 
 
 
-	
+
 ?>

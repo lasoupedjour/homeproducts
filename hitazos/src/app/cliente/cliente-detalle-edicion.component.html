@@ -125,6 +125,14 @@
           </span>
         </label>
 
+        <label [hidden]="genericForm.controls.TipoPersona.value == 'Empresa'" class="fecha">
+          <input class="form-control form-control-sm" placeholder="Fecha de nacimiento"
+                 formControlName="FechaNacimiento" ngbDatepicker #d="ngbDatepicker" [startDate]="{year: 1970, month: 1}" [(ngModel)]="modelfechanacimiento">
+          <button class="input-group-addon" (click)="d.toggle()" type="button">
+            <i class="fa fa-calendar"></i>
+          </button>
+        </label>
+
         <label>
           <input autocomplete="off" type="email" class="form-control form-control-sm" formControlName="NoReferencia" placeholder="Número de Referencia" />
           <span class="alert alert-danger" *ngIf="!genericForm.controls.NoReferencia.valid && genericForm.controls.NoReferencia.touched">
@@ -623,7 +631,7 @@
       <a class="btn btn-sm btnicono" routerLink="/registro-de-casos"><i class="fa fa-angle-left"></i> Anterior</a>
     </div>
     <div class="col-6 text-right my-5 ">
-      <a class="btn btn-sm btnicono" (click)="submitRegistro()"> Registrar </a>
+      <a class="btn btn-sm btnicono" (click)="submitRegistro()"> Guardar </a>
     </div>
   </div>
 </div>

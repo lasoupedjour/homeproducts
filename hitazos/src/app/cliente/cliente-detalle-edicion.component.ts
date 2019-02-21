@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
 import { userValidators } from '../userValidators';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
     selector: 'clientedetalleedicion',
@@ -13,6 +14,8 @@ import { userValidators } from '../userValidators';
 export class ClienteDetalleEdicionComponent {
     title = 'app';
     genericForm: FormGroup;
+
+    modelfechanacimiento: NgbDateStruct;
 
     formulariostatus = {
         "mostrarDatosCompra": false,
@@ -44,6 +47,8 @@ export class ClienteDetalleEdicionComponent {
         console.log('init registro');
         console.log(this._global.user);
 
+        console.log('*******Cliente*********');
+        console.log(this._global.cliente.objeto);
 
         this.genericForm = this.formBuilder.group({
             /*usuario: ['', Validators.compose([
@@ -69,6 +74,7 @@ export class ClienteDetalleEdicionComponent {
             AMaterno: [Object(this._global.cliente.objeto).AMaterno,
                 Validators.required
             ],
+            FechaNacimiento: [Object(this._global.cliente.objeto).FechaNacimiento],
             Pais: [Object(this._global.cliente.objeto).Pais,
                 Validators.required
             ],
@@ -87,9 +93,7 @@ export class ClienteDetalleEdicionComponent {
             Direccion: [Object(this._global.cliente.objeto).Direccion,
                 Validators.required
             ],
-            NoExt: [Object(this._global.cliente.objeto).NoExt,
-                Validators.required
-            ],
+            NoExt: [Object(this._global.cliente.objeto).NoExt],
             NoInt: [Object(this._global.cliente.objeto).NoInt],
             CodigoPais: [Object(this._global.cliente.objeto).CodigoPais,
                 Validators.required
@@ -101,24 +105,79 @@ export class ClienteDetalleEdicionComponent {
 
             ],
             Email: [Object(this._global.cliente.objeto).Email,
-                Validators.required
+                Validators.email
             ],
             NoReferencia: [Object(this._global.cliente.objeto).NoReferencia,
-            Validators.required
             ],
             /*Email: ['', Validators.compose([
                 Validators.required,
                 Validators.email
             ])],*/
+            /*,
+            NoReferencia: [Object(this._global.cliente.objeto).NoReferencia,
+            Validators.required
+            ]*/
             /*NoTieneEmail: [''],*/
 
 
 
         });
-
         this.changeTipoPersona();
+        //this.modelfechanacimiento = Object(this._global.cliente.objeto).FechaNacimiento;
 
+        var fecha = Object(this._global.cliente.objeto).FechaNacimiento;
+        fecha = fecha.split('-');
 
+        var fechatemp = {
+            day: parseInt(fecha[2]),
+            month: parseInt(fecha[1]),
+            year: parseInt(fecha[0])
+        };
+
+        this.modelfechanacimiento = { year: fechatemp.year, month: fechatemp.month, day: fechatemp.day };
+
+        this.precargaPaises();
+    }
+
+    precargaPaises() {
+
+        var params = {};
+
+        params['Pais'] = Object(this._global.user).Pais;
+        params['nivel'] = Object(this._global.user).nivel;
+
+        this._global.appstatus.loading = true;
+
+        /*console.log('Precarga distribuidores');
+        console.log(params);*/
+
+        this._httpService.postJSON(params, 'precarga-paises.php')
+            .subscribe(
+            data => {
+                console.log('data');
+                console.log(data);
+                this._global.appstatus.loading = false;
+
+                if (data.res == 'ok') {
+
+                    this._global.paises = this._global.parseJSON(data.paises);
+
+                    console.log('paises');
+                    console.log(this._global.paises);
+
+                    if (data.paises.length == 0) {
+                        this._global.appstatus.mensaje = 'No se encontraron datos con estas características.';
+                    }
+
+                } else if (data.res = 'error') {
+
+                    this._global.appstatus.mensaje = data.error;
+
+                }
+            },
+            error => alert(error),
+            () => console.log('termino submit')
+            );
 
     }
 

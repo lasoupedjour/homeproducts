@@ -37,6 +37,16 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
 <script src="js/rickshaw.js"></script>
 <!--Data table-->
 <link rel="stylesheet" href="//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<script type="text/javascript">
+  var usr = jQuery.parseJSON( localStorage.getItem('user') );
+  console.log("user", usr);
+  console.log("nivel", usr.nivel);
+
+  if(usr.nivel!="administrador"){
+    window.location.href='../';
+  }
+</script>
+
 </head>
 <body>
 <div id="wrapper">
@@ -53,11 +63,8 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
     </div>
     <!-- /.navbar-header -->
     <ul class="nav navbar-nav navbar-right">
-      <li class="dropdown">
-        <a href="#" class="dropdown-toggle avatar" data-toggle="dropdown"><img src="images/account.png"></a>
-        <ul class="dropdown-menu">
-          <li class="m_2"><a href="#"><i class="fa fa-lock"></i> Logout</a></li>
-        </ul>
+      <li>
+        <a href="../inicio" style="color: #fff;">Inicio</a>
       </li>
     </ul>
     <div class="navbar-default sidebar" role="navigation">

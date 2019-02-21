@@ -107,7 +107,6 @@ if($arre['NoTieneEmail'] == false){
 		if ($stmt = $mysqli->prepare("
 
 		update clientes set
-		IDCentro = ?,
 		OrigenContacto = ?,
 		TipoPersona = ?,
 		RFC = ?,
@@ -115,6 +114,7 @@ if($arre['NoTieneEmail'] == false){
 		Nombre = ?,
 		APaterno = ?,
 		AMaterno = ?,
+    FechaNacimiento = ?,
 		Email = ?,
 		NoReferencia = ?,
 		Pais = ?,
@@ -131,14 +131,15 @@ if($arre['NoTieneEmail'] == false){
 		where id = ?
 
 		")) {
-			$stmt->bind_param("dssssssssssssssssssssd",
-			$arre['OrigenContacto'],
+			$stmt->bind_param("sssssssssssssssssssssd",
+      $arre['OrigenContacto'],
 			$arre['TipoPersona'],
 			$arre['RFC'],
 			$arre['RazonSocial'],
 			$arre['Nombre'],
 			$arre['APaterno'],
 			$arre['AMaterno'],
+      $FechaNacimiento,
 			$arre['Email'],
 			$arre['NoReferencia'],
 			$arre['Pais'],

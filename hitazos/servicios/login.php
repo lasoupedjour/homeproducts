@@ -18,7 +18,7 @@ $usuario = urldecode($arre['usuario']);
 $pwd = urldecode($arre['pwd']);
 
 $res = array();
-
+/*
 $q = mysql_query("
 select usuarios_admin.id, usuarios_admin.IDCentro, centros.IDMaster, usuarios_admin.nombre, usuarios_admin.nivel, centros.Nombre as NombreCentro, centros.Red, centros.Categoria, centros.Pais, centros.Ciudad, centros.Direccion, centros.Telefono1, centros.Telefono2, centros.Telefono3, centros.Email, centros.Horarios, centros.Responsable, centros.TelefonoResponsable, centros.IDGrupoTarifa, centros.ModoDePago
 from usuarios_admin, centros
@@ -28,7 +28,15 @@ and usuarios_admin.IDCentro = centros.id
 and usuarios_admin.status = 1
 and centros.status = 1
 ") or die(mysql_error());
+*/
 
+$q = mysql_query("
+select id
+from usuarios_admin
+where
+usuario = '$usuario' and pwd = '$pwd'
+and status = 1
+") or die(mysql_error());
 $num = mysql_num_rows($q);
 
 if($num == 0){
@@ -59,6 +67,15 @@ if($num == 0){
     $res['MedioDePago'] = "";
   }
 }else if($num > 0){
+  $q = mysql_query("
+  select usuarios_admin.id, usuarios_admin.IDCentro, IFNULL(centros.IDMaster, 0) as IDMaster, usuarios_admin.nombre, usuarios_admin.nivel, IFNULL(centros.Nombre, usuarios_admin.nombre) as NombreCentro, centros.Red, centros.Categoria, centros.Pais, centros.Ciudad, centros.Direccion, centros.Telefono1, centros.Telefono2, centros.Telefono3, centros.Email, centros.Horarios, centros.Responsable, centros.TelefonoResponsable, centros.IDGrupoTarifa, centros.ModoDePago from
+  (select * from usuarios_admin where
+  usuario = '$usuario' and pwd = '$pwd' and status=1) as usuarios_admin
+  left join
+  (select * from centros where status=1) as centros
+  on usuarios_admin.IDCentro = centros.id
+  ") or die(mysql_error());
+
 	$res['res'] = 'ok';
 	list($id, $IDCentro, $IDMaster, $nombre, $nivel, $NombreCentro, $Red, $Categoria, $Pais, $Ciudad, $Direccion, $Telefono1, $Telefono2, $Telefono3, $Email, $Horarios, $Responsable, $TelefonoResponsable, $IDGrupoTarifa, $MedioDePago) = mysql_fetch_row($q);
 	$res['id'] = $id;

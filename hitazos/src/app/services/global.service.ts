@@ -88,6 +88,7 @@ export class GlobalService implements CanActivate{
             "Telefono": "",
             "TipoPersona": "",
             "id": "",
+            "FechaNacimiento": "",
         },
 
     }
@@ -1676,6 +1677,7 @@ export class GlobalService implements CanActivate{
                 "Telefono": "",
                 "TipoPersona": "",
                 "id" : "",
+                "FechaNacimiento": "",
             },
 
         };

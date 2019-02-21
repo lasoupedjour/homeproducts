@@ -213,7 +213,7 @@
             </span>
           </label>
         </div>
-        <label *ngIf="this._global.user.IDDistribuidor>0 && (this.genericForm.controls.Categoria.value=='LINEA BLANCA' || this.genericForm.controls.Modelo.value=='OS-17001' || this.genericForm.controls.Modelo.value=='OS-17001-1')">
+        <label *ngIf="(this._global.user.IDDistribuidor>0 || this._global.user.nivel=='contactcenter') && (this.genericForm.controls.Categoria.value=='LINEA BLANCA' || this.genericForm.controls.Modelo.value=='OS-17001' || this.genericForm.controls.Modelo.value=='OS-17001-1')">
           <select class="form-control form-control-sm" formControlName="IDCentro" id="idcentro" (change)="changeCentro()">
             <option value="">Centro de Servicio</option>
             <option *ngFor="let item of _global.centros; let i = index" value="{{item.id}}">{{item.Nombre}} <label *ngIf="item.Ciudad!=''">- {{item.Ciudad}}</label><label *ngIf="item.Categoria!=''">- {{item.Categoria}}</label></option>
@@ -288,13 +288,13 @@
             Este campo es requerido
           </span>
         </label>
-        <label>
+        <label *ngIf="this._global.user.nivel!='contactcenter'">
           <span class="simbolo">$</span> <input class="form-control form-control-sm w-50" OnlyNumber="true" placeholder="Costo Landed" formControlName="CostoLanded" >&nbsp;USD
           <span class="alert alert-danger" *ngIf="!genericForm.controls.CostoLanded.valid && genericForm.controls.CostoLanded.touched">
             Este campo es requerido
           </span>
         </label>
-        <label>
+        <label *ngIf="this._global.user.nivel!='contactcenter'">
           <span class="simbolo">$</span> <input class="form-control form-control-sm w-50" OnlyNumber="true" placeholder="Otro costo" formControlName="OtroCostoDistribuidor" >&nbsp;USD
         </label>
       </div>
@@ -307,13 +307,13 @@
         </label>
       </div>
     </div>
-    <div class="row" *ngIf="this.genericForm.controls.TipoCaso.value == 'Garantía' && this.genericForm.controls.Categoria.value=='MENAJE'">
+    <div class="row" *ngIf="this.genericForm.controls.TipoCaso.value == 'Garantía' && this.genericForm.controls.Categoria.value=='MENAJE' && this._global.user.nivel!='contactcenter'">
       <div class="col-sm-12 my-3">
         <h4 class="mt-3 naranja"><b>Archivos adjuntos</b></h4>
         <hr />
       </div>
     </div>
-    <div class="row" *ngIf="this.genericForm.controls.TipoCaso.value == 'Garantía' && this.genericForm.controls.Categoria.value=='MENAJE' && _global.AdjuntosFacturasNotasCompraArre.length==0">
+    <div class="row" *ngIf="this.genericForm.controls.TipoCaso.value == 'Garantía' && this.genericForm.controls.Categoria.value=='MENAJE' && _global.AdjuntosFacturasNotasCompraArre.length==0 && this._global.user.nivel!='contactcenter'">
       <div class="col-sm-6 mb-5">
         <div class="row">
           <div class="col-4 text-right">
@@ -334,7 +334,7 @@
         </div>
       </div>
 
-      <div class="col-sm-6 mb-5">
+      <div class="col-sm-6 mb-5" *ngIf="this._global.user.nivel!='contactcenter'">
         <div class="row">
           <div class="col-4 text-right">
             <div class="sform mb-3">12. <i>Fotos del modelo y no. serie</i> de producto:</div>

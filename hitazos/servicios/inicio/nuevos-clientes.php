@@ -22,7 +22,7 @@ $res = array();
 
 $res['res'] = 'ok';
 
-if($arre['nivel'] == 'administrador' || $arre['nivel'] == 'MKT'){
+if($arre['nivel'] == 'administrador' || $arre['nivel'] == 'MKT' ||  $arre['nivel'] == 'contactcenter'){
 	$query = "SELECT  *, DATE_FORMAT(FechaRegistro,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF FROM clientes order by FechaRegistro desc LIMIT 5;";
 }else{
   if($arre["IDDistribuidor"]==0)

@@ -3,7 +3,7 @@
     <div class="pt-3">
       <h3>{{this.nameApp}}</h3>
     </div>
-    
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <a class="navbar-brand" routerLink="/inicio"><img src="assets/img/household-oster.png" alt="logo Oster" class="img-fluid"></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -26,6 +26,9 @@
           </li>
           <li class="nav-item text-center" [hidden]="this._global.user.id == ''" *ngIf="this._global.user.nivel=='distribuidor'">
             <a class="nav-link" routerLink="/administracion/resumen-distribuidor" routerLinkActive="active">Administración</a>
+          </li>
+          <li class="nav-item text-center" *ngIf="this._global.user.nivel=='administrador'">
+            <a class="nav-link" routerLink="../backoffice/productos.php" routerLinkActive="active">Administración de catálogos</a>
           </li>
           <li class="nav-item text-center" [hidden]="this._global.user.id == ''">
             <a class="nav-link" routerLink="/notificaciones" routerLinkActive="#"><i class="far fa-bell"></i></a>

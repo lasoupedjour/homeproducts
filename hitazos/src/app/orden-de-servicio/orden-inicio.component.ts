@@ -741,6 +741,13 @@ export class OrdenInicioComponent {
                       this._global.guardarIdReporte(data.idreporte);
                       this._global.guardarObjReporte(data.objreporte);
 
+                      this._global.AdjuntosFacturasNotasCompraArre = [];
+                      this._global.AdjuntosFotosModeloSerieArre = [];
+                      this._global.AdjuntosFacturasRepuestosArre = [];
+                      this._global.AdjuntosOtrosArre = [];
+                      this._global.AdjuntosReciclajeArre = [];
+              
+
                       this._global.appstatus.loading = false;
 
                       if(this._global.reporte.objreporte.StatusCambioFisico=='Rechazado'){
