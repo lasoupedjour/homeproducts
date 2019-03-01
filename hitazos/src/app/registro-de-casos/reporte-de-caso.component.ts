@@ -534,7 +534,7 @@ export class ReporteCasoComponent {
         var opcionesProducto = [];
         opcionesProducto.push('Cambio Físico');
         opcionesProducto.push('Garantía');
-        opcionesProducto.push('Refacciones');
+        //opcionesProducto.push('Refacciones');
         opcionesProducto.push('Manuales');
         opcionesProducto.push('Cambio Físico');
         var requiereDescripcion = true;
@@ -653,9 +653,6 @@ export class ReporteCasoComponent {
 
         this.descripcion();
 
-
-
-
         switch (this.genericForm.controls.TipoCaso.value) {
 
             case "Garantía":
@@ -670,14 +667,14 @@ export class ReporteCasoComponent {
                   this.genericForm.controls.Comentarios.updateValueAndValidity();
                 }
                 break;
-
+/*
             case "Refacciones":
 
                 this.genericForm.controls.Comentarios.setValidators([Validators.required]);
                 this.genericForm.controls.Comentarios.updateValueAndValidity();
 
                 break;
-
+*/
             default:
 
                 this.resetRequired();
