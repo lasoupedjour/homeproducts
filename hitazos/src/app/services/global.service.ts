@@ -1168,6 +1168,14 @@ export class GlobalService implements CanActivate{
         }
     }
 
+    resetRefaccionRecuperada() {
+        this.refaccionrecuperada = {
+            "NombreRefaccion": "",
+            "NoParte": "",
+            "Cantidad": ""
+        }
+    }
+
     setRefaccionesBd() {
         var refacciones = Object(this.reporte.objreporte).Refacciones;
         if (refacciones[0]) {

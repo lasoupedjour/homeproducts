@@ -129,6 +129,7 @@ export class ReparacionInicioComponent {
         this.precargaCentros();
 
         this._global.setRefaccionesBd();
+        this._global.setRefaccionesRecuperadasBd();
         this.updateRequiereRefacciones();
         this._global.setAdjuntos();
 

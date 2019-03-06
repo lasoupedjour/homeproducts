@@ -57,8 +57,8 @@ export class ResumenOrdenComponent {
 
     }
 
-    ReciclajeLenght: 0;
-    adjuntosValidosCambioFisico;
+    ReciclajeLenght = 0;
+    adjuntosValidosCambioFisico = false;
 
     modelfechaentregacambio: NgbDateStruct;
 
@@ -133,8 +133,6 @@ export class ResumenOrdenComponent {
 
 
 
-        this._global.setRefaccionesBd();
-        this._global.setRefaccionesRecuperadasBd();
 
         this.getDistribuidor();
         this.setTipoReparacion();
@@ -154,11 +152,15 @@ export class ResumenOrdenComponent {
         this.obtenerDetalleResolucion();
         this.llenaRefacciones();
         this._global.setAdjuntos();
+
+        this._global.setRefaccionesBd();
+        this._global.setRefaccionesRecuperadasBd();
+        console.log("this._global.refaccionesrecuperadas-->", this._global.refaccionesrecuperadas.length);
     }
 
     changeCantidad(id, val) {
 
-        console.log('change cantidad');
+        console.log('change cantidad', id);
 
         this._global.refaccionesrecuperadas[id].Cantidad = parseInt(val);
 
@@ -170,7 +172,7 @@ export class ResumenOrdenComponent {
       if (OtraRefaccion != '') {
           this.status.agregaRefaccionValid = true;
 
-          this._global.resetRefaccion();
+          this._global.resetRefaccionRecuperada();
 
           var nombrerefaccion = "";
 
@@ -185,12 +187,12 @@ export class ResumenOrdenComponent {
           this._global.refaccionrecuperada.NoParte = String(OtraRefaccion);
           this._global.refaccionrecuperada.Cantidad = "1";
 
-          this._global.refaccionesrecuperadas.push(this._global.refaccion);
-
+          this._global.refaccionesrecuperadas.push(this._global.refaccionrecuperada);
+          console.log("this._global.refaccionesrecuperadas", this._global.refaccionesrecuperadas);
           this.adjuntosCambioFisicoForm.controls.Refaccion.setValue('');
           this.adjuntosCambioFisicoForm.controls.NoParte.setValue('');
 
-          this.habilitarOrdenServicio();
+          //this.habilitarOrdenServicio();
 
       }/*else if(this.adjuntosCambioFisicoForm.controls.Refaccion.value == 'Otro'){
         alert("Show input");
@@ -231,30 +233,6 @@ export class ResumenOrdenComponent {
 
 
         return validarefacciones;
-    }
-
-    habilitarOrdenServicio() {
-
-        var habilitar = true;
-
-        for (var i = 0; i < this._global.refaccionesrecuperadas.length; i++) {
-            if (this._global.refacciones[i].Status != 'Seleccionada' && this._global.refacciones[i].Status != 'Aprobada') {
-              habilitar = false;
-            }
-        }
-
-        if (!this.validaPropiedadesRefacciones())
-            habilitar = false;
-
-        if((this._global.reporte.objreporte.Categoria!="MENAJE" || this._global.reporte.objreporte.Modelo=='OS-17001' || this._global.reporte.objreporte.Modelo=='OS-17001-1') && this._global.user.nivel=='administrador' && this.genericForm.controls.RequiereRecoleccion.value!=0)
-          habilitar = false;
-
-        if((this._global.reporte.objreporte.Categoria=="MENAJE" && this._global.reporte.objreporte.Modelo!='OS-17001' && this._global.reporte.objreporte.Modelo!='OS-17001-1') && this._global.user.nivel=='administrador' && this.genericForm.controls.RequiereRecoleccion.value!=0)
-          habilitar = false;
-
-
-        this.status.habilitarOrden = habilitar;
-
     }
 
     llenaRefacciones() {
@@ -304,7 +282,7 @@ export class ResumenOrdenComponent {
             this.status.agregaRefaccionValid = true;
 
 
-            this._global.resetRefaccion();
+            this._global.resetRefaccionRecuperada();
 
             var nombrerefaccion = "";
 
@@ -325,7 +303,7 @@ export class ResumenOrdenComponent {
             this.adjuntosCambioFisicoForm.controls.Refaccion.setValue('');
             this.adjuntosCambioFisicoForm.controls.NoParte.setValue('');
 
-            this.habilitarOrdenServicio();
+            //this.habilitarOrdenServicio();
 
         }/*else if(this.adjuntosCambioFisicoForm.controls.Refaccion.value == 'Otro'){
           alert("Show input");
@@ -585,7 +563,7 @@ export class ResumenOrdenComponent {
         params["MontoIVA"] = this._global.reporte.objreporte.MontoIVA;
         params["MontoTotal"] = this._global.reporte.objreporte.MontoTotal;
 
-        params["Refacciones"] = JSON.stringify(this._global.refacciones);
+        params["Refacciones"] = JSON.stringify(this._global.refaccionesrecuperadas);
         /*
         params["MontoDespiece"] = this._global.reporte.objreporte.MontoDespiece;
         params["MontoSubtotal"] = this._global.reporte.objreporte.MontoSubtotal;

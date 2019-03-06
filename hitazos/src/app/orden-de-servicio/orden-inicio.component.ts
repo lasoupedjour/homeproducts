@@ -179,6 +179,7 @@ export class OrdenInicioComponent {
         this.llenaRefacciones();
         this.llenaTipoReparacion();
         this._global.setRefaccionesBd();
+        this._global.setRefaccionesRecuperadasBd();
         this.getDistribuidor();
         this.calculaValorRefacciones();
 
@@ -217,6 +218,7 @@ export class OrdenInicioComponent {
         }else{
             this._global.AdjuntosFacturasRepuestosArre = [];
         }
+        //console.log("this._global.reporte.objreporte.AdjuntosFacturasRepuestos", this._global.AdjuntosFacturasRepuestosArre);
 
         if(this._global.reporte.objreporte.AdjuntosOtros!=""){
             try { this._global.AdjuntosOtrosArre = JSON.parse(Object(this._global.reporte.objreporte).AdjuntosOtros); } catch (e) { };
@@ -746,7 +748,7 @@ export class OrdenInicioComponent {
                       this._global.AdjuntosFacturasRepuestosArre = [];
                       this._global.AdjuntosOtrosArre = [];
                       this._global.AdjuntosReciclajeArre = [];
-              
+
 
                       this._global.appstatus.loading = false;
 

@@ -408,7 +408,7 @@
           </div>
           <div class="col-8">
             <div class="row no-gutters">
-              <div class="col-12 mb-1 attachments" *ngIf="this.ReciclajeLenght==0 && this.adjuntosValidosCambioFisico==false">
+              <div class="col-12 mb-1 attachments" *ngIf="_global.AdjuntosReciclajeArre.length==0">
 
                 <ng2-file-input (onAction)="onActionReciclaje($event)"></ng2-file-input>
                 <div class="alert alert-danger" *ngIf="this.ReciclajeLenght==0 && this.adjuntosValidosCambioFisico==false">
@@ -416,7 +416,7 @@
                 </div>
                 <!-- <div *ngIf="_global.AdjuntosReciclajeArre.length<2">No hay</div> -->
               </div>
-              <div class="col-12 mb-1 attachments">
+              <div class="col-12 mb-1 attachments" *ngIf="_global.AdjuntosReciclajeArre.length>0">
                 <div class="prev" *ngFor="let item of _global.AdjuntosReciclajeArre; let i = index"  [innerHTML]="prevAttach(item)"></div>
               </div>
             </div>
@@ -430,12 +430,12 @@
 <!--termina Archivos Adjuntos CAMBIO FISICO-->
 
 <!--REFACCIONES -->
-<div class="row mt-2" *ngIf="_global.refaccionesrecuperadas.length>0">
+<div class="row mt-2" *ngIf="_global.reporte.objreporte.RefaccionesRecuperadas.length>0">
   <div class="col-12">
     <div class="sform mb-3">15. <i>Refacciones recuperadas del producto</i>:</div>
 
     <!--tabla-->
-    <div class="row my-5" *ngIf="_global.refaccionesrecuperadas[0]">
+    <div class="row my-5">
       <div class="col-12 mb-5">
 
         <table class="w-50">
@@ -455,11 +455,10 @@
         </table>
       </div>
     </div>
-    <div class="mb-5" *ngIf="!_global.refaccionesrecuperadas[0]">No requiere refacciones.</div>
   </div>
 </div>
 
-<div class="row" *ngIf="_global.refaccionesrecuperadas.length==0">
+<div class="row" *ngIf="_global.reporte.objreporte.RefaccionesRecuperadas.length==0">
   <div class="col-12">
 
     <div class="row">
@@ -490,7 +489,7 @@
 
 
     <!--tabla-->
-    <div class="row my-5" *ngIf="_global.refacciones[0]">
+    <div class="row my-5" *ngIf="_global.refaccionesrecuperadas[0]">
       <div class="col-12 mb-5">
 
         <table class="w-50">
@@ -500,15 +499,13 @@
             <th>Eliminar</th>
           </tr>
 
-          <tr *ngFor="let item of _global.refacciones; let i = index">
+          <tr *ngFor="let item of _global.refaccionesrecuperadas; let i = index">
 
             <td>
               {{item.NombreRefaccion}} - {{item.NoParte}}
             </td>
             <td>
-              <div>
-                <input type="number" class="form-control form-control-sm cantidad text-center" (keyup)="changeCantidad(i, $event.target.value)" (change)="changeCantidad(i, $event.target.value)" min="1" value="{{_global.refacciones[i].Cantidad}}" />
-              </div>
+              <input type="number" id="cant-{{i}}" class="form-control form-control-sm cantidad text-center" (change)="changeCantidad(i, $event.target.value)" min="1" value="{{_global.refaccionesrecuperadas[i].Cantidad}}" />
             </td>
             <td>
               <a class="btneliminar" (click)="eliminarRefaccion(i)"><i class="fa fa-trash"></i></a>
