@@ -41,6 +41,12 @@ while ($row = mysql_fetch_array($q))
   $impuestotarifamensual = $row["ImpuestoTarifaMensual"];
   $necesitaautorizacion = $row["NecesitaAutorizacion"];
 }
+
+$query = "SELECT idgrupotarifa, nombre
+          FROM  `centros`
+          GROUP BY idgrupotarifa
+          ORDER BY idgrupotarifa";
+$q = mysql_query($query) or die(mysql_error());
 ?>
 <div class="xs">
    <h3>Eliminar tarifa</h3>
@@ -52,30 +58,38 @@ while ($row = mysql_fetch_array($q))
          <label class="control-label">Grupo tarifa</label>
          <select class="form-control1 ng-invalid ng-invalid-required" id="idgrupotarifa" name="idgrupotarifa" ng-model="model.idgrupotarifa" disabled>
            <option value="? undefined:undefined ?"></option>
-           <option value="1" <?php if($idgrupotarifa=='1') echo('selected'); ?>>1</option>
-           <option value="2" <?php if($idgrupotarifa=='2') echo('selected'); ?>>2</option>
-           <option value="3" <?php if($idgrupotarifa=='3') echo('selected'); ?>>3</option>
-           <option value="4" <?php if($idgrupotarifa=='4') echo('selected'); ?>>4</option>
-           <option value="5" <?php if($idgrupotarifa=='5') echo('selected'); ?>>5</option>
-           <option value="6" <?php if($idgrupotarifa=='6') echo('selected'); ?>>6</option>
-           <option value="7" <?php if($idgrupotarifa=='7') echo('selected'); ?>>7</option>
-           <option value="8" <?php if($idgrupotarifa=='8') echo('selected'); ?>>8</option>
-           <option value="9" <?php if($idgrupotarifa=='9') echo('selected'); ?>>9</option>
-           <option value="10" <?php if($idgrupotarifa=='10') echo('selected'); ?>>10</option>
-           <option value="11" <?php if($idgrupotarifa=='11') echo('selected'); ?>>11</option>
-           <option value="12" <?php if($idgrupotarifa=='12') echo('selected'); ?>>12</option>
-           <option value="13" <?php if($idgrupotarifa=='13') echo('selected'); ?>>13</option>
-           <option value="14" <?php if($idgrupotarifa=='14') echo('selected'); ?>>14</option>
-           <option value="15" <?php if($idgrupotarifa=='15') echo('selected'); ?>>15</option>
-           <option value="16" <?php if($idgrupotarifa=='16') echo('selected'); ?>>16</option>
-           <option value="17" <?php if($idgrupotarifa=='17') echo('selected'); ?>>17</option>
-           <option value="18" <?php if($idgrupotarifa=='18') echo('selected'); ?>>18</option>
-           <option value="19" <?php if($idgrupotarifa=='19') echo('selected'); ?>>19</option>
-           <option value="20" <?php if($idgrupotarifa=='20') echo('selected'); ?>>20</option>
-           <option value="21" <?php if($idgrupotarifa=='21') echo('selected'); ?>>21</option>
-           <option value="22" <?php if($idgrupotarifa=='22') echo('selected'); ?>>22</option>
-           <option value="23" <?php if($idgrupotarifa=='23') echo('selected'); ?>>23</option>
-           <option value="24" <?php if($idgrupotarifa=='24') echo('selected'); ?>>24</option>
+           <?php
+           while ($row = mysql_fetch_array($q))
+           {
+           ?>
+           <option value="<?= $row["idgrupotarifa"]?>"  <?php if($idgrupotarifa==$row["idgrupotarifa"]) echo('selected'); ?>><?= $row["idgrupotarifa"]?> - <?= utf8_encode($row["nombre"])?></option>
+           <?php
+           }
+           ?>
+           <!--option value="1" <?php if($idgrupotarifa=='1') echo('selected'); ?>>1 - R&P ELECTRONICS</option>
+           <option value="2" <?php if($idgrupotarifa=='2') echo('selected'); ?>>2 - ALMACENES LADY LEE S.A. DE C.V.</option>
+           <option value="3" <?php if($idgrupotarifa=='3') echo('selected'); ?>>3 - IVYMEP</option>
+           <option value="4" <?php if($idgrupotarifa=='4') echo('selected'); ?>>4 - ALBONSA</option>
+           <option value="5" <?php if($idgrupotarifa=='5') echo('selected'); ?>>5 - ILAE</option>
+           <option value="6" <?php if($idgrupotarifa=='6') echo('selected'); ?>>6 - R&V (Microondas)</option>
+           <option value="7" <?php if($idgrupotarifa=='7') echo('selected'); ?>>7 - SERVICIO MASTER</option>
+           <option value="8" <?php if($idgrupotarifa=='8') echo('selected'); ?>>8 - SERVICIO TÉCNICO SC</option>
+           <option value="9" <?php if($idgrupotarifa=='9') echo('selected'); ?>>9 - PRODISUR-BACES TECHNOLOGIES SAS</option>
+           <option value="10" <?php if($idgrupotarifa=='10') echo('selected'); ?>>10 - ELECTROGLOBAL</option>
+           <option value="11" <?php if($idgrupotarifa=='11') echo('selected'); ?>>11 - SERVIOCASA</option>
+           <option value="12" <?php if($idgrupotarifa=='12') echo('selected'); ?>>12 - R&V (Línea Blanca)</option>
+           <option value="13" <?php if($idgrupotarifa=='13') echo('selected'); ?>>13 - RYASA</option>
+           <option value="14" <?php if($idgrupotarifa=='14') echo('selected'); ?>>14 - SUPERMARCAS</option>
+           <option value="15" <?php if($idgrupotarifa=='15') echo('selected'); ?>>15 - RAYNET</option>
+           <option value="16" <?php if($idgrupotarifa=='16') echo('selected'); ?>>16 - REDELEC</option>
+           <option value="17" <?php if($idgrupotarifa=='17') echo('selected'); ?>>17 - R&M</option>
+           <option value="18" <?php if($idgrupotarifa=='18') echo('selected'); ?>>18 - PLUS SERVICES</option>
+           <option value="19" <?php if($idgrupotarifa=='19') echo('selected'); ?>>19 - SERVICENTER</option>
+           <option value="20" <?php if($idgrupotarifa=='20') echo('selected'); ?>>20 - MASTER BOLIVIA</option>
+           <option value="21" <?php if($idgrupotarifa=='21') echo('selected'); ?>>21 - CENSEL</option>
+           <option value="22" <?php if($idgrupotarifa=='22') echo('selected'); ?>>22 - ELECTROSERVICES</option>
+           <option value="23" <?php if($idgrupotarifa=='23') echo('selected'); ?>>23 - RADIOCENTRO</option>
+           <option value="24" <?php if($idgrupotarifa=='24') echo('selected'); ?>>24 - MOBIPLUS</option-->
          </select>
        </div>
        <div class="form-group">
@@ -100,13 +114,13 @@ while ($row = mysql_fetch_array($q))
          <label class="control-label">Tipo de Servicio</label>
          <select class="form-control1 ng-invalid ng-invalid-required" id="tiposervicio" name="tiposervicio" ng-model="model.tiposervicio" disabled>
            <option value="? undefined:undefined ?"></option>
-           <option value="Atención Técnica" <?php if($tiposervicio=='Atención Técnica') echo('selected'); ?>>Atención Técnica</option>
-           <option value="Movilización" <?php if($tiposervicio=='Movilización') echo('selected'); ?>>Movilización</option>
+           <option value="Atención Técnica" <?php if(utf8_encode($tiposervicio)=='Atención Técnica') echo('selected'); ?>>Atención Técnica</option>
+           <option value="Movilización" <?php if(utf8_encode($tiposervicio)=='Movilización') echo('selected'); ?>>Movilización</option>
          </select>
        </div>
        <div class="form-group">
          <label class="control-label">Subtipo de Servicio</label>
-         <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="subtiposervicio" name="subtiposervicio" ng-model="model.subtiposervicio" value="<?= $subtiposervicio ?>" readonly>
+         <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="subtiposervicio" name="subtiposervicio" ng-model="model.subtiposervicio" value="<?= utf8_encode($subtiposervicio) ?>" required="">
        </div>
        <div class="form-group">
          <label class="control-label">Valor</label>
@@ -126,8 +140,17 @@ while ($row = mysql_fetch_array($q))
        </div>
        <div class="form-group">
          <label class="control-label">¿Necesita Autorización?</label>
-         <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="necesitaautorizacion" name="necesitaautorizacion" ng-model="model.necesitaautorizacion" value="<?= $necesitaautorizacion ?>" readonly>
+         <input type="radio" id="necesitaautorizacion1" name="necesitaautorizacion" value="0" <?php if($necesitaautorizacion=="0") echo "checked" ?>>
+         <label for="necesitaautorizacion1">No</label>
+
+         <input type="radio" id="necesitaautorizacion2" name="necesitaautorizacion" value="1" <?php if($necesitaautorizacion=="1") echo "checked" ?>>
+         <label for="necesitaautorizacion2">Sí</label>
+
+         <!--input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="necesitaautorizacion" name="necesitaautorizacion" ng-model="model.necesitaautorizacion" value="<?= $necesitaautorizacion ?>" readonly-->
        </div>
+
+
+
        <div class="form-group">
          <button type="submit" class="btn btn-primary">Eliminar</button>
          <button type="reset" class="btn btn-default" onclick="javaScript: window.location.href='tarifas.php'">Cancelar</button>

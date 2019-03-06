@@ -21,6 +21,15 @@ if($_POST["postback"]){
   $idgrupotarifa = $_POST["idgrupotarifa"];
   $idmaster = $_POST["idmaster"];
 
+  if($idgrupotarifa==0)
+    $idgrupotarifa = $_POST["nuevogrupotarifa"];
+
+  if($red==0)
+    $red = $_POST["nuevared"];
+
+  if($pais==0)
+    $pais = $_POST["nuevopais"];
+
   $q = mysql_query("
   Insert into centros
   (Nombre, Red, Categoria, Pais, Ciudad, Direccion, Telefono1, Telefono2, Telefono3, Email, Horarios, Responsable, TelefonoResponsable, IDGrupoTarifa, idMaster, Status)
@@ -30,6 +39,37 @@ if($_POST["postback"]){
 
   echo("<script>alert('Registro exitoso'); window.location.href='centros.php';</script>");
 }
+
+$query = "SELECT idgrupotarifa, nombre
+          FROM  `centros`
+          GROUP BY idgrupotarifa
+          ORDER BY idgrupotarifa";
+$q = mysql_query($query) or die(mysql_error());
+
+//Obtenemos todas las redes
+$query = "SELECT red
+          FROM centros
+          GROUP BY red
+          ORDER BY 1 ";
+$redes = mysql_query($query) or die(mysql_error());
+
+//Obtenemos todos los paises
+$query = "SELECT pais
+          FROM centros
+          GROUP BY pais
+          ORDER BY 1";
+$paises = mysql_query($query) or die(mysql_error());
+
+//Obtenemos todos los paises
+$query = "SELECT id, nombre
+          FROM centros
+          WHERE idmaster =0
+          AND nombre <>  'HOME PRODUCTS'
+          AND nombre <>  'Contact Center'
+          GROUP BY id, nombre
+          ORDER BY nombre";
+
+$masters = mysql_query($query) or die(mysql_error());
 ?>
 <div class="xs">
    <h3>Nuevo CD´s</h3>
@@ -40,8 +80,18 @@ if($_POST["postback"]){
        <div class="form-group">
          <label class="control-label">Master</label>
          <select class="form-control1 ng-invalid ng-invalid-required" id="idmaster" name="idmaster" ng-model="model.idmaster" required="">
-            <option value="? undefined:undefined ?">Master</option>
-            <option value="1">R&P ELECTRONICS</option>
+            <option value="0">Master</option>
+            <?php
+            while ($row = mysql_fetch_array($masters))
+            {
+            ?>
+            <option value="<?= $row["id"]?>"><?= $row["nombre"]?></option>
+            <?php
+            }
+            ?>
+
+
+            <!--option value="1">R&P ELECTRONICS</option>
             <option value="18">RAYNET</option>
             <option value="6">ALBONSA</option>
             <option value="16">RYASA</option>
@@ -52,7 +102,7 @@ if($_POST["postback"]){
             <option value="22">SERVICENTER</option>
             <option value="21">PLUS SERVICES</option>
             <option value="25">ELECTROSERVICES</option>
-            <option value="28">MOBIPLUS</option>
+            <option value="28">MOBIPLUS</option-->
          </select>
        </div>
        <div class="form-group">
@@ -62,7 +112,7 @@ if($_POST["postback"]){
        <div class="form-group">
          <label class="control-label">Red</label>
          <select class="form-control1 ng-invalid ng-invalid-required" id="red" name="red" ng-model="model.red" required="">
-           <option value="? undefined:undefined ?"></option>
+           <!--option value="? undefined:undefined ?"></option>
            <option value="Master R&P"P>Master R&P</option>
            <option value="Red Albon">Red Albon</option>
            <option value="Red Censel">Red Censel</option>
@@ -74,8 +124,18 @@ if($_POST["postback"]){
            <option value="Red Redelec">Red Redelec</option>
            <option value="Red Ryasa">Red Ryasa</option>
            <option value="Red Servicenter">Red Servicenter</option>
-           <option value="Red SMEcuador">Red SMEcuador</option>
+           <option value="Red SMEcuador">Red SMEcuador</option-->
+           <?php
+           while ($row = mysql_fetch_array($redes))
+           {
+           ?>
+           <option value="<?= $row["red"]?>"><?= $row["red"]?></option>
+           <?php
+           }
+           ?>
+           <option value="0">Nueva red</option>
          </select>
+         <input type="text" placeholder="Nombre de la red" class="form-control1 ng-invalid ng-invalid-required ng-touched m-t-sm" id="nuevared" name="nuevared" ng-model="model.nuevared">
        </div>
        <div class="form-group">
          <label class="control-label">Categoría</label>
@@ -87,8 +147,16 @@ if($_POST["postback"]){
        </div>
        <div class="form-group">
          <label class="control-label">País</label>
-         <select class="form-control1 ng-invalid ng-invalid-required" id="pais" name="pais" ng-model="model.pais" required=""><option value="? undefined:undefined ?"></option>
-           <option value="Argentina">Argentina</option>
+         <select class="form-control1 ng-invalid ng-invalid-required" id="pais" name="pais" ng-model="model.pais" required="">
+           <?php
+           while ($row = mysql_fetch_array($paises))
+           {
+           ?>
+           <option value="<?= $row["pais"]?>"><?= $row["pais"]?></option>
+           <?php
+           }
+           ?>
+           <!--option value="Argentina">Argentina</option>
            <option value="Bolivia">Bolivia</option>
            <option value="Chile">Chile</option>
            <option value="Colombia">Colombia</option>
@@ -100,8 +168,10 @@ if($_POST["postback"]){
            <option value="Nicaragua">Nicaragua</option>
            <option value="Panamá">Panamá</option>
            <option value="Perú">Perú</option>
-           <option value="República Dominicana">República Dominicana</option>
+           <option value="República Dominicana">República Dominicana</option-->
+           <option value="0">Otro país</option>
          </select>
+         <input type="text" placeholder="Nombre del país" class="form-control1 ng-invalid ng-invalid-required ng-touched m-t-sm" id="nuevopais" name="nuevopais" ng-model="model.nuevopais">
        </div>
        <div class="form-group">
          <label class="control-label">Ciudad</label>
@@ -142,8 +212,18 @@ if($_POST["postback"]){
        <div class="form-group">
          <label class="control-label">Grupo tarifa</label>
          <select class="form-control1 ng-invalid ng-invalid-required" id="idgrupotarifa" name="idgrupotarifa" ng-model="model.idgrupotarifa" required="">
-           <option value="? undefined:undefined ?"></option>
-           <option value="1">1</option>
+           <option value="0">Nuevo grupo tarifa</option>
+           <?php
+           $joe = 1;
+           while ($row = mysql_fetch_array($q))
+           {
+           ?>
+           <option value="<?= $row["idgrupotarifa"]?>"><?= $row["idgrupotarifa"]?> - <?= utf8_encode($row["nombre"])?></option>
+           <?php
+           $joe++;
+           }
+           ?>
+           <!--option value="1">1</option>
            <option value="2">2</option>
            <option value="3">3</option>
            <option value="4">4</option>
@@ -166,8 +246,9 @@ if($_POST["postback"]){
            <option value="21">21</option>
            <option value="22">22</option>
            <option value="23">23</option>
-           <option value="24">24</option>
+           <option value="24">24</option-->
          </select>
+         <input type="hidden" name="nuevogrupotarifa" value="<?= $joe?>" />
        </div>
        <div class="form-group">
          <button type="submit" class="btn btn-primary">Registrar</button>
@@ -180,3 +261,33 @@ if($_POST["postback"]){
 </div>
 <?php include 'inc_footer.php'; ?>
 <script src="js/custom.js"></script>
+<script type="text/javascript">
+  $("#categoria").change(function () {
+      var categoria = this.value;
+      $(".data-lineablanca").show();
+      $(".data-menaje").show();
+
+      if(categoria=='LINEA BLANCA')
+        $(".data-menaje").hide();
+      else
+        $(".data-lineablanca").hide();
+  });
+
+  $(document).ready(function(){
+    $("#nuevared").hide();
+  });
+  $("#red").change(function(){
+    if($(this).val()==0){
+      $("#nuevared").show();
+    }else{
+      $("#nuevared").hide();
+    }
+  });
+  $("#pais").change(function(){
+    if($(this).val()==0){
+      $("#nuevopais").show();
+    }else{
+      $("#nuevopais").hide();
+    }
+  });
+</script>

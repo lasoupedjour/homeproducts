@@ -34,6 +34,13 @@ while ($row = mysql_fetch_array($q))
   $tipo = $row["Tipo"];
   $razonsocial = $row["RazonSocial"];
 }
+
+//Obtenemos todos los paises
+$query = "SELECT pais
+          FROM distribuidores
+          GROUP BY pais
+          ORDER BY 1";
+$paises = mysql_query($query) or die(mysql_error());
 ?>
 <div class="xs">
    <h3>Eliminar distribuidor</h3>
@@ -48,7 +55,15 @@ while ($row = mysql_fetch_array($q))
        <div class="form-group">
          <label class="control-label">País</label>
          <select class="form-control1 ng-invalid ng-invalid-required" id="pais" name="pais" ng-model="model.pais" disabled>
-           <option value="? undefined:undefined ?"></option>
+           <?php
+           while ($row = mysql_fetch_array($paises))
+           {
+           ?>
+           <option value="<?= $row["pais"]?>" <?php if($pais==$row["pais"]) echo('selected'); ?>><?= $row["pais"]?></option>
+           <?php
+           }
+           ?>
+           <!--option value="? undefined:undefined ?"></option>
            <option value="Argentina" <?php if($pais=='Argentina') echo('selected'); ?>>Argentina</option>
            <option value="Bolivia" <?php if($pais=='Bolivia') echo('selected'); ?>>Bolivia</option>
            <option value="Chile" <?php if($pais=='Chile') echo('selected'); ?>>Chile</option>
@@ -65,7 +80,7 @@ while ($row = mysql_fetch_array($q))
            <option value="Puerto Rico" <?php if($pais=='Puerto Rico') echo('selected'); ?>>Puerto Rico</option>
            <option value="República Dominicana" <?php if($pais=='República Dominicana') echo('selected'); ?>>República Dominicana</option>
            <option value="Uruguay" <?php if($pais=='Uruguay') echo('selected'); ?>>Uruguay</option>
-           <option value="Venezuela" <?php if($pais=='Venezuela') echo('selected'); ?>>Venezuela</option>
+           <option value="Venezuela" <?php if($pais=='Venezuela') echo('selected'); ?>>Venezuela</option-->
          </select>
        </div>
        <div class="form-group">
@@ -76,7 +91,7 @@ while ($row = mysql_fetch_array($q))
            <option value="MENAJE" <?php if($categoria=='MENAJE') echo('selected'); ?>>MENAJE</option>
          </select>
        </div>
-       <div class="form-group">
+       <!--div class="form-group">
          <label class="control-label">Tipo</label>
          <select class="form-control1 ng-invalid ng-invalid-required" id="tipo" name="tipo" ng-model="model.tipo" disabled>
            <option value="? undefined:undefined ?"></option>
@@ -87,7 +102,7 @@ while ($row = mysql_fetch_array($q))
            <option value="Walmart" <?php if($tipo=='Walmart') echo('selected'); ?>>Walmart</option>
            <option value="Nicaragua" <?php if($tipo=='Nicaragua') echo('selected'); ?>>Nicaragua</option>
          </select>
-       </div>
+       </div-->
        <div class="form-group">
          <label class="control-label">Nombre</label>
          <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="razonsocial" name="razonsocial" ng-model="model.razonsocial" value="<?= $razonsocial ?>" readonly>

@@ -197,6 +197,7 @@ export class GlobalService implements CanActivate{
                 "NoSerie": "",
                 "ObservacionesCDSDiagnostico": "",
                 "Refacciones": "",
+                "RefaccionesRecuperadas": "",
                 "Resolucion": "",
                 "Sello": "",
                 "Status": "",
@@ -277,6 +278,8 @@ export class GlobalService implements CanActivate{
 
     refacciones = []
 
+    refaccionesrecuperadas = []
+
     refaccionesproductos = [];
     tarifas = [];
     refaccion = {
@@ -294,6 +297,12 @@ export class GlobalService implements CanActivate{
         "NoGuia": "",
         "StatusCotizacion": "",
         "Status":""
+    }
+
+    refaccionrecuperada = {
+        "NombreRefaccion": "",
+        "NoParte": "",
+        "Cantidad": ""
     }
 
     subcategorias = []
@@ -1105,6 +1114,7 @@ export class GlobalService implements CanActivate{
                 "NoSerie": "",
                 "ObservacionesCDSDiagnostico": "",
                 "Refacciones": "",
+                "RefaccionesRecuperadas": "",
                 "Resolucion": "",
                 "Sello": "",
                 "Status": "",
@@ -1167,6 +1177,20 @@ export class GlobalService implements CanActivate{
         }
     }
 
+    setRefaccionesRecuperadasBd() {
+      console.log("setRefaccionesRecuperadasBd() {");
+      console.log("reporte_recuperadas->", Object(this.reporte.objreporte).RefaccionesRecuperadas);
+
+      var refacciones = Object(this.reporte.objreporte).RefaccionesRecuperadas;
+      if (refacciones[0]) {
+          console.log('set refacciones recuperadas bd');
+          console.log(JSON.parse(refacciones));
+          this.refaccionesrecuperadas = JSON.parse(refacciones);
+      }
+
+      console.log("this.refaccionesrecuperadas->", this.refaccionesrecuperadas);
+    }
+
     setAdjuntos() {
         console.log('set adjuntos');
         console.log(this.reporte.objreporte);
@@ -1211,6 +1235,9 @@ export class GlobalService implements CanActivate{
 
                     //reset refacciones
                     this.refacciones = [];
+
+                    //reset refaccionesrecuperadas
+                    this.refaccionesrecuperadas = [];
 
                     this.cliente.objeto = JSON.parse(data.cliente);
 
@@ -1262,6 +1289,9 @@ export class GlobalService implements CanActivate{
 
                     //reset refacciones
                     this.refacciones = [];
+
+                    //reset refaccionesrecuperadas
+                    this.refaccionesrecuperadas = [];
 
                     this.guardarIdReporte(data.idreporte);
                     this.guardarObjReporte(data.reporte);

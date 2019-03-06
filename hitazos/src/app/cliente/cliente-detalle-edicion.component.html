@@ -14,13 +14,13 @@
           </div>
           <div>Reporte del Caso</div>
         </div>
-        <div class="paso">
+        <div class="paso" *ngIf="this._global.user.nivel!='contactcenter'">
           <div class="wrap">
             <span>3</span>
           </div>
           <div>Reparación</div>
         </div>
-        <div class="paso">
+        <div class="paso" *ngIf="this._global.user.nivel!='contactcenter'">
           <div class="wrap">
             <span>4</span>
           </div>
@@ -121,7 +121,7 @@
         <label>
           <input autocomplete="off" type="email" class="form-control form-control-sm" formControlName="Email" placeholder="Correo Electrónico" />
           <span class="alert alert-danger" *ngIf="!genericForm.controls.Email.valid && genericForm.controls.Email.touched">
-            Este campo es requerido
+            Formato de correo inválido
           </span>
         </label>
 
@@ -131,6 +131,9 @@
           <button class="input-group-addon" (click)="d.toggle()" type="button">
             <i class="fa fa-calendar"></i>
           </button>
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.FechaNacimiento.valid && genericForm.controls.FechaNacimiento.touched">
+            Este campo es requerido
+          </span>
         </label>
 
         <label>

@@ -23,6 +23,12 @@ if($_POST["postback"]){
 
   echo("<script>alert('Registro exitoso'); window.location.href='tarifas.php';</script>");
 }
+
+$query = "SELECT idgrupotarifa, nombre
+          FROM  `centros`
+          GROUP BY idgrupotarifa
+          ORDER BY idgrupotarifa";
+$q = mysql_query($query) or die(mysql_error());
 ?>
 <div class="xs">
    <h3>Nueva tarifa</h3>
@@ -34,30 +40,39 @@ if($_POST["postback"]){
          <label class="control-label">Grupo tarifa</label>
          <select class="form-control1 ng-invalid ng-invalid-required" id="idgrupotarifa" name="idgrupotarifa" ng-model="model.idgrupotarifa" required="">
            <option value="? undefined:undefined ?"></option>
-           <option value="1">1</option>
-           <option value="2">2</option>
-           <option value="3">3</option>
-           <option value="4">4</option>
-           <option value="5">5</option>
-           <option value="6">6</option>
-           <option value="7">7</option>
-           <option value="8">8</option>
-           <option value="9">9</option>
-           <option value="10">10</option>
-           <option value="11">11</option>
-           <option value="12">12</option>
-           <option value="13">13</option>
-           <option value="14">14</option>
-           <option value="15">15</option>
-           <option value="16">16</option>
-           <option value="17">17</option>
-           <option value="18">18</option>
-           <option value="19">19</option>
-           <option value="20">20</option>
-           <option value="21">21</option>
-           <option value="22">22</option>
-           <option value="23">23</option>
-           <option value="24">24</option>
+           <?php
+           while ($row = mysql_fetch_array($q))
+           {
+           ?>
+           <option value="<?= $row["idgrupotarifa"]?>"><?= $row["idgrupotarifa"]?> - <?= utf8_encode($row["nombre"])?></option>
+           <?php
+           }
+           ?>
+
+           <!--option value="1">1 - R&P ELECTRONICS</option>
+           <option value="2">2 - ALMACENES LADY LEE S.A. DE C.V.</option>
+           <option value="3">3 - IVYMEP</option>
+           <option value="4">4 - ALBONSA</option>
+           <option value="5">5 - ILAE</option>
+           <option value="6">6 - R&V (Microondas)</option>
+           <option value="7">7 - SERVICIO MASTER</option>
+           <option value="8">8 - SERVICIO TÉCNICO SC</option>
+           <option value="9">9 - PRODISUR-BACES TECHNOLOGIES SAS</option>
+           <option value="10">10 - ELECTROGLOBAL</option>
+           <option value="11">11 - SERVIOCASA</option>
+           <option value="12">12 - R&V (Línea Blanca)</option>
+           <option value="13">13 - RYASA</option>
+           <option value="14">14 - SUPERMARCAS</option>
+           <option value="15">15 - RAYNET</option>
+           <option value="16">16 - REDELEC</option>
+           <option value="17">17 - R&M</option>
+           <option value="18">18 - PLUS SERVICES</option>
+           <option value="19">19 - SERVICENTER</option>
+           <option value="20">20 - MASTER BOLIVIA</option>
+           <option value="21">21 - CENSEL</option>
+           <option value="22">22 - ELECTROSERVICES</option>
+           <option value="23">23 - RADIOCENTRO</option>
+           <option value="24">24 - MOBIPLUS</option-->
          </select>
        </div>
        <div class="form-group">
@@ -107,7 +122,12 @@ if($_POST["postback"]){
        </div>
        <div class="form-group">
          <label class="control-label">¿Necesita Autorización?</label>
-         <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="necesitaautorizacion" name="necesitaautorizacion" ng-model="model.necesitaautorizacion" required="">
+         <input type="radio" id="necesitaautorizacion1" name="necesitaautorizacion" value="0" checked>
+         <label for="necesitaautorizacion1">No</label>
+
+         <input type="radio" id="necesitaautorizacion2" name="necesitaautorizacion" value="1">
+         <label for="necesitaautorizacion2">Sí</label>
+         <!--input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="necesitaautorizacion" name="necesitaautorizacion" ng-model="model.necesitaautorizacion" required=""-->
        </div>
        <div class="form-group">
          <button type="submit" class="btn btn-primary">Registrar</button>

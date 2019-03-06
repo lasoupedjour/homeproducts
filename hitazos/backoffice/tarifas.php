@@ -3,7 +3,13 @@ $_global_active = "tarifas";
 include 'inc_header.php';
 include "../servicios/dbc.php";
 
-$query = "select * from tarifas Where status<>2";
+//$query = "select * from tarifas Where status<>2";
+$query = "select t.*, Nombre from
+(select * from tarifas where status<>2) as t
+join
+(select idGrupoTarifa, Nombre from centros where idmaster=0 and nombre <> 'HOME PRODUCTS' and nombre <>'Contact Center') as c
+on t.idGrupoTarifa = c.idGrupoTarifa";
+
 $q = mysql_query($query) or die(mysql_error());
 ?>
 <div class="col-md-12 span_3">
@@ -34,10 +40,10 @@ $q = mysql_query($query) or die(mysql_error());
        ?>
        <tr>
          <td><?= $row["id"]?></td>
-         <td><?= $row["IDGrupoTarifa"]?></td>
+         <td><?= $row["IDGrupoTarifa"]?> - <?= utf8_encode($row["Nombre"])?></td>
          <td><?= $row["TipoTarifa"]?></td>
-         <td><?= $row["TipoServicio"]?></td>
-         <td><?= $row["SubtipoServicio"]?></td>
+         <td><?= utf8_encode($row["TipoServicio"])?></td>
+         <td><?= utf8_encode($row["SubtipoServicio"])?></td>
          <td><?= $row["Valor"]?></td>
          <td><?= $row["Impuesto"]?></td>
          <td><?= $row["TarifaMensual"]?></td>

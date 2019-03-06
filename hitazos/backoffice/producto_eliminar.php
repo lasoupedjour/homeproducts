@@ -106,10 +106,10 @@ while ($row = mysql_fetch_array($q))
          <label class="control-label">Producto</label>
          <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="producto" name="producto" ng-model="model.producto" value="<?= $producto ?>" readonly>
        </div>
-       <div class="form-group">
+       <!--div class="form-group">
          <label class="control-label">País</label>
          <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="pais" name="pais" ng-model="model.pais" value="<?= $pais ?>" readonly>
-       </div>
+       </div-->
        <div class="form-group">
          <button type="submit" class="btn btn-primary">Eliminar</button>
          <button type="reset" class="btn btn-default" onclick="javaScript: window.location.href='productos.php'">Cancelar</button>

@@ -28,9 +28,9 @@
             <a class="nav-link" routerLink="/administracion/resumen-distribuidor" routerLinkActive="active">Administración</a>
           </li>
           <li class="nav-item text-center" *ngIf="this._global.user.nivel=='administrador'">
-            <a class="nav-link" routerLink="../backoffice/productos.php" routerLinkActive="active">Administración de catálogos</a>
+            <a class="nav-link" href="backoffice/productos.php" routerLinkActive="active">Administración de catálogos</a>
           </li>
-          <li class="nav-item text-center" [hidden]="this._global.user.id == ''">
+          <li class="nav-item text-center" [hidden]="this._global.user.id == '' || this._global.user.nivel=='contactcenter'">
             <a class="nav-link" routerLink="/notificaciones" routerLinkActive="#"><i class="far fa-bell"></i></a>
             <div id="bell-counter" *ngIf="this._global.notificaciones.nuevas > 0">{{this._global.notificaciones.nuevas}}</div>
           </li>

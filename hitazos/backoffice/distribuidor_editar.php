@@ -14,7 +14,7 @@ if($_POST["postback"]){
 
   $q = mysql_query("
   update distribuidores set
-  IDDistribuidor='$iddistribuidor', Pais='$pais', Categoria='$categoria',
+  IDDistribuidor='$iddistribuidor', Pais='" . utf8_decode($pais) . "', Categoria='$categoria',
   Tipo='$tipotarifa', RazonSocial='$razonsocial'
   where id = $id_distribuidor
   ") or die(mysql_error());
@@ -39,6 +39,13 @@ while ($row = mysql_fetch_array($q))
   $tipo = $row["Tipo"];
   $razonsocial = $row["RazonSocial"];
 }
+
+//Obtenemos todos los paises
+$query = "SELECT pais
+          FROM distribuidores
+          GROUP BY pais
+          ORDER BY 1";
+$paises = mysql_query($query) or die(mysql_error());
 ?>
 <div class="xs">
    <h3>Editar distribuidor</h3>
@@ -53,7 +60,15 @@ while ($row = mysql_fetch_array($q))
        <div class="form-group">
          <label class="control-label">País</label>
          <select class="form-control1 ng-invalid ng-invalid-required" id="pais" name="pais" ng-model="model.pais" required="">
-           <option value="? undefined:undefined ?"></option>
+           <?php
+           while ($row = mysql_fetch_array($paises))
+           {
+           ?>
+           <option value="<?= $row["pais"]?>" <?php if($pais==$row["pais"]) echo('selected'); ?>><?= utf8_encode($row["pais"])?></option>
+           <?php
+           }
+           ?>
+           <!--option value="? undefined:undefined ?"></option>
            <option value="Argentina" <?php if($pais=='Argentina') echo('selected'); ?>>Argentina</option>
            <option value="Bolivia" <?php if($pais=='Bolivia') echo('selected'); ?>>Bolivia</option>
            <option value="Chile" <?php if($pais=='Chile') echo('selected'); ?>>Chile</option>
@@ -70,7 +85,7 @@ while ($row = mysql_fetch_array($q))
            <option value="Puerto Rico" <?php if($pais=='Puerto Rico') echo('selected'); ?>>Puerto Rico</option>
            <option value="República Dominicana" <?php if($pais=='República Dominicana') echo('selected'); ?>>República Dominicana</option>
            <option value="Uruguay" <?php if($pais=='Uruguay') echo('selected'); ?>>Uruguay</option>
-           <option value="Venezuela" <?php if($pais=='Venezuela') echo('selected'); ?>>Venezuela</option>
+           <option value="Venezuela" <?php if($pais=='Venezuela') echo('selected'); ?>>Venezuela</option-->
          </select>
        </div>
        <div class="form-group">

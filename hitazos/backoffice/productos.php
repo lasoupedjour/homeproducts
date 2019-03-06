@@ -21,7 +21,7 @@ $q = mysql_query($query) or die(mysql_error());
          <th>Tipo Tarifa</th>
          <th>Modelo</th>
          <th>Producto</th>
-         <th>País</th>
+         <!--th>País</th-->
          <!--th>Voltaje</th>
          <th>Status</th-->
          <th></th>
@@ -40,7 +40,7 @@ $q = mysql_query($query) or die(mysql_error());
          <td><?= $row["TipoTarifa"]?></td>
          <td><?= $row["Modelo"]?></td>
          <td><?= $row["Producto"]?></td>
-         <td><?= $row["Pais"]?></td>
+         <!--td><?= $row["Pais"]?></td-->
          <!--td><?= $row["Voltaje"]?></td>
          <td><?= $row["Status"]?></td-->
          <td>

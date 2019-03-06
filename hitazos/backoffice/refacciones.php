@@ -20,8 +20,8 @@ $q = mysql_query($query) or die(mysql_error());
          <th>Nombre</th>
          <th>No. de parte</th>
          <th>Modelo producto</th>
-         <th>Voltaje</th>
-         <th>Diagrama</th>
+         <!--th>Voltaje</th>
+         <th>Diagrama</th-->
          <th></th>
        </tr>
      </thead>
@@ -37,8 +37,8 @@ $q = mysql_query($query) or die(mysql_error());
          <td><?= $row["Nombre"]?></td>
          <td><?= $row["NoParte"]?></td>
          <td><?= $row["ModeloProducto"]?></td>
-         <td><?= $row["Voltaje"]?></td>
-         <td><?= $row["Diagrama"]?></td>
+         <!--td><?= $row["Voltaje"]?></td>
+         <td><?= $row["Diagrama"]?></td-->
          <td>
            <a href="refacciones_editar.php?id=<?= $row["id"] ?>"><i class="far fa-edit"></i></a>
            <a href="refacciones_eliminar.php?id=<?= $row["id"] ?>"><i class="far fa-trash-alt"></i></a>

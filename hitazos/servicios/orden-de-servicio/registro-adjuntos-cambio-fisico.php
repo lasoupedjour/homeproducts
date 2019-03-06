@@ -90,7 +90,8 @@ if($StatusCostoLanded==""){
             MontoIVA = ?,
             MontoTotal = ?,
             AdjuntosReciclaje = ?,
-            FechaAdjuntosCambioFisico = now()
+            FechaAdjuntosCambioFisico = now(),
+            RefaccionesRecuperadas = ?
             where id = ?
             ";
 }else{
@@ -105,13 +106,14 @@ if($StatusCostoLanded==""){
             MontoTotal = ?,
             AdjuntosReciclaje = ?,
             SubStatusReporte = 'Cerrado',
-            FechaAdjuntosCambioFisico = now()
+            FechaAdjuntosCambioFisico = now(),
+            RefaccionesRecuperadas = ?
             where id = ?
             ";
 }
 
 if ($stmt = $mysqli->prepare($query)) {
-  $stmt->bind_param("dddsdddsd",
+  $stmt->bind_param("dddsdddssd",
   $arre['MontoDespiece'],
   $arre['MontoReciclaje'],
   $arre['MontoOtro'],
@@ -120,6 +122,7 @@ if ($stmt = $mysqli->prepare($query)) {
   $arre['MontoIVA'],
   $arre['MontoTotal'],
   json_encode($AdjuntosReciclaje),
+  $arre['Refacciones'],
   $arre['IDReporte']
   );
   if($stmt->execute()){

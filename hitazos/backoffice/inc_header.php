@@ -41,7 +41,7 @@ Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony
   var usr = jQuery.parseJSON( localStorage.getItem('user') );
   console.log("user", usr);
   console.log("nivel", usr.nivel);
-
+  //alert(usr.nivel);
   if(usr.nivel!="administrador"){
     window.location.href='../';
   }

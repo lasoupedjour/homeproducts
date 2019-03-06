@@ -18,7 +18,6 @@ $q = mysql_query($query) or die(mysql_error());
          <th>IDDistribuidor</th>
          <th>País</th>
          <th>Categoría</th>
-         <th>Tipo</th>
          <th>Nombre</th>
          <th></th>
        </tr>
@@ -33,7 +32,6 @@ $q = mysql_query($query) or die(mysql_error());
          <td><?= $row["IDDistribuidor"]?></td>
          <td><?= $row["Pais"]?></td>
          <td><?= $row["Categoria"]?></td>
-         <td><?= $row["Tipo"]?></td>
          <td><?= $row["RazonSocial"]?></td>
          <td>
            <a href="distribuidor_editar.php?id=<?= $row["id"] ?>"><i class="far fa-edit"></i></a>

@@ -86,14 +86,14 @@ while ($row = mysql_fetch_array($q))
          <label class="control-label">Modelo producto</label>
          <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="producto" name="producto" ng-model="model.producto" value="<?= $modeloproducto ?>" readonly>
        </div>
-       <div class="form-group">
+       <!--div class="form-group">
          <label class="control-label">Voltaje</label>
          <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="pais" name="pais" ng-model="model.pais" value="<?= $voltaje ?>" readonly>
        </div>
        <div class="form-group">
          <label class="control-label">Diagrama</label>
          <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="sap" name="sap" ng-model="model.sap" value="<?= $diagrama ?>" readonly>
-       </div>
+       </div-->
        <div class="form-group">
          <button type="submit" class="btn btn-primary">Eliminar</button>
          <button type="reset" class="btn btn-default" onclick="javaScript: window.location.href='refacciones.php'">Cancelar</button>

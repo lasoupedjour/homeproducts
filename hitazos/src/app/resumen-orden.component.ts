@@ -45,6 +45,18 @@ export class ResumenOrdenComponent {
         "success": 1
     };
 
+    status = {
+        "TipoCaso" : "",
+        "FechaCompra" : "",
+        "garantiaValida": false,
+        "mostrarDescripcion": false,
+        "agregaRefaccionValid": true,
+        "cotizar": -1,
+        "solicitar": -1,
+        "habilitarOrden" : false
+
+    }
+
     ReciclajeLenght: 0;
     adjuntosValidosCambioFisico;
 
@@ -84,6 +96,8 @@ export class ResumenOrdenComponent {
         });
 
         this.adjuntosCambioFisicoForm = this.formBuilder.group({
+            Refaccion: [''],
+            NoParte: ['']
             // informacionCompleta: ['',
             //     Validators.required
             // ],
@@ -120,7 +134,8 @@ export class ResumenOrdenComponent {
 
 
         this._global.setRefaccionesBd();
-        this._global.setAdjuntos();
+        this._global.setRefaccionesRecuperadasBd();
+
         this.getDistribuidor();
         this.setTipoReparacion();
 
@@ -137,6 +152,188 @@ export class ResumenOrdenComponent {
             }
 
         this.obtenerDetalleResolucion();
+        this.llenaRefacciones();
+        this._global.setAdjuntos();
+    }
+
+    changeCantidad(id, val) {
+
+        console.log('change cantidad');
+
+        this._global.refaccionesrecuperadas[id].Cantidad = parseInt(val);
+
+    }
+
+    agregarOtraRefaccion(){
+      var OtraRefaccion = $("#OtraRefaccion").val();
+
+      if (OtraRefaccion != '') {
+          this.status.agregaRefaccionValid = true;
+
+          this._global.resetRefaccion();
+
+          var nombrerefaccion = "";
+
+          /*
+          this._global.refaccionesproductos.forEach(function (e) {
+              if (e.NoParte == outer.genericForm.controls.OtraRefaccion.value)
+                  nombrerefaccion = e.Nombre;
+          });
+          */
+
+          this._global.refaccionrecuperada.NombreRefaccion = 'Otro';
+          this._global.refaccionrecuperada.NoParte = String(OtraRefaccion);
+          this._global.refaccionrecuperada.Cantidad = "1";
+
+          this._global.refaccionesrecuperadas.push(this._global.refaccion);
+
+          this.adjuntosCambioFisicoForm.controls.Refaccion.setValue('');
+          this.adjuntosCambioFisicoForm.controls.NoParte.setValue('');
+
+          this.habilitarOrdenServicio();
+
+      }/*else if(this.adjuntosCambioFisicoForm.controls.Refaccion.value == 'Otro'){
+        alert("Show input");
+      }*/else {
+          this.status.agregaRefaccionValid = false;
+      }
+    }
+
+    validaRefacciones() {
+        var validarefacciones = true;
+        if (this.genericForm.controls.RequiereRefacciones.value && !this._global.refacciones[0]) {
+            validarefacciones = false;
+        }
+        return validarefacciones;
+    }
+
+    validaPropiedadesRefacciones() {
+        var validarefacciones = true;
+        console.log(this._global.refacciones);
+
+        //valida por casos
+        this._global.refaccionesrecuperadas.forEach(function (e) {
+            //caso disponible
+            if (e.Existencia == 'Disponible') {
+              if (e.Status == "" || e.CostoUnitario === "")
+                validarefacciones = false
+            }
+
+            //caso no encontrada
+            if (e.Existencia == 'No Disponible' || e.Existencia == 'No Encontrada') {
+                if (e.Cantidad == null || e.Cantidad == 0)
+                    validarefacciones = false
+            }
+
+
+
+        });
+
+
+        return validarefacciones;
+    }
+
+    habilitarOrdenServicio() {
+
+        var habilitar = true;
+
+        for (var i = 0; i < this._global.refaccionesrecuperadas.length; i++) {
+            if (this._global.refacciones[i].Status != 'Seleccionada' && this._global.refacciones[i].Status != 'Aprobada') {
+              habilitar = false;
+            }
+        }
+
+        if (!this.validaPropiedadesRefacciones())
+            habilitar = false;
+
+        if((this._global.reporte.objreporte.Categoria!="MENAJE" || this._global.reporte.objreporte.Modelo=='OS-17001' || this._global.reporte.objreporte.Modelo=='OS-17001-1') && this._global.user.nivel=='administrador' && this.genericForm.controls.RequiereRecoleccion.value!=0)
+          habilitar = false;
+
+        if((this._global.reporte.objreporte.Categoria=="MENAJE" && this._global.reporte.objreporte.Modelo!='OS-17001' && this._global.reporte.objreporte.Modelo!='OS-17001-1') && this._global.user.nivel=='administrador' && this.genericForm.controls.RequiereRecoleccion.value!=0)
+          habilitar = false;
+
+
+        this.status.habilitarOrden = habilitar;
+
+    }
+
+    llenaRefacciones() {
+
+        var params = {
+            Subcategoria: Object(this._global.reporte.objreporte).Subcategoria,
+            Modelo: Object(this._global.reporte.objreporte).Modelo
+        };
+
+        this._global.appstatus.loading = true;
+        this._global.refaccionesproductos = [];
+
+        this._httpService.postJSON(params, 'buscar-refacciones.php')
+            .subscribe(
+            data => {
+                console.log('data');
+                console.log(data);
+                this._global.appstatus.loading = false;
+
+                if (data.res == 'ok') {
+                    this._global.refaccionesproductos = this._global.parseJSON(data.refaccionesproductos);
+                    console.log('refaccionesproductos');
+                    console.log(this._global.refaccionesproductos);
+
+                    /*this.genericForm.controls.MotivoFallaDiagnostico.setValue(Object(this._global.reporte.objreporte).MotivoFallaDiagnostico);
+                    this.genericForm.controls.MotivoFallaDiagnostico.updateValueAndValidity();
+                    */
+
+                    if (data.refaccionesproductos.length == 0) {
+                        //this._global.appstatus.mensaje = 'No se encontraron datos con estas características.';
+                    }
+
+                } else if (data.res = 'error') {
+                    this._global.appstatus.mensaje = data.error;
+                }
+            },
+            error => alert(error),
+            () => console.log('termino submit')
+            );
+
+    }
+
+    agregarRefaccion() {
+        console.log('agregar refaccion');
+
+        if (this.adjuntosCambioFisicoForm.controls.Refaccion.value != '' && this.adjuntosCambioFisicoForm.controls.Refaccion.value!='Otro') {
+            this.status.agregaRefaccionValid = true;
+
+
+            this._global.resetRefaccion();
+
+            var nombrerefaccion = "";
+
+            var outer = this;
+
+            this._global.refaccionesproductos.forEach(function (e) {
+                if (e.NoParte == outer.adjuntosCambioFisicoForm.controls.Refaccion.value)
+                    nombrerefaccion = e.Nombre;
+            });
+
+            this._global.refaccionrecuperada.NombreRefaccion = nombrerefaccion;
+            this._global.refaccionrecuperada.NoParte = this.adjuntosCambioFisicoForm.controls.Refaccion.value;
+            this._global.refaccionrecuperada.Cantidad = "1";
+
+
+            this._global.refaccionesrecuperadas.push(this._global.refaccion);
+
+            this.adjuntosCambioFisicoForm.controls.Refaccion.setValue('');
+            this.adjuntosCambioFisicoForm.controls.NoParte.setValue('');
+
+            this.habilitarOrdenServicio();
+
+        }/*else if(this.adjuntosCambioFisicoForm.controls.Refaccion.value == 'Otro'){
+          alert("Show input");
+        }*/else {
+            this.status.agregaRefaccionValid = false;
+        }
+
+        //this.habilitarOrdenServicio();
     }
 
     obtenerDetalleResolucion(){
@@ -155,12 +352,15 @@ export class ResumenOrdenComponent {
               if (data.res == 'ok') {
                 console.log("resolucion", data.resolucion);
 
-                this.resolucion.id=JSON.parse(data.resolucion).id;
-                this.resolucion.info_completa=JSON.parse(data.resolucion).info_completa;
-                this.resolucion.reclamo=JSON.parse(data.resolucion).reclamo;
-                this.resolucion.razon_rechazo=JSON.parse(data.resolucion).razon_rechazo;
-                this.resolucion.procesado_por=JSON.parse(data.resolucion).procesado_por;
-                this.resolucion.fecha=JSON.parse(data.resolucion).fecha;
+                if (!(data.resolucion.length == 0)) {
+                  this.resolucion.id=JSON.parse(data.resolucion).id;
+                  this.resolucion.info_completa=JSON.parse(data.resolucion).info_completa;
+                  this.resolucion.reclamo=JSON.parse(data.resolucion).reclamo;
+                  this.resolucion.razon_rechazo=JSON.parse(data.resolucion).razon_rechazo;
+                  this.resolucion.procesado_por=JSON.parse(data.resolucion).procesado_por;
+                  this.resolucion.fecha=JSON.parse(data.resolucion).fecha;
+                }
+
 
                 //console.log("this.resolucion.id", this.resolucion.id);
                   /*
@@ -333,6 +533,7 @@ export class ResumenOrdenComponent {
       if(this._global.user.nivel == 'administrador'){
         flag = null;
       }
+      console.log("flag this._global.reporte.objreporte", this._global.reporte.objreporte);
       return flag;
     }
 
@@ -384,6 +585,7 @@ export class ResumenOrdenComponent {
         params["MontoIVA"] = this._global.reporte.objreporte.MontoIVA;
         params["MontoTotal"] = this._global.reporte.objreporte.MontoTotal;
 
+        params["Refacciones"] = JSON.stringify(this._global.refacciones);
         /*
         params["MontoDespiece"] = this._global.reporte.objreporte.MontoDespiece;
         params["MontoSubtotal"] = this._global.reporte.objreporte.MontoSubtotal;

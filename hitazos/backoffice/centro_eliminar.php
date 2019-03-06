@@ -44,6 +44,26 @@ while ($row = mysql_fetch_array($q))
   $idgrupotarifa = $row["IDGrupoTarifa"];
   $idmaster = $row["idMaster"];
 }
+
+$query = "SELECT idgrupotarifa, nombre
+          FROM  `centros`
+          GROUP BY idgrupotarifa
+          ORDER BY idgrupotarifa";
+$q = mysql_query($query) or die(mysql_error());
+
+//Obtenemos todas las redes
+$query = "SELECT red
+          FROM centros
+          GROUP BY red
+          ORDER BY 1 ";
+$redes = mysql_query($query) or die(mysql_error());
+
+//Obtenemos todos los paises
+$query = "SELECT pais
+          FROM centros
+          GROUP BY pais
+          ORDER BY 1";
+$paises = mysql_query($query) or die(mysql_error());
 ?>
 <div class="xs">
    <h3>Eliminar CD´s</h3>
@@ -54,7 +74,16 @@ while ($row = mysql_fetch_array($q))
        <div class="form-group">
          <label class="control-label">Master</label>
          <select class="form-control1 ng-invalid ng-invalid-required" id="idmaster" name="idmaster" ng-model="model.idmaster" disabled>
-            <option value="? undefined:undefined ?">Master</option>
+           <option value="0">Master</option>
+           <?php
+           while ($row = mysql_fetch_array($masters))
+           {
+           ?>
+           <option value="<?= $row["id"]?>" <?php if($idmaster==$row["id"]) echo('selected'); ?>><?= $row["nombre"]?></option>
+           <?php
+           }
+           ?>
+            <!--option value="? undefined:undefined ?">Master</option>
             <option value="1" <?php if($idmaster=='1') echo('selected'); ?>>R&P ELECTRONICS</option>
             <option value="18" <?php if($idmaster=='18') echo('selected'); ?>>RAYNET</option>
             <option value="6" <?php if($idmaster=='6') echo('selected'); ?>>ALBONSA</option>
@@ -66,7 +95,7 @@ while ($row = mysql_fetch_array($q))
             <option value="22" <?php if($idmaster=='22') echo('selected'); ?>>SERVICENTER</option>
             <option value="21" <?php if($idmaster=='21') echo('selected'); ?>>PLUS SERVICES</option>
             <option value="25" <?php if($idmaster=='25') echo('selected'); ?>>ELECTROSERVICES</option>
-            <option value="28" <?php if($idmaster=='28') echo('selected'); ?>>MOBIPLUS</option>
+            <option value="28" <?php if($idmaster=='28') echo('selected'); ?>>MOBIPLUS</option-->
          </select>
        </div>
        <div class="form-group">
@@ -76,7 +105,7 @@ while ($row = mysql_fetch_array($q))
        <div class="form-group">
          <label class="control-label">Red</label>
          <select class="form-control1 ng-invalid ng-invalid-required" id="red" name="red" ng-model="model.red"  disabled>
-           <option value="? undefined:undefined ?"></option>
+           <!--option value="? undefined:undefined ?"></option>
            <option value="Master R&P" <?php if($red=='Master R&P') echo('selected'); ?>>Master R&P</option>
            <option value="Red Albon" <?php if($red=='Red Albon') echo('selected'); ?>>Red Albon</option>
            <option value="Red Censel" <?php if($red=='Red Censel') echo('selected'); ?>>Red Censel</option>
@@ -88,7 +117,16 @@ while ($row = mysql_fetch_array($q))
            <option value="Red Redelec" <?php if($red=='Red Redelec') echo('selected'); ?>>Red Redelec</option>
            <option value="Red Ryasa" <?php if($red=='Red Ryasa') echo('selected'); ?>>Red Ryasa</option>
            <option value="Red Servicenter" <?php if($red=='Red Servicenter') echo('selected'); ?>>Red Servicenter</option>
-           <option value="Red SMEcuador" <?php if($red=='Red SMEcuador') echo('selected'); ?>>Red SMEcuador</option>
+           <option value="Red SMEcuador" <?php if($red=='Red SMEcuador') echo('selected'); ?>>Red SMEcuador</option-->
+           <?php
+           while ($row = mysql_fetch_array($redes))
+           {
+           ?>
+           <option value="<?= $row["red"]?>" <?php if($red==$row["red"]) echo('selected'); ?>><?= $row["red"]?></option>
+           <?php
+           }
+           ?>
+           <option value="0">Nueva red</option>
          </select>
        </div>
        <div class="form-group">
@@ -103,7 +141,15 @@ while ($row = mysql_fetch_array($q))
        <div class="form-group">
          <label class="control-label">País</label>
          <select class="form-control1 ng-invalid ng-invalid-required" id="pais" name="pais" ng-model="model.pais"  disabled>
-           <option value="? undefined:undefined ?"></option>
+           <?php
+           while ($row = mysql_fetch_array($paises))
+           {
+           ?>
+           <option value="<?= $row["pais"]?>" <?php if($pais==$row["pais"]) echo('selected'); ?>><?= utf8_encode($row["pais"])?></option>
+           <?php
+           }
+           ?>
+           <!--option value="? undefined:undefined ?"></option>
            <option value="Argentina" <?php if($pais=='Argentina') echo('selected'); ?>>Argentina</option>
            <option value="Bolivia" <?php if($pais=='Bolivia') echo('selected'); ?>>Bolivia</option>
            <option value="Chile" <?php if($pais=='Chile') echo('selected'); ?>>Chile</option>
@@ -116,7 +162,7 @@ while ($row = mysql_fetch_array($q))
            <option value="Nicaragua" <?php if($pais=='Nicaragua') echo('selected'); ?>>Nicaragua</option>
            <option value="Panamá" <?php if($pais=='Panamá') echo('selected'); ?>>Panamá</option>
            <option value="Perú" <?php if($pais=='Perú') echo('selected'); ?>>Perú</option>
-           <option value="República Dominicana" <?php if($pais=='República Dominicana') echo('selected'); ?>>República Dominicana</option>
+           <option value="República Dominicana" <?php if($pais=='República Dominicana') echo('selected'); ?>>República Dominicana</option-->
          </select>
        </div>
        <div class="form-group">
@@ -125,7 +171,7 @@ while ($row = mysql_fetch_array($q))
        </div>
        <div class="form-group">
          <label class="control-label">Dirección</label>
-         <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="direccion" name="direccion" ng-model="model.direccion" value="<?= $direccion ?>" readonly>
+         <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="direccion" name="direccion" ng-model="model.direccion" value="<?= utf8_encode($direccion) ?>" readonly>
        </div>
        <div class="form-group">
          <label class="control-label">Teléfono 1</label>
@@ -145,11 +191,11 @@ while ($row = mysql_fetch_array($q))
        </div>
        <div class="form-group">
          <label class="control-label">Horarios</label>
-         <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="horarios" name="horarios" ng-model="model.horarios" value="<?= $horarios ?>" readonly>
+         <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="horarios" name="horarios" ng-model="model.horarios" value="<?= utf8_encode($horarios) ?>" readonly>
        </div>
        <div class="form-group">
          <label class="control-label">Responsable</label>
-         <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="responsable" name="responsable" ng-model="model.responsable" value="<?= $resonsable ?>" readonly>
+         <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="responsable" name="responsable" ng-model="model.responsable" value="<?= utf8_encode($resonsable) ?>" readonly>
        </div>
        <div class="form-group">
          <label class="control-label">Teléfono Responsable</label>
@@ -158,7 +204,17 @@ while ($row = mysql_fetch_array($q))
        <div class="form-group">
          <label class="control-label">Grupo tarifa</label>
          <select class="form-control1 ng-invalid ng-invalid-required" id="idgrupotarifa" name="idgrupotarifa" ng-model="model.idgrupotarifa"  disabled>
-           <option value="? undefined:undefined ?"></option>
+           <?php
+           $joe = 1;
+           while ($row = mysql_fetch_array($q))
+           {
+           ?>
+           <option value="<?= $row["idgrupotarifa"]?>" <?php if($idgrupotarifa==$row["idgrupotarifa"]) echo('selected'); ?>><?= $row["idgrupotarifa"]?> - <?= utf8_encode($row["nombre"])?></option>
+           <?php
+           $joe++;
+           }
+           ?>
+           <!--option value="? undefined:undefined ?"></option>
            <option value="1" <?php if($idgrupotarifa=='1') echo('selected'); ?>>1</option>
            <option value="2" <?php if($idgrupotarifa=='2') echo('selected'); ?>>2</option>
            <option value="3" <?php if($idgrupotarifa=='3') echo('selected'); ?>>3</option>
@@ -182,7 +238,7 @@ while ($row = mysql_fetch_array($q))
            <option value="21" <?php if($idgrupotarifa=='21') echo('selected'); ?>>21</option>
            <option value="22" <?php if($idgrupotarifa=='22') echo('selected'); ?>>22</option>
            <option value="23" <?php if($idgrupotarifa=='23') echo('selected'); ?>>23</option>
-           <option value="24" <?php if($idgrupotarifa=='24') echo('selected'); ?>>24</option>
+           <option value="24" <?php if($idgrupotarifa=='24') echo('selected'); ?>>24</option-->
          </select>
        </div>
        <div class="form-group">

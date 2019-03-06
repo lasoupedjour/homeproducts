@@ -10,8 +10,10 @@ if($_POST["postback"]){
   $nombre = $_POST["nombre"];
   $noparte = $_POST["noparte"];
   $modeloproducto = $_POST["modeloproducto"];
-  $voltaje = $_POST["voltaje"];
-  $diagrama = $_POST["diagrama"];
+  //$voltaje = $_POST["voltaje"];
+  //$diagrama = $_POST["diagrama"];
+  $voltaje = '';
+  $diagrama = '';
 
   $q = mysql_query("
   Insert into refacciones_productos
@@ -72,14 +74,14 @@ if($_POST["postback"]){
          <label class="control-label">Modelo producto</label>
          <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="producto" name="producto" ng-model="model.producto" required="">
        </div>
-       <div class="form-group">
+       <!---div class="form-group">
          <label class="control-label">Voltaje</label>
          <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="pais" name="pais" ng-model="model.pais" required="">
        </div>
        <div class="form-group">
          <label class="control-label">Diagrama</label>
          <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="sap" name="sap" ng-model="model.sap" required="">
-       </div>
+       </div-->
        <div class="form-group">
          <button type="submit" class="btn btn-primary">Registrar</button>
          <button type="reset" class="btn btn-default" onclick="javaScript: window.location.href='refacciones.php'">Cancelar</button>

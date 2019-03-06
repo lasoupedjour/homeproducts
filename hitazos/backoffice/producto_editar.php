@@ -12,7 +12,8 @@ if($_POST["postback"]){
   $tipotarifa = $_POST["tipotarifa"];
   $modelo = $_POST["modelo"];
   $producto = $_POST["producto"];
-  $pais = $_POST["pais"];
+  //$pais = $_POST["pais"];
+  $pais = '';
 
   $q = mysql_query("
   update productos set
@@ -52,7 +53,7 @@ while ($row = mysql_fetch_array($q))
      <fieldset>
        <div class="form-group">
          <label class="control-label">SAP</label>
-         <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="sap" name="sap" ng-model="model.sap" value="<?= $sap ?>" required="">
+         <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="sap" name="sap" ng-model="model.sap" value="<?= $sap ?>">
        </div>
        <div class="form-group">
          <label class="control-label">Categoría</label>
@@ -113,10 +114,10 @@ while ($row = mysql_fetch_array($q))
          <label class="control-label">Producto</label>
          <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="producto" name="producto" ng-model="model.producto" value="<?= $producto ?>" required="">
        </div>
-       <div class="form-group">
+       <!--div class="form-group">
          <label class="control-label">País</label>
          <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="pais" name="pais" ng-model="model.pais" value="<?= $pais ?>" required="">
-       </div>
+       </div-->
        <div class="form-group">
          <button type="submit" class="btn btn-primary">Actualizar</button>
          <button type="reset" class="btn btn-default" onclick="javaScript: window.location.href='productos.php'">Cancelar</button>

@@ -249,7 +249,7 @@
     </div>
 
     <div class="offset-sm-4 col-sm-4">
-
+      <form name="formulariotarifas" [formGroup]="genericForm">
       <div class="vform"><div class="vformleft aright">Valor de Refacciones: </div> <div class="vformright"> {{this._global.reporte.objreporte.MontoRefacciones | currency}} &nbsp;USD</div></div>
       <div class="vform"><div class="vformleft aright">Atención Técnica: </div> <div class="vformright"> {{this._global.reporte.objreporte.MontoReparacion | currency}} &nbsp;USD</div></div>
       <div class="vform"><div class="vformleft aright">Movilización: </div> <div class="vformright"> {{this._global.reporte.objreporte.MontoMovilizacion | currency}} &nbsp;USD</div></div>
@@ -272,6 +272,7 @@
       <div class="vform"><div class="vformleft aright">Subtotal: </div> <div class="vformright"> {{this._global.reporte.objreporte.MontoSubtotal | currency}} &nbsp;USD</div></div>
       <div class="vform"><div class="vformleft aright">IVA%: </div> <div class="vformright"> {{this._global.reporte.objreporte.MontoIVA | currency}}&nbsp;USD</div></div>
       <div class="vform bold negro"><div class="vformleft aright">Total: </div> <div class="vformright"> {{this._global.reporte.objreporte.MontoTotal | currency}}&nbsp;USD</div></div>
+      </form>
     </div>
 
    </div>
@@ -288,7 +289,7 @@
     <div class="row" [hidden]="this._global.reporte.objreporte.TipoReclamoDiagnostico=='Cambio' && this._global.user.nivel=='distribuidor'">
       <div class="col-sm-4 mb-5">
         <div class="row">
-          <div class="col-4 text-right">
+          <div class="col-4 text-left">
             <div class="sform mb-3">11. <i>Factura o ticket de compra</i> del producto:</div>
           </div>
           <div class="col-8">
@@ -306,7 +307,7 @@
 
       <div class="col-sm-4 mb-5">
         <div class="row">
-          <div class="col-4 text-right">
+          <div class="col-4 text-left">
             <div class="sform mb-3">12. <i>Fotos del modelo y no. serie</i> de producto:</div>
           </div>
           <div class="col-8">
@@ -323,7 +324,7 @@
 
       <div class="col-sm-4 mb-5" *ngIf="_global.AdjuntosFacturasRepuestosArre[0]">
         <div class="row">
-          <div class="col-4 text-right">
+          <div class="col-4 text-left">
             <div class="sform mb-3">13. <i>Facturas de repuestos</i> utilizados:</div>
           </div>
           <div class="col-8">
@@ -340,7 +341,7 @@
 
       <div class="col-sm-4 mb-5" *ngIf="_global.AdjuntosFacturasNotasCompraArre[0]=='' && this._global.reporte.objreporte.Categoria!='MENAJE'">
         <div class="row">
-          <div class="col-4 text-right">
+          <div class="col-4 text-left">
             <div class="sform mb-3">14. Adjuntar <i>otro</i>:</div>
           </div>
           <div class="col-8">
@@ -356,7 +357,7 @@
       </div>
       <div class="col-sm-4 mb-5" *ngIf="_global.AdjuntosReciclajeArre[0]!='' && this._global.reporte.objreporte.RequiereRecoleccion=='1'">
         <div class="row">
-          <div class="col-4 text-right">
+          <div class="col-4 text-left">
             <div class="sform mb-3">13. <i>Comprobante reciclaje</i>:</div>
           </div>
           <div class="col-8">
@@ -383,7 +384,7 @@
     </div>
     <div class="col-sm-4 mb-5" *ngIf="_global.AdjuntosReciclajeArre[0]!='' && this._global.reporte.objreporte.StatusCambioFisico=='Aprobado' && this._global.reporte.objreporte.SubStatusReporte=='Cerrado' && !this._global.esDistribuidor()">
       <div class="row">
-        <div class="col-4 text-right">
+        <div class="col-4 text-left">
           <div class="sform mb-3">13. <i>Comprobante reciclaje</i>:</div>
         </div>
         <div class="col-8">
@@ -402,40 +403,132 @@
 
       <div class="col-sm-4 mb-5">
         <div class="row">
-          <div class="col-6 text-right">
-            <div class="sform mb-3">14. Comprobante<i>reciclaje</i>:</div>
+          <div class="col-4 text-left">
+            <div class="sform mb-3">14. <i>Comprobante reciclaje</i>:</div>
           </div>
-          <div class="col-6">
+          <div class="col-8">
             <div class="row no-gutters">
-              <div class="col-12 mb-1 attachments">
+              <div class="col-12 mb-1 attachments" *ngIf="this.ReciclajeLenght==0 && this.adjuntosValidosCambioFisico==false">
 
                 <ng2-file-input (onAction)="onActionReciclaje($event)"></ng2-file-input>
                 <div class="alert alert-danger" *ngIf="this.ReciclajeLenght==0 && this.adjuntosValidosCambioFisico==false">
                   Este campo es requerido
                 </div>
-
+                <!-- <div *ngIf="_global.AdjuntosReciclajeArre.length<2">No hay</div> -->
+              </div>
+              <div class="col-12 mb-1 attachments">
                 <div class="prev" *ngFor="let item of _global.AdjuntosReciclajeArre; let i = index"  [innerHTML]="prevAttach(item)"></div>
-                  <!-- <div *ngIf="_global.AdjuntosReciclajeArre.length<2">No hay</div> -->
-                </div>
-
+              </div>
             </div>
 
           </div>
         </div>
 
       </div>
-
-
+      <div class="col-8"></div>
     </div>
-
-    <div class="row">
-      <div class="col-sm-12 my-3 mt-1 text-center">
-        <button class="btn" type="submit" >Registrar adjuntos de cambio físico</button>
-      </div>
-    </div>
-  </form>
 <!--termina Archivos Adjuntos CAMBIO FISICO-->
 
+<!--REFACCIONES -->
+<div class="row mt-2" *ngIf="_global.refaccionesrecuperadas.length>0">
+  <div class="col-12">
+    <div class="sform mb-3">15. <i>Refacciones recuperadas del producto</i>:</div>
+
+    <!--tabla-->
+    <div class="row my-5" *ngIf="_global.refaccionesrecuperadas[0]">
+      <div class="col-12 mb-5">
+
+        <table class="w-50">
+          <tr>
+            <th>Descripción/No. Parte</th>
+            <th>Cantidad</th>
+          </tr>
+
+          <tr *ngFor="let item of _global.refaccionesrecuperadas; let i = index">
+            <td>
+              {{item.NombreRefaccion}} - {{item.NoParte}}
+            </td>
+            <td>
+              {{item.Cantidad}}
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="mb-5" *ngIf="!_global.refaccionesrecuperadas[0]">No requiere refacciones.</div>
+  </div>
+</div>
+
+<div class="row" *ngIf="_global.refaccionesrecuperadas.length==0">
+  <div class="col-12">
+
+    <div class="row">
+      <div class="col-6 text-left">
+        <div class="sform mb-3">15. <i>Agrega las refacciones recuperadas del producto</i>:</div>
+      </div>
+      <div class="col-sm-4">
+        <label>
+          <select class="form-control form-control-sm" formControlName="Refaccion" (change)="agregarRefaccion()">
+            <option value="" hidden="">Agregar refacción</option>
+            <option value="Otro">Otro</option>
+            <option *ngFor="let item of _global.refaccionesproductos; let i = index" value="{{item.NoParte}}">{{item.NoParte}} - {{item.Nombre}}</option>
+          </select>
+        </label>
+      </div>
+      <div class="col-sm-4">
+        <label>
+          <input *ngIf="this.adjuntosCambioFisicoForm.controls.Refaccion.value == 'Otro'" autocomplete="off" type="text" class="form-control form-control-sm" id="OtraRefaccion" placeholder="Descripción" maxlength="100" />&nbsp;
+        </label>
+      </div>
+      <div class="col-sm-4">
+        <label>
+          <button *ngIf="this.adjuntosCambioFisicoForm.controls.Refaccion.value == 'Otro'" type="button" class="btn btn-sm" (click)="agregarOtraRefaccion()"><i class="fa fa-plus-circle"></i> Agregar Refacción</button>
+        </label>
+      </div>
+    </div>
+
+
+
+    <!--tabla-->
+    <div class="row my-5" *ngIf="_global.refacciones[0]">
+      <div class="col-12 mb-5">
+
+        <table class="w-50">
+          <tr>
+            <th>Refacción/No. de parte</th>
+            <th>Cantidad</th>
+            <th>Eliminar</th>
+          </tr>
+
+          <tr *ngFor="let item of _global.refacciones; let i = index">
+
+            <td>
+              {{item.NombreRefaccion}} - {{item.NoParte}}
+            </td>
+            <td>
+              <div>
+                <input type="number" class="form-control form-control-sm cantidad text-center" (keyup)="changeCantidad(i, $event.target.value)" (change)="changeCantidad(i, $event.target.value)" min="1" value="{{_global.refacciones[i].Cantidad}}" />
+              </div>
+            </td>
+            <td>
+              <a class="btneliminar" (click)="eliminarRefaccion(i)"><i class="fa fa-trash"></i></a>
+            </td>
+          </tr>
+
+        </table>
+
+      </div>
+    </div>
+  </div>
+    <!--termina REFACCIONES -->
+  <div class="row">
+    <div class="col-sm-12 my-3 mt-1 text-center">
+      <button class="btn" type="submit" >Registrar información de cambio físico</button>
+    </div>
+  </div>
+
+</div>
+</form>
 <!--DISTRIBUIDOR CAMBIO FISICO-->
 <div class="row" *ngIf="this._global.reporte.objreporte.TipoReclamoDiagnostico == 'Cambio' && this._global.user.nivel != 'operador'">
   <div class="col-sm-12 my-3">

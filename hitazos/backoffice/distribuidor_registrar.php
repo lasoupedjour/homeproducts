@@ -8,7 +8,8 @@ if($_POST["postback"]){
   $iddistribuidor = $_POST["iddistribuidor"];
   $pais = $_POST["pais"];
   $categoria = $_POST["categoria"];
-  $tipo = $_POST["tipo"];
+  //$tipo = $_POST["tipo"];
+  $tipo = "";
   $razonsocial = $_POST["razonsocial"];
 
   $q = mysql_query("
@@ -20,6 +21,13 @@ if($_POST["postback"]){
 
   echo("<script>alert('Registro exitoso'); window.location.href='distribuidores.php';</script>");
 }
+
+//Obtenemos todos los paises
+$query = "SELECT pais
+          FROM distribuidores
+          GROUP BY pais
+          ORDER BY 1";
+$paises = mysql_query($query) or die(mysql_error());
 ?>
 <div class="xs">
    <h3>Nuevo distribuidor</h3>
@@ -34,7 +42,15 @@ if($_POST["postback"]){
        <div class="form-group">
          <label class="control-label">País</label>
          <select class="form-control1 ng-invalid ng-invalid-required" id="pais" name="pais" ng-model="model.pais" required="">
-           <option value="? undefined:undefined ?"></option>
+           <?php
+           while ($row = mysql_fetch_array($paises))
+           {
+           ?>
+           <option value="<?= $row["pais"]?>"><?= $row["pais"]?></option>
+           <?php
+           }
+           ?>
+           <!--option value="? undefined:undefined ?"></option>
            <option value="Argentina">Argentina</option>
            <option value="Bolivia">Bolivia</option>
            <option value="Chile">Chile</option>
@@ -51,7 +67,8 @@ if($_POST["postback"]){
            <option value="Puerto Rico">Puerto Rico</option>
            <option value="República Dominicana">República Dominicana</option>
            <option value="Uruguay">Uruguay</option>
-           <option value="Venezuela">Venezuela</option>
+           <option value="Venezuela">Venezuela</option-->
+           <option value="0">Otro país</option>
          </select>
        </div>
        <div class="form-group">
@@ -61,7 +78,7 @@ if($_POST["postback"]){
            <option value="MENAJE">MENAJE</option>
          </select>
        </div>
-       <div class="form-group">
+       <!--div class="form-group">
          <label class="control-label">Tipo</label>
          <select class="form-control1 ng-invalid ng-invalid-required" id="tipo" name="tipo" ng-model="model.tipo" required="">
            <option value="? undefined:undefined ?"></option>
@@ -72,7 +89,7 @@ if($_POST["postback"]){
            <option value="Walmart">Walmart</option>
            <option value="Nicaragua">Nicaragua</option>
          </select>
-       </div>
+       </div-->
        <div class="form-group">
          <label class="control-label">Nombre</label>
          <input type="text" class="form-control1 ng-invalid ng-invalid-required ng-touched" id="razonsocial" name="razonsocial" ng-model="model.razonsocial" value="<?= $razonsocial ?>" required="">

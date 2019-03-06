@@ -243,6 +243,11 @@ export class ClienteDetalleEdicionComponent {
                 this.genericForm.controls.APaterno.updateValueAndValidity();
                 this.genericForm.controls.AMaterno.setValidators([Validators.required]);
                 this.genericForm.controls.AMaterno.updateValueAndValidity();
+                //this.genericForm.controls.FechaNacimiento.valid = true;
+
+                this.genericForm.controls.FechaNacimiento.setValidators([]);
+                this.genericForm.controls.FechaNacimiento.setValue('');
+                this.genericForm.controls.FechaNacimiento.updateValueAndValidity();
 
                 break;
 
@@ -338,7 +343,7 @@ export class ClienteDetalleEdicionComponent {
     }
 
     submitRegistro() {
-        console.log('submit prevalidation');
+        console.log('submit prevalidation valid', this.genericForm.valid);
 
         if (this.genericForm.valid) {
 

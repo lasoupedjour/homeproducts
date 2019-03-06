@@ -14,13 +14,13 @@
           </div>
           <div>Reporte del Caso</div>
         </div>
-        <div class="paso" *ngIf="!(this._global.esDistribuidor())">
+        <div class="paso" *ngIf="!(this._global.esDistribuidor()) && this._global.user.nivel!='contactcenter'">
           <div class="wrap">
             <span>3</span>
           </div>
           <div>Reparación</div>
         </div>
-        <div class="paso" *ngIf="!(this._global.esDistribuidor())">
+        <div class="paso" *ngIf="!(this._global.esDistribuidor()) && this._global.user.nivel!='contactcenter'">
           <div class="wrap">
             <span>4</span>
           </div>
@@ -361,7 +361,7 @@
       </label>
     </div>-->
     <!--REVISION-->
-    <div *ngIf="!(this._global.user.IDDistribuidor>0) && this.genericForm.controls.TipoCaso.value == 'Garantía' && (this.genericForm.controls.Categoria.value!='MENAJE' || this.genericForm.controls.Modelo.value=='OS-17001' || this.genericForm.controls.Modelo.value=='OS-17001-1')" class="col-12">
+    <div *ngIf="(!(this._global.user.IDDistribuidor>0) && this._global.user.nivel!='contactcenter') && this.genericForm.controls.TipoCaso.value == 'Garantía' && (this.genericForm.controls.Categoria.value!='MENAJE' || this.genericForm.controls.Modelo.value=='OS-17001' || this.genericForm.controls.Modelo.value=='OS-17001-1')" class="col-12">
       <div class="row">
 
         <div class="col-12 pt-3">
