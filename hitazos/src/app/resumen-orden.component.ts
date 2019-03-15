@@ -410,7 +410,7 @@ export class ResumenOrdenComponent {
     imprimirReporte() {
 
         //var ventana = window.open('http://apps.pautacreativatemporales.com.mx/oster/homeproducts/inicio/resumen/orden', '', 'width=1000,height=1000');
-        var ventana = window.open('https://www.homeproductslatam.com.mx/inicio/resumen/orden', '', 'width=1000,height=1000');
+        var ventana = window.open('http://www.solution-center.net/inicio/resumen/orden', '', 'width=1000,height=1000');
         //var ventana = window.open('/inicio/resumen/orden', '', 'width=1000,height=1000');
 
         //ventana.document.write();

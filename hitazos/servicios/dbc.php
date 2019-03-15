@@ -14,18 +14,18 @@ function filter($data) {
 
 	if (get_magic_quotes_gpc())
 		$data = stripslashes($data);
-	
+
 	$data = mysql_real_escape_string($data);
 	$data = html_entity_decode($data);
-	
+
 	return $data;
 }
 
 function genPassword($id, $nombrepadre, $nombrenino){
-	
+
 	$pwd = $id.strtoupper(substr($nombrepadre,0,1)).strtoupper(substr($nombrenino,0,1));
 	return $pwd;
-	
+
 }
 
 function randomPassword() {

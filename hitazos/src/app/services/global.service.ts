@@ -10,7 +10,8 @@ import swal from 'sweetalert2';
 export class GlobalService implements CanActivate{
 
     //base = '';
-    base = 'http://apps.pautacreativatemporales.com.mx/oster/homeproducts/servicios/';
+    //base = 'http://apps.pautacreativatemporales.com.mx/oster/homeproducts/servicios/';
+    base = 'http://www.solution-center.net/servicios/';
     //base = 'https://www.homeproductslatam.com.mx/servicios/';
     //base = 'http://oster:8080/homeproducts/homeproducts/servicios/';
 
