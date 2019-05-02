@@ -142,6 +142,32 @@ export class ReparacionInicioComponent {
 
     }
 
+    changeInvDesp(id, val) {
+
+        console.log("id", id);
+        console.log("val", val);
+        if(val=="Despiece")
+          this._global.refacciones[id].InvDesp = val;
+        else
+          this._global.refacciones[id].InvDesp = "Inventario";
+        /*
+        this._global.refacciones[id].Existencia = val;
+        this._global.refacciones[id].CostoUnitario = '';
+        this._global.refacciones[id].CostoTotal = '';
+        this._global.refacciones[id].FechaEntrega = {};
+
+
+        if (val == 'Disponible') {
+            this._global.refacciones[id].StatusCotizacion = 'No Aplica';
+            this._global.refacciones[id].Status = 'Seleccionada';
+        } else if (val == 'No Disponible' || val == 'No Encontrada' ) {
+            this._global.refacciones[id].Status = 'Por definir';
+        }
+        */
+        //this.habilitarOrdenServicio();
+
+    }
+
     precargaCentros(){
 
         var params = {};
@@ -493,6 +519,14 @@ export class ReparacionInicioComponent {
         this._global.refacciones[id].Cantidad = parseInt(val);
 
         this.calculaCostoTotal(id);
+
+    }
+
+    changeOrdenDespiece(id, val) {
+
+        console.log('change OrdenDespiece');
+
+        this._global.refacciones[id].OrdenDespiece = parseInt(val);
 
     }
 

@@ -252,6 +252,7 @@
                   <th>Refacción/No. de parte</th>
                   <!--th>Paquete Técnico</th-->
                   <th>Existencia</th>
+                  <th>Inventario o Despiece</th>
                   <th>Cantidad</th>
                   <th>Costo Unitario</th>
                   <th>Costo Total</th>
@@ -277,6 +278,16 @@
                       <option [selected]="_global.refacciones[i].Existencia == 'No Disponible'" value="No Disponible">No Disponible</option>
                       <option [selected]="_global.refacciones[i].Existencia == 'No Encontrada'" value="No Encontrada">No Encontrada</option>
                     </select>
+                  </td>
+                  <td>
+                    <select class="form-control form-control-sm existencia" (change)="changeInvDesp(i, $event.target.value)" >
+                      <option value="" hidden>Seleccionar</option>
+                      <option [selected]="_global.refacciones[i].InvDesp == 'Inventario'" value="Inventario">Inventario</option>
+                      <option [selected]="_global.refacciones[i].InvDesp == 'Despiece'" value="Despiece">Despiece</option>
+                    </select>
+                    <div *ngIf="item.InvDesp == 'Despiece'">
+                      <input type="number" class="form-control form-control-sm cantidad text-center" (keyup)="changeOrdenDespiece(i, $event.target.value)" (change)="changeOrdenDespiece(i, $event.target.value)" min="1" value="{{_global.refacciones[i].OrdenDespiece}}" placeholder="No. de orden" />
+                    </div>
                   </td>
                   <td>
                     <div *ngIf="item.Existencia != ''">

@@ -40,7 +40,7 @@ function subirAdjuntos($idreporte, $field, $size){
 				$file_extension = end($temporary);
 				if((($_FILES["hard_file"]["type"] == "image/png") || ($_FILES[$field.$i]["type"] == "image/jpg") || ($_FILES[$field.$i]["type"] == "image/jpeg") || ($_FILES[$field.$i]["type"] == "image/png") || ($_FILES[$field.$i]["type"] == "application/pdf")) && in_array($file_extension, $valid_extensions)){
 					$sourcePath = $_FILES[$field.$i]['tmp_name'];
-					$targetPath = "uploads-ordenes/".$fileName;
+					$targetPath = "uploads-tickets/".$fileName;
 					if(move_uploaded_file($sourcePath,$targetPath)){
 						$uploadedFile = $fileName;
 					}

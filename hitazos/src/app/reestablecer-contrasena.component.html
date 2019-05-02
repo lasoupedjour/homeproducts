@@ -1,0 +1,33 @@
+<div class="container mt-5">
+  <div class="row mt-5">
+    <div class="col-12 text-center">
+      <h1>Reesbalecer contraseña</h1>
+    </div>
+    <div class="col-6 offset-3 formularioreestablecer">
+      <form class="formulario formulariologin" name="formularioreestablecer" [formGroup]="reestablecerForm" (ngSubmit)="submitForm()">
+        <label>
+          <input type="password" class="form-control form-control-sm" formControlName="pwd" placeholder="Contraseña" />
+          <span class="alert alert-danger" *ngIf="!reestablecerForm.controls.pwd.valid && reestablecerForm.controls.pwd.touched">
+            Este campo es requerido
+          </span>
+        </label>
+        <label>
+          <input type="password" class="form-control form-control-sm" formControlName="pwd2" placeholder="Repetir contraseña" />
+          <span class="alert alert-danger" *ngIf="!reestablecerForm.controls.pwd.valid && reestablecerForm.controls.pwd.touched">
+            Este campo es requerido
+          </span>
+        </label>
+        <label class="text-center">
+          <button class="btn btn-sm" type="submit">Enviar</button>
+        </label>
+        <input type="hidden" formControlName="codigo" value="">
+      </form>
+    </div>
+    <div class="col-6 offset-3 text-center">
+        <a routerLink="/">Ingresar</a>
+    </div>
+    <div class="col-6 offset-3 text-center alert-danger">
+        {{_global.appstatus.mensaje}}
+    </div>
+  </div>
+</div>

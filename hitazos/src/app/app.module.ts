@@ -15,6 +15,7 @@ import { BusquedaModule } from './busqueda.module';
 /********************************/
 
 import { OlvidoComponent } from './olvido.component';
+import { ReestablecerContrasenaComponent } from './reestablecer-contrasena.component';
 import { RegistroClienteComponent } from './registro-de-casos/registro-cliente.component';
 import { ReporteCasoComponent } from './registro-de-casos/reporte-de-caso.component';
 
@@ -62,6 +63,8 @@ import { NuevasMovilizacionesComponent } from './nuevas-movilizaciones.component
 import { NuevosCambiosFisicosDistComponent } from './nuevos-cambios-fisicos-dist.component';
 import { NuevosCambiosFisicosComponent } from './nuevos-cambios-fisicos.component';
 
+import { ReestablecerComponent } from './reestablecer.component';
+
 import { HttpModule } from '@angular/http';
 import { HTTPService } from './services/http.service';
 import { GlobalService } from './services/global.service';
@@ -96,6 +99,7 @@ import 'datatables.net-fixedheader';
 
         RegistroClienteComponent,
         OlvidoComponent,
+        ReestablecerContrasenaComponent,
         ReporteCasoComponent,
 
 
@@ -130,6 +134,7 @@ import 'datatables.net-fixedheader';
         NuevasMovilizacionesComponent,
         NuevosCambiosFisicosDistComponent,
         NuevosCambiosFisicosComponent,
+        ReestablecerComponent,
 
   ],
   imports: [

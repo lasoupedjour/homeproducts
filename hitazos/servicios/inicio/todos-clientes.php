@@ -9,7 +9,7 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
 
 $json = $_POST['json'];
 $arre = json_decode($json, true);
-	
+
 $current_charset = 'ISO-8859-15';//or what it is now
 array_walk_recursive($arre,function(&$value) use ($current_charset){
      $value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
@@ -24,6 +24,8 @@ $res['res'] = 'ok';
 
 if($arre['nivel'] == 'administrador' || $arre['nivel'] == 'MKT'){
 	$query = "SELECT  * FROM clientes order by FechaRegistro desc;";
+}elseif($arre['nivel'] == 'distribuidor'){
+	$query = "SELECT  * FROM clientes where Pais = '".$arre["Pais"]."' order by FechaRegistro desc;";
 }else{
 	$query = "SELECT  * FROM clientes where Pais = '".$arre["Pais"]."' and IDCentro = ".$arre["IDCentro"]." order by FechaRegistro desc;";
 }
@@ -32,8 +34,8 @@ $q = mysql_query($query) or die(mysql_error());
 
 $clientes = array();
 
-while ($row = mysql_fetch_array($q))   
-{  
+while ($row = mysql_fetch_array($q))
+{
 	$current_charset = 'ISO-8859-15';//or what it is now
 	array_walk_recursive($row,function(&$value) use ($current_charset){
 		 //$value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
@@ -49,5 +51,5 @@ echo json_encode($res);
 
 
 
-	
+
 ?>

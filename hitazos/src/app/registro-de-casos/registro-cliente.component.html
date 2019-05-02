@@ -126,8 +126,8 @@
           </label>
 
           <label [hidden]="genericForm.controls.TipoPersona.value == 'Empresa'" class="fecha">
-            <input class="form-control form-control-sm" placeholder="Fecha de nacimiento"
-                   formControlName="FechaNacimiento" ngbDatepicker #d="ngbDatepicker" [startDate]="{year: 1950, month: 1}" [(ngModel)]="modelfechanacimiento">
+            <input class="form-control form-control-sm" placeholder="Fecha de nacimiento yyyy-mm-dd"
+                   formControlName="FechaNacimiento" ngbDatepicker #d="ngbDatepicker" [readonly]="true" [startDate]="{year: 1950, month: 1}" [(ngModel)]="modelfechanacimiento">
             <button class="input-group-addon" (click)="d.toggle()" type="button">
               <i class="fa fa-calendar"></i>
             </button>

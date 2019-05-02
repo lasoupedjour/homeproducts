@@ -9,6 +9,7 @@ import { ReporteComponent } from './reporte.component';
 /******************************************/
 
 import { OlvidoComponent } from './olvido.component';
+import { ReestablecerContrasenaComponent } from './reestablecer-contrasena.component';
 import { RegistroClienteComponent } from './registro-de-casos/registro-cliente.component';
 import { ReporteCasoComponent } from './registro-de-casos/reporte-de-caso.component';
 
@@ -54,11 +55,14 @@ import { NuevasMovilizacionesComponent } from './nuevas-movilizaciones.component
 import { NuevosCambiosFisicosDistComponent } from './nuevos-cambios-fisicos-dist.component';
 import { NuevosCambiosFisicosComponent } from './nuevos-cambios-fisicos.component';
 
+import { ReestablecerComponent } from './reestablecer.component';
+
 import { GlobalService } from './services/global.service';
 
 export const routing = RouterModule.forRoot([
     { path: '', component: LoginComponent },
     { path: 'olvido', component: OlvidoComponent },
+    { path: 'reestablecer-contrasena', component: ReestablecerContrasenaComponent },
 
     { path: 'inicio', component: InicioComponent, canActivate: [GlobalService] },
     { path: 'inicio/cliente/detalle', component: ClienteDetalleComponent, canActivate: [GlobalService] },
@@ -103,6 +107,8 @@ export const routing = RouterModule.forRoot([
 
     { path: 'nuevos-cambios-fisicos-dist', component: NuevosCambiosFisicosDistComponent, canActivate: [GlobalService] },
     { path: 'nuevos-cambios-fisicos', component: NuevosCambiosFisicosComponent, canActivate: [GlobalService] },
+
+    { path: 'reestablecer', component: ReestablecerComponent, canActivate: [GlobalService] },
 
 
     /*{ path: 'conductor', component: HomeConductorComponent },

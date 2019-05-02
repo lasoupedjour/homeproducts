@@ -227,6 +227,7 @@
               <tr>
                 <th>Cantidad</th>
                 <th>Descripción/No. Parte</th>
+                <th>Inventario o Despiece</th>
                 <th>Precio Unitario</th>
                 <th>Importe</th>
                 <th>Status cotización</th>
@@ -241,6 +242,11 @@
                 </td>
                 <td>
                   {{item.NombreRefaccion}} - {{item.NoParte}}
+                </td>
+                <td>
+                  {{item.InvDesp}}
+                  <p *ngIf="item.InvDesp==''">Inventario</p>
+                  <p *ngIf="item.InvDesp=='Despiece'">No. de Orden: {{item.OrdenDespiece}}</p>
                 </td>
                 <td>
                   {{item.CostoUnitario|currency}}
