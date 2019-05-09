@@ -72,21 +72,22 @@ $IDTarifas = $arre['TipoKilometraje'];
 if($IDTarifas == ''){
 	$IDTarifas = 0;
 }
-/*$StatusMovilidad = '';
+$StatusMovilidad = '';
 if($IDTarifas != 0){
 	$StatusMovilidad = 'En revisión';
-}*/
+}
 
 $id_reporte = 0;
 //revisar si es update o nuevo
-
+/*
 $StatusMovilidad = '';
+
 if($arre['NecesitaAutorizacion'] == 1){
 	$StatusMovilidad = 'En revisión';
 }else if($arre['NecesitaAutorizacion'] == 0){
 	$StatusMovilidad = 'Aprobada';
 }
-
+*/
 $IDOperadorCentro = 0;
 $IDCentro = 0;
 

@@ -126,7 +126,7 @@
            <h3>Cotizaciones por autorizar</h3>
          </div>
          <div class="col-4 text-right">
-           <a routerLink="../nuevas-cotizacizaciones/">Ver todos</a>
+           <a routerLink="../nuevas-cotizaciones/">Ver todos</a>
          </div>
        </div>
 
@@ -673,6 +673,7 @@
        <table class="table table-striped table-bordered">
          <tr>
            <th>País</th>
+           <th *ngIf="_global.user.nivel == 'administrador'">CDS</th>
            <th>No. de Reporte</th>
            <th>Nombre o Razón Social</th>
 
@@ -694,6 +695,9 @@
 
            <td>
              {{item.Pais}}
+           </td>
+           <td *ngIf="_global.user.nivel == 'administrador'">
+             {{item.NombreCentro}}
            </td>
            <td>
              {{item.id}}
@@ -791,6 +795,7 @@
        <table class="table table-striped table-bordered">
          <tr>
            <th>País</th>
+           <th *ngIf="_global.user.nivel == 'administrador'">CDS</th>
            <th>No. de Orden</th>
            <th>Nombre o Razón Social</th>
 
@@ -809,6 +814,9 @@
 
            <td>
              {{item.Pais}}
+           </td>
+           <td *ngIf="_global.user.nivel == 'administrador'">
+             {{item.NombreCentro}}
            </td>
            <td>
              {{item.id}}

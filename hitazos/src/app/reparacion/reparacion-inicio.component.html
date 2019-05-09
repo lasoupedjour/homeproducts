@@ -280,12 +280,12 @@
                     </select>
                   </td>
                   <td>
-                    <select class="form-control form-control-sm existencia" (change)="changeInvDesp(i, $event.target.value)" >
+                    <select class="form-control form-control-sm existencia" (change)="changeInvDesp(i, $event.target.value)" *ngIf="item.Existencia == 'Disponible'">
                       <option value="" hidden>Seleccionar</option>
                       <option [selected]="_global.refacciones[i].InvDesp == 'Inventario'" value="Inventario">Inventario</option>
                       <option [selected]="_global.refacciones[i].InvDesp == 'Despiece'" value="Despiece">Despiece</option>
                     </select>
-                    <div *ngIf="item.InvDesp == 'Despiece'">
+                    <div *ngIf="item.InvDesp == 'Despiece' && item.Existencia == 'Disponible'">
                       <input type="number" class="form-control form-control-sm cantidad text-center" (keyup)="changeOrdenDespiece(i, $event.target.value)" (change)="changeOrdenDespiece(i, $event.target.value)" min="1" value="{{_global.refacciones[i].OrdenDespiece}}" placeholder="No. de orden" />
                     </div>
                   </td>

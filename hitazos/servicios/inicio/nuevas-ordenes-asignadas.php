@@ -61,22 +61,28 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
 if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
   if($arre["IDDistribuidor"]>0){ //Si es un distribuidor
     $query = "
-    select reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno , DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF from
+    select reportes.*, centros.Nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno , DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF from
     (select * from reportes) as reportes
     join
     (select * from clientes) as clientes
     on reportes.IDCliente = clientes.id
+    left join
+    (select * from centros) as centros
+    on reportes.IDCentro = centros.id
     Where (StatusReporte <> 'Orden de Servicio' and StatusReporte <> 'Cerrado')
     and (reportes.IDOperadorDistribuidor = ".$arre["IDDistribuidor"]." or reportes.IDDistribuidor = ".$arre["IDDistribuidor"].")
     order by FechaRegistroReporte desc LIMIT 5;
     ";
   }else{
     $query = "
-    select reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno , DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF from
+    select reportes.*, centros.Nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno , DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF from
     (select * from reportes) as reportes
     join
     (select * from clientes) as clientes
     on reportes.IDCliente = clientes.id
+    left join
+    (select * from centros) as centros
+    on reportes.IDCentro = centros.id
     Where (StatusReporte <> 'Orden de Servicio' and StatusReporte <> 'Cerrado')
     and reportes.IDCentro = ".$arre["IDCentro"]."
     order by FechaRegistroReporte desc LIMIT 5;
@@ -85,11 +91,14 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
 
   if($arre["nivel"] == "contactcenter"){
     $query = "
-    select reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno , DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF from
+    select reportes.*, centros.Nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno , DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF from
     (select * from reportes) as reportes
     join
     (select * from clientes) as clientes
     on reportes.IDCliente = clientes.id
+    left join
+    (select * from centros) as centros
+    on reportes.IDCentro = centros.id
     Where (StatusReporte <> 'Orden de Servicio' and StatusReporte <> 'Cerrado')
     and reportes.IDCentroAsigno = ".$arre["IDCentro"]."
     order by FechaRegistroReporte desc LIMIT 5;
@@ -97,7 +106,7 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
   }
 }else{
   $query = "
-  select reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno , DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF from
+  select reportes.*, centros.Nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno , DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF from
   (select * from reportes) as reportes
   join
   (select * from clientes) as clientes
@@ -111,13 +120,17 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
   ";
 }
 
-if($arre["Cds"]!=""){
+if($arre["Cds"]!="" && $arre["Cds"]!="Todos"){
   $query = str_replace(":filtroCds", " and reportes.IDCentro=" . $arre["Cds"], $query);
 }elseif($arre["Master"]!=""){
   $query = str_replace(":filtroCds", " and centros.IDMaster=" . $arre["Master"], $query);
 }else{
   $query = str_replace(":filtroCds", "", $query);
 }
+/*
+echo($query);
+die();
+*/
 
 $q = mysql_query($query) or die(mysql_error());
 

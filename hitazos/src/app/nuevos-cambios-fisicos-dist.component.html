@@ -32,6 +32,7 @@
        <div class="col-12 ">
 
          <table datatable [dtOptions]="dtOptions" [dtTrigger]="trigger"  id="tabla" class="table table-striped table-bordered">
+           <thead>
            <tr>
              <th>País</th>
              <th>No. de Reporte</th>
@@ -58,7 +59,8 @@
 
              <th>Selección</th>
            </tr>
-
+           </thead>
+           <tbody>
            <tr *ngFor="let item of _global.cambiosFisicosXAutorizarDist.recientes;" class="formulario">
 
              <td>
@@ -118,7 +120,7 @@
                <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen/orden')" class="btn btn-sm">Ver reporte</button>
              </td>
            </tr>
-
+           </tbody>
          </table>
 
        </div>
