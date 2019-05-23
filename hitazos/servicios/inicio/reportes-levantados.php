@@ -23,18 +23,22 @@ $res = array();
 $res['res'] = 'ok';
 
 if($arre["IDDistribuidor"]>0){
-  $query = "SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
-  FROM reportes, clientes
+  $query = "SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(DATE_ADD(FechaRegistroReporte, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
+  FROM reportes, clientes, centros, zonas_horarias
   where clientes.id = reportes.IDCliente
   and reportes.IDDistribuidor = ".$arre["IDDistribuidor"]."
   and reportes.IDCliente = ".$arre['IDCliente']."
+  and centros.id = reportes.IDCentro
+  and zonas_horarias.pais = centros.pais
   order by FechaRegistroReporte desc LIMIT 5;";
 }else{
-  $query = "SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
-  FROM reportes, clientes
+  $query = "SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(DATE_ADD(FechaRegistroReporte, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
+  FROM reportes, clientes, centros, zonas_horarias
   where clientes.id = reportes.IDCliente
   and reportes.IDCentro = ".$arre["IDCentro"]."
   and reportes.IDCliente = ".$arre['IDCliente']."
+  and centros.id = reportes.IDCentro
+  and zonas_horarias.pais = centros.pais
   order by FechaRegistroReporte desc LIMIT 5;";
 }
 

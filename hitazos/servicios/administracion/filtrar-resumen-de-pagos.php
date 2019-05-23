@@ -60,7 +60,9 @@ $queryMontos = "
             MontoReciclaje as MontoReciclaje,
             MontoOtro as MontoOtro,
             CostoLanded as CostoLanded,
-            StatusReporte, FechaOrdenServicio, reportes.IDCentro, reportes.Categoria, reportes.Distribuidor, reportes.id
+            StatusReporte,
+            DATE_FORMAT(DATE_ADD(FechaOrdenServicio, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaOrdenServicio,
+            reportes.IDCentro, reportes.Categoria, reportes.Distribuidor, reportes.id
             from
             (select * from reportes) as reportes
             join
@@ -75,6 +77,9 @@ $queryMontos = "
             left join
             (select * from centros where IDMaster=$IDMaster) as centros1
             on centros.idMaster = centros1.id
+            join
+            (select * from zonas_horarias) as zonas_horarias
+            on zonas_horarias.pais = cambios.pais
             where clientes.id = reportes.IDCliente and
             StatusReporte = 'Orden de Servicio'
             :filtros;
@@ -82,7 +87,8 @@ $queryMontos = "
 
 $queryFee = "
             select TarifaMensual, ImpuestoTarifaMensual,
-            StatusReporte, FechaOrdenServicio, reportes.IDCentro, reportes.Categoria, reportes.Distribuidor from
+            StatusReporte,
+            DATE_FORMAT(DATE_ADD(FechaOrdenServicio, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaOrdenServicio, reportes.IDCentro, reportes.Categoria, reportes.Distribuidor from
             (select idcentro, StatusReporte, FechaOrdenServicio, Categoria, Distribuidor from reportes) as reportes
             join
             (select id, idgrupotarifa from centros where IDMaster=$IDMaster) as c
@@ -90,6 +96,9 @@ $queryFee = "
             join
             (select * from tarifas) as t
             on c.idgrupotarifa = t.idgrupotarifa
+            join
+            (select * from zonas_horarias) as zonas_horarias
+            on zonas_horarias.pais = cambios.pais
             where StatusReporte = 'Orden de Servicio'
             :filtros
             GROUP by TarifaMensual, ImpuestoTarifaMensual
@@ -113,7 +122,7 @@ if ($cds!=""){
 }
 */
 if($mes!=0 && $ano!=0){
-  $filtroFecha = " and (FechaOrdenServicio >= '$fechaIni' and FechaOrdenServicio <= '$fechaFin')";
+  $filtroFecha = " and (DATE_FORMAT(DATE_ADD(FechaOrdenServicio, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) >= '$fechaIni' and DATE_FORMAT(DATE_ADD(FechaOrdenServicio, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) <= '$fechaFin')";
 }
 
 if($filtroDist==""){

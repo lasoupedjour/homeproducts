@@ -85,7 +85,7 @@ export class ReporteCasoComponent {
                 Validators.required,
                 Validators.email
             ])],*/
-
+            MedioDeContacto: [Object(this._global.reporte.objreporte).MedioDeContacto],
             TipoCaso: [Object(this._global.reporte.objreporte).TipoCaso,
                 Validators.required
             ],
@@ -1413,49 +1413,52 @@ export class ReporteCasoComponent {
 
               console.log("registro reporte", params);
 
+            if(this._global.user.nivel == 'contactcenter' && this.genericForm.controls.MedioDeContacto.value==""){
+              //Campo requerido
+              swal('', 'Favor de indicar el medio de contacto.', 'warning');
+            }else{
               this._httpService.postFormData(params, 'registro-de-casos/registro-reporte-menaje.php')
-                  .subscribe(
-                  data => {
-                      console.log('data');
-                      console.log(data);
-                      this._global.appstatus.loading = false;
+              .subscribe(
+              data => {
+                  console.log('data');
+                  console.log(data);
+                  this._global.appstatus.loading = false;
 
-                      if (data.res == 'ok') {
+                  if (data.res == 'ok') {
 
-                          console.log("objReporte", data.objreporte);
-                          this._global.guardarIdReporte(data.idreporte);
-                          this._global.guardarObjReporte(data.objreporte);
-                          //this._global.guardarObjReporte(data.objreporte);
-
-
-                          this.genericForm.reset();
-                          // this.status.paso = 2;
-                          swal({
-                              title: 'Solicitud Enviada',
-                              text: 'Se ha enviado la solicitud.',
-                              type: 'success',
-                              showConfirmButton: true,
-                              confirmButtonText: 'Ok',
-                              customClass: 'swal2-overflow',
-                          }).then((result) => {
-                            ////Registro de notificación para HP
-                            this._global.notificaciones.modulo = "/registro-de-casos/reporte-de-caso-menaje";
-                            this._global.notificaciones.descripcion = "Se ha registrado un reporte de menaje con el No. de orden: " + this._global.reporte.idreporte;
-                            this._global.registrarNotificacion(this._global.reporte.idreporte);
-
-                            this._router.navigate(['inicio/resumen']);
-                          });
-                      } else if (data.res == 'error') {
-
-                          this._global.appstatus.mensaje = data.msg;
-
-                      }
-                  },
-                  error => alert(error),
-                  () => console.log('termino submit')
-                  );
+                      console.log("objReporte", data.objreporte);
+                      this._global.guardarIdReporte(data.idreporte);
+                      this._global.guardarObjReporte(data.objreporte);
+                      //this._global.guardarObjReporte(data.objreporte);
 
 
+                      this.genericForm.reset();
+                      // this.status.paso = 2;
+                      swal({
+                          title: 'Solicitud Enviada',
+                          text: 'Se ha enviado la solicitud.',
+                          type: 'success',
+                          showConfirmButton: true,
+                          confirmButtonText: 'Ok',
+                          customClass: 'swal2-overflow',
+                      }).then((result) => {
+                        ////Registro de notificación para HP
+                        this._global.notificaciones.modulo = "/registro-de-casos/reporte-de-caso-menaje";
+                        this._global.notificaciones.descripcion = "Se ha registrado un reporte de menaje con el No. de orden: " + this._global.reporte.idreporte;
+                        this._global.registrarNotificacion(this._global.reporte.idreporte);
+
+                        this._router.navigate(['inicio/resumen']);
+                      });
+                  } else if (data.res == 'error') {
+
+                      this._global.appstatus.mensaje = data.msg;
+
+                  }
+              },
+              error => alert(error),
+              () => console.log('termino submit')
+              );
+            }
           } else {
               this._global.validateAllFormFields(this.genericForm);
           }
@@ -1510,98 +1513,102 @@ export class ReporteCasoComponent {
 
                 console.log("registro reporte", params);
 
-                this._httpService.postFormData(params, 'registro-de-casos/registro-reporte-menaje.php')
-                  .subscribe(
-                  data => {
-                      console.log('data');
-                      console.log(data);
-                      this._global.appstatus.loading = false;
+                if(this._global.user.nivel == 'contactcenter' && this.genericForm.controls.MedioDeContacto.value==""){
+                  //Campo requerido
+                  swal('', 'Favor de indicar el medio de contacto.', 'warning');
+                }else{
+                  this._httpService.postFormData(params, 'registro-de-casos/registro-reporte-menaje.php')
+                    .subscribe(
+                    data => {
+                        console.log('data');
+                        console.log(data);
+                        this._global.appstatus.loading = false;
 
-                      if (data.res == 'ok') {
+                        if (data.res == 'ok') {
 
-                          console.log("objReporte", data.objreporte);
-                          this._global.guardarIdReporte(data.idreporte);
-                          this._global.guardarObjReporte(data.objreporte);
-                          //this._global.guardarObjReporte(data.objreporte);
+                            console.log("objReporte", data.objreporte);
+                            this._global.guardarIdReporte(data.idreporte);
+                            this._global.guardarObjReporte(data.objreporte);
+                            //this._global.guardarObjReporte(data.objreporte);
 
 
-                          this.genericForm.reset();
-                          // this.status.paso = 2;
+                            this.genericForm.reset();
+                            // this.status.paso = 2;
 
-                          if (this.formulariostatus.necesitaAutorizacion == 1) {
-                              //Registro de notificación
-                              this._global.notificaciones.modulo = "/inicio/resumen/orden";
-                              this._global.notificaciones.descripcion = "Se ha enviado la solicitud de autorización de kilometraje a HP." + this._global.reporte.idreporte;
-                              this._global.registrarNotificacion(data.idreporte);
-                              swal({
-                                  title: 'Solicitud Enviada',
-                                  text: 'Se ha enviado la solicitud de autorización de kilometraje a HP.',
-                                  type: 'success',
-                                  showConfirmButton: true,
-                                  confirmButtonText: 'Ok',
-                                  customClass: 'swal2-overflow',
-                              }).then((result) => {
-                                  if (result.value) {
-                                    if(this._global.user.IDDistribuidor){
-                                      this._router.navigate(['inicio']);
-                                    }else{
-                                      this._router.navigate(['inicio/resumen']);
+                            if (this.formulariostatus.necesitaAutorizacion == 1) {
+                                //Registro de notificación
+                                this._global.notificaciones.modulo = "/inicio/resumen/orden";
+                                this._global.notificaciones.descripcion = "Se ha enviado la solicitud de autorización de kilometraje a HP." + this._global.reporte.idreporte;
+                                this._global.registrarNotificacion(data.idreporte);
+                                swal({
+                                    title: 'Solicitud Enviada',
+                                    text: 'Se ha enviado la solicitud de autorización de kilometraje a HP.',
+                                    type: 'success',
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'Ok',
+                                    customClass: 'swal2-overflow',
+                                }).then((result) => {
+                                    if (result.value) {
+                                      if(this._global.user.IDDistribuidor){
+                                        this._router.navigate(['inicio']);
+                                      }else{
+                                        this._router.navigate(['inicio/resumen']);
+                                      }
                                     }
-                                  }
-                              });
+                                });
 
-                          } else {
-                            //alert(TipoCaso);
-                            if(TipoCaso!='Garantía'){
-                              this._router.navigate(['inicio']);
-                            }
-                            else if(parseInt(this._global.user.IDDistribuidor)>0 && Categoria=='LINEA BLANCA'){
-                              swal({
-                                  title: 'Solicitud Enviada',
-                                  text: 'Se ha enviado la solicitud.',
-                                  type: 'success',
-                                  showConfirmButton: true,
-                                  confirmButtonText: 'Ok',
-                                  customClass: 'swal2-overflow',
-                              }).then((result) => {
-                                ////Registro de notificación para HP
-                                this._global.notificaciones.modulo = "/cambio-fisico-distribuidor";
-                                //this._global.notificaciones.descripcion = "Se ha registrado una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
-                                this._global.notificaciones.descripcion = "Se ha registrado un caso de Línea Blanca con No. de orden " + this._global.reporte.idreporte;
-                                this._global.registrarNotificacion(this._global.reporte.idreporte);
-
-                                this._global.notificaciones.modulo = "/cambio-fisico-dist-asigna";
-                                this._global.notificaciones.descripcion = "Se ha registrado y asignado a su CDs una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
-                                this._global.registrarNotificacion(this._global.reporte.idreporte, this._global.user.IDCentro);
-
+                            } else {
+                              //alert(TipoCaso);
+                              if(TipoCaso!='Garantía'){
                                 this._router.navigate(['inicio']);
-                              });
-                            }else{
+                              }
+                              else if(parseInt(this._global.user.IDDistribuidor)>0 && Categoria=='LINEA BLANCA'){
+                                swal({
+                                    title: 'Solicitud Enviada',
+                                    text: 'Se ha enviado la solicitud.',
+                                    type: 'success',
+                                    showConfirmButton: true,
+                                    confirmButtonText: 'Ok',
+                                    customClass: 'swal2-overflow',
+                                }).then((result) => {
+                                  ////Registro de notificación para HP
+                                  this._global.notificaciones.modulo = "/cambio-fisico-distribuidor";
+                                  //this._global.notificaciones.descripcion = "Se ha registrado una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
+                                  this._global.notificaciones.descripcion = "Se ha registrado un caso de Línea Blanca con No. de orden " + this._global.reporte.idreporte;
+                                  this._global.registrarNotificacion(this._global.reporte.idreporte);
 
-                              if((Categoria=='LINEA BLANCA' || Modelo=='OS-17001' || Modelo=='OS-17001-1') && this._global.user.nivel!='operador')
-                                this._router.navigate(['inicio']);
-                              else
-                                this._router.navigate(['inicio/resumen']);
+                                  this._global.notificaciones.modulo = "/cambio-fisico-dist-asigna";
+                                  this._global.notificaciones.descripcion = "Se ha registrado y asignado a su CDs una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
+                                  this._global.registrarNotificacion(this._global.reporte.idreporte, this._global.user.IDCentro);
+
+                                  this._router.navigate(['inicio']);
+                                });
+                              }else{
+
+                                if((Categoria=='LINEA BLANCA' || Modelo=='OS-17001' || Modelo=='OS-17001-1') && this._global.user.nivel!='operador')
+                                  this._router.navigate(['inicio']);
+                                else
+                                  this._router.navigate(['inicio/resumen']);
+                              }
                             }
-                          }
 
 
 
 
 
-                      } else if (data.res == 'error') {
+                        } else if (data.res == 'error') {
 
-                          this._global.appstatus.mensaje = data.msg;
+                            this._global.appstatus.mensaje = data.msg;
 
-                      }
+                        }
 
 
 
-                  },
-                  error => alert(error),
-                  () => console.log('termino submit')
-                  );
-
+                    },
+                    error => alert(error),
+                    () => console.log('termino submit')
+                    );
+                  }
 
           } else {
               this._global.validateAllFormFields(this.genericForm);

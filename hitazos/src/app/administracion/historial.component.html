@@ -196,14 +196,14 @@
                {{item.detalle.GarantiaMOyKms | currency}}
              </td>
              <td *ngIf="_global.user.nivel!='distribuidor'">
-               {{item.detalle.GarantiaDeCambios | currency}}
+               {{item.detalle.ReembolsoGarantiaFee | currency}}
              </td>
              <td *ngIf="_global.user.nivel!='operador'">
                <span *ngIf="item.detalle.IDDistribuidor==''">{{0 | currency}}</span>
                <span *ngIf="item.detalle.IDDistribuidor!=''">{{item.detalle.GarantiaDeCambios | currency}}</span>
              </td>
              <td *ngIf="_global.user.nivel!='distribuidor'">
-               {{item.detalle.ReembolsoGarantiaFee | currency}}
+               {{item.detalle.GarantiaDeCambios | currency}}
              </td>
 
              <td *ngIf="_global.user.nivel!='distribuidor'">

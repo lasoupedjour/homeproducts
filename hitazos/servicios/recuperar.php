@@ -145,9 +145,8 @@ if ($stmt = $mysqli->prepare("select max(id) from usuarios_admin where email=? a
 
             require "email-conf.php";
 
-            //$mail->AddAddress('slazo@pautacreativa.com.mx');
-            $mail->AddAddress('jguillen@pautacreativa.com.mx');
-            $mail->AddBCC('slazo@pautacreativa.com.mx');
+            $mail->AddAddress($email);
+            $mail->AddBCC('jguillen@pautacreativa.com.mx');
             $mail->AddBCC('nguzman@pautacreativa.com.mx');
             //$mail->AddBCC('lasoupedjour@gmail.com');
 

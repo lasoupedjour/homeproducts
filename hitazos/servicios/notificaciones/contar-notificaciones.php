@@ -62,10 +62,11 @@ if($nivel=='administrador'){
             and modulo<>'/registro-caso-menaje-reparacion'
             and (descripcion not like '%Movilización del repot%')
             and (descripcion not like '%La movilización del report%')
-            and r.IDDistribuidor=$id_usuario
+            and r.id=$id_usuario
             group by id
             order by id desc
             ";
+
 }
 
 $q = mysql_query($query) or die(mysql_error());

@@ -23,11 +23,13 @@ $res = array();
 $res['res'] = 'ok';
 
 $query = "
-          SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
-          FROM reportes, clientes, centros
+          SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno,
+          DATE_FORMAT(DATE_ADD(FechaRegistroReporte, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
+          FROM reportes, clientes, centros, zonas_horarias
           where clientes.id = reportes.IDCliente
           and centros.id = reportes.IDCentro
-          and StatusReporte = 'Reparacion'
+          and StatusReporte = 'Reparacion' and reportes.status=1
+          and zonas_horarias.pais = centros.pais
           order by FechaRegistroReporte desc :LIMIT
           ";
 

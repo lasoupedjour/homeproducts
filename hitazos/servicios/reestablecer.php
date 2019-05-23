@@ -46,8 +46,9 @@ if($num == 0){
 
   $q = mysql_query("
   update usuarios_admin set
-  pwd = '$pwd'
-  where id = $num
+  pwd = '$pwd', 
+  codigo = ''
+  where codigo = '$codigo'
   ") or die(mysql_error());
 
   $res['res'] = 'ok';

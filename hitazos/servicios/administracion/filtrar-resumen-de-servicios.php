@@ -46,7 +46,10 @@ StatusReporte = 'Orden de Servicio'
 order by FechaOrdenServicio desc;
 */
 $query = "
-Select DISTINCT reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, centros.nombre,  IFNULL( centros1.nombre,  'N/A' ) AS  'Master', tarifas.TarifaMensual, tarifas.ImpuestoTarifaMensual, (reportes.MontoTotal - CostoLanded - OtroCostoDistribuidor) as MontoTotal1, replace(replace(replace(CAST(resolucion.reclamo as CHAR(1)), '1', 'Aceptado'), '0', 'Rechazado'), '', 'Sin resolución') as Reclamo  from
+Select DISTINCT reportes.*,
+DATE_FORMAT(DATE_ADD(FechaRegistroReporte, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporte,
+DATE_FORMAT(DATE_ADD(FechaDiagnostico, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaDiagnostico, 
+clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, centros.nombre,  IFNULL( centros1.nombre,  'N/A' ) AS  'Master', tarifas.TarifaMensual, tarifas.ImpuestoTarifaMensual, (reportes.MontoTotal - CostoLanded - OtroCostoDistribuidor) as MontoTotal1, replace(replace(replace(CAST(resolucion.reclamo as CHAR(1)), '1', 'Aceptado'), '0', 'Rechazado'), '', 'Sin resolución') as Reclamo  from
 (select * from reportes) as reportes
 join
 (select * from clientes) as clientes
@@ -63,6 +66,9 @@ on centros.idMaster = centros1.id
 left join
 (select id_reporte, reclamo from resolucion) as resolucion
 on resolucion.id_reporte = reportes.id
+join
+(select * from zonas_horarias) as zonas_horarias
+on zonas_horarias.pais = centros.pais
 where clientes.id = reportes.IDCliente and
 StatusReporte = 'Orden de Servicio'
 :filtros

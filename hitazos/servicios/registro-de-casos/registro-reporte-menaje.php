@@ -115,10 +115,10 @@ if($arre['IDDistribuidor']==0){
 if(!$arre['Update']){
   //insertar
 	if ($stmt = $mysqli->prepare("
-	insert into reportes (IDCliente, IDCentro, IDDistribuidor, IDCentroAsigno, IDOperadorDistribuidor, IDOperadorCentro, TipoCaso, Categoria, Subcategoria, Tipo, Modelo, CodigoSAP, FechaCompra, Sello, AplicaGarantia, Uso, Distribuidor, LugarCompra, Falla, FallaDescripcion, Comentarios, TipoRevision, IDTarifas, StatusMovilidad, MontoMovilizacion, FechaRevision, Descripcion, StatusReporte, NoSerie, CondicionProductoDiagnostico, CostoLanded, OtroCostoDistribuidor)
-	values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Reporte', ?, ?, ?, ?)
+	insert into reportes (IDCliente, IDCentro, IDDistribuidor, IDCentroAsigno, IDOperadorDistribuidor, IDOperadorCentro, TipoCaso, Categoria, Subcategoria, Tipo, Modelo, CodigoSAP, FechaCompra, Sello, AplicaGarantia, Uso, Distribuidor, LugarCompra, Falla, FallaDescripcion, Comentarios, TipoRevision, IDTarifas, StatusMovilidad, MontoMovilizacion, FechaRevision, Descripcion, StatusReporte, NoSerie, CondicionProductoDiagnostico, CostoLanded, OtroCostoDistribuidor, MedioDeContacto)
+	values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'Reporte', ?, ?, ?, ?, ?)
 	")) {
-		$stmt->bind_param("ddddddssssssssssssssssdsdssssss",
+		$stmt->bind_param("ddddddssssssssssssssssdsdsssssss",
 		$arre['IDCliente'],
 		$IDCentro,
     $IDDistribuidor,
@@ -149,7 +149,8 @@ if(!$arre['Update']){
     $arre['NoSerie'],
     $arre['CondicionProductoDiagnostico'],
     $arre['CostoLanded'],
-    $arre['OtroCostoDistribuidor']
+    $arre['OtroCostoDistribuidor'],
+    $arre['MedioDeContacto']
 		);
 
 		if($stmt->execute()){
@@ -261,8 +262,8 @@ if(!$arre['Update']){
         });
 
         $emailcentro = $row["Email"];
-        //$emailcliente = $row["EmailCliente"];
-        $emailcliente = "jguillen@pautacreativa.com.mx";
+        $emailcliente = $row["EmailCliente"];
+        //$emailcliente = "jguillen@pautacreativa.com.mx";
         $categoria = $row["Categoria"];
         $imagenHeader = "logo-hp.jpg";
         if($categoria!="LINEA BLANCA"){
@@ -364,11 +365,11 @@ if(!$arre['Update']){
 
               require "../email-conf.php";
 
-              //$mail->AddAddress('slazo@pautacreativa.com.mx');
-              $mail->AddAddress('jguillen@pautacreativa.com.mx');
-              $mail->AddBCC('slazo@pautacreativa.com.mx');
+              //Correo al cliente
+              $mail->AddAddress($emailcliente);
+              //Pauta
+              $mail->AddBCC('jguillen@pautacreativa.com.mx');
               $mail->AddBCC('nguzman@pautacreativa.com.mx');
-              //$mail->AddBCC('lasoupedjour@gmail.com');
 
               $mail->Subject  = utf8_decode("Caso registrado en HomeProducts");
 

@@ -9,7 +9,7 @@ if (isset($_SERVER['HTTP_ORIGIN'])) {
 
 $json = $_POST['json'];
 $arre = json_decode($json, true);
-	
+
 $current_charset = 'ISO-8859-15';//or what it is now
 array_walk_recursive($arre,function(&$value) use ($current_charset){
      $value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
@@ -26,7 +26,7 @@ $mes = $arre['mes'];
 $ano = $arre['ano'];
 $IDCentro = $arre['IDCentro'];
 /*
-$mesnext = 
+$mesnext =
 if($mes)*/
 
 
@@ -35,15 +35,20 @@ $fechaFin = $ano.'-'.$mes.'-'.'31';
 
 
 $q = mysql_query("
-SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno 
-FROM reportes, clientes 
+SELECT  reportes.*,
+DATE_FORMAT(DATE_ADD(FechaRegistroReporte, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporte,
+DATE_FORMAT(DATE_ADD(FechaDiagnostico, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaDiagnostico,
+clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno
+FROM reportes, clientes, centros, zonas_horarias
 where clientes.id = reportes.IDCliente and FechaOrdenServicio >= '$fechaIni' and FechaOrdenServicio <= '$fechaFin' and IDCentro = $IDCentro
 and StatusReporte = 'Orden de Servicio'
+and centros.id = reportes.IDCentro
+and zonas_horarias.pais = centros.pais
 order by FechaOrdenServicio desc;
 ") or die(mysql_error());
 
 /*
-SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno 
+SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno
 FROM reportes
 LEFT JOIN clientes on clientes.id = reportes.IDCliente
 LEFT JOIN pagos on (reportes.IDCentro = pagos.IDCentro and pagos.Mes = '08' and pagos.Ano = '2018')
@@ -54,8 +59,8 @@ order by FechaOrdenServicio desc
 
 $reportes = array();
 
-while ($row = mysql_fetch_array($q))   
-{  
+while ($row = mysql_fetch_array($q))
+{
 	$current_charset = 'ISO-8859-15';//or what it is now
 	array_walk_recursive($row,function(&$value) use ($current_charset){
 		 //$value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
@@ -71,8 +76,8 @@ $q = mysql_query("
 SELECT  StatusPago from pagos where Mes = '$mes' and Ano = '$ano' order by FechaRegistro desc limit 1
 ") or die(mysql_error());
 
-while ($row = mysql_fetch_array($q))   
-{  
+while ($row = mysql_fetch_array($q))
+{
 	$current_charset = 'ISO-8859-15';//or what it is now
 	array_walk_recursive($row,function(&$value) use ($current_charset){
 		 //$value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
@@ -88,5 +93,5 @@ echo json_encode($res);
 
 
 
-	
+
 ?>

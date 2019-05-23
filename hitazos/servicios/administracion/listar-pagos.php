@@ -28,12 +28,34 @@ $nivel = $arre['nivel'];
 $IDDistribuidor = $arre['IDDistribuidor'];
 
 if($IDMaster>0 && $arre["Nivel"]!="administrador"){
-  $queryPagos = "SELECT  id, IDMaster, IDCentro, IDOperadorAdmin, IDDistribuidor, replace(Categoria, '', 'No seleccionada') as Categoria, ODS, GarantiaDePartes, GarantiaMOyKms, GarantiaDeCambios, ReembolsoGarantiaFee, IVA, MontoTotal, StatusPago, Comprobante, FechaRegistro, FechaPago,
+  $queryPagos = "
+  SELECT
+  id, IDMaster, IDCentro, IDOperadorAdmin, IDDistribuidor, replace(Categoria, '', 'No seleccionada') as Categoria, ODS, GarantiaDePartes, GarantiaMOyKms, GarantiaDeCambios, ReembolsoGarantiaFee, IVA, MontoTotal, StatusPago, Comprobante,
+  DATE_FORMAT(DATE_ADD(FechaRegistro, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaRegistro,
+  DATE_FORMAT(DATE_ADD(FechaPago, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaPago,
   REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Mes, '12', 'Diciembre'), '11', 'Noviembre'), '10', 'Octubre'), '09', 'Septiembre'), '08', 'Agosto'), '07', 'Julio'), '06', 'Junio'), '05', 'Mayo'), '04', 'Abril'), '03', 'Marzo'), '02', 'Febrero'), '01', 'Enero') AS  Mes, Ano, Status
-  FROM  pagos where IDMaster=$IDMaster order by id desc";
+  FROM
+  (select * from pagos) as pagos
+  join
+  (select * from centros) as centros
+  on centros.id = pagos.idCentro
+  join
+  (select * from zonas_horarias) as zonas_horarias
+  on zonas_horarias.pais = centros.pais
+  where IDMaster=$IDMaster order by id desc
+  ";
 }elseif($IDDistribuidor>0){
-  $queryPagos = "select pagos.id, pagos.IDMaster, pagos.IDCentro, pagos.IDOperadorAdmin, replace(pagos.Categoria, '', 'No seleccionada') as Categoria, pagos.ODS, GarantiaDePartes, GarantiaMOyKms, GarantiaDeCambios, ReembolsoGarantiaFee, pagos.IVA, pagos.MontoTotal, pagos.StatusPago, pagos.Comprobante, pagos.FechaRegistro, pagos.FechaPago, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Mes, '12', 'Diciembre'), '11', 'Noviembre'), '10', 'Octubre'), '09', 'Septiembre'), '08', 'Agosto'), '07', 'Julio'), '06', 'Junio'), '05', 'Mayo'), '04', 'Abril'), '03', 'Marzo'), '02', 'Febrero'), '01', 'Enero') AS Mes, pagos.Ano, pagos.Status, distribuidores.IDDistribuidor from
+  $queryPagos = "select pagos.id, pagos.IDMaster, pagos.IDCentro, pagos.IDOperadorAdmin, replace(pagos.Categoria, '', 'No seleccionada') as Categoria, pagos.ODS, GarantiaDePartes, GarantiaMOyKms, GarantiaDeCambios, ReembolsoGarantiaFee, pagos.IVA, pagos.MontoTotal, pagos.StatusPago, pagos.Comprobante,
+                 DATE_FORMAT(DATE_ADD(pagos.FechaRegistro, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaRegistro,
+                 DATE_FORMAT(DATE_ADD(pagos.FechaPago, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaPago,
+                 REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Mes, '12', 'Diciembre'), '11', 'Noviembre'), '10', 'Octubre'), '09', 'Septiembre'), '08', 'Agosto'), '07', 'Julio'), '06', 'Junio'), '05', 'Mayo'), '04', 'Abril'), '03', 'Marzo'), '02', 'Febrero'), '01', 'Enero') AS Mes, pagos.Ano, pagos.Status, distribuidores.IDDistribuidor from
                  (SELECT * FROM pagos where IDDistribuidor=$IDDistribuidor) as pagos
+                 join
+                 (select * from centros) as centros
+                 on centros.id = pagos.idCentro
+                 join
+                 (select * from zonas_horarias) as zonas_horarias
+                 on zonas_horarias.pais = centros.pais
                  left join
                  (select * from distribuidores) as distribuidores
                  on pagos.IDDistribuidor=distribuidores.id
@@ -45,14 +67,20 @@ if($IDMaster>0 && $arre["Nivel"]!="administrador"){
   FROM  pagos where IDDistribuidor=$IDDistribuidor order by id desc";
   */
 }elseif($arre["Nivel"]=="administrador"){
-  $queryPagos = "select pagos.id, pagos.IDMaster, pagos.IDCentro, pagos.IDOperadorAdmin, replace(pagos.Categoria, '', 'No seleccionada') as Categoria, pagos.ODS, GarantiaDePartes, GarantiaMOyKms, GarantiaDeCambios, ReembolsoGarantiaFee, pagos.IVA, pagos.MontoTotal, pagos.StatusPago, pagos.Comprobante, pagos.FechaRegistro, pagos.FechaPago, REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Mes, '12', 'Diciembre'), '11', 'Noviembre'), '10', 'Octubre'), '09', 'Septiembre'), '08', 'Agosto'), '07', 'Julio'), '06', 'Junio'), '05', 'Mayo'), '04', 'Abril'), '03', 'Marzo'), '02', 'Febrero'), '01', 'Enero') AS Mes, pagos.Ano, pagos.Status, distribuidores.IDDistribuidor, centros.Nombre, distribuidores.RazonSocial from
+  $queryPagos = "select pagos.id, pagos.IDMaster, pagos.IDCentro, pagos.IDOperadorAdmin, replace(pagos.Categoria, '', 'No seleccionada') as Categoria, pagos.ODS, GarantiaDePartes, GarantiaMOyKms, GarantiaDeCambios, ReembolsoGarantiaFee, pagos.IVA, pagos.MontoTotal, pagos.StatusPago, pagos.Comprobante,
+                 DATE_FORMAT(DATE_ADD(pagos.FechaRegistro, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaRegistro,
+                 DATE_FORMAT(DATE_ADD(pagos.FechaPago, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaPago,
+                 REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(Mes, '12', 'Diciembre'), '11', 'Noviembre'), '10', 'Octubre'), '09', 'Septiembre'), '08', 'Agosto'), '07', 'Julio'), '06', 'Junio'), '05', 'Mayo'), '04', 'Abril'), '03', 'Marzo'), '02', 'Febrero'), '01', 'Enero') AS Mes, pagos.Ano, pagos.Status, distribuidores.IDDistribuidor, centros.Nombre, distribuidores.RazonSocial from
                  (SELECT * FROM pagos) as pagos
                  left join
                  (select * from distribuidores) as distribuidores
                  on pagos.IDDistribuidor=distribuidores.id
                  left join
-                 (select id, Nombre from centros) as centros
+                 (select id, Nombre, Pais from centros) as centros
                  on pagos.IDCentro = centros.id
+                 join
+                 (select * from zonas_horarias) as zonas_horarias
+                 on zonas_horarias.pais = centros.pais
                  order by pagos.id desc";
   /*
   "SELECT  id, IDMaster, IDCentro, IDOperadorAdmin, IDDistribuidor,  replace(Categoria, '', 'No seleccionada') as Categoria, ODS, MontoTotal, StatusPago, Comprobante, FechaRegistro, FechaPago,

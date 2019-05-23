@@ -15,10 +15,10 @@
        <i class="fa fa-user-circle"></i> Bienvenido {{_global.user.nombre}} <br> No. Operador: {{_global.user.id}}
      </div>
 
-     
+
    </div>
 
-   
+
   <hr>
    <div class="row mt-5 mb-2">
      <div class="col-8">
@@ -37,6 +37,7 @@
          <tr>
            <th>País</th>
            <th>No. de Orden</th>
+           <th>CDS</th>
            <th>Nombre o Razón Social</th>
 
            <th>Fecha de Registro</th>
@@ -58,6 +59,9 @@
            </td>
            <td>
              {{item.id}}
+           </td>
+           <td>
+             {{item.NombreCentro}}
            </td>
            <td>
              {{item.RazonSocial}} {{item.Nombre}} {{item.APaterno}} {{item.AMaterno}}
@@ -85,7 +89,7 @@
              {{item.StatusReporte}}
            </td>
            <td>
-             Cerrado
+             {{item.SubStatusReporte}}
            </td>
            <td>
              <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Seleccionar</button>
@@ -95,7 +99,7 @@
        </table>
 
      </div>
-   </div> 
+   </div>
 
 
 
@@ -104,8 +108,3 @@
 
 
 </div>
-
-  
-
-
-

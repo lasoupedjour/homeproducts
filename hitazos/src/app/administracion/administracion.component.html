@@ -139,6 +139,7 @@
            <thead>
            <tr>
              <th>Orden de Servicio</th>
+             <th>Estatus</th>
              <th>Resolución</th>
              <th>Centro - Master</th>
              <th>No. Orden</th>
@@ -175,6 +176,9 @@
            <tr *ngFor="let item of _global.ordenesServicio.recientes;">
              <td>
                <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen/orden')" class="btn btn-sm">Consultar</button>
+             </td>
+             <td>
+               {{item.SubStatusReporte}}
              </td>
              <td>
                {{item.Reclamo}}

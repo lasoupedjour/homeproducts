@@ -24,8 +24,10 @@ $res['res'] = 'ok';
 
 if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
 	$query = "
-	SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
-	FROM reportes, clientes, centros
+	SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno,
+  DATE_FORMAT(DATE_ADD(FechaRegistroReporte, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF,
+  DATE_FORMAT(DATE_ADD(FechaCompra, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
+	FROM reportes, clientes, centros, zonas_horarias
 	where clientes.id = reportes.IDCliente
   and centros.id = reportes.IDCentro
 	and reportes.IDOperadorCentro = ".$arre["IDCentro"]."
@@ -33,20 +35,23 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
   and SubStatusReporte <> 'Cerrado'
   and TipoReclamoDiagnostico = 'Cambio'
   and StatusCostoLanded = ''
-  and CostoLanded > 0
+  and CostoLanded > 0 and reportes.status=1
+  and zonas_horarias.pais = centros.pais
 	order by FechaRegistroReporte desc :LIMIT;
 	";
 }else{
 	$query = "
-	SELECT distinct reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
-	FROM reportes, clientes, centros
+	SELECT distinct reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno,
+  DATE_FORMAT(DATE_ADD(FechaRegistroReporte, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
+	FROM reportes, clientes, centros, zonas_horarias
 	where clientes.id = reportes.IDCliente
   and centros.id = reportes.IDCentro
 	and StatusReporte = 'Orden de Servicio'
   and SubStatusReporte <> 'Cerrado'
   and TipoReclamoDiagnostico = 'Cambio'
   and StatusCostoLanded = ''
-  and CostoLanded > 0
+  and CostoLanded > 0 and reportes.status=1
+  and zonas_horarias.pais = centros.pais
 	order by FechaRegistroReporte desc :LIMIT;
 	";
 }

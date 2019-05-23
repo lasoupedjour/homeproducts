@@ -93,6 +93,7 @@ export class CasosAsignadosComponent {
 
         var params = {};
         params["IDCentro"] = this._global.user.IDCentro;
+        params["IDDistribuidor"] = this._global.user.IDDistribuidor;
         params["nivel"] = this._global.user.nivel;
 
         this._global.appstatus.loading = true;

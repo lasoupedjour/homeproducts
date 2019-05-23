@@ -15,7 +15,7 @@ $mail->Host       = "172.16.120.17"; // SMTP server
 
 //$mail->AddReplyTo("$email",utf8_decode("$nombre"));
 
-$mail->From       = "slazo@pautacreativa.com.mx";
+$mail->From       = "alertas@solution-center.net";
 //$mail->From       = "slazo@pautacreativa.com.mx";
 $mail->FromName   = utf8_decode("Oster Home Products");
 

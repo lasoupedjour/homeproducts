@@ -3,6 +3,7 @@ import { HTTPService } from './services/http.service';
 import { GlobalService } from './services/global.service';
 import { Router } from '@angular/router';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
+import swal from 'sweetalert2';
 
 
 @Component({
@@ -76,6 +77,47 @@ export class ResumenReporteComponent {
           error => alert(error),
           () => console.log('termino submit')
           );
+    }
+
+    eliminarReporte(id) {
+      swal({
+          title: 'Eliminar #Reporte: ' + id,
+          html: `Favor de eliminar la eliminación del reporte.`,
+          showConfirmButton: true,
+          confirmButtonText: 'Confirmar',
+          showCancelButton: true,
+          cancelButtonText: 'Cancelar',
+          customClass: 'swal2-overflow',
+
+      }).then((result) => {
+        console.log("Result", result);
+
+        var params = {};
+        params["IDReporte"] = this._global.reporte.idreporte;
+
+        this._global.appstatus.loading = true;
+
+        this._httpService.postJSON(params, 'eliminar-reporte.php')
+            .subscribe(
+            data => {
+                console.log('data');
+                console.log(data);
+                this._global.appstatus.loading = false;
+
+                if (data.res == 'ok') {
+                  swal(data.msg, "success");
+                  this._router.navigate(['inicio']);
+                  //console.log("this.resolucion.id", this.resolucion.id);
+                } else if (data.res = 'error') {
+                    this._global.appstatus.mensaje = data.error;
+                }
+            },
+            error => console.log(error),
+            () => console.log('termino submit')
+            );
+
+      });
+
     }
 
     nuevosCasosAsignados() {

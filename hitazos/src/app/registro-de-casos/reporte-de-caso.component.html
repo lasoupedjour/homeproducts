@@ -55,6 +55,18 @@
   </div>
 
   <form *ngIf="status.paso == 1" class="formulario formularioRegistro my-3" name="formulariologin" [formGroup]="genericForm" (ngSubmit)="submitRegistro()">
+    <!-- Campo necesario para Contact Center-->
+    <div class="row my-3"  *ngIf="this._global.user.nivel == 'contactcenter'">
+      <div class="col-6">Origen del contacto:</div>
+      <div class="col-6">
+        <select class="form-control form-control-sm" formControlName="MedioDeContacto" >
+          <option value="">Seleccuine origen del contacto</option>
+          <option value="Correo Electrónico">Correo Electrónico</option>
+          <option value="Llamada">Llamada</option>
+        </select>
+      </div>
+    </div>
+    <!-- #Campo necesario para Contact Center-->
     <div class="row my-3">
       <div class="col-6">
         <p>Proporciona los datos para identificar el caso y generar el reporte:</p>

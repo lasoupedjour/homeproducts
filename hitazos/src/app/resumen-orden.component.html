@@ -4,7 +4,9 @@
     <div class="col-8">
       <h3><b>Resumen de la Orden de Servicio #{{_global.reporte.idreporte}}</b></h3>
     </div>
+
     <div class="col-4 text-right">
+      <button class="btn" *ngIf="(_global.reporte.objreporte.StatusReporte!='Eliminado') && this._global.user.nivel == 'administrador'" (click)="eliminarReporte(this._global.reporte.idreporte)">Eliminar </button>&nbsp;
       <button class="btn" (click)="imprimirReporte()"><i class="fa fa-print"></i> Imprimir </button>
     </div>
   </div>

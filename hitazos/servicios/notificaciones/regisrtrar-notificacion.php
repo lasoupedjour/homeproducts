@@ -189,10 +189,13 @@ if($modulo!="" &&
             $body             = utf8_decode(preg_replace('/\\\\/','', $body)); //Strip backslashes
 
             require "../email-conf.php";
-
-            //$mail->AddAddress('slazo@pautacreativa.com.mx');
             $mail->AddAddress('jguillen@pautacreativa.com.mx');
-            //$mail->AddBCC('lasoupedjour@gmail.com');
+            //$mail->AddAddress('slazo@pautacreativa.com.mx');
+            //$mail->AddAddress($emailcentro);
+            //$mail->AddCC('soporte.garantias@homeproductsgroup.net');
+            $mail->AddBCC('jguillen@pautacreativa.com.mx');
+            $mail->AddBCC('nguzman@pautacreativa.com.mx');
+
 
             $mail->Subject  = utf8_decode("Nueva notificación en HomeProducts");
 

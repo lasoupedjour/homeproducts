@@ -253,6 +253,7 @@ export class AdministracionComponent {
 
         if(centro!="" ){
           var params = {};
+          params['pais']   = this.filterForm.controls.Pais.value;
           params['master']   = this.filterForm.controls.Master.value;
           params['cds']   = this.filterForm.controls.Cds.value;
           params['mes']   = this.filterForm.controls.Mes.value;

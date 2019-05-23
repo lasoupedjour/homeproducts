@@ -37,7 +37,9 @@
          <thead>
          <tr>
            <th>Selección</th>
+           <th>País</th>
            <th>No. de Reporte</th>
+           <th>CDS</th>
            <th>Días Transcurridos</th>
            <th>Proceso</th>
            <th>País</th>
@@ -62,7 +64,13 @@
              <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Seleccionar</button>
            </td>
            <td>
+             {{item.Pais}}
+           </td>
+           <td>
              {{item.id}}
+           </td>
+           <td>
+             {{item.NombreCentro}}
            </td>
            <td [ngClass]="this._global.diasTranscurridosColor(item.FechaRegistroReporte)">
              {{this._global.diasTranscurridos(item.FechaRegistroReporte)}}

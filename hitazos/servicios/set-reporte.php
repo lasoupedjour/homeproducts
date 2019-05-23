@@ -30,9 +30,11 @@ $reporte = array();
 $IDCliente = '';
 
 $query = "
-select reportes.*, tarifas.SubtipoServicio, tarifas.Valor, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y' ) as FechaCompraNF
+select reportes.*, tarifas.SubtipoServicio, tarifas.Valor, DATE_FORMAT(DATE_ADD(FechaRegistroReporte, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(DATE_ADD(FechaCompra, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
 from reportes
 LEFT JOIN tarifas on IDTarifas = tarifas.id
+LEFT Join centros on centros.id = reportes.idcentro
+LEFT JOIN zonas_horarias on zonas_horarias.pais = centros.pais
 where reportes.id = ".$arre['id'].";
 ";
 

@@ -19,8 +19,10 @@ $res = array();
 
 $res['res'] = 'ok';
 
-$query = "SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
-FROM reportes, clientes, centros
+$query = "SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno,
+DATE_FORMAT(DATE_ADD(FechaRegistroReporte, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF,
+DATE_FORMAT(DATE_ADD(FechaCompra, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
+FROM reportes, clientes, centros, zonas_horarias 
 where clientes.id = reportes.IDCliente
 and centros.id = reportes.IDCentro
 and (reportes.Distribuidor = '".$arre["Distribuidor"]."'
@@ -28,7 +30,8 @@ or reportes.Distribuidor = '".$arre["NombreDistribuidor"]."')
 and StatusReporte = 'Orden de Servicio'
 and TipoReclamoDiagnostico = 'Cambio'
 and (CostoLanded = 0 or StatusCostoLanded='Rechazado')
-and StatusCambioFisico='Aprobado'
+and StatusCambioFisico='Aprobado' and reportes.status=1
+and zonas_horarias.pais = centros.pais
 order by FechaRegistroReporte desc :LIMIT;";
 
 if($arre["limit"]=="")

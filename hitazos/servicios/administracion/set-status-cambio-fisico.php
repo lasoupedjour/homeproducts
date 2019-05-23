@@ -14,6 +14,7 @@ include "../dbci.php";
 
 $json = $_POST['json'];
 $arre = json_decode($json, true);
+$email = $arre["Email"];
 
 $current_charset = 'ISO-8859-15';//or what it is now
 array_walk_recursive($arre,function(&$value) use ($current_charset){
@@ -32,7 +33,8 @@ require '../phpmailer/class.phpmailer.php';
 require "../baseurl.php";
 
 $q = mysqli_query($con, "
-select centros.Nombre as NombreCentro, centros.Direccion, centros.Pais, reportes.Modelo, reportes.NoFactura, clientes.RazonSocial, clientes.Nombre as NombreCliente, clientes.APaterno, clientes.AMaterno, reportes.FechaStatusCambioFisico, reportes.Categoria
+select centros.Nombre as NombreCentro, centros.Email, centros.Direccion, centros.Pais, reportes.Modelo, reportes.NoFactura, clientes.RazonSocial, clientes.Nombre as NombreCliente,
+clientes.APaterno, clientes.AMaterno, reportes.FechaStatusCambioFisico, reportes.Categoria, clientes.Email as EmailCliente
 from reportes, centros, clientes
 where
 reportes.id = ".$arre["IDReporte"]." and
@@ -54,7 +56,7 @@ array_walk_recursive($row,function(&$value) use ($current_charset){
 // 	});
 //
 // }
-
+$emailcliente = $row["EmailCliente"];
 $nombrecliente = $row["RazonSocial"].''.$row["NombreCliente"].' '.$row["APaterno"].' '.$row["AMaterno"];
 $categoria = $row["Categoria"];
 $imagenHeader = "logo-hp.jpg";
@@ -184,8 +186,8 @@ switch ($arre["StatusCambioFisico"]) {
 
         //$mail->AddAddress('slazo@pautacreativa.com.mx');
         //$mail->AddBCC('lasoupedjour@gmail.com');
-        $mail->AddAddress('jguillen@pautacreativa.com.mx');
-        $mail->AddBCC('slazo@pautacreativa.com.mx');
+        $mail->AddAddress($emailcliente);
+        $mail->AddBCC('jguillen@pautacreativa.com.mx');
         $mail->AddBCC('nguzman@pautacreativa.com.mx');
 
         $mail->Subject  = utf8_decode($Asunto . " de Cambio Físico");
@@ -219,11 +221,15 @@ where id = ".$arre["IDReporte"]."
 ");
 
 $q = mysqli_query($con, "
-SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, DATE_FORMAT(FechaRegistroReporte,  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF, DATE_FORMAT(FechaCompra,  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
-FROM reportes, clientes
+SELECT  reportes.*, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno,
+DATE_FORMAT(DATE_ADD(FechaRegistroReporte, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF,
+DATE_FORMAT(DATE_ADD(FechaCompra, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaCompraNF
+FROM reportes, clientes, centros, zonas_horarias
 where clientes.id = reportes.IDCliente
 and StatusReporte = 'Orden de Servicio'
 and TipoReclamoDiagnostico = 'Cambio'
+and centros.id = reportes.IDCentro
+and zonas_horarias.pais = centros.pais
 order by FechaRegistroReporte desc LIMIT 5;
 ");
 

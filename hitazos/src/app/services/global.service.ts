@@ -220,7 +220,8 @@ export class GlobalService implements CanActivate{
                 "Valor": "",
                 "SubtipoServicio": "",
                 "IDTarifas": "",
-                "RequiereRecoleccion": ""
+                "RequiereRecoleccion": "",
+                "MedioDeContacto": ""
             },
             "objrefacciones": [],
             "participaciones": [],
@@ -927,6 +928,7 @@ export class GlobalService implements CanActivate{
         var params = {};
         params['IDReporte'] = id;
         params['StatusCambioFisico'] = aprobacion;
+        params['Email'] = this.user.Email;
 
         this.appstatus.loading = true;
 
@@ -1137,7 +1139,8 @@ export class GlobalService implements CanActivate{
                 "Valor": "",
                 "SubtipoServicio": "",
                 "IDTarifas": "",
-                "RequiereRecoleccion": ""
+                "RequiereRecoleccion": "",
+                "MedioDeContacto": ""
             },
             "objrefacciones": [],
             "participaciones": [],
