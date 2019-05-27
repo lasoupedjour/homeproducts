@@ -82,7 +82,7 @@ export class ResumenReporteComponent {
     eliminarReporte(id) {
       swal({
           title: 'Eliminar #Reporte: ' + id,
-          html: `Favor de eliminar la eliminación del reporte.`,
+          html: `¿Estás seguro que deseas eliminar el reporte?`,
           showConfirmButton: true,
           confirmButtonText: 'Confirmar',
           showCancelButton: true,
@@ -105,7 +105,7 @@ export class ResumenReporteComponent {
                 this._global.appstatus.loading = false;
 
                 if (data.res == 'ok') {
-                  swal(data.msg, "success");
+                  swal(data.msg);
                   this._router.navigate(['inicio']);
                   //console.log("this.resolucion.id", this.resolucion.id);
                 } else if (data.res = 'error') {

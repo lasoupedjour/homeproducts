@@ -51,7 +51,7 @@ export class InicioComponent {
         });
 
         this.filterOrdenesForm = this.formBuilder.group({
-            Pais: [this._global.user.Pais],
+            PaisOrdenes: [this._global.user.Pais],
             Master: [''],
             Cds: ['']
         });
@@ -89,7 +89,12 @@ export class InicioComponent {
     changePais(cmb="") {
         //console.log(this.filterForm.controls.Pais.value);
         var params = {};
-        params['Pais'] = this.filterForm.controls.Pais.value;
+
+        if(cmb=="")
+          params['Pais'] = this.filterForm.controls.Pais.value;
+        else
+          params['Pais'] = this.filterOrdenesForm.controls.PaisOrdenes.value;
+
         params['IDCentro'] = this._global.user.IDCentro;
         params['Nivel'] = this._global.user.nivel;
         params['IDMaster'] = this._global.user.IDMaster;
@@ -121,7 +126,13 @@ export class InicioComponent {
     changeMaster(cmb="") {
         //console.log(this.filterForm.controls.Pais.value);
         var params = {};
-        params['Pais'] = this.filterForm.controls.Pais.value;
+        //params['Pais'] = this.filterForm.controls.Pais.value;
+
+        if(cmb=="")
+          params['Pais'] = this.filterForm.controls.Pais.value;
+        else
+          params['Pais'] = this.filterOrdenesForm.controls.PaisOrdenes.value;
+
         params['Nivel'] = this._global.user.nivel;
         if(cmb=="")
           params['IDMaster'] = $("#master").val();
@@ -504,7 +515,7 @@ export class InicioComponent {
         params["Cds"] = this.filterOrdenesForm.controls.Cds.value;
         params["Master"] = this.filterOrdenesForm.controls.Master.value;
         params["CustomerID"] = CustomerID;
-        
+
         this._global.appstatus.loading = true;
         console.log('params nuevas ordenes');
         console.log(params);
@@ -554,7 +565,7 @@ export class InicioComponent {
         this._httpService.postJSON(params, 'inicio/nuevos-clientes.php')
             .subscribe(
             data => {
-                console.log('data');
+                console.log('data clientes');
                 console.log(data);
                 this._global.appstatus.loading = false;
 

@@ -238,7 +238,7 @@ export class ResumenOrdenComponent {
     eliminarReporte(id) {
       swal({
           title: 'Eliminar #Reporte: ' + id,
-          html: `Favor de eliminar la eliminación del reporte.`,
+          html: `¿Estás seguro que deseas eliminar el reporte?`,
           showConfirmButton: true,
           confirmButtonText: 'Confirmar',
           showCancelButton: true,

@@ -39,10 +39,10 @@
            <th>Selección</th>
            <th>País</th>
            <th>No. de Reporte</th>
-           <th>CDS</th>
            <th>Días Transcurridos</th>
            <th>Proceso</th>
            <th>País</th>
+           <th>CDS</th>
            <th>Aplica Garantía</th>
            <th>Nombre o Razón Social</th>
 
@@ -69,9 +69,6 @@
            <td>
              {{item.id}}
            </td>
-           <td>
-             {{item.NombreCentro}}
-           </td>
            <td [ngClass]="this._global.diasTranscurridosColor(item.FechaRegistroReporte)">
              {{this._global.diasTranscurridos(item.FechaRegistroReporte)}}
            </td>
@@ -80,6 +77,9 @@
            </td>
            <td>
              {{item.Pais}}
+           </td>
+           <td>
+             {{item.NombreCentro}}
            </td>
            <td [innerHtml]="aplicaGarantia(item.AplicaGarantia)"></td>
            <td>

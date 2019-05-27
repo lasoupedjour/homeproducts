@@ -268,7 +268,7 @@ export class OrdenInicioComponent {
             this.genericForm.controls.NoParteCausoDano.setValue('');
             this.genericForm.controls.NoParteCausoDano.updateValueAndValidity();
         }
-
+        console.log("pregarga()", this._global.reporte.objreporte);
         if (Object(this._global.reporte.objreporte).FechaFactura != "0000-00-00 00:00:00" && Object(this._global.reporte.objreporte).FechaFactura != "") {
 
             this.status.update = true;

@@ -331,7 +331,7 @@ if(!$arre['Update']){
                   <p style='text-align: left;'>
                     <span style='color: black;'>Estimado cliente, gracias por estar en contacto.<br /><br />
                                                 Se ha registrado número de reporte <strong>" . $id_reporte . "</strong> para revisión del producto modelo <strong>" . $modelo . "</strong> que será atendido por el Centro de Servicio Autorizado.<br /><br />
-                                                <a href='www.homeproductslatam.com.mx'>www.homeproductslatam.com.mx</a>.
+                                                <a href='https://www.solution-center.net'>www.solution-center.net</a>.
                   </p>
                   <br>
                   <br>

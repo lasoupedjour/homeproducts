@@ -1520,7 +1520,7 @@ export class ReporteCasoComponent {
                   this._httpService.postFormData(params, 'registro-de-casos/registro-reporte-menaje.php')
                     .subscribe(
                     data => {
-                        console.log('data');
+                        console.log('data res menaje');
                         console.log(data);
                         this._global.appstatus.loading = false;
 
