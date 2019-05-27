@@ -91,7 +91,8 @@ if($StatusCostoLanded==""){
             MontoTotal = ?,
             AdjuntosReciclaje = ?,
             FechaAdjuntosCambioFisico = now(),
-            RefaccionesRecuperadas = ?
+            RefaccionesRecuperadas = ?,
+            FechaCierre = now()
             where id = ?
             ";
 }else{
@@ -107,7 +108,8 @@ if($StatusCostoLanded==""){
             AdjuntosReciclaje = ?,
             SubStatusReporte = 'Cerrado',
             FechaAdjuntosCambioFisico = now(),
-            RefaccionesRecuperadas = ?
+            RefaccionesRecuperadas = ?,
+            FechaCierre = now() 
             where id = ?
             ";
 }

@@ -45,8 +45,8 @@ export class OrdenesServicioComponent {
             AMaterno: [''],
             RazonSocial: [''],
             Email: [''],
- 
-            
+
+
         });
 
 
@@ -61,6 +61,11 @@ export class OrdenesServicioComponent {
         var params = {};
         params["IDCentro"] = this._global.user.IDCentro;
         params["nivel"] = this._global.user.nivel;
+
+        if(this._global.user.nivel=="distribuidor"){
+          params["NombreDistribuidor"] = this._global.user.nombre;
+          params["Distribuidor"] = this._global.user.CustomerID;
+        }
 
         this._global.appstatus.loading = true;
 
@@ -160,9 +165,9 @@ export class OrdenesServicioComponent {
 
                     if (data.res == 'ok') {
 
-                        
+
                         this._global.busqueda.clientes = this._global.parseJSON(data.clientes);
-                        
+
 
                         console.log(this._global.busqueda.clientes);
 
@@ -210,5 +215,3 @@ export class OrdenesServicioComponent {
     }
 
 }
-
-

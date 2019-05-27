@@ -42,7 +42,8 @@ if($InformacionCompleta!="" &&
 
   $q = mysql_query("
   update reportes set
-  StatusResolucionHP = 'Aprobado'
+  StatusResolucionHP = 'Aprobado',
+  FechaCierre = now()
   where id = $NoOrden
   ") or die(mysql_error());
 }else{

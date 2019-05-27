@@ -221,7 +221,8 @@ export class GlobalService implements CanActivate{
                 "SubtipoServicio": "",
                 "IDTarifas": "",
                 "RequiereRecoleccion": "",
-                "MedioDeContacto": ""
+                "MedioDeContacto": "",
+                "FechaCierre": ""
             },
             "objrefacciones": [],
             "participaciones": [],
@@ -1140,7 +1141,8 @@ export class GlobalService implements CanActivate{
                 "SubtipoServicio": "",
                 "IDTarifas": "",
                 "RequiereRecoleccion": "",
-                "MedioDeContacto": ""
+                "MedioDeContacto": "",
+                "FechaCierre": ""
             },
             "objrefacciones": [],
             "participaciones": [],

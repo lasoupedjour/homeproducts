@@ -43,6 +43,7 @@ import { ResumenPagosComponent } from './administracion/resumen-de-pagos.compone
 import { ResumenDeCambiosComponent } from './administracion/resumen-de-cambios.component';
 import { ResumenDeCambiosHPComponent } from './administracion/resumen-de-cambios-hp.component';
 import { ResumenDeServiciosComponent } from './administracion/resumen-de-servicios.component';
+import { ResumenDeRefaccionesComponent } from './administracion/resumen-de-refacciones.component';
 
 //Notificaciones
 import { NotificacionesComponent } from './notificaciones/listado.component';
@@ -54,6 +55,7 @@ import { NuevasMovilizacionesComponent } from './nuevas-movilizaciones.component
 
 import { NuevosCambiosFisicosDistComponent } from './nuevos-cambios-fisicos-dist.component';
 import { NuevosCambiosFisicosComponent } from './nuevos-cambios-fisicos.component';
+import { TodosCambiosFisicosDistComponent } from './todos-cambios-fisicos-dist.component';
 
 import { ReestablecerComponent } from './reestablecer.component';
 
@@ -94,6 +96,7 @@ export const routing = RouterModule.forRoot([
     { path: 'administracion/resumen-de-cambios', component: ResumenDeCambiosComponent, canActivate: [GlobalService] },
     { path: 'administracion/resumen-de-cambios-hp', component: ResumenDeCambiosHPComponent, canActivate: [GlobalService] },
     { path: 'administracion/resumen-de-servicios', component: ResumenDeServiciosComponent, canActivate: [GlobalService] },
+    { path: 'administracion/resumen-de-refacciones', component: ResumenDeRefaccionesComponent, canActivate: [GlobalService] },
 
 
     //{ path: 'registroticket/:idparticipante', component: RegistroTicketComponent, canActivate: [GlobalService] },
@@ -107,6 +110,7 @@ export const routing = RouterModule.forRoot([
 
     { path: 'nuevos-cambios-fisicos-dist', component: NuevosCambiosFisicosDistComponent, canActivate: [GlobalService] },
     { path: 'nuevos-cambios-fisicos', component: NuevosCambiosFisicosComponent, canActivate: [GlobalService] },
+    { path: 'todos-cambios-fisicos-dist', component: TodosCambiosFisicosDistComponent, canActivate: [GlobalService] },
 
     { path: 'reestablecer', component: ReestablecerComponent, canActivate: [GlobalService] },
 

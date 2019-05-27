@@ -18,6 +18,12 @@
     <div class="col-sm-2 text-center" *ngIf="this._global.user.nivel!='distribuidor'">
       <a routerLink="/administracion/historial-de-pagos/">Resumen de Pagos</a>
     </div>
+    <!--div class="col-sm-2 text-center" *ngIf="this._global.user.nivel!='distribuidor'">
+      <a routerLink="/administracion/resumen-de-refacciones/">Resumen de Refacciones</a>
+    </di--v>
+    <div class="col-sm-2 text-center" *ngIf="this._global.user.nivel!='distribuidor'">
+      <a routerLink="/administracion/historial-de-pagos/">Resumen de Pagos</a>
+    </div>
     <!--<div class="col-sm-2 text-center">
       <a routerLink="/administracion/servicios-red/">Servicios Red</a>
     </div>-->
@@ -149,6 +155,7 @@
              <th>Nombre Cliente</th>
              <th>Fecha de recepción</th>
              <th>Fecha de entrega</th>
+             <th>Fecha de cierre</th>
              <th>Tipo de Reclamo</th>
              <th>Costo Landed</th>
              <th>Otro Costo</th>
@@ -227,6 +234,9 @@
              </td>
              <td>
                {{item.FechaDiagnostico}}
+             </td>
+             <td>
+               {{item.FechaCierre}}
              </td>
              <td>
                {{item.TipoReclamoDiagnostico}}

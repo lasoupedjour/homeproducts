@@ -533,7 +533,8 @@
          <h3>Cambios físicos</h3>
        </div>
        <div class="col-4 text-right">
-         <a routerLink="../nuevos-cambios-fisicos/">Ver todos</a>
+         <a *ngIf="_global.user.nivel!='distribuidor'" routerLink="../nuevos-cambios-fisicos/">Ver todos</a>
+         <a *ngIf="_global.user.nivel=='distribuidor'" routerLink="../todos-cambios-fisicos-dist/">Ver todos</a>
        </div>
      </div>
 

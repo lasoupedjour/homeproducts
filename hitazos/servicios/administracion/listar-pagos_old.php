@@ -168,7 +168,8 @@ function detallePago($cds, $ano, $mes, $categoria, $CustomerID, $Nombre, $IDMast
   }
   */
   if($mes!=0 && $ano!=0){
-    $filtroFecha = " and (FechaOrdenServicio >= '$fechaIni' and FechaOrdenServicio <= '$fechaFin')";
+    //$filtroFecha = " and (FechaOrdenServicio >= '$fechaIni' and FechaOrdenServicio <= '$fechaFin')";
+    $filtroFecha = " and (FechaCierre >= '$fechaIni' and FechaCierre <= '$fechaFin')";
   }
 
   if($filtroDist==""){

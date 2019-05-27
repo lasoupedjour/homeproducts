@@ -1,4 +1,4 @@
-﻿<!--div class="container">
+<!--div class="container">
   <div class="row mt-5">
     <div class="col-12 mt-1">
       <h2 class="alert-danger px-2">{{_global.appstatus.mensaje}}</h2>
@@ -9,13 +9,13 @@
 <div class="container fM2 menuadmin">
   <div class="row">
 
-    <div class="offset-sm-6  col-sm-2 text-center active" *ngIf="this._global.user.nivel!='distribuidor'">
+    <div class="offset-sm-6  col-sm-2 text-center" *ngIf="this._global.user.nivel!='distribuidor'">
       <a routerLink="/administracion/inicio/">Resumen de Servicios</a>
     </div>
     <div class="col-sm-2 text-center" *ngIf="this._global.user.nivel!='distribuidor'">
       <a routerLink="/administracion/resumen-de-cambios-hp/">Resumen de Cambios</a>
     </div>
-    <!--div class="col-sm-2 text-center" *ngIf="this._global.user.nivel!='distribuidor'">
+    <!--div class="col-sm-2 text-center active" *ngIf="this._global.user.nivel!='distribuidor'">
       <a routerLink="/administracion/resumen-de-refacciones/">Resumen de Refacciones</a>
     </div-->
     <div class="col-sm-2 text-center" *ngIf="this._global.user.nivel!='distribuidor'">
@@ -31,7 +31,7 @@
 
    <div class="row mt-3">
      <div class="col-6">
-       <h2>RESUMEN DE SERVICIOS</h2>
+       <h2>RESUMEN DE REFACCIONES RECUPERADAS</h2>
      </div>
    </div>
 
@@ -52,12 +52,6 @@
 
 
       <div class="col-4 fM3">
-        <h5>Garantia de Partes: <strong>{{this.GarantiaDePartes|currency}} USD</strong></h5>
-        <h5>Garantia de M.O. & Kms: <strong>{{this.GarantiaMOyKms|currency}} USD</strong></h5>
-        <h5>Reembolso Garantia FEE : <strong>{{this.ReembolsoGarantiaFee|currency}} USD</strong></h5>
-        <h5>Garantia de Perdidas y Daños: <strong>{{this.GarantiaDeCambios|currency}} USD</strong></h5>
-        <h5>Monto Impuesto: <strong>{{this.MontoIVA|currency}} USD</strong></h5>
-        <h5>Monto Total: <strong>{{montoTotal|currency}} USD</strong></h5>
         <!--div class="row">
           <div class="col-12">
             <h5><strong>Monto Total: ${{montoTotal}} USD</strong></h5>
@@ -73,18 +67,18 @@
    <form  name="formulariofiltros" [formGroup]="filterForm" >
    <div class="row mt-3">
      <div class="col-2 text-right">
-       <select class="form-control form-control-sm" formControlName="Pais" (change)="changePais()">
+       <select class="form-control form-control-sm" formControlName="Pais" (change)="changePais()" *ngIf="_global.user.nivel=='administrador'">
          <option value="" hidden="">País</option>
          <option *ngFor="let item of _global.paises;" value="{{item.Pais}}">{{item.Pais}}</option>
        </select>
      </div>
      <div class="col-2 text-right">
-       <select class="form-control form-control-sm" formControlName="Master" id="master" (change)="changeMaster()">
+       <select class="form-control form-control-sm" formControlName="Master" id="master" (change)="changeMaster()" *ngIf="_global.user.nivel=='administrador'">
          <option value="" hidden>Master</option>
        </select>
      </div>
      <div class="col-2 text-right">
-       <select class="form-control form-control-sm" formControlName="Cds" id="centros">
+       <select class="form-control form-control-sm" formControlName="Cds" id="centros" *ngIf="_global.user.nivel=='administrador'">
          <option value="" hidden>CDS</option>
          <option value="Todos">Todos</option>
        </select>
@@ -142,37 +136,9 @@
            <thead>
            <tr>
              <th>Orden de Servicio</th>
-             <th>Estatus</th>
-             <th>Resolución</th>
              <th>Centro - Master</th>
              <th>No. Orden</th>
-             <th>Año</th>
-             <th>Mes</th>
-             <th>Día</th>
-             <th>Categoría</th>
-             <th>Subcategoría</th>
-             <th>No. Serie</th>
-             <th>Descripción del Producto</th>
-             <th>Modelo</th>
-             <th>Refacciones</th>
-             <th>Descripción Falla</th>
-             <th>Motivo de Falla</th>
-             <th>Nombre Cliente</th>
-             <th>Fecha de recepción</th>
-             <th>Fecha de entrega</th>
-             <th>Fecha de cierre</th>
-             <th>Tipo de Reclamo</th>
-             <th>Costo Refacciones</th>
-             <th>Costo Reparacion</th>
-             <th>Costo Movilización</th>
-             <th>Costo Despiece</th>
-             <th>Costo Reciclaje</th>
-             <th>Otro Costo</th>
-             <th>Desc. otro Costo</th>
-             <th>Fee Mensual</th>
-             <th>Impuesto Fee Mensual</th>
-             <th>Costo Impuesto</th>
-             <th>Total</th>
+             <th>Refacciones recuperadas</th>
            </tr>
            </thead>
 
@@ -182,116 +148,23 @@
                <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen/orden')" class="btn btn-sm">Consultar</button>
              </td>
              <td>
-               {{item.SubStatusReporte}}
-             </td>
-             <td>
-               {{item.Reclamo}}
-             </td>
-             <td>
                {{item.nombre}}<span *ngIf="item.Master!='N/A'"> - {{item.Master}}</span>
              </td>
              <td>
                {{item.id}}
              </td>
              <td>
-               {{item.FechaOrdenAno}}
-             </td>
-             <td>
-               {{item.FechaOrdenMes}}
-             </td>
-             <td>
-               {{item.FechaOrdenDia}}
-             </td>
-             <td>
-               {{item.Categoria}}
-             </td>
-             <td>
-               {{item.Subcategoria}}
-             </td>
-             <td>
-               {{item.NoSerie}}
-             </td>
-             <td>
-               {{item.Tipo}}
-             </td>
-             <td>
-               {{item.Modelo}}
-             </td>
-             <td>
-               <table *ngIf="item.Refacciones!='' && item.Refacciones!='[]'">
+               <table *ngIf="item.RefaccionesRecuperadas!='' && item.RefaccionesRecuperadas!='[]'">
                  <tr>
-                   <th>Cantidad</th>
                    <th>Descripción/No. Parte</th>
-                   <th>Precio Unitario</th>
-                   <th>Importe</th>
-                   <th>Status cotización</th>
-                   <th>Status refacción</th>
+                   <th>Cantidad</th>
                  </tr>
-                 <tr *ngFor="let refaccion of _global.stringToJson(item.Refacciones);">
+                 <tr *ngFor="let refaccion of _global.stringToJson(item.RefaccionesRecuperadas);">
+                   <td>{{refaccion.NombreRefaccion}}-{{refaccion.NoParte}}</td>
                    <td>{{refaccion.Cantidad}}</td>
-                   <td>{{refaccion.NombreRefaccion}}-{{refaccion.NombreRefaccion}}</td>
-                   <td>{{refaccion.CostoUnitario}}</td>
-                   <td>{{refaccion.CostoTotal}}</td>
-                   <td>{{refaccion.StatusCotizacion}}</td>
-                   <td>{{refaccion.Status}}</td>
                  </tr>
                </table>
              </td>
-             <td>
-               {{item.Comentarios}}
-             </td>
-             <td>
-               {{item.ObservacionesCDSDiagnostico}}
-             </td>
-             <td>
-               {{item.RazonSocial}} {{item.Nombre}} {{item.APaterno}} {{item.AMaterno}}
-             </td>
-             <td>
-               {{item.FechaRegistroReporte}}
-             </td>
-             <td>
-               {{item.FechaDiagnostico}}
-             </td>
-             <td>
-               {{item.FechaCierre}}
-             </td>
-             <td>
-               {{item.TipoReclamoDiagnostico}}
-             </td>
-             <td>
-               {{item.MontoRefacciones | currency}}
-             </td>
-             <td>
-               {{item.MontoReparacion | currency}}
-             </td>
-             <td>
-               {{item.MontoMovilizacion | currency}}
-             </td>
-             <td>
-               {{item.MontoDespiece | currency}}
-             </td>
-             <td>
-               {{item.MontoReciclaje | currency}}
-             </td>
-             <td>
-               {{item.MontoOtro | currency}}
-             </td>
-             <td>
-               {{item.MontoOtroDescripcion}}
-             </td>
-             <td>
-               {{item.TarifaMensual | currency}}
-             </td>
-             <td>
-               {{item.ImpuestoTarifaMensual | currency}}
-             </td>
-             <td>
-               {{item.MontoIVA | currency}}
-             </td>
-             <td>
-               {{item.MontoTotal | currency}}
-             </td>
-
            </tr>
            </tbody>
 </table>

@@ -83,7 +83,8 @@ if ($cds!="" && $cds!="Todos"){
 }
 
 if($mes!=0 && $ano!=0){
-  $filtroFecha = " and (FechaOrdenServicio >= '$fechaIni' and FechaOrdenServicio <= '$fechaFin')";
+  //$filtroFecha = " and (FechaOrdenServicio >= '$fechaIni' and FechaOrdenServicio <= '$fechaFin')";
+  $filtroFecha = " and (FechaCierre >= '$fechaIni' and FechaCierre <= '$fechaFin')";
 }
 
 if ($categoria!=""){

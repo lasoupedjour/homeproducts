@@ -13,6 +13,9 @@
       <a routerLink="/administracion/resumen-de-servicios/">Resumen de Servicios</a>
     </div>
     <!--div class="col-sm-2 text-center" *ngIf="this._global.user.nivel!='distribuidor'">
+      <a routerLink="/administracion/resumen-de-refacciones/">Resumen de Refacciones</a>
+    </div-->
+    <!--div class="col-sm-2 text-center" *ngIf="this._global.user.nivel!='distribuidor'">
       <a routerLink="/administracion/resumen-de-cambios/">Resumen de Cambios</a>
     </div-->
     <div class="col-sm-2 text-center" *ngIf="this._global.user.nivel!='distribuidor'">
@@ -162,6 +165,7 @@
              <th>Nombre Cliente</th>
              <th>Fecha de recepción</th>
              <th>Fecha de entrega</th>
+             <th>Fecha de cierre</th>
              <th>Tipo de Reclamo</th>
              <th>Costo Refacciones</th>
              <th>Costo Reparacion</th>
@@ -249,6 +253,9 @@
              </td>
              <td>
                {{item.FechaDiagnostico}}
+             </td>
+             <td>
+               {{item.FechaCierre}}
              </td>
              <td>
                {{item.TipoReclamoDiagnostico}}
