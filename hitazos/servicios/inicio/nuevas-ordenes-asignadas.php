@@ -71,6 +71,9 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
     left join
     (select * from centros) as centros
     on reportes.IDCentro = centros.id
+    join
+    (select * from zonas_horarias) as zonas_horarias
+    on zonas_horarias.pais = centros.pais
     Where (StatusReporte <> 'Orden de Servicio' and StatusReporte <> 'Cerrado')
     and (reportes.IDOperadorDistribuidor = ".$arre["IDDistribuidor"]." or reportes.IDDistribuidor = ".$arre["IDDistribuidor"].")
     order by FechaRegistroReporte desc LIMIT 5;
@@ -107,7 +110,7 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
     on reportes.IDCliente = clientes.id
     left join
     (select * from centros) as centros
-    on reportes.IDCentro = centros.id
+    on reportes.IDCentroAsigno = centros.id
     join
     (select * from zonas_horarias) as zonas_horarias
     on zonas_horarias.pais = centros.pais

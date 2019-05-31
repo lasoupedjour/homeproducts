@@ -145,6 +145,7 @@ export class ResumenOrdenComponent {
 
         if(
             this._global.reporte.objreporte.StatusCambioFisico=='Aprobado' &&
+            this._global.reporte.objreporte.StatusCostoLanded=='Aprobado' && 
             this._global.reporte.objreporte.SubStatusReporte=='Abierto' && !this._global.esDistribuidor()){
               this.editarReciclaje = true;
             }

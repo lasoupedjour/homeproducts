@@ -15,9 +15,6 @@ array_walk_recursive($arre,function(&$value) use ($current_charset){
      $value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
 });
 
-
-
-
 $res = array();
 
 $res['res'] = 'ok';
@@ -30,6 +27,7 @@ and centros.id = reportes.IDCentro
 and StatusMovilidad <> 'Aprobada'
 and reportes.IDTarifas = tarifas.id and reportes.status=1
 and zonas_horarias.pais = centros.pais
+and tarifas.Valor > 0
 order by FechaRegistroReporte desc :LIMIT
 ";
 /*
@@ -54,6 +52,8 @@ if($arre["limit"]=="")
   $query = str_replace(":LIMIT", "", $query);
 else
   $query = str_replace(":LIMIT", "LIMIT 5", $query);
+
+
 
 $q = mysql_query($query) or die(mysql_error());
 

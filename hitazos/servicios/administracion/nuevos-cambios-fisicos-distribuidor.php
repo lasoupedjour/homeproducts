@@ -39,6 +39,7 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
   and zonas_horarias.pais = centros.pais
 	order by FechaRegistroReporte desc :LIMIT;
 	";
+
 }else{
 	$query = "
 	SELECT distinct reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno,
@@ -60,10 +61,7 @@ if($arre["limit"]=="")
   $query = str_replace(":LIMIT", "", $query);
 else
   $query = str_replace(":LIMIT", "LIMIT 5", $query);
-/*
-echo($query);
-die();
-*/
+
 $q = mysql_query($query) or die(mysql_error());
 
 $reportes = array();

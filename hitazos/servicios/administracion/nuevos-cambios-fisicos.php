@@ -21,6 +21,8 @@ array_walk_recursive($arre,function(&$value) use ($current_charset){
 $res = array();
 
 $res['res'] = 'ok';
+$limite = $arre["limit"];
+//$limite = "";
 
 if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
 	$query = "
@@ -54,7 +56,7 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
 	";
 }
 
-if($arre["limit"]=="")
+if($limite=="")
   $query = str_replace(":LIMIT", "", $query);
 else
   $query = str_replace(":LIMIT", "LIMIT 5", $query);

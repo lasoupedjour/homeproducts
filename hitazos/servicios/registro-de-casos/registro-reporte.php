@@ -291,11 +291,11 @@ if(!$arre['Update']){
 
             require "../email-conf.php";
 
-            //Correo al cliente
             $mail->AddAddress($emailcliente);
-            //Pauta
             $mail->AddBCC('jguillen@pautacreativa.com.mx');
+            $mail->AddBCC('slazo@pautacreativa.com.mx');
             $mail->AddBCC('nguzman@pautacreativa.com.mx');
+            //$mail->AddBCC('lasoupedjour@gmail.com');
 
             $mail->Subject  = utf8_decode("Caso registrado en HomeProducts");
 

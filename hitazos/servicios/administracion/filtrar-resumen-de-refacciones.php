@@ -51,7 +51,7 @@ Select DISTINCT reportes.*,
 DATE_FORMAT(DATE_ADD(FechaRegistroReporte, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporte,
 DATE_FORMAT(DATE_ADD(FechaDiagnostico, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaDiagnostico,
 clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno, centros.nombre,  IFNULL( centros1.nombre,  'N/A' ) AS  'Master', tarifas.TarifaMensual, tarifas.ImpuestoTarifaMensual, (reportes.MontoTotal - CostoLanded - OtroCostoDistribuidor) as MontoTotal1, replace(replace(replace(CAST(resolucion.reclamo as CHAR(1)), '1', 'Aceptado'), '0', 'Rechazado'), '', 'Sin resolución') as Reclamo  from
-(select * from reportes) as reportes
+(select * from reportes where RefaccionesRecuperadas<>'' and RefaccionesRecuperadas<>'[]') as reportes
 join
 (select * from clientes) as clientes
 on reportes.idcliente = clientes.id
@@ -141,33 +141,6 @@ while ($row = mysql_fetch_array($q))
 	array_push($reportes, $temp);
 }
 $res['reportes'] = $reportes;
-
-$pagos = array();
-
-if($cds>0){
-  $query = "
-            select * from pagos where IDMaster=$master and IDCentro=$cds and Categoria='$categoria' and Ano='$ano' and Mes='$mes' order by FechaRegistro desc;
-           ";
-}else{
-  $query = "
-            select * from pagos where IDMaster=$master and Categoria='$categoria' and Ano='$ano' and Mes='$mes' order by FechaRegistro desc;
-           ";
-}
-
-$q = mysql_query($query) or die(mysql_error());
-
-while ($row = mysql_fetch_array($q))
-{
-	$current_charset = 'ISO-8859-15';//or what it is now
-	array_walk_recursive($row,function(&$value) use ($current_charset){
-		 //$value = iconv('UTF-8//TRANSLIT',$current_charset,$value);
-		$value = utf8_encode($value);
-	});
-	$temp = json_encode($row);
-	array_push($pagos, $temp);
-}
-$res['pagos'] = $pagos;
-
 echo json_encode($res);
 
 

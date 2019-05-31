@@ -34,7 +34,7 @@ if ($stmt = $mysqli->prepare("select max(id) from usuarios_admin where email=? a
   }else if($num > 0){///elseif 2
     $rand = rand(100000,999999);
   	$encodeemail = urlencode($email);
-    $link = "http://apps.pautacreativatemporales.com.mx/oster/homeproducts/reestablecer-contrasena/?e=$encodeemail&c=$rand";
+    $link = "https://www.solution-center.net/reestablecer-contrasena/?e=$encodeemail&c=$rand";
 
     if ($stmt = $mysqli->prepare("update usuarios_admin set codigo = ? where email = ?")) {///3
     	$stmt->bind_param("ss",

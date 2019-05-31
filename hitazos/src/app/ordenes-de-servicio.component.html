@@ -91,7 +91,10 @@
              {{item.SubStatusReporte}}
            </td>
            <td>
-             <button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Seleccionar</button>
+             <button *ngIf="item.StatusCambioFisico=='' && item.TipoReclamoDiagnostico=='Cambio' " (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen/orden')" class="btn btn-sm">Seleccionar</button>
+             <button *ngIf="item.StatusCambioFisico=='Rechazado'" (click)="this._global.seleccionarReporte(item.id, 'registro-de-casos/orden-de-servicio/inicio')" class="btn btn-sm">Seleccionar</button>
+             <button *ngIf="item.TipoReclamoDiagnostico!='Cambio' || item.StatusCambioFisico=='Aprobado'" (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen/orden')" class="btn btn-sm">Seleccionar</button>
+             <!--button (click)="this._global.seleccionarReporte(item.id, 'inicio/resumen')" class="btn btn-sm">Seleccionar</button-->
            </td>
          </tr>
        </tbody>

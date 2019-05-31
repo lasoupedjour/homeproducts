@@ -116,7 +116,17 @@ if(!$update){
   $AdjuntosOtros = subirAdjuntos($arre['IDReporte'], 'AdjuntosOtros', $arre['AdjuntosOtrosSize']);
   $AdjuntosReciclaje = subirAdjuntos($arre['IDReporte'], 'AdjuntosReciclaje', $arre['AdjuntosReciclajeSize']);
 
-  if($arre['AdjuntosFacturasNotasCompraSize']>0 && $arre['AdjuntosFotosModeloSerieSize']>0 && $arre['AdjuntosFacturasRepuestosSize']>0 && $arre['AdjuntosReciclaje']==0){
+  if(!$arre['AdjuntosFacturasRepuestosSize']>0){
+    $AdjuntosFacturasRepuestos = "[]";
+  }
+  if(!$arre['AdjuntosOtrosSize']>0){
+    $AdjuntosOtros = "[]";
+  }
+  if(!$arre['AdjuntosReciclajeSize']>0){
+    $AdjuntosReciclaje = "[]";
+  }
+
+  if($arre['AdjuntosFacturasNotasCompraSize']>0 && $arre['AdjuntosFotosModeloSerieSize']>0){
     $query = "
     update reportes set
     HomeProductsGroupNo = ?,
@@ -179,7 +189,6 @@ if(!$update){
 
 }
 
-
 //actualizar
 //determinar substatus reporte ABIERTO o Cerrado
 $SubStatusReporte = "Cerrado";
@@ -219,7 +228,17 @@ if ($stmt = $mysqli->prepare($query)) {
 
   	);
   }else{
-    if($arre['AdjuntosFacturasNotasCompraSize']>0 && $arre['AdjuntosFotosModeloSerieSize']>0 && $arre['AdjuntosFacturasRepuestosSize']>0 && $arre['AdjuntosReciclaje']==0){
+    if(!$arre['AdjuntosFacturasRepuestosSize']>0){
+      $AdjuntosFacturasRepuestos = "[]";
+    }
+    if(!$arre['AdjuntosOtrosSize']>0){
+      $AdjuntosOtros = "[]";
+    }
+    if(!$arre['AdjuntosReciclajeSize']>0){
+      $AdjuntosReciclaje = "[]";
+    }
+
+    if($arre['AdjuntosFacturasNotasCompraSize']>0 && $arre['AdjuntosFotosModeloSerieSize']>0){
       $stmt->bind_param($params,
     	$arre['HomeProductsGroupNo'],
     	$arre['NoFactura'],

@@ -22,10 +22,14 @@ $res = array();
 
 $res['res'] = 'ok';
 
+$Distribuidor = "";
 
-if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
+if(isset($arre["Distribuidor"]))
+  $Distribuidor = $arre["Distribuidor"];
+
+if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" && $arre["nivel"] != "distribuidor" ){
 	$q = mysql_query("
-	SELECT  reportes.*, centros.Nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno
+	SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno
 	FROM reportes, clientes, centros
 	where clientes.id = reportes.IDCliente
 	and reportes.IDCentro = ".$arre["IDCentro"]."
@@ -35,9 +39,23 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
 	") or die(mysql_error());
 }else{
 	$q = mysql_query("
-	SELECT  reportes.*, centros.Nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno
+	SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno
 	FROM reportes, clientes, centros
 	where clientes.id = reportes.IDCliente
+	and StatusReporte = 'Orden de Servicio' and reportes.status=1
+  and centros.id = reportes.IDCentro
+	order by FechaRegistroReporte desc;
+	") or die(mysql_error());
+}
+
+
+if($arre["nivel"]=="distribuidor"){
+  $q = mysql_query("
+	SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno
+	FROM reportes, clientes, centros
+	where clientes.id = reportes.IDCliente
+	and (reportes.Distribuidor = '".$Distribuidor."'
+  or reportes.Distribuidor = '".$arre["NombreDistribuidor"]."')
 	and StatusReporte = 'Orden de Servicio' and reportes.status=1
   and centros.id = reportes.IDCentro
 	order by FechaRegistroReporte desc;

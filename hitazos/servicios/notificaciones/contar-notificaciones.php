@@ -1,4 +1,8 @@
 <?php
+ini_set('display_errors', 0);
+ini_set('display_startup_errors', 0);
+error_reporting(0);
+
 include "../dbc.php";
 
 if (isset($_SERVER['HTTP_ORIGIN'])) {
@@ -23,7 +27,8 @@ $id_usuario = utf8_decode(urldecode($arre['id_usuario']));
 $id_centro = utf8_decode(urldecode($arre['id_centro']));
 $nivel= utf8_decode(urldecode($arre['nivel']));
 $IDDistribuidor = utf8_decode(urldecode($arre['IDDistribuidor']));
-$CustomerID = $arre['CustomerID'];
+if(isset($arre['CustomerID']))
+  $CustomerID = $arre['CustomerID'];
 
 if($nivel=='administrador'){
   $query = "SELECT notificaciones.id FROM notificaciones,usuarios_admin where notificaciones.id_usuario=usuarios_admin.id and usuarios_admin.nivel <> 'administrador' and leida=0 order by notificaciones.id desc";

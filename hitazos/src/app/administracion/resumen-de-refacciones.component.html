@@ -9,15 +9,19 @@
 <div class="container fM2 menuadmin">
   <div class="row">
 
-    <div class="offset-sm-6  col-sm-2 text-center" *ngIf="this._global.user.nivel!='distribuidor'">
+
+    <div class="offset-sm-4 col-sm-2 text-center" *ngIf="_global.user.nivel == 'administrador'">
       <a routerLink="/administracion/inicio/">Resumen de Servicios</a>
     </div>
-    <div class="col-sm-2 text-center" *ngIf="this._global.user.nivel!='distribuidor'">
+    <div class="offset-sm-6 col-sm-2 text-center" *ngIf="_global.user.IDMaster == '0' && _global.user.nivel == 'operador'">
+      <a routerLink="/administracion/resumen-de-servicios/">Resumen de Servicios</a>
+    </div>
+    <div class="col-sm-2 text-center" *ngIf="_global.user.nivel == 'administrador'">
       <a routerLink="/administracion/resumen-de-cambios-hp/">Resumen de Cambios</a>
     </div>
-    <!--div class="col-sm-2 text-center active" *ngIf="this._global.user.nivel!='distribuidor'">
+    <div class="col-sm-2 text-center active" *ngIf="this._global.user.nivel!='distribuidor'">
       <a routerLink="/administracion/resumen-de-refacciones/">Resumen de Refacciones</a>
-    </div-->
+    </div>
     <div class="col-sm-2 text-center" *ngIf="this._global.user.nivel!='distribuidor'">
       <a routerLink="/administracion/historial-de-pagos/">Resumen de Pagos</a>
     </div>
@@ -67,6 +71,10 @@
    <form  name="formulariofiltros" [formGroup]="filterForm" >
    <div class="row mt-3">
      <div class="col-2 text-right">
+     </div>
+     <div class="col-2 text-right">
+     </div>
+     <div class="col-2 text-right">
        <select class="form-control form-control-sm" formControlName="Pais" (change)="changePais()" *ngIf="_global.user.nivel=='administrador'">
          <option value="" hidden="">País</option>
          <option *ngFor="let item of _global.paises;" value="{{item.Pais}}">{{item.Pais}}</option>
@@ -82,6 +90,7 @@
          <option value="" hidden>CDS</option>
          <option value="Todos">Todos</option>
        </select>
+
      </div>
      <div class="col-2 text-right">
        <select class="form-control form-control-sm" formControlName="Categoria">
@@ -89,31 +98,7 @@
          <option value="LINEA BLANCA">LINEA BLANCA</option>
          <option value="MENAJE">MENAJE</option>
        </select>
-     </div>
-     <div class="col-2 text-right">
-       <select class="form-control form-control-sm" formControlName="Ano">
-         <option value="0">Año</option>
-         <option value="2019">2019</option>
-         <option value="2018">2018</option>
-         <option value="2017">2017</option>
-       </select>
-     </div>
-     <div class="col-2 text-right">
-       <select class="form-control form-control-sm" formControlName="Mes">
-         <option value="0">Mes</option>
-         <option value="01">enero</option>
-         <option value="02">febrero</option>
-         <option value="03">marzo</option>
-         <option value="04">abril</option>
-         <option value="05">mayo</option>
-         <option value="06">junio</option>
-         <option value="07">julio</option>
-         <option value="08">agosto</option>
-         <option value="09">septiembre</option>
-         <option value="10">octubre</option>
-         <option value="11">noviembre</option>
-         <option value="12">diciembre</option>
-       </select>
+
      </div>
    </div>
    <div class="row mt-3">

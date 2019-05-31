@@ -468,7 +468,7 @@ export class InicioComponent {
         params["Cds"] = this.filterForm.controls.Cds.value;
 
         this._global.appstatus.loading = true;
-
+        console.log("***********casos asignados***********");
         this._httpService.postJSON(params, 'inicio/nuevas-ordenes-asignadas.php')
             .subscribe(
             data => {

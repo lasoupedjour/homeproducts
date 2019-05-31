@@ -149,8 +149,7 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" ){
 if($arre["Cds"]!="" && $arre["Cds"]!="Todos"){
   $query = str_replace(":filtroCds", " and reportes.IDCentro=" . $arre["Cds"], $query);
 }elseif($arre["Master"]!=""){
-  //$query = str_replace(":filtroCds", " and centros.IDMaster=" . $arre["Master"], $query);
-  $query = str_replace(":filtroCds", " and (centros.IDMaster=" . $arre["Master"] . " or reportes.IDCentro=" . $arre["Master"] . ")" , $query);
+  $query = str_replace(":filtroCds", " and centros.IDMaster=" . $arre["Master"] . " or reportes.IDCentro=" . $arre["Master"], $query);
 }else{
   $query = str_replace(":filtroCds", "", $query);
 }

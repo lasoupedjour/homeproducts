@@ -24,7 +24,7 @@ $res['res'] = 'ok';
 
 if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" && $arre["nivel"] != "distribuidor" ){
 	$q = mysql_query("
-	SELECT  reportes.*, centros.Nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno
+	SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno
 	FROM reportes, clientes, centros
 	where clientes.id = reportes.IDCliente
 	and reportes.IDCentro = ".$arre["IDCentro"]."
@@ -35,7 +35,7 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" && $arre["nivel"
 }else if($arre["nivel"]=="distribuidor"){
 
   $q = mysql_query("
-	SELECT  reportes.*, centros.Nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno
+	SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno
 	FROM reportes, clientes, centros
 	where clientes.id = reportes.IDCliente
 	and reportes.IDDistribuidor = ".$arre["IDDistribuidor"]."
@@ -45,11 +45,11 @@ if($arre["nivel"] != "MKT" && $arre["nivel"] != "administrador" && $arre["nivel"
 	") or die(mysql_error());
 }else{
 	$q = mysql_query("
-	SELECT  reportes.*, centros.Nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno
+	SELECT  reportes.*, centros.nombre as NombreCentro, clientes.Pais, clientes.RazonSocial, clientes.Nombre, clientes.APaterno, clientes.AMaterno
 	FROM reportes, clientes, centros
 	where clientes.id = reportes.IDCliente
 	and StatusReporte <> 'Orden de Servicio'
-  and centros.id = reportes.IDCentro 
+  and centros.id = reportes.IDCentro
 	order by FechaRegistroReporte desc;
 	") or die(mysql_error());
 }
