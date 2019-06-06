@@ -32,8 +32,8 @@ if($arre['nivel'] == 'administrador' || $arre['nivel'] == 'MKT' ||  $arre['nivel
    where clientes.Pais = '".$arre["Pais"]."' and IDCentro = ".$arre["IDCentro"]." and centros.id = clientes.IDCentro and zonas_horarias.pais = centros.pais order by FechaRegistro desc LIMIT 5;";
   else
     $query = "SELECT  clientes.*, DATE_FORMAT(DATE_ADD(FechaRegistro, INTERVAL zonas_horarias.horas HOUR),  '%d/%m/%Y %H:%i:%s' ) as FechaRegistroReporteNF
-    FROM clientes, centros, zonas_horarias
-    where clientes.Pais = '".$arre["Pais"]."' and IDDistribuidor = ".$arre["IDDistribuidor"]."  and centros.id = clientes.IDCentro and zonas_horarias.pais = centros.pais order by FechaRegistro desc LIMIT 5;";
+    FROM clientes, distribuidores, zonas_horarias
+    where clientes.Pais = '".$arre["Pais"]."' and clientes.IDDistribuidor = ".$arre["IDDistribuidor"]."  and distribuidores.id = clientes.IDDistribuidor and zonas_horarias.pais = distribuidores.pais order by FechaRegistro desc LIMIT 5;";
 }
 
 $q = mysql_query($query) or die(mysql_error());

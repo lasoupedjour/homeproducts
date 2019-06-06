@@ -1359,139 +1359,46 @@ export class ReporteCasoComponent {
         //alert(this.genericForm.controls.Categoria.value);
         //Validamos si se trata de un casi de menaje
         var Modelo = this.genericForm.controls.Modelo.value;
+        console.log("Centro->",this.genericForm.controls.IDCentro.value);
+        if(this._global.user.nivel=='distribuidor' && this.genericForm.controls.IDCentro.value=="" && this.genericForm.controls.Categoria.value!='MENAJE'){
+          swal('', 'Favor de elegir el Centro de Servicio', 'warning');
+        }else{
+          if(this.genericForm.controls.Categoria.value=='MENAJE' && this.genericForm.controls.Modelo.value!='OS-17001' && this.genericForm.controls.Modelo.value!='OS-17001-1'){
+            //Validamos los archivos adjuntos
+            this.validarAdjuntos();
 
-        if(this.genericForm.controls.Categoria.value=='MENAJE' && this.genericForm.controls.Modelo.value!='OS-17001' && this.genericForm.controls.Modelo.value!='OS-17001-1'){
-          //Validamos los archivos adjuntos
-          this.validarAdjuntos();
+            if (this.genericForm.valid && this.adjuntosValidos) {
 
-          if (this.genericForm.valid && this.adjuntosValidos) {
+                console.log('submit registro');
+                this._global.clearMessages();
+                var Categoria = this.genericForm.controls.Categoria.value;
 
-              console.log('submit registro');
-              this._global.clearMessages();
-              var Categoria = this.genericForm.controls.Categoria.value;
+                var params = {};
+                params = this.genericForm.getRawValue();
+                params["Update"] = this.status.update;
 
-              var params = {};
-              params = this.genericForm.getRawValue();
-              params["Update"] = this.status.update;
+                if(this.genericForm.controls.IDCentro.value=='')
+                  params["IDCentro"] = this._global.user.IDCentro;
+                else
+                  params["IDCentro"] = this.genericForm.controls.IDCentro.value;
 
-              if(this.genericForm.controls.IDCentro.value=='')
-                params["IDCentro"] = this._global.user.IDCentro;
-              else
-                params["IDCentro"] = this.genericForm.controls.IDCentro.value;
+                if(this._global.user.nivel=="contactcenter")
+                  params["IDCentroAsigno"] = this._global.user.IDCentro;
+                else
+                  params["IDCentroAsigno"] = 0;
 
-              if(this._global.user.nivel=="contactcenter")
-                params["IDCentroAsigno"] = this._global.user.IDCentro;
-              else
-                params["IDCentroAsigno"] = 0;
+                params["IDReporte"] = this._global.reporte.idreporte;
 
-              params["IDReporte"] = this._global.reporte.idreporte;
-
-              if(this._global.user.IDDistribuidor!='' && this._global.user.IDDistribuidor!='0'){
-                params["IDCentro"] = 0;
-                params["IDDistribuidor"] = this._global.user.IDDistribuidor;
-              }
-              else
-                params["IDDistribuidor"] = this.genericForm.controls.Distribuidor.value;
-
-              params["IDUsuario"] = this._global.user.id;
-              params["IDCliente"] = Object(this._global.cliente.objeto).id;
-              params["Refacciones"] = JSON.stringify(this._global.refacciones);
-              params["NecesitaAutorizacion"] = this.formulariostatus.necesitaAutorizacion;
-
-              params["NoSerie"] = this.genericForm.controls.NoSerie.value;
-              params["Condicion"] = this.genericForm.controls.Condicion.value;
-              params["CostoLanded"] = this.genericForm.controls.CostoLanded.value;
-              params["OtroCostoDistribuidor"] = this.genericForm.controls.OtroCostoDistribuidor.value;
-
-              params["AdjuntosFacturasNotasCompra"] = this._global.AdjuntosFacturasNotasCompra;
-              try { params["AdjuntosFacturasNotasCompraSize"] = Object(this._global.AdjuntosFacturasNotasCompra).currentFiles.length; } catch (e) { params["AdjuntosFacturasNotasCompraSize"] = 0; };
-
-              params["AdjuntosFotosModeloSerie"] = this._global.AdjuntosFotosModeloSerie;
-              try { params["AdjuntosFotosModeloSerieSize"] = Object(this._global.AdjuntosFotosModeloSerie).currentFiles.length; } catch (e) { params["AdjuntosFotosModeloSerieSize"] = 0; };
-
-              this._global.appstatus.loading = true;
-
-              console.log("registro reporte", params);
-
-            if(this._global.user.nivel == 'contactcenter' && this.genericForm.controls.MedioDeContacto.value==""){
-              //Campo requerido
-              swal('', 'Favor de indicar el medio de contacto.', 'warning');
-            }else{
-              this._httpService.postFormData(params, 'registro-de-casos/registro-reporte-menaje.php')
-              .subscribe(
-              data => {
-                  console.log('data');
-                  console.log(data);
-                  this._global.appstatus.loading = false;
-
-                  if (data.res == 'ok') {
-
-                      console.log("objReporte", data.objreporte);
-                      this._global.guardarIdReporte(data.idreporte);
-                      this._global.guardarObjReporte(data.objreporte);
-                      //this._global.guardarObjReporte(data.objreporte);
+                if(this._global.user.IDDistribuidor!='' && this._global.user.IDDistribuidor!='0'){
+                  params["IDCentro"] = 0;
+                  params["IDDistribuidor"] = this._global.user.IDDistribuidor;
+                }
+                else
+                  params["IDDistribuidor"] = this.genericForm.controls.Distribuidor.value;
 
 
-                      this.genericForm.reset();
-                      // this.status.paso = 2;
-                      swal({
-                          title: 'Solicitud Enviada',
-                          text: 'Se ha enviado la solicitud.',
-                          type: 'success',
-                          showConfirmButton: true,
-                          confirmButtonText: 'Ok',
-                          customClass: 'swal2-overflow',
-                      }).then((result) => {
-                        ////Registro de notificación para HP
-                        this._global.notificaciones.modulo = "/registro-de-casos/reporte-de-caso-menaje";
-                        this._global.notificaciones.descripcion = "Se ha registrado un reporte de menaje con el No. de orden: " + this._global.reporte.idreporte;
-                        this._global.registrarNotificacion(this._global.reporte.idreporte);
-
-                        this._router.navigate(['inicio/resumen']);
-                      });
-                  } else if (data.res == 'error') {
-
-                      this._global.appstatus.mensaje = data.msg;
-
-                  }
-              },
-              error => alert(error),
-              () => console.log('termino submit')
-              );
-            }
-          } else {
-              this._global.validateAllFormFields(this.genericForm);
-          }
-        }else{//Si es un caso de línea blanca sigue el flujo normal
-          if (this.genericForm.valid) {
-              console.log('submit registro');
-              this._global.clearMessages();
-              var Categoria = this.genericForm.controls.Categoria.value;
-              var TipoCaso = this.genericForm.controls.TipoCaso.value;
-
-              var params = {};
-              params = this.genericForm.getRawValue();
-              params["Update"] = this.status.update;
-
-              if(this.genericForm.controls.IDCentro.value=='')
-                params["IDCentro"] = this._global.user.IDCentro;
-              else
-                params["IDCentro"] = this.genericForm.controls.IDCentro.value;
-
-              if(this._global.user.nivel=="contactcenter")
-                params["IDCentroAsigno"] = this._global.user.IDCentro;
-              else
-                params["IDCentroAsigno"] = 0;
-
-              params["IDReporte"] = this._global.reporte.idreporte;
-
-              if(this._global.user.IDDistribuidor!='' && this._global.user.IDDistribuidor!='0'){
-                params["IDDistribuidor"] = this._global.user.IDDistribuidor;
-                params["TipoRevision"] = "otro centro";
-              }else{
-                params["IDDistribuidor"] = this.genericForm.controls.Distribuidor.value;
-              }
-
+                if(this._global.user.nivel=='distribuidor' && this.genericForm.controls.Categoria.value=='MENAJE')
+                  params["IDCentro"] = 12;
 
                 params["IDUsuario"] = this._global.user.id;
                 params["IDCliente"] = Object(this._global.cliente.objeto).id;
@@ -1502,118 +1409,220 @@ export class ReporteCasoComponent {
                 params["Condicion"] = this.genericForm.controls.Condicion.value;
                 params["CostoLanded"] = this.genericForm.controls.CostoLanded.value;
                 params["OtroCostoDistribuidor"] = this.genericForm.controls.OtroCostoDistribuidor.value;
-                /*
+
                 params["AdjuntosFacturasNotasCompra"] = this._global.AdjuntosFacturasNotasCompra;
                 try { params["AdjuntosFacturasNotasCompraSize"] = Object(this._global.AdjuntosFacturasNotasCompra).currentFiles.length; } catch (e) { params["AdjuntosFacturasNotasCompraSize"] = 0; };
 
                 params["AdjuntosFotosModeloSerie"] = this._global.AdjuntosFotosModeloSerie;
                 try { params["AdjuntosFotosModeloSerieSize"] = Object(this._global.AdjuntosFotosModeloSerie).currentFiles.length; } catch (e) { params["AdjuntosFotosModeloSerieSize"] = 0; };
-                */
+
                 this._global.appstatus.loading = true;
 
                 console.log("registro reporte", params);
 
-                if(this._global.user.nivel == 'contactcenter' && this.genericForm.controls.MedioDeContacto.value==""){
-                  //Campo requerido
-                  swal('', 'Favor de indicar el medio de contacto.', 'warning');
+              if(this._global.user.nivel == 'contactcenter' && this.genericForm.controls.MedioDeContacto.value==""){
+                //Campo requerido
+                swal('', 'Favor de indicar el medio de contacto.', 'warning');
+              }else{
+                this._httpService.postFormData(params, 'registro-de-casos/registro-reporte-menaje.php')
+                .subscribe(
+                data => {
+                    console.log('data');
+                    console.log(data);
+                    this._global.appstatus.loading = false;
+
+                    if (data.res == 'ok') {
+
+                        console.log("objReporte", data.objreporte);
+                        this._global.guardarIdReporte(data.idreporte);
+                        this._global.guardarObjReporte(data.objreporte);
+                        //this._global.guardarObjReporte(data.objreporte);
+
+
+                        this.genericForm.reset();
+                        // this.status.paso = 2;
+                        swal({
+                            title: 'Solicitud Enviada',
+                            text: 'Se ha enviado la solicitud.',
+                            type: 'success',
+                            showConfirmButton: true,
+                            confirmButtonText: 'Ok',
+                            customClass: 'swal2-overflow',
+                        }).then((result) => {
+                          ////Registro de notificación para HP
+                          this._global.notificaciones.modulo = "/registro-de-casos/reporte-de-caso-menaje";
+                          this._global.notificaciones.descripcion = "Se ha registrado un reporte de menaje con el No. de orden: " + this._global.reporte.idreporte;
+                          this._global.registrarNotificacion(this._global.reporte.idreporte);
+
+                          this._router.navigate(['inicio/resumen']);
+                        });
+                    } else if (data.res == 'error') {
+
+                        this._global.appstatus.mensaje = data.msg;
+
+                    }
+                },
+                error => alert(error),
+                () => console.log('termino submit')
+                );
+              }
+            } else {
+                this._global.validateAllFormFields(this.genericForm);
+            }
+          }else{//Si es un caso de línea blanca sigue el flujo normal
+            if (this.genericForm.valid) {
+                console.log('submit registro');
+                this._global.clearMessages();
+                var Categoria = this.genericForm.controls.Categoria.value;
+                var TipoCaso = this.genericForm.controls.TipoCaso.value;
+
+                var params = {};
+                params = this.genericForm.getRawValue();
+                params["Update"] = this.status.update;
+
+                if(this.genericForm.controls.IDCentro.value=='')
+                  params["IDCentro"] = this._global.user.IDCentro;
+                else
+                  params["IDCentro"] = this.genericForm.controls.IDCentro.value;
+
+                if(this._global.user.nivel=="contactcenter")
+                  params["IDCentroAsigno"] = this._global.user.IDCentro;
+                else
+                  params["IDCentroAsigno"] = 0;
+
+                params["IDReporte"] = this._global.reporte.idreporte;
+
+                if(this._global.user.IDDistribuidor!='' && this._global.user.IDDistribuidor!='0'){
+                  params["IDDistribuidor"] = this._global.user.IDDistribuidor;
+                  params["TipoRevision"] = "otro centro";
                 }else{
-                  this._httpService.postFormData(params, 'registro-de-casos/registro-reporte-menaje.php')
-                    .subscribe(
-                    data => {
-                        console.log('data res menaje');
-                        console.log(data);
-                        this._global.appstatus.loading = false;
-
-                        if (data.res == 'ok') {
-
-                            console.log("objReporte", data.objreporte);
-                            this._global.guardarIdReporte(data.idreporte);
-                            this._global.guardarObjReporte(data.objreporte);
-                            //this._global.guardarObjReporte(data.objreporte);
+                  params["IDDistribuidor"] = this.genericForm.controls.Distribuidor.value;
+                }
 
 
-                            this.genericForm.reset();
-                            // this.status.paso = 2;
+                  params["IDUsuario"] = this._global.user.id;
+                  params["IDCliente"] = Object(this._global.cliente.objeto).id;
+                  params["Refacciones"] = JSON.stringify(this._global.refacciones);
+                  params["NecesitaAutorizacion"] = this.formulariostatus.necesitaAutorizacion;
 
-                            if (this.formulariostatus.necesitaAutorizacion == 1) {
-                                //Registro de notificación
-                                this._global.notificaciones.modulo = "/inicio/resumen/orden";
-                                this._global.notificaciones.descripcion = "Se ha enviado la solicitud de autorización de kilometraje a HP." + this._global.reporte.idreporte;
-                                this._global.registrarNotificacion(data.idreporte);
-                                swal({
-                                    title: 'Solicitud Enviada',
-                                    text: 'Se ha enviado la solicitud de autorización de kilometraje a HP.',
-                                    type: 'success',
-                                    showConfirmButton: true,
-                                    confirmButtonText: 'Ok',
-                                    customClass: 'swal2-overflow',
-                                }).then((result) => {
-                                    if (result.value) {
-                                      if(this._global.user.IDDistribuidor){
-                                        this._router.navigate(['inicio']);
-                                      }else{
-                                        this._router.navigate(['inicio/resumen']);
+                  params["NoSerie"] = this.genericForm.controls.NoSerie.value;
+                  params["Condicion"] = this.genericForm.controls.Condicion.value;
+                  params["CostoLanded"] = this.genericForm.controls.CostoLanded.value;
+                  params["OtroCostoDistribuidor"] = this.genericForm.controls.OtroCostoDistribuidor.value;
+                  /*
+                  params["AdjuntosFacturasNotasCompra"] = this._global.AdjuntosFacturasNotasCompra;
+                  try { params["AdjuntosFacturasNotasCompraSize"] = Object(this._global.AdjuntosFacturasNotasCompra).currentFiles.length; } catch (e) { params["AdjuntosFacturasNotasCompraSize"] = 0; };
+
+                  params["AdjuntosFotosModeloSerie"] = this._global.AdjuntosFotosModeloSerie;
+                  try { params["AdjuntosFotosModeloSerieSize"] = Object(this._global.AdjuntosFotosModeloSerie).currentFiles.length; } catch (e) { params["AdjuntosFotosModeloSerieSize"] = 0; };
+                  */
+                  this._global.appstatus.loading = true;
+
+                  console.log("registro reporte", params);
+
+                  if(this._global.user.nivel == 'contactcenter' && this.genericForm.controls.MedioDeContacto.value==""){
+                    //Campo requerido
+                    swal('', 'Favor de indicar el medio de contacto.', 'warning');
+                  }else{
+                    this._httpService.postFormData(params, 'registro-de-casos/registro-reporte-menaje.php')
+                      .subscribe(
+                      data => {
+                          console.log('data res menaje');
+                          console.log(data);
+                          this._global.appstatus.loading = false;
+
+                          if (data.res == 'ok') {
+
+                              console.log("objReporte", data.objreporte);
+                              this._global.guardarIdReporte(data.idreporte);
+                              this._global.guardarObjReporte(data.objreporte);
+                              //this._global.guardarObjReporte(data.objreporte);
+
+
+                              this.genericForm.reset();
+                              // this.status.paso = 2;
+
+                              if (this.formulariostatus.necesitaAutorizacion == 1) {
+                                  //Registro de notificación
+                                  this._global.notificaciones.modulo = "/inicio/resumen/orden";
+                                  this._global.notificaciones.descripcion = "Se ha enviado la solicitud de autorización de kilometraje a HP." + this._global.reporte.idreporte;
+                                  this._global.registrarNotificacion(data.idreporte);
+                                  swal({
+                                      title: 'Solicitud Enviada',
+                                      text: 'Se ha enviado la solicitud de autorización de kilometraje a HP.',
+                                      type: 'success',
+                                      showConfirmButton: true,
+                                      confirmButtonText: 'Ok',
+                                      customClass: 'swal2-overflow',
+                                  }).then((result) => {
+                                      if (result.value) {
+                                        if(this._global.user.IDDistribuidor){
+                                          this._router.navigate(['inicio']);
+                                        }else{
+                                          this._router.navigate(['inicio/resumen']);
+                                        }
                                       }
-                                    }
-                                });
+                                  });
 
-                            } else {
-                              //alert(TipoCaso);
-                              if(TipoCaso!='Garantía'){
-                                this._router.navigate(['inicio']);
-                              }
-                              else if(parseInt(this._global.user.IDDistribuidor)>0 && Categoria=='LINEA BLANCA'){
-                                swal({
-                                    title: 'Solicitud Enviada',
-                                    text: 'Se ha enviado la solicitud.',
-                                    type: 'success',
-                                    showConfirmButton: true,
-                                    confirmButtonText: 'Ok',
-                                    customClass: 'swal2-overflow',
-                                }).then((result) => {
-                                  ////Registro de notificación para HP
-                                  this._global.notificaciones.modulo = "/cambio-fisico-distribuidor";
-                                  //this._global.notificaciones.descripcion = "Se ha registrado una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
-                                  this._global.notificaciones.descripcion = "Se ha registrado un caso de Línea Blanca con No. de orden " + this._global.reporte.idreporte;
-                                  this._global.registrarNotificacion(this._global.reporte.idreporte);
-
-                                  this._global.notificaciones.modulo = "/cambio-fisico-dist-asigna";
-                                  this._global.notificaciones.descripcion = "Se ha registrado y asignado a su CDs una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
-                                  this._global.registrarNotificacion(this._global.reporte.idreporte, this._global.user.IDCentro);
-
+                              } else {
+                                //alert(TipoCaso);
+                                if(TipoCaso!='Garantía'){
                                   this._router.navigate(['inicio']);
-                                });
-                              }else{
+                                }
+                                else if(parseInt(this._global.user.IDDistribuidor)>0 && Categoria=='LINEA BLANCA'){
+                                  swal({
+                                      title: 'Solicitud Enviada',
+                                      text: 'Se ha enviado la solicitud.',
+                                      type: 'success',
+                                      showConfirmButton: true,
+                                      confirmButtonText: 'Ok',
+                                      customClass: 'swal2-overflow',
+                                  }).then((result) => {
+                                    ////Registro de notificación para HP
+                                    this._global.notificaciones.modulo = "/cambio-fisico-distribuidor";
+                                    //this._global.notificaciones.descripcion = "Se ha registrado una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
+                                    this._global.notificaciones.descripcion = "Se ha registrado un caso de Línea Blanca con No. de orden " + this._global.reporte.idreporte;
+                                    this._global.registrarNotificacion(this._global.reporte.idreporte);
 
-                                if((Categoria=='LINEA BLANCA' || Modelo=='OS-17001' || Modelo=='OS-17001-1') && this._global.user.nivel!='operador')
-                                  this._router.navigate(['inicio']);
-                                else
-                                  this._router.navigate(['inicio/resumen']);
+                                    this._global.notificaciones.modulo = "/cambio-fisico-dist-asigna";
+                                    this._global.notificaciones.descripcion = "Se ha registrado y asignado a su CDs una solicitud de cambio físico para la orden No. " + this._global.reporte.idreporte;
+                                    this._global.registrarNotificacion(this._global.reporte.idreporte, this._global.user.IDCentro);
+
+                                    this._router.navigate(['inicio']);
+                                  });
+                                }else{
+
+                                  if((Categoria=='LINEA BLANCA' || Modelo=='OS-17001' || Modelo=='OS-17001-1') && this._global.user.nivel!='operador')
+                                    this._router.navigate(['inicio']);
+                                  else
+                                    this._router.navigate(['inicio/resumen']);
+                                }
                               }
-                            }
 
 
 
 
 
-                        } else if (data.res == 'error') {
+                          } else if (data.res == 'error') {
 
-                            this._global.appstatus.mensaje = data.msg;
+                              this._global.appstatus.mensaje = data.msg;
 
-                        }
+                          }
 
 
 
-                    },
-                    error => alert(error),
-                    () => console.log('termino submit')
-                    );
-                  }
+                      },
+                      error => alert(error),
+                      () => console.log('termino submit')
+                      );
+                    }
 
-          } else {
-              this._global.validateAllFormFields(this.genericForm);
+            } else {
+                this._global.validateAllFormFields(this.genericForm);
+            }
           }
         }
+
     }
 
     changeCentro(){

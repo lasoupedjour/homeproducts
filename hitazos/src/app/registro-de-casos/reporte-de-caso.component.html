@@ -230,6 +230,9 @@
             <option value="">Centro de Servicio</option>
             <option *ngFor="let item of _global.centros; let i = index" value="{{item.id}}">{{item.Nombre}} <label *ngIf="item.Ciudad!=''">- {{item.Ciudad}}</label><label *ngIf="item.Categoria!=''">- {{item.Categoria}}</label></option>
           </select>
+          <span class="alert alert-danger" *ngIf="!genericForm.controls.IDCentro.valid && genericForm.controls.IDCentro.touched">
+            Este campo es requerido
+          </span>
         </label>
         <label>
           <select class="form-control form-control-sm" formControlName="Distribuidor" *ngIf="this._global.user.IDDistribuidor>0">

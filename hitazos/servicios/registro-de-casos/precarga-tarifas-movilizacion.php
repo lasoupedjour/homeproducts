@@ -24,8 +24,6 @@ $res['res'] = 'ok';
 
 
 $query = "SELECT tarifas.id, SubtipoServicio,Valor,NecesitaAutorizacion from centros, tarifas where tarifas.IDGrupoTarifa = centros.IDGrupoTarifa and tarifas.TipoServicio like '%Movilizaci%' and tarifas.TipoTarifa = '".$arre['Subcategoria']."' and centros.id = ".$arre['IDCentroCliente'];
-echo($query);
-die();
 $query = utf8_encode($query);
 
 $q = mysql_query($query) or die(mysql_error());
