@@ -8,8 +8,8 @@ export class HTTPService {
 
 
     //base = '';
-    //base = 'http://apps.pautacreativatemporales.com.mx/oster/homeproducts/servicios/';
-    base = 'https://www.solution-center.net/servicios/';
+    base = 'http://apps.pautacreativatemporales.com.mx/oster/homeproducts/servicios/';
+    //base = 'https://www.solution-center.net/servicios/';
     //base = 'https://www.homeproductslatam.com.mx/servicios/';
     //base = 'http://oster:8080/homeproducts/homeproducts/servicios/';
     //base = 'http://localhost/oster/servicios/';

@@ -227,7 +227,7 @@
         <div class="col-5">
           &nbsp;
         </div>
-        <div class="col-2 text-right" *ngIf="(_global.reporte.objreporte.StatusReporte!='Eliminado') && this._global.user.nivel == 'administrador'">
+        <div class="col-2 text-right" *ngIf="(_global.reporte.objreporte.StatusReporte!='Eliminado') && this._global.user.IDMaster == 0">
           <button class="btn" (click)="eliminarReporte(this._global.reporte.idreporte)">Eliminar </button>&nbsp;
           <a class="btn" routerLink="/registro-de-casos/reporte-de-caso">Editar</a>
         </div>

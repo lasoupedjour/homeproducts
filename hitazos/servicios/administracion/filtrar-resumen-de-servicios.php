@@ -85,7 +85,7 @@ if ($cds!="" && $cds!="Todos"){
 }else if($cds!="Todos"){
   $filtroCds = " and centros.idMaster=$master";
 }else{
-  $filtroCds = " and centros.Pais='$pais'";
+  $filtroCds = " and centros.Pais='$pais' and (centros.idMaster=$master or reportes.IDCentro=$master)" ;
 }
 
 if($mes!=0 && $ano!=0){
